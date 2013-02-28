@@ -7,3 +7,9 @@ TestResults
 
 # temp files
 *.dia~
+
+# user config
+*.csproj.user
+
+# BKV RAW DB
+budapest_gtfs

@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Menetrend_WebApp.Classes;
+using Menetrend_WebApp.Models;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,10 +18,19 @@ namespace Menetrend_WebApp.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult TestMap()
         {
-            ViewBag.Message = "Your app description page.";
+            Utility.SetupCulture();
 
+            ViewBag.Message = "Google Maps teszt";
+            var StopsToShow = new List<Stop>();
+            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Nyugati")));
+            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Oktogon")));
+            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Blaha")));
+            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Petőfi")));
+            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Budafoki")));
+            ViewBag.Stops = StopsToShow;
+            
             return View();
         }
 

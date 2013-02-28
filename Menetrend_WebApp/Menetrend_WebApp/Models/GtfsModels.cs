@@ -3,19 +3,77 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
+using Menetrend_WebApp.Classes;
 
 namespace Menetrend_WebApp.Models
 {
-    public enum RouteType
+    /// <summary>
+    /// Temporary in-memory database
+    /// </summary>
+    public class GtfsDatabase
+    {
+        public static List<Agency> agencies = new List<Agency>();
+        public static List<Route> routes = new List<Route>();
+        public static List<Trip> trips = new List<Trip>();
+        public static List<StopTime> stop_times = new List<StopTime>();
+        public static List<Stop> stops = new List<Stop>();
+        public static List<CalendarDate> calendar_dates = new List<CalendarDate>();
+        public static List<Calendar> calendar = new List<Calendar>();
+        public static List<Shape> shapes = new List<Shape>();
+    }
+
+    public class GtfsReader
+    {
+        /// <summary>
+        /// Reads in a CSV file
+        /// </summary>
+        /// <typeparam name="T">Type of instances to return</typeparam>
+        /// <param name="fileName">Name of the file</param>
+        /// <returns>List of instances with data from csv</returns>
+        public static IEnumerable<T> Read<T>(string fileName) where T : class
+        {
+            var fileReader = System.IO.File.OpenText(fileName);
+            var csvReader = new CsvHelper.CsvReader(fileReader, new CsvConfiguration().);            
+            return csvReader.GetRecords<T>();
+        }
+    }
+
+    public enum E_WheelchairSupport
+    {
+        NO_INFO = 0,
+        YES = 1,
+        NO = 2
+    }
+
+    public enum E_RouteType
     {
         TRAM = 0,
         SUBWAY = 1,
         RAIL = 2,
         BUS = 3,
         FERRY = 4,
-        CABLECAR = 5,
-        GONDOLA = 6,
-        FUNICULAR = 7
+        STREET_LEVEL_CABLE_CAR = 5,
+        GONDOLA_LIFT = 6,
+        FUNICULAR_CLIFF_RAIL = 7
+    }
+
+    public enum E_TripDirection
+    {
+        FORWARD = 0,
+        BACKWARD = 1
+    }
+
+    public enum E_LocationType
+    {
+        STOP = 0,
+        STATION = 1
+    }
+
+    public enum E_CalendarExceptionType
+    {
+        ADDED = 1,
+        REMOVED = 2
     }
 
     public class Agency
@@ -58,7 +116,8 @@ namespace Menetrend_WebApp.Models
         public String RouteDescription { get; set; }
 
         [CsvField(Name = "route_type")]
-        public Int32 RouteType { get; set; }    // convert to enum !!
+        [TypeConverter(typeof(AdvancedEnumConverter<E_RouteType>))]
+        public E_RouteType RouteType { get; set; }
 
         [CsvField(Name = "route_color")]
         public String RouteColor { get; set; }
@@ -84,7 +143,8 @@ namespace Menetrend_WebApp.Models
         public String TripHeadsign { get; set; }
 
         [CsvField(Name = "direction_id")]
-        public Int32 DirectionId { get; set; }    // to Enum
+        [TypeConverter(typeof(AdvancedEnumConverter<E_TripDirection>))]
+        public E_TripDirection DirectionId { get; set; }
 
         [CsvField(Name = "block_id")]
         public String BlockId { get; set; }      // refer
@@ -93,7 +153,8 @@ namespace Menetrend_WebApp.Models
         public String ShapeId { get; set; }      // refer
 
         [CsvField(Name = "wheelchair_accessible")]
-        public Int32 WheelchairAccessible { get; set; }    // to Enum
+        [TypeConverter(typeof(AdvancedEnumConverter<E_WheelchairSupport>))]
+        public E_WheelchairSupport WheelchairAccessible { get; set; }
     }
 
     public class StopTime
@@ -136,13 +197,15 @@ namespace Menetrend_WebApp.Models
         public Double StopLongitude { get; set; }
 
         [CsvField(Name = "location_type")]
-        public Int32 LocationType { get; set; }          // to Enum
+        [TypeConverter(typeof(AdvancedEnumConverter<E_LocationType>))]
+        public E_LocationType LocationType { get; set; }
 
         [CsvField(Name = "parent_station")]
         public String ParentStation { get; set; }
 
         [CsvField(Name = "wheelchair_boarding")]
-        public Int32 WheelchairBoarding { get; set; }    // to Enum
+        [TypeConverter(typeof(AdvancedEnumConverter<E_WheelchairSupport>))]
+        public E_WheelchairSupport WheelchairBoarding { get; set; }
     }
 
     public class CalendarDate
@@ -156,7 +219,8 @@ namespace Menetrend_WebApp.Models
         public String Date { get; set; }             // to DateTime?
 
         [CsvField(Name = "exception_type")]
-        public Int32 ExceptionType { get; set; }     // to Enum
+        [TypeConverter(typeof(AdvancedEnumConverter<E_CalendarExceptionType>))]
+        public E_CalendarExceptionType ExceptionType { get; set; }
     }
 
     public class Calendar
