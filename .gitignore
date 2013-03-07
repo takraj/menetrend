@@ -13,3 +13,7 @@ TestResults
 
 # BKV RAW DB
 budapest_gtfs
+
+# Database
+*.mdf
+*.ldf
