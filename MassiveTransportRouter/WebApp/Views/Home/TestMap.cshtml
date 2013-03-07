@@ -77,8 +77,8 @@
 
     @{
         int i = 0;
-        var Markers = (IEnumerable<MTR.WebApp.Models.Stop>)ViewBag.Stops;
-        foreach (MTR.WebApp.Models.Stop marker in Markers)
+        var Markers = (IEnumerable<MTR.DataAccess.Models.Stop>)ViewBag.Stops;
+        foreach (MTR.DataAccess.Models.Stop marker in Markers)
         {
             i++;
             @Html.Raw("addMarkerToMap(" + marker.StopLatitude + ", " + marker.StopLongitude + ", \"#" + i + " -- " + marker.StopName + "\");")

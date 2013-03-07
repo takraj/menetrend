@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using MTR.WebApp.Classes;
+using MTR.DataAccess.Classes;
 
-namespace MTR.WebApp.Models
+namespace MTR.DataAccess.Models
 {
     /// <summary>
     /// Temporary in-memory database

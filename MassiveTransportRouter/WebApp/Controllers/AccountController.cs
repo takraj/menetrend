@@ -9,12 +9,12 @@ using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using MTR.WebApp.Filters;
-using MTR.WebApp.Models;
+using MTR.DataAccess.Models;
 
 namespace MTR.WebApp.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
+    //[InitializeSimpleMembership]
     public class AccountController : Controller
     {
         //

@@ -4,7 +4,7 @@ using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
-using MTR.WebApp.Models;
+using MTR.DataAccess.Models;
 
 namespace MTR.WebApp.Filters
 {
