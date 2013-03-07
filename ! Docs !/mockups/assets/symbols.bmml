@@ -1,0 +1,83 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1084" measuredH="734" mockupW="1024" mockupH="714">
+  <controls>
+    <control controlID="0" controlTypeID="__group__" x="60" y="20" w="1024" h="714" measuredW="1024" measuredH="714" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <controlName>Static</controlName>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="0" y="0" w="1024" h="714" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="0">
+          <controlProperties>
+            <text>Massive%20Transport%20Router%0Ahttp%3A//example.com</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Map" x="238" y="174" w="780" h="509" measuredW="252" measuredH="222" zOrder="1" locked="false" isInGroup="0"/>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Image" x="15" y="80" w="-1" h="-1" measuredW="77" measuredH="79" zOrder="2" locked="false" isInGroup="0">
+          <controlProperties>
+            <text/>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Title" x="107" y="80" w="-1" h="-1" measuredW="471" measuredH="43" zOrder="3" locked="false" isInGroup="0">
+          <controlProperties>
+            <text>Massive%20Transport%20Router</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::SubTitle" x="138" y="123" w="-1" h="-1" measuredW="455" measuredH="27" zOrder="4" locked="false" isInGroup="0">
+          <controlProperties>
+            <text>A%20vadi%FAj%20t%F6megk%F6zleked%E9si%20%FAtvonaltervez%u0151</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="1" controlTypeID="__group__" x="60" y="80" w="205" h="322" measuredW="205" measuredH="322" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <controlName>Keres%E9s%20panel</controlName>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::FieldSet" x="0" y="0" w="205" h="322" measuredW="200" measuredH="170" zOrder="0" locked="false" isInGroup="1">
+          <controlProperties>
+            <text>%DAtvonaltervez%E9s</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::SearchBox" x="10" y="22" w="180" h="-1" measuredW="120" measuredH="25" zOrder="1" locked="false" isInGroup="1">
+          <controlProperties>
+            <text>Honnan%3F</text>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::SearchBox" x="10" y="62" w="180" h="-1" measuredW="120" measuredH="25" zOrder="2" locked="false" isInGroup="1">
+          <controlProperties>
+            <text>Hova%3F</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Calendar" x="10" y="102" w="180" h="131" measuredW="96" measuredH="96" zOrder="3" locked="false" isInGroup="1"/>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Button" x="10" y="240" w="155" h="27" measuredW="130" measuredH="27" zOrder="4" locked="false" isInGroup="1">
+          <controlProperties>
+            <text>Tov%E1bbi%20be%E1ll%EDt%E1sok</text>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::PointyButton" x="10" y="282" w="180" h="-1" measuredW="68" measuredH="27" zOrder="5" locked="false" isInGroup="1">
+          <controlProperties>
+            <text>Keres%E9s</text>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::HelpButton" x="172" y="244" w="-1" h="-1" measuredW="18" measuredH="18" zOrder="6" locked="false" isInGroup="1"/>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="2" controlTypeID="__group__" x="60" y="140" w="200" h="170" measuredW="200" measuredH="170" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <controlName>%FAtvonalterv</controlName>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::FieldSet" x="0" y="0" w="-1" h="-1" measuredW="200" measuredH="170" zOrder="0" locked="false" isInGroup="2">
+          <controlProperties>
+            <text>%DAtvonalterv</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::DataGrid" x="8" y="16" w="-1" h="-1" measuredW="185" measuredH="143" zOrder="1" locked="false" isInGroup="2">
+          <controlProperties>
+            <text>Utas%EDt%E1s%2C%20Id%u0151%0ASz%E1lljon%20fel%20a...%2C%201%20perc%0AUtazzon%204%20meg%E1ll%F3t%5Cra%20...-ig%2C%2010%20perc%0ASz%E1lljon%20%E1t%20a...%2C%207%20perc%0A....</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+  </controls>
+</mockup>

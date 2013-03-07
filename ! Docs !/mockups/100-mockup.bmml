@@ -1,0 +1,19 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1048" measuredH="734" mockupW="1024" mockupH="714">
+  <controls>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Component" x="24" y="20" w="1024" h="714" measuredW="1024" measuredH="714" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/symbols.bmml#Static</src>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Component" x="39" y="194" w="205" h="322" measuredW="205" measuredH="322" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/symbols.bmml#Keresés panel</src>
+      </controlProperties>
+    </control>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::StickyNote" x="167" y="214" w="109" h="88" measuredW="109" measuredH="123" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Autocomplete%20a%20meg%E1ll%F3k%20nev%E9re</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
