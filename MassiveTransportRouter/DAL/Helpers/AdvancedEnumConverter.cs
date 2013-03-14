@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MTR.DataAccess.Classes
+namespace MTR.DataAccess.Helpers
 {
     public class AdvancedEnumConverter<T> : DefaultTypeConverter
     {

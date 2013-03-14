@@ -1,4 +1,4 @@
-﻿using MTR.DataAccess.Models;
+﻿using MTR.BusinessLogic.DataManager;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,15 +26,18 @@ namespace MTR.WebApp
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
-            String BasePath = HttpRuntime.AppDomainAppPath + "budapest_gtfs/";
+            //CsvDataManager.importCsv(HttpRuntime.AppDomainAppPath + "budapest_gtfs/");
+            //String BasePath = HttpRuntime.AppDomainAppPath + "budapest_gtfs/";
             //GtfsDatabase.agencies.AddRange(GtfsReader.Read<Agency>(BasePath + Agency.SourceFilename));
             //GtfsDatabase.calendar.AddRange(GtfsReader.Read<MTR.DataAccess.Models.Calendar>(BasePath + MTR.DataAccess.Models.Calendar.SourceFilename));
             //GtfsDatabase.calendar_dates.AddRange(GtfsReader.Read<CalendarDate>(BasePath + CalendarDate.SourceFilename));
             //GtfsDatabase.routes.AddRange(GtfsReader.Read<MTR.DataAccess.Models.Route>(BasePath + MTR.DataAccess.Models.Route.SourceFilename));
             //GtfsDatabase.shapes.AddRange(GtfsReader.Read<Shape>(BasePath + Shape.SourceFilename));
             //GtfsDatabase.stop_times.AddRange(GtfsReader.Read<StopTime>(BasePath + StopTime.SourceFilename));
-            GtfsDatabase.stops.AddRange(GtfsReader.Read<Stop>(BasePath + Stop.SourceFilename));
+            //GtfsDatabase.stops.AddRange(GtfsReader.Read<VMDL_Stop>(BasePath + VMDL_Stop.SourceFilename));
             //GtfsDatabase.trips.AddRange(GtfsReader.Read<Trip>(BasePath + Trip.SourceFilename));
+
+            DbDataManager.initDatabase(HttpRuntime.AppDomainAppPath + "budapest_gtfs/");
         }
     }
 }

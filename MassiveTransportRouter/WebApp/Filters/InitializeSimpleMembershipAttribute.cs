@@ -1,10 +1,10 @@
-﻿using System;
+﻿using MTR.WebApp.Models;
+using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
-using MTR.DataAccess.Models;
 
 namespace MTR.WebApp.Filters
 {

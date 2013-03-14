@@ -1,10 +1,8 @@
-﻿using MTR.DataAccess.Classes;
-using MTR.DataAccess.Models;
-using System;
+﻿using MTR.BusinessLogic.DataManager;
+using MTR.DataAccess.Helpers;
+using MTR.WebApp.Common.ViewModels;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MTR.WebApp.Controllers
@@ -23,12 +21,13 @@ namespace MTR.WebApp.Controllers
             Utility.SetupCulture();
 
             ViewBag.Message = "Google Maps teszt";
-            var StopsToShow = new List<Stop>();
-            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Nyugati")));
-            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Oktogon")));
-            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Blaha")));
-            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Petőfi")));
-            StopsToShow.Add(GtfsDatabase.stops.First(l => l.StopName.Contains("Budafoki")));
+            var StopsToShow = new List<VMDL_Stop>();
+            var allStops = DbDataManager.GetAllStops();
+            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Nyugati")));
+            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Oktogon")));
+            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Blaha")));
+            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Petőfi")));
+            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Budafoki")));
             ViewBag.Stops = StopsToShow;
             
             return View();

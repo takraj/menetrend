@@ -1,84 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using CsvHelper.Configuration;
+﻿using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using MTR.DataAccess.Classes;
+using MTR.Common.Gtfs;
+using MTR.DataAccess.Helpers;
+using System;
 
 namespace MTR.DataAccess.Models
 {
-    /// <summary>
-    /// Temporary in-memory database
-    /// </summary>
-    public class GtfsDatabase
-    {
-        public static List<Agency> agencies = new List<Agency>();
-        public static List<Route> routes = new List<Route>();
-        public static List<Trip> trips = new List<Trip>();
-        public static List<StopTime> stop_times = new List<StopTime>();
-        public static List<Stop> stops = new List<Stop>();
-        public static List<CalendarDate> calendar_dates = new List<CalendarDate>();
-        public static List<Calendar> calendar = new List<Calendar>();
-        public static List<Shape> shapes = new List<Shape>();
-    }
-
-    public class GtfsReader
-    {
-        /// <summary>
-        /// Reads in a CSV file
-        /// </summary>
-        /// <typeparam name="T">Type of instances to return</typeparam>
-        /// <param name="fileName">Name of the file</param>
-        /// <returns>List of instances with data from csv</returns>
-        public static IEnumerable<T> Read<T>(string fileName) where T : class
-        {
-            var fileReader = System.IO.File.OpenText(fileName);
-            var config = new CsvConfiguration();
-            config.UseInvariantCulture = true;
-            var csvReader = new CsvHelper.CsvReader(fileReader, config);
-            return csvReader.GetRecords<T>();
-        }
-    }
-
-    public enum E_WheelchairSupport
-    {
-        NO_INFO = 0,
-        YES = 1,
-        NO = 2
-    }
-
-    public enum E_RouteType
-    {
-        TRAM = 0,
-        SUBWAY = 1,
-        RAIL = 2,
-        BUS = 3,
-        FERRY = 4,
-        STREET_LEVEL_CABLE_CAR = 5,
-        GONDOLA_LIFT = 6,
-        FUNICULAR_CLIFF_RAIL = 7
-    }
-
-    public enum E_TripDirection
-    {
-        FORWARD = 0,
-        BACKWARD = 1
-    }
-
-    public enum E_LocationType
-    {
-        STOP = 0,
-        STATION = 1
-    }
-
-    public enum E_CalendarExceptionType
-    {
-        ADDED = 1,
-        REMOVED = 2
-    }
-
-    public class Agency
+    public class GTFS_Agency
     {
         public const string SourceFilename = "agency.txt";
 
@@ -101,7 +29,7 @@ namespace MTR.DataAccess.Models
         public String AgencyPhoneNumber { get; set; }
     }
 
-    public class Route
+    public class GTFS_Route
     {
         public const string SourceFilename = "routes.txt";
 
@@ -109,7 +37,7 @@ namespace MTR.DataAccess.Models
         public String RouteId { get; set; }
 
         [CsvField(Name = "agency_id")]
-        public String AgencyId { get; set; }    // refer to that concrete object !!
+        public String AgencyId { get; set; }
 
         [CsvField(Name = "route_short_name")]
         public String RouteShortName { get; set; }
@@ -128,7 +56,7 @@ namespace MTR.DataAccess.Models
         public String RouteTextColor { get; set; }
     }
 
-    public class Trip
+    public class GTFS_Trip
     {
         public const string SourceFilename = "trips.txt";
 
@@ -136,10 +64,10 @@ namespace MTR.DataAccess.Models
         public String TripId { get; set; }
 
         [CsvField(Name = "route_id")]
-        public String RouteId { get; set; }     // refer
+        public String RouteId { get; set; }
 
         [CsvField(Name = "service_id")]
-        public String ServiceId { get; set; }   // refer
+        public String ServiceId { get; set; }
 
         [CsvField(Name = "trip_headsign")]
         public String TripHeadsign { get; set; }
@@ -149,17 +77,17 @@ namespace MTR.DataAccess.Models
         public E_TripDirection DirectionId { get; set; }
 
         [CsvField(Name = "block_id")]
-        public String BlockId { get; set; }      // refer
+        public String BlockId { get; set; }
 
         [CsvField(Name = "shape_id")]
-        public String ShapeId { get; set; }      // refer
+        public String ShapeId { get; set; }
 
         [CsvField(Name = "wheelchair_accessible")]
         [TypeConverter(typeof(AdvancedEnumConverter<E_WheelchairSupport>))]
         public E_WheelchairSupport WheelchairAccessible { get; set; }
     }
 
-    public class StopTime
+    public class GTFS_StopTime
     {
         public const string SourceFilename = "stop_times.txt";
 
@@ -167,13 +95,13 @@ namespace MTR.DataAccess.Models
         public String TripId { get; set; }
 
         [CsvField(Name = "arrival_time")]
-        public String ArrivalTime { get; set; }      // to DateTime?
+        public String ArrivalTime { get; set; }
 
         [CsvField(Name = "departure_time")]
-        public String DepartureTime { get; set; }    // to DateTime?
+        public String DepartureTime { get; set; }
 
         [CsvField(Name = "stop_id")]
-        public String StopId { get; set; }           // refer
+        public String StopId { get; set; }
 
         [CsvField(Name = "stop_sequence")]
         public Int32 StopSequence { get; set; }
@@ -182,7 +110,7 @@ namespace MTR.DataAccess.Models
         public Double ShapeDistanceTraveled { get; set; }
     }
 
-    public class Stop
+    public class GTFS_Stop
     {
         public const string SourceFilename = "stops.txt";
 
@@ -210,22 +138,22 @@ namespace MTR.DataAccess.Models
         public E_WheelchairSupport WheelchairBoarding { get; set; }
     }
 
-    public class CalendarDate
+    public class GTFS_CalendarDate
     {
         public const string SourceFilename = "calendar_dates.txt";
 
         [CsvField(Name = "service_id")]
-        public String ServiceId { get; set; }        // refer
+        public String ServiceId { get; set; }
 
         [CsvField(Name = "date")]
-        public String Date { get; set; }             // to DateTime?
+        public String Date { get; set; }
 
         [CsvField(Name = "exception_type")]
         [TypeConverter(typeof(AdvancedEnumConverter<E_CalendarExceptionType>))]
         public E_CalendarExceptionType ExceptionType { get; set; }
     }
 
-    public class Calendar
+    public class GTFS_Calendar
     {
         public const string SourceFilename = "calendar.txt";
 
@@ -254,13 +182,13 @@ namespace MTR.DataAccess.Models
         public Boolean Sunday { get; set; }
 
         [CsvField(Name = "start_date")]
-        public String StartDate { get; set; }        // to DateTime?
+        public String StartDate { get; set; }
 
         [CsvField(Name = "end_date")]
-        public String EndDate { get; set; }          // to DateTime?
+        public String EndDate { get; set; }
     }
 
-    public class Shape
+    public class GTFS_Shape
     {
         public const string SourceFilename = "shapes.txt";
 

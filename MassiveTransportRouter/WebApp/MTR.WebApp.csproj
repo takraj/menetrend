@@ -167,6 +167,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -240,8 +241,11 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\maptools.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -292,9 +296,9 @@
       <Project>{f015235e-4e36-42b6-a78c-72125e9c25c3}</Project>
       <Name>MTR.BusinessLogic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DAL\MTR.DataAccess.csproj">
-      <Project>{13feecde-4f94-46df-b9b0-9fe85e8ef059}</Project>
-      <Name>MTR.DataAccess</Name>
+    <ProjectReference Include="..\Common\MTR.Common.csproj">
+      <Project>{7943c27f-8910-4ceb-8931-cd935a2bf635}</Project>
+      <Name>MTR.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\WACommon\MTR.WebApp.Common.csproj">
       <Project>{14c2fa3d-aa81-4944-bd10-7fbcc615fd20}</Project>

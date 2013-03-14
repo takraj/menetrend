@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTR.WebApp.Common", "WAComm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTR.BusinessLogic.Common", "BLCommon\MTR.BusinessLogic.Common.csproj", "{01BE9468-E7AA-46E3-98C4-3CFF229F5F2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTR.Common", "Common\MTR.Common.csproj", "{7943C27F-8910-4CEB-8931-CD935A2BF635}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{01BE9468-E7AA-46E3-98C4-3CFF229F5F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01BE9468-E7AA-46E3-98C4-3CFF229F5F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01BE9468-E7AA-46E3-98C4-3CFF229F5F2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7943C27F-8910-4CEB-8931-CD935A2BF635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7943C27F-8910-4CEB-8931-CD935A2BF635}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7943C27F-8910-4CEB-8931-CD935A2BF635}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7943C27F-8910-4CEB-8931-CD935A2BF635}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -49,37 +49,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\AdvancedEnumConverter.cs" />
-    <Compile Include="Classes\Utility.cs" />
-    <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\GtfsModels.cs" />
+    <Compile Include="CsvDataManager\GtfsUtility.cs" />
+    <Compile Include="EFDataManager\DbManager.cs" />
+    <Compile Include="EFDataManager\EF_GtfsDbContext.cs" />
+    <Compile Include="EFDataManager\Entities\EF_Agency.cs" />
+    <Compile Include="EFDataManager\Entities\EF_Calendar.cs" />
+    <Compile Include="EFDataManager\Entities\EF_CalendarDate.cs" />
+    <Compile Include="EFDataManager\Entities\EF_Route.cs" />
+    <Compile Include="EFDataManager\Entities\EF_Shape.cs" />
+    <Compile Include="EFDataManager\Entities\EF_Stop.cs" />
+    <Compile Include="EFDataManager\Entities\EF_StopTime.cs" />
+    <Compile Include="EFDataManager\Entities\EF_Trip.cs" />
+    <Compile Include="Helpers\AdvancedEnumConverter.cs" />
+    <Compile Include="CsvDataManager\GtfsModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="EFDataManager\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\BLCommon\MTR.BusinessLogic.Common.csproj">
       <Project>{01be9468-e7aa-46e3-98c4-3cff229f5f2b}</Project>
       <Name>MTR.BusinessLogic.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common\MTR.Common.csproj">
+      <Project>{7943c27f-8910-4ceb-8931-cd935a2bf635}</Project>
+      <Name>MTR.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

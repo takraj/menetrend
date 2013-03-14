@@ -6,7 +6,7 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Web.Security;
 
-namespace MTR.DataAccess.Models
+namespace MTR.WebApp.Models
 {
     public class UsersContext : DbContext
     {

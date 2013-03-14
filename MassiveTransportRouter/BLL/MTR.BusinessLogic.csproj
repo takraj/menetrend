@@ -39,10 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataManager\CsvDataManager.cs" />
+    <Compile Include="DataManager\DbDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataManager\" />
     <Folder Include="DataTransformer\" />
     <Folder Include="Pathfinder\" />
   </ItemGroup>
@@ -50,6 +51,10 @@
     <ProjectReference Include="..\BLCommon\MTR.BusinessLogic.Common.csproj">
       <Project>{01be9468-e7aa-46e3-98c4-3cff229f5f2b}</Project>
       <Name>MTR.BusinessLogic.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\MTR.Common.csproj">
+      <Project>{7943c27f-8910-4ceb-8931-cd935a2bf635}</Project>
+      <Name>MTR.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\DAL\MTR.DataAccess.csproj">
       <Project>{13feecde-4f94-46df-b9b0-9fe85e8ef059}</Project>
