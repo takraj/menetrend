@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,5 +40,27 @@ namespace MTR.DataAccess.EFDataManager.Entities
             LocationType = stop.LocationType;
             WheelchairBoarding = stop.WheelchairBoarding;
         }
+
+        #region Bulk Insert
+
+        public static void BulkInsertEntities(List<EF_Stop> entities)
+        {
+            var insertManager = new BulkInsertManager(MethodBase.GetCurrentMethod().DeclaringType.Name);
+            insertManager.AddColumn("OriginalId");
+            insertManager.AddColumn("StopName");
+            insertManager.AddColumn("StopLatitude");
+            insertManager.AddColumn("StopLongitude");
+            insertManager.AddColumn("LocationType");
+            insertManager.AddColumn("WheelchairBoarding");
+
+            foreach (EF_Stop e in entities)
+            {
+                insertManager.AddRow(e.OriginalId, e.StopName, e.StopLatitude, e.StopLongitude, (int)e.LocationType, (int)e.WheelchairBoarding);
+            }
+
+            insertManager.DoBulkInsert();
+        }
+
+        #endregion
     }
 }

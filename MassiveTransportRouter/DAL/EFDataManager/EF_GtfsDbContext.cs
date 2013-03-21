@@ -20,6 +20,14 @@ namespace MTR.DataAccess.EFDataManager
         public DbSet<EF_Trip> Trips { get; set; }
         public DbSet<EF_StopTime> StopTimes { get; set; }
 
+        public static string ConnectionString
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            }
+        }
+
         public EF_GtfsDbContext()
             : base("DefaultConnection")
         {

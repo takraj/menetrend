@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,5 +30,24 @@ namespace MTR.DataAccess.EFDataManager.Entities
             ExceptionDate = DateTime.ParseExact(cd.Date, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
             ExceptionType = cd.ExceptionType;
         }
+
+        #region Bulk Insert
+
+        public static void BulkInsertEntities(List<EF_CalendarDate> entities)
+        {
+            var insertManager = new BulkInsertManager(MethodBase.GetCurrentMethod().DeclaringType.Name);
+            insertManager.AddColumn("ExceptionDate");
+            insertManager.AddColumn("ExceptionType");
+            insertManager.AddColumn("CalendarId_Id");
+
+            foreach (EF_CalendarDate e in entities)
+            {
+                insertManager.AddRow(e.ExceptionDate, (int)e.ExceptionType, e.CalendarId.Id);
+            }
+
+            insertManager.DoBulkInsert();
+        }
+
+        #endregion
     }
 }

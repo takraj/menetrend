@@ -14,17 +14,5 @@ namespace MTR.BusinessLogic.DataManager
         {
             GtfsDatabase.importCsv(BasePath);
         }
-
-        public static List<MTR.WebApp.Common.ViewModels.VMDL_Stop> GetAllStops()
-        {
-            var result = new List<MTR.WebApp.Common.ViewModels.VMDL_Stop>();
-
-            foreach (Stop s in DataAccess.CsvDataManager.GtfsDatabase.GetAllStops())
-            {
-                result.Add(new WebApp.Common.ViewModels.VMDL_Stop(s.StopId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, s.ParentStation, s.WheelchairBoarding));
-            }
-
-            return result;
-        }
     }
 }

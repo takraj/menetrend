@@ -25,9 +25,9 @@ namespace MTR.WebApp.Controllers
             var allStops = DbDataManager.GetAllStops();
             StopsToShow.Add(allStops.First(l => l.StopName.Contains("Nyugati")));
             StopsToShow.Add(allStops.First(l => l.StopName.Contains("Oktogon")));
-            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Blaha")));
-            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Petőfi")));
-            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Budafoki")));
+            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Blaha Lujza tér")));
+            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Petőfi híd")));
+            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Budafoki út")));
             ViewBag.Stops = StopsToShow;
             
             return View();

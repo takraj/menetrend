@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,5 +41,29 @@ namespace MTR.DataAccess.EFDataManager.Entities
             BlockId = trip.BlockId;
             WheelchairAccessible = trip.WheelchairAccessible;
         }
+
+        #region Bulk Insert
+
+        public static void BulkInsertEntities(List<EF_Trip> entities)
+        {
+            var insertManager = new BulkInsertManager(MethodBase.GetCurrentMethod().DeclaringType.Name);
+            insertManager.AddColumn("OriginalId");
+            insertManager.AddColumn("TripHeadsign");
+            insertManager.AddColumn("BlockId");
+            insertManager.AddColumn("DirectionId");
+            insertManager.AddColumn("WheelchairAccessible");
+            insertManager.AddColumn("RouteId_Id");
+            insertManager.AddColumn("ServiceId_Id");
+            insertManager.AddColumn("ShapeId_Id");
+
+            foreach (EF_Trip e in entities)
+            {
+                insertManager.AddRow(e.OriginalId, e.TripHeadsign, e.BlockId, (int)e.DirectionId, (int)e.WheelchairAccessible, e.RouteId.Id, e.ServiceId.Id, e.ShapeId.Id);
+            }
+
+            insertManager.DoBulkInsert();
+        }
+
+        #endregion
     }
 }

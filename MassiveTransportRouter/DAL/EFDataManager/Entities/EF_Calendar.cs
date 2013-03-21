@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,5 +44,31 @@ namespace MTR.DataAccess.EFDataManager.Entities
             StartDate = DateTime.ParseExact(calendar.StartDate, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
             EndDate = DateTime.ParseExact(calendar.EndDate, "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
         }
+
+        #region Bulk Insert
+
+        public static void BulkInsertEntities(List<EF_Calendar> entities)
+        {
+            var insertManager = new BulkInsertManager(MethodBase.GetCurrentMethod().DeclaringType.Name);
+            insertManager.AddColumn("OriginalId");
+            insertManager.AddColumn("Monday");
+            insertManager.AddColumn("Tuesday");
+            insertManager.AddColumn("Wednesday");
+            insertManager.AddColumn("Thursday");
+            insertManager.AddColumn("Friday");
+            insertManager.AddColumn("Saturday");
+            insertManager.AddColumn("Sunday");
+            insertManager.AddColumn("StartDate");
+            insertManager.AddColumn("EndDate");
+
+            foreach (EF_Calendar e in entities)
+            {
+                insertManager.AddRow(e.OriginalId, e.Monday, e.Tuesday, e.Wednesday, e.Thursday, e.Friday, e.Saturday, e.Sunday, e.StartDate, e.EndDate);
+            }
+
+            insertManager.DoBulkInsert();
+        }
+
+        #endregion
     }
 }

@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,5 +38,26 @@ namespace MTR.DataAccess.EFDataManager.Entities
             AgencyLanguage = agency.AgencyLanguage;
             AgencyPhoneNumber = agency.AgencyPhoneNumber;
         }
+
+        #region Bulk Insert
+
+        public static void BulkInsertEntities(List<EF_Agency> entities) {
+            var insertManager = new BulkInsertManager(MethodBase.GetCurrentMethod().DeclaringType.Name);
+            insertManager.AddColumn("OriginalId");
+            insertManager.AddColumn("AgencyName");
+            insertManager.AddColumn("AgencyUrl");
+            insertManager.AddColumn("AgencyTimeZone");
+            insertManager.AddColumn("AgencyLanguage");
+            insertManager.AddColumn("AgencyPhoneNumber");
+
+            foreach (EF_Agency e in entities)
+            {
+                insertManager.AddRow(e.OriginalId, e.AgencyName, e.AgencyUrl, e.AgencyTimeZone, e.AgencyLanguage, e.AgencyPhoneNumber);
+            }
+
+            insertManager.DoBulkInsert();
+        }
+
+        #endregion
     }
 }

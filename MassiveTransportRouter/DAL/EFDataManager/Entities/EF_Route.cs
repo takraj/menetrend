@@ -4,7 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,7 +30,7 @@ namespace MTR.DataAccess.EFDataManager.Entities
 
         public EF_Route() { }
 
-        public EF_Route(GTFS_Route route)
+        public EF_Route(GTFS_Route route, EF_Agency agency)
         {
             OriginalId = route.RouteId;
             RouteShortName = route.RouteShortName;
@@ -35,6 +38,30 @@ namespace MTR.DataAccess.EFDataManager.Entities
             RouteType = route.RouteType;
             RouteColor = route.RouteColor;
             RouteTextColor = route.RouteTextColor;
+            AgencyId = agency;
         }
+
+        #region Bulk Insert
+
+        public static void BulkInsertEntities(List<EF_Route> entities)
+        {
+            var insertManager = new BulkInsertManager(MethodBase.GetCurrentMethod().DeclaringType.Name);
+            insertManager.AddColumn("OriginalId");
+            insertManager.AddColumn("RouteShortName");
+            insertManager.AddColumn("RouteDescription");
+            insertManager.AddColumn("RouteType");
+            insertManager.AddColumn("RouteColor");
+            insertManager.AddColumn("RouteTextColor");
+            insertManager.AddColumn("AgencyId_Id");
+
+            foreach (EF_Route e in entities)
+            {
+                insertManager.AddRow(e.OriginalId, e.RouteShortName, e.RouteDescription, (int)e.RouteType, e.RouteColor, e.RouteTextColor, e.AgencyId.Id);
+            }
+
+            insertManager.DoBulkInsert();
+        }
+
+        #endregion
     }
 }

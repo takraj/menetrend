@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,5 +32,26 @@ namespace MTR.DataAccess.EFDataManager.Entities
             ShapePointSequence = shape.ShapePointSequence;
             ShapeDistanceTravelled = shape.ShapeDistanceTravelled;
         }
+
+        #region Bulk Insert
+
+        public static void BulkInsertEntities(List<EF_Shape> entities)
+        {
+            var insertManager = new BulkInsertManager(MethodBase.GetCurrentMethod().DeclaringType.Name);
+            insertManager.AddColumn("OriginalId");
+            insertManager.AddColumn("ShapePointLatitude");
+            insertManager.AddColumn("ShapePointLongitude");
+            insertManager.AddColumn("ShapePointSequence");
+            insertManager.AddColumn("ShapeDistanceTravelled");
+
+            foreach (EF_Shape e in entities)
+            {
+                insertManager.AddRow(e.OriginalId, e.ShapePointLatitude, e.ShapePointLongitude, e.ShapePointSequence, e.ShapeDistanceTravelled);
+            }
+
+            insertManager.DoBulkInsert();
+        }
+
+        #endregion
     }
 }
