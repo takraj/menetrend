@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<MTR.WebApp.Common.ViewModels.VMDL_Stop>
+@using System.Web.Script.Serialization
+@{
     ViewBag.Title = "Teszt oldal";
 }
 
@@ -8,7 +10,7 @@
 </hgroup>
 
 <article>
-    <div id="map_canvas" style="width:650px; height:650px"></div>
+    <div id="map_canvas" style="width: 650px; height: 650px"></div>
 </article>
 
 <aside>
@@ -23,103 +25,30 @@
     </ul>
 </aside>
 
-<script type="text/javascript"
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
-</script>
+@section Scripts {
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
+    </script>
 
-<script type="text/javascript">
-    var mapOptions = {
-        center: new google.maps.LatLng(47.5, 19.08),
-        zoom: 12,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-</script>
+    @Scripts.Render("~/bundles/maptools");
 
-<script type="text/javascript">
-    // Container Variables, Arrays
-    var nodes = new Array();
+    <script type="text/javascript">
+        window.onunload = function () { }
+        window.onload = function () {
+            // CreateMap
+            MTR.MapTools.createMap("map_canvas");
 
-    // Adds a Marker to the Map
-    function addMarkerToMap(lat, lon, title) {
-        var myLatlng = new google.maps.LatLng(lat, lon);
-        nodes.push({
-            marker: new google.maps.Marker({
-                position: myLatlng,
-                map: map,
-                title: title
-            }),
-            infoWindow: null
-        });
-    }
+            // Add Waypoints + Markers
+            @Html.Raw("var markers = " + new JavaScriptSerializer().Serialize(Model) + ";")
+            markers.forEach(function (marker, i) {
+                MTR.MapTools.addMarkerToMap(marker.StopLatitude, marker.StopLongitude, "#" + (i+1) + " -- " + marker.StopName);
+            });
 
-    // Returns the list of Node Coordinates
-    function getNodeCoords() {
-        var waypoints = new Array();
+            // draw path
+            MTR.MapTools.drawPath();
 
-        nodes.forEach(function (node) {
-            waypoints.push(node.marker.position);
-        });
-
-        return waypoints;
-    }
-
-    // Creates an InfoWindow
-    function createInfoWindow(node, content, isOpened) {
-        node.infoWindow =  new google.maps.InfoWindow({ content: content });
-        if (isOpened) node.infoWindow.open(map, node.marker);
-        google.maps.event.addListener(node.marker, 'click', function () {
-            node.infoWindow.open(map, node.marker);
-        });
-    }
-
-    // Add Waypoints + Markers
-
-    @{
-        int i = 0;
-        var Markers = (IEnumerable<MTR.WebApp.Common.ViewModels.VMDL_Stop>)ViewBag.Stops;
-        foreach (MTR.WebApp.Common.ViewModels.VMDL_Stop marker in Markers)
-        {
-            i++;
-            @Html.Raw("addMarkerToMap(" + marker.StopLatitude + ", " + marker.StopLongitude + ", \"#" + i + " -- " + marker.StopName + "\");")
+            // setup infoWindows
+            MTR.MapTools.setupInfoWindows();
         }
-    }
-
-    // Draw Route
-
-    var line = new google.maps.Polyline({
-        path: getNodeCoords(),
-        strokeColor: "#0000FF",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-        map: map,
-        icons: [{
-            icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
-            offset: '100%'
-        }]
-    });
-
-    // Animating Arrow Icon
-
-    var count = 0;
-    offsetId = window.setInterval(function () {
-        count = (++count) % 100;
-
-        var icons = line.get('icons'); 
-        icons[0].offset = count + '%';
-        line.set('icons', icons);
-    }, 40);
-
-    // setup infoWindows
-
-    nodes.forEach(function (node, index) {
-        if (index == 0) {
-            createInfoWindow(node, "Kezdőpont: " + node.marker.title, true);
-        } else if (index == (nodes.length - 1)) {
-            createInfoWindow(node, "Végpont: " + node.marker.title, true);
-        } else {
-            createInfoWindow(node, "<i>Köztes pont: " + node.marker.title + "</i>", false);
-        }
-    });
-
-</script>
+    </script>
+}

@@ -46,6 +46,10 @@ namespace MTR.DataAccess.CsvDataManager
             }
         }
 
+        /// <summary>
+        /// Imports the GTFS (CSV) database to MSSQL
+        /// </summary>
+        /// <param name="BasePath">Path to files (root directory)</param>
         public static void importCsv(string BasePath) {
             var db_agencies = new ConcurrentDictionary<String, EF_Agency>();
             var db_calendars = new ConcurrentDictionary<String, EF_Calendar>();

@@ -28,9 +28,8 @@ namespace MTR.WebApp.Controllers
             StopsToShow.Add(allStops.First(l => l.StopName.Contains("Blaha Lujza tér")));
             StopsToShow.Add(allStops.First(l => l.StopName.Contains("Petőfi híd")));
             StopsToShow.Add(allStops.First(l => l.StopName.Contains("Budafoki út")));
-            ViewBag.Stops = StopsToShow;
-            
-            return View();
+
+            return View(StopsToShow);
         }
 
         public ActionResult Contact()
