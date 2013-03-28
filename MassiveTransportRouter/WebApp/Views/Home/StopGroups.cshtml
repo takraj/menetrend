@@ -1,0 +1,58 @@
+﻿@model IEnumerable<MTR.WebApp.Common.ViewModels.VMDL_StopGroup>
+@using System.Web.Script.Serialization
+@{
+    ViewBag.Title = "Stop Groups";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>@ViewBag.Message</h2>
+</hgroup>
+
+<article>
+    <div id="map_canvas" style="width: 650px; height: 650px"></div>
+</article>
+
+<aside>
+    <h3>Különböző nevű összevont megállók</h3>
+    <p>Összesen: @Html.Raw(Model.Count(m => m.HasDifferentNames))</p>
+    <ul>
+        @foreach (var group in Model)
+        {
+            if (group.HasDifferentNames)
+            { 
+            <li><strong>@Html.Raw(group.name)</strong></li>
+            <li>
+                <ul>
+                    @foreach (var stop in group.GetStops())
+                    {
+                        <li>@Html.Raw(stop.StopName)</li>
+                    }
+                </ul>
+            </li>
+            }
+        }
+    </ul>
+</aside>
+
+@section Scripts {
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
+    </script>
+
+    @Scripts.Render("~/bundles/maptools");
+
+    <script type="text/javascript">
+        window.onunload = function () { }
+        window.onload = function () {
+            // CreateMap
+            MTR.MapTools.createMap("map_canvas");
+
+            // Add Markers
+            @Html.Raw("var markers = " + new JavaScriptSerializer().Serialize(Model.Where(m => m.HasDifferentNames)) + ";")
+            markers.forEach(function (marker) {
+                MTR.MapTools.addMarkerToMap(marker.avgLatitude, marker.avgLongitude, marker.name);
+            });
+        }
+    </script>
+}

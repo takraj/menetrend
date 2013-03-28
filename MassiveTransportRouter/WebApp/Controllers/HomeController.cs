@@ -18,9 +18,6 @@ namespace MTR.WebApp.Controllers
 
         public ActionResult TestMap()
         {
-            Utility.SetupCulture();
-
-            ViewBag.Message = "Google Maps teszt";
             var StopsToShow = new List<VMDL_Stop>();
             var allStops = DbDataManager.GetAllStops();
             StopsToShow.Add(allStops.First(l => l.StopName.Contains("Nyugati")));
@@ -29,14 +26,18 @@ namespace MTR.WebApp.Controllers
             StopsToShow.Add(allStops.First(l => l.StopName.Contains("Petőfi híd")));
             StopsToShow.Add(allStops.First(l => l.StopName.Contains("Budafoki út")));
 
+            ViewBag.Message = "Google Maps teszt";
+            Utility.SetupCulture();
             return View(StopsToShow);
         }
 
-        public ActionResult Contact()
+        public ActionResult StopGroups()
         {
-            ViewBag.Message = "Your contact page.";
+            var allStops = DbDataManager.GetAllStops();
+            var stopGroups = DbDataManager.GetStopGroups(50);
 
-            return View();
+            ViewBag.Message = "Stop Groups teszt: " + stopGroups.Count + " / " + allStops.Count;
+            return View(stopGroups);
         }
     }
 }
