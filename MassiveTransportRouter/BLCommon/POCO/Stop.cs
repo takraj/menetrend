@@ -9,6 +9,7 @@ namespace MTR.BusinessLogic.Common.POCO
 {
     public class Stop
     {
+        public Int32 DbId;
         public String StopId;
         public String StopName;
         public Double StopLatitude;
@@ -17,8 +18,9 @@ namespace MTR.BusinessLogic.Common.POCO
         public String ParentStation;
         public E_WheelchairSupport WheelchairBoarding;
 
-        public Stop(string id, string name, double lat, double lon, E_LocationType loctype, String parentStation, E_WheelchairSupport wheelchair)
+        public Stop(int dbid, string id, string name, double lat, double lon, E_LocationType loctype, String parentStation, E_WheelchairSupport wheelchair)
         {
+            this.DbId = dbid;
             this.StopId = id;
             this.StopName = name;
             this.StopLatitude = lat;
@@ -26,6 +28,54 @@ namespace MTR.BusinessLogic.Common.POCO
             this.LocationType = loctype;
             this.ParentStation = parentStation;
             this.WheelchairBoarding = wheelchair;
+        }
+
+        public bool HasSimilarNameTo(string subjectName)
+        {
+            if (this.StopName.Equals(subjectName))
+            {
+                return true;
+            }
+
+            var allowedDifferences = new List<char>();
+            allowedDifferences.Add(' ');
+            allowedDifferences.Add('+');
+            allowedDifferences.Add('/');
+            allowedDifferences.Add('M');
+            allowedDifferences.Add('H');
+
+            if (this.StopName.StartsWith(subjectName))
+            {
+                var tail = this.StopName.Substring(subjectName.Length, this.StopName.Length - subjectName.Length);
+                if (tail.Length > 1)
+                {
+                    foreach (char c in tail.ToCharArray())
+                    {
+                        if (!allowedDifferences.Exists(diff => diff.CompareTo(c) == 0))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            else if (subjectName.StartsWith(this.StopName))
+            {
+                var tail = subjectName.Substring(this.StopName.Length, subjectName.Length - this.StopName.Length);
+                if (tail.Length > 1)
+                {
+                    foreach (char c in tail.ToCharArray())
+                    {
+                        if (!allowedDifferences.Exists(diff => diff.CompareTo(c) == 0))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            return false;
         }
     }
 }

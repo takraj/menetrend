@@ -1,4 +1,6 @@
-﻿using MTR.DataAccess.CsvDataManager;
+﻿using MTR.BusinessLogic.Common.POCO;
+using MTR.BusinessLogic.DataTransformer;
+using MTR.DataAccess.CsvDataManager;
 using MTR.DataAccess.EFDataManager;
 using MTR.WebApp.Common.ViewModels;
 using System;
@@ -37,42 +39,61 @@ namespace MTR.BusinessLogic.DataManager
         {
             var result = new List<VMDL_StopGroup>();
 
-            GetAllStops().ForEach(stop => {
-                // Only if the current stop is not contained by a stopgroup
-                if (!result.Exists(sg => sg.GetStops().Contains(stop)))
-                {
-                    bool createNewGroup = true; 
-
-                    foreach (VMDL_StopGroup sg in result)
-                    {
-                        // Similar names (one contains the other & length difference is small)
-                        // Example: "Cinkota" VS "Cinkota H"
-                        if (sg.GetStops().Exists(s => s.HasSimilarNameTo(stop.StopName)))
-                        {
-                            sg.AddStop(stop);
-                            createNewGroup = false;
-                            break;
-                        }
-
-                        // Not similar name, but it's near
-                        else if (sg.GetMaxDistanceTo(stop.StopLatitude, stop.StopLongitude) <= maxDistance)
-                        {
-                            sg.AddStop(stop);
-                            createNewGroup = false;
-                            break;
-                        }
-                    }
-
-                    if (createNewGroup)
-                    {
-                        var sg = new VMDL_StopGroup();
-                        sg.AddStop(stop);
-                        result.Add(sg);
-                    }
-                }
+            GraphTransformer.GetStopGroups(maxDistance).ForEach(sg => {
+                var stops = new List<VMDL_Stop>();
+                sg.GetStops().ForEach(s => stops.Add(new VMDL_Stop(s.StopId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, s.ParentStation, s.WheelchairBoarding)));
+                result.Add(new VMDL_StopGroup(stops, sg.HasDifferentNames, sg.avgLatitude, sg.avgLongitude, sg.name));
             });
 
             return result;
+        }
+
+        /// <summary>
+        /// Todo...
+        /// </summary>
+        public static void GetRoute()
+        {
+            var stopsTripsDict = new Dictionary<int, List<int>>();  // StopId -> List<-TripId->
+            var tripsTimesDict = new Dictionary<int, List<StopTime>>();  // TripId -> List<StopTime>
+
+            {
+                var times = DbManager.GetAllStopTimesForDate(new DateTime(2013, 3, 1));
+                times.ForEach(st =>
+                {
+                    // minden megállóhoz, hogy milyen útvonalakon (trip) szerepel
+                    {
+                        List<int> stopsTripsValue;
+                        if (stopsTripsDict.TryGetValue(st.stopId, out stopsTripsValue))
+                        {
+                            stopsTripsValue.Add(st.tripId);
+                        }
+                        else
+                        {
+                            stopsTripsValue = new List<int>();
+                            stopsTripsValue.Add(st.tripId);
+                            stopsTripsDict.Add(st.stopId, stopsTripsValue);
+                        }
+                    }
+
+                    // minden útvonalhoz (trip), hogy sorban milyen StopTime-ok szerepelnek benne
+                    {
+                        List<StopTime> tripsTimesValue;
+                        if (tripsTimesDict.TryGetValue(st.tripId, out tripsTimesValue))
+                        {
+                            tripsTimesValue.Add(st);
+                        }
+                        else
+                        {
+                            tripsTimesValue = new List<StopTime>();
+                            tripsTimesValue.Add(st);
+                            tripsTimesDict.Add(st.tripId, tripsTimesValue);
+                        }
+                    }
+                });
+            }
+
+            // setup stopgroups
+            var stopGroups = GraphTransformer.GetStopGroups(100, stopsTripsDict, tripsTimesDict);
         }
     }
 }

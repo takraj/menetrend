@@ -27,53 +27,5 @@ namespace MTR.WebApp.Common.ViewModels
             this.ParentStation = parentStation;
             this.WheelchairBoarding = wheelchair;
         }
-
-        public bool HasSimilarNameTo(string subjectName)
-        {
-            if (this.StopName.Equals(subjectName))
-            {
-                return true;
-            }
-
-            var allowedDifferences = new List<char>();
-            allowedDifferences.Add(' ');
-            allowedDifferences.Add('+');
-            allowedDifferences.Add('/');
-            allowedDifferences.Add('M');
-            allowedDifferences.Add('H');
-
-            if (this.StopName.StartsWith(subjectName))
-            {
-                var tail = this.StopName.Substring(subjectName.Length, this.StopName.Length - subjectName.Length);
-                if (tail.Length > 1)
-                {
-                    foreach (char c in tail.ToCharArray())
-                    {
-                        if (!allowedDifferences.Exists(diff => diff.CompareTo(c) == 0))
-                        {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            }
-            else if (subjectName.StartsWith(this.StopName))
-            {
-                var tail = subjectName.Substring(this.StopName.Length, subjectName.Length - this.StopName.Length);
-                if (tail.Length > 1)
-                {
-                    foreach (char c in tail.ToCharArray())
-                    {
-                        if (!allowedDifferences.Exists(diff => diff.CompareTo(c) == 0))
-                        {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            }
-
-            return false;
-        }
     }
 }

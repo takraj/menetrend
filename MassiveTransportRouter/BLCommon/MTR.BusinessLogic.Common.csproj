@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="POCO\Stop.cs" />
+    <Compile Include="POCO\StopGroup.cs" />
+    <Compile Include="POCO\StopTime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
