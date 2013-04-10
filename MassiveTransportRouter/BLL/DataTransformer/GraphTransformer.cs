@@ -20,8 +20,11 @@ namespace MTR.BusinessLogic.DataTransformer
         {
             var result = new List<StopGroup>();
             var allStops = DbManager.GetAllStops();
+
+            // default paraméterértéknél ne keressünk továbblépési pontokat, mert elszállna a program
             var dontFindNextStops = (stopsTripsDict == null || tripsTimesDict == null);
 
+            // A feldolgozás szekvenciális, nem lehet hatékonyan párhuzamosítani!
             allStops.ForEach(stop =>
             {
                 // Only if the current stop is not contained by a stopgroup
@@ -41,6 +44,7 @@ namespace MTR.BusinessLogic.DataTransformer
                             }
                             else
                             {
+                                // Adjuk hozzá ÉS keressük meg a lehetséges továbblépési pontokat is!
                                 sg.AddStop(stop, stopsTripsDict, tripsTimesDict, allStops);
                             }
                             createNewGroup = false;
@@ -56,6 +60,7 @@ namespace MTR.BusinessLogic.DataTransformer
                             }
                             else
                             {
+                                // Adjuk hozzá ÉS keressük meg a lehetséges továbblépési pontokat is!
                                 sg.AddStop(stop, stopsTripsDict, tripsTimesDict, allStops);
                             }
                             createNewGroup = false;
@@ -72,6 +77,7 @@ namespace MTR.BusinessLogic.DataTransformer
                         }
                         else
                         {
+                            // Adjuk hozzá ÉS keressük meg a lehetséges továbblépési pontokat is!
                             sg.AddStop(stop, stopsTripsDict, tripsTimesDict, allStops);
                         }
                         result.Add(sg);
@@ -79,6 +85,8 @@ namespace MTR.BusinessLogic.DataTransformer
                 }
             });
 
+            // A visszatérési érték az összes létrehozott csoport.
+            // Minden megálló bekerül valamilyen csoportba, ha más nem, akkor egy-eleműbe.
             return result;
         }
     }

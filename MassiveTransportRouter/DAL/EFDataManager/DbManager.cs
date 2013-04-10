@@ -1,7 +1,10 @@
 ﻿using MTR.DataAccess.EFDataManager.Entities;
+using MTR.DataAccess.EFDataManager.Serialization;
+using ProtoBuf;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +13,9 @@ namespace MTR.DataAccess.EFDataManager
 {
     public class DbManager
     {
+        private static string cacheDir = "cache";
+        private static string cacheExt = ".dat";
+
         /// <summary>
         /// Returns all stop records from the database
         /// </summary>
@@ -27,6 +33,329 @@ namespace MTR.DataAccess.EFDataManager
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Visszaad minden lehetséges útvonalhoz egy Trip-et, listában
+        /// </summary>
+        /// <returns></returns>
+        public static List<MTR.BusinessLogic.Common.POCO.Trip> GetTripsWithDistinctPaths()
+        {
+            var result = new List<MTR.BusinessLogic.Common.POCO.Trip>();
+            var shapes = new HashSet<Int32>();
+
+            using (var db = new EF_GtfsDbContext())
+            {
+                foreach (EF_Trip t in db.Trips.ToList())
+                {
+                    if (shapes.Add(t.ShapeId.Id))
+                    {
+                        result.Add(new MTR.BusinessLogic.Common.POCO.Trip { 
+                            BlockId = t.BlockId,
+                            DbId = t.Id,
+                            DirectionId = t.DirectionId,
+                            OriginalId = t.OriginalId,
+                            RouteId = t.RouteId.Id,
+                            ServiceId = t.ServiceId.Id,
+                            ShapeId = t.ShapeId.Id,
+                            TripHeadsign = t.TripHeadsign,
+                            WheelchairAccessible = t.WheelchairAccessible
+                        });
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Egy adott Trip-hez visszaadja, hogy milyen sorrendben jönnek a megállók (Stop lista)
+        /// </summary>
+        /// <param name="trip"></param>
+        /// <returns></returns>
+        public static List<MTR.BusinessLogic.Common.POCO.Stop> GetStopsOrderByTrip(MTR.BusinessLogic.Common.POCO.Trip trip)
+        {
+            var result = new List<MTR.BusinessLogic.Common.POCO.Stop>();
+
+            using (var db = new EF_GtfsDbContext())
+            {
+                foreach (EF_StopTime stoptime in db.StopTimes.Where(st => st.TripId.Id == trip.DbId).OrderBy(st => st.StopSequence).ToList())
+                {
+                    var s = stoptime.StopId;
+                    result.Add(new BusinessLogic.Common.POCO.Stop(s.Id, s.OriginalId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, (s.ParentStation != null) ? s.ParentStation.OriginalId : null, s.WheelchairBoarding));
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// A következő indulási időpontot adja meg, cacheből
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="referenceTime"></param>
+        /// <param name="routeId"></param>
+        /// <param name="stopId"></param>
+        /// <returns></returns>
+        public static TimeSpan? GetNextDepartureFromCache(DateTime date, TimeSpan referenceTime, int routeId, int stopId)
+        {
+            try
+            {
+                using (var file = File.OpenRead("cache\\" + routeId.ToString() + "-" + stopId.ToString() + cacheExt))
+                {
+                    var timetable = Serializer.Deserialize<List<TimetableItem>>(file); // Eleve rendezett lista!
+
+                    // Szűrés napra:
+                    switch (date.DayOfWeek)
+                    {
+                        case DayOfWeek.Monday:
+                            timetable = timetable.Where(t => t.ValidOnMonday).ToList();
+                            break;
+                        case DayOfWeek.Tuesday:
+                            timetable = timetable.Where(t => t.ValidOnTuesday).ToList();
+                            break;
+                        case DayOfWeek.Wednesday:
+                            timetable = timetable.Where(t => t.ValidOnWednesday).ToList();
+                            break;
+                        case DayOfWeek.Thursday:
+                            timetable = timetable.Where(t => t.ValidOnThursday).ToList();
+                            break;
+                        case DayOfWeek.Friday:
+                            timetable = timetable.Where(t => t.ValidOnFriday).ToList();
+                            break;
+                        case DayOfWeek.Saturday:
+                            timetable = timetable.Where(t => t.ValidOnSaturday).ToList();
+                            break;
+                        case DayOfWeek.Sunday:
+                            timetable = timetable.Where(t => t.ValidOnSunday).ToList();
+                            break;
+                    }
+
+                    return TimeSpan.FromTicks(timetable.First(ti => (ti.DepartureTick > referenceTime.Ticks)
+                        && (ti.ValidFromTick <= date.Ticks) && (ti.ValidToTick >= date.Ticks)).DepartureTick);
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// A következő indulási időpontot adja meg, közvetlenül adatbázisból
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="referenceTime"></param>
+        /// <param name="routeId"></param>
+        /// <param name="stopId"></param>
+        /// <returns></returns>
+        public static TimeSpan? GetNextDeparture(DateTime date, TimeSpan referenceTime, int routeId, int stopId)
+        {
+            using (var db = new EF_GtfsDbContext())
+            {
+                var query = from stoptimes in db.StopTimes
+                            where ((stoptimes.StopId.Id == stopId)
+                                && (stoptimes.TripId.RouteId.Id == routeId)
+                                && (stoptimes.DepartureTime > referenceTime)
+                                && (stoptimes.TripId.ServiceId.StartDate <= date)
+                                && (stoptimes.TripId.ServiceId.EndDate >= date))
+                            orderby stoptimes.DepartureTime ascending
+                            select stoptimes;
+
+                try
+                {
+                    switch (date.DayOfWeek)
+                    {
+                        case DayOfWeek.Monday:
+                            return query.First(t => t.TripId.ServiceId.Monday).DepartureTime;
+                        case DayOfWeek.Tuesday:
+                            return query.First(t => t.TripId.ServiceId.Tuesday).DepartureTime;
+                        case DayOfWeek.Wednesday:
+                            return query.First(t => t.TripId.ServiceId.Wednesday).DepartureTime;
+                        case DayOfWeek.Thursday:
+                            return query.First(t => t.TripId.ServiceId.Thursday).DepartureTime;
+                        case DayOfWeek.Friday:
+                            return query.First(t => t.TripId.ServiceId.Friday).DepartureTime;
+                        case DayOfWeek.Saturday:
+                            return query.First(t => t.TripId.ServiceId.Saturday).DepartureTime;
+                        case DayOfWeek.Sunday:
+                            return query.First(t => t.TripId.ServiceId.Sunday).DepartureTime;
+                        default:
+                            return null;
+                    }
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// A szolgáltatási rendet adja vissza
+        /// </summary>
+        /// <param name="date">Melyik napra vagy kíváncsi?</param>
+        /// <returns>RouteId, StopId -- ListOfTimeSpan (mikor indul onnan az adott járat)</returns>
+        public static Dictionary<int, Dictionary<int, List<TimeSpan>>> GetTimetable(DateTime date)
+        {
+            var result = new Dictionary<int, Dictionary<int, List<TimeSpan>>>();
+
+            using (var db = new EF_GtfsDbContext())
+            {
+                // Filter 1
+                var trips = db.Trips.Where(t => ((t.ServiceId.StartDate <= date) && (t.ServiceId.EndDate >= date)));
+
+                // Filter 2
+                switch (date.DayOfWeek)
+                {
+                    case DayOfWeek.Monday:
+                        trips = trips.Where(t => t.ServiceId.Monday);
+                        break;
+                    case DayOfWeek.Tuesday:
+                        trips = trips.Where(t => t.ServiceId.Tuesday);
+                        break;
+                    case DayOfWeek.Wednesday:
+                        trips = trips.Where(t => t.ServiceId.Wednesday);
+                        break;
+                    case DayOfWeek.Thursday:
+                        trips = trips.Where(t => t.ServiceId.Thursday);
+                        break;
+                    case DayOfWeek.Friday:
+                        trips = trips.Where(t => t.ServiceId.Friday);
+                        break;
+                    case DayOfWeek.Saturday:
+                        trips = trips.Where(t => t.ServiceId.Saturday);
+                        break;
+                    case DayOfWeek.Sunday:
+                        trips = trips.Where(t => t.ServiceId.Sunday);
+                        break;
+                }
+
+                // for easy querying
+                var tripids = new List<int>();
+                trips.ToList().ForEach(t => tripids.Add(t.Id));
+                trips = null;
+
+                foreach (int tripid in tripids)
+                {
+                    // query
+                    Console.WriteLine("Constructing easy query...");
+                    var times = db.StopTimes.Where(st => (st.TripId.Id == tripid)).OrderBy(st => st.StopSequence);
+
+                    // create result
+                    Console.WriteLine("Running easy query...");
+                    foreach (var t in times.ToArray())
+                    {
+                        // 1. szint
+                        if (!result.ContainsKey(t.TripId.RouteId.Id))
+                        {
+                            result.Add(t.TripId.RouteId.Id, new Dictionary<int, List<TimeSpan>>());
+                        }
+
+                        Dictionary<int, List<TimeSpan>> timesOfStops;
+                        result.TryGetValue(t.TripId.RouteId.Id, out timesOfStops);
+
+                        // 2. szint
+                        if (!timesOfStops.ContainsKey(t.StopId.Id))
+                        {
+                            timesOfStops.Add(t.StopId.Id, new List<TimeSpan>());
+                        }
+
+                        List<TimeSpan> timesOfStop;
+                        timesOfStops.TryGetValue(t.StopId.Id, out timesOfStop);
+
+                        // 3. szint
+                        timesOfStop.Add(t.DepartureTime);
+
+                        Console.Write("#" + t.Id);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// A szolgáltatási rendet gyorsítótárazza, asszociatív módon,
+        /// fájlokba csoportosítva járatok-megállók alapján
+        /// </summary>
+        public static void CreateTimetableAssociativeCache()
+        {
+            ulong counter = 0;
+
+            using (var db = new EF_GtfsDbContext())
+            {
+                // query
+                Console.WriteLine("Constructing query...");
+                var times = from stoptimes in db.StopTimes
+                            select new TimetableItem
+                            {
+                                RouteDbId = stoptimes.TripId.RouteId.Id,
+                                StopDbId = stoptimes.StopId.Id,
+                                ValidFrom = stoptimes.TripId.ServiceId.StartDate,
+                                ValidTo = stoptimes.TripId.ServiceId.EndDate,
+                                ValidOnMonday = stoptimes.TripId.ServiceId.Monday,
+                                ValidOnTuesday = stoptimes.TripId.ServiceId.Tuesday,
+                                ValidOnWednesday = stoptimes.TripId.ServiceId.Wednesday,
+                                ValidOnThursday = stoptimes.TripId.ServiceId.Thursday,
+                                ValidOnFriday = stoptimes.TripId.ServiceId.Friday,
+                                ValidOnSaturday = stoptimes.TripId.ServiceId.Saturday,
+                                ValidOnSunday = stoptimes.TripId.ServiceId.Sunday,
+                                Departure = stoptimes.DepartureTime
+                            };
+
+                // create result: Berakja egy szótárba, ahol a kulcs a megfelelő RouteId-StopId pár
+                var timetableDict = new Dictionary<string, List<TimetableItem>>();
+                Console.WriteLine("Running query...");
+                foreach (var t in times)
+                {
+                    string filename = t.RouteDbId.ToString() + "-" + t.StopDbId.ToString();
+
+                    if (!timetableDict.ContainsKey(filename))
+                    {
+                        timetableDict.Add(filename, new List<TimetableItem>());
+                    }
+
+                    List<TimetableItem> values;
+                    timetableDict.TryGetValue(filename, out values);
+                    values.Add(t);
+
+                    counter++;
+                    if ((counter % 100000) == 0)
+                    {
+                        Console.WriteLine((counter / 100000).ToString() + " x 100K processed");
+                    }
+                }
+                Console.WriteLine();
+
+                Console.WriteLine("Creating files...");
+
+                #region Create / Reset cache directory
+                
+                bool IsExists = System.IO.Directory.Exists(cacheDir);
+                if (IsExists)
+                {
+                    Console.WriteLine("Recreating cache directory...");
+                    Directory.Delete(cacheDir, true);
+                }
+                System.IO.Directory.CreateDirectory(cacheDir);
+
+                #endregion
+
+                foreach (var key in timetableDict.Keys)
+                {
+                    List<TimetableItem> values;
+                    timetableDict.TryGetValue(key, out values);
+
+                    // Flush
+                    using (var file = File.Create(cacheDir + "\\" + key + ".dat"))
+                    {
+                        Console.Write("-- WRITING FILE: " + cacheDir + "\\" + key + cacheExt + " --");
+                        Serializer.Serialize(file, values.OrderBy(v => v.DepartureTick)); // Bináris szerializáló! Nagyon gyors! (protobuf-net)
+                        Console.WriteLine(" [OK, "+ values.Count +" items written]");
+                    }
+                }
+            }
         }
 
         /// <summary>

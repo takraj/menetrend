@@ -25,6 +25,13 @@ namespace MTR.BusinessLogic.Common.POCO
             }
         }
 
+        /// <summary>
+        /// Megadja, hogy a csoporton belül lévő megállók és a megadott koordináta pár
+        /// között mekkora a legnagyobb távolság.
+        /// </summary>
+        /// <param name="lat">Szélesség</param>
+        /// <param name="lon">Hosszúság</param>
+        /// <returns>Távolság, méterben</returns>
         public double GetMaxDistanceTo(double lat, double lon)
         {
             var lck = new Object();
@@ -46,6 +53,10 @@ namespace MTR.BusinessLogic.Common.POCO
             return result;
         }
 
+        /// <summary>
+        /// Simán hozzáad egy megállót a csoporthoz
+        /// </summary>
+        /// <param name="stop"></param>
         public void AddStop(Stop stop)
         {
             stops.Add(stop);
@@ -63,6 +74,14 @@ namespace MTR.BusinessLogic.Common.POCO
             }
         }
 
+        /// <summary>
+        /// Hozzáad egy megállót a csoporthoz, majd megkeresi a paraméterek alapján,
+        /// hogy milyen következő megállók lehetségesek innen.
+        /// </summary>
+        /// <param name="stop"></param>
+        /// <param name="stopsTripsDict">Adott stop-ban (int id) milyen trip-ek értelmezettek (list int id). Szótár.</param>
+        /// <param name="tripsTimesDict">Adott trip (int id) megállói (list StopTime id). Szótár.</param>
+        /// <param name="allStops">Az összes lehetséges megálló. Ezek már konkrét Stop példányok.</param>
         public void AddStop(Stop stop, Dictionary<int, List<int>> stopsTripsDict, Dictionary<int, List<StopTime>> tripsTimesDict, List<Stop> allStops)
         {
             this.AddStop(stop);
@@ -94,16 +113,28 @@ namespace MTR.BusinessLogic.Common.POCO
             }
         }
 
+        /// <summary>
+        /// Pointert hoz létre egy lehetséges továbblépési pontra.
+        /// </summary>
+        /// <param name="stop"></param>
         public void AddNextStop(Stop stop)
         {
             nextStops.Add(stop);
         }
 
+        /// <summary>
+        /// Lekéri a csoport összes megállóját
+        /// </summary>
+        /// <returns></returns>
         public List<Stop> GetStops()
         {
             return new List<Stop>(stops);
         }
 
+        /// <summary>
+        /// Lekéri a csoport összes lehetséges továbblépési pontját
+        /// </summary>
+        /// <returns></returns>
         public List<Stop> GetNextStops()
         {
             return new List<Stop>(nextStops);

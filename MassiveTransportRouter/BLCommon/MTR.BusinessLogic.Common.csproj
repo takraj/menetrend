@@ -39,9 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="POCO\Route.cs" />
     <Compile Include="POCO\Stop.cs" />
     <Compile Include="POCO\StopGroup.cs" />
     <Compile Include="POCO\StopTime.cs" />
+    <Compile Include="POCO\Trip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

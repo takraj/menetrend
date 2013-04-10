@@ -41,6 +41,8 @@
   <ItemGroup>
     <Compile Include="DataManager\CsvDataManager.cs" />
     <Compile Include="DataManager\DbDataManager.cs" />
+    <Compile Include="DataTransformer\CostCalculator.cs" />
+    <Compile Include="DataTransformer\GraphBuilder.cs" />
     <Compile Include="DataTransformer\GraphTransformer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

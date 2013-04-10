@@ -37,11 +37,15 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.0.0.621\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -62,6 +66,7 @@
     <Compile Include="EFDataManager\Entities\EF_Stop.cs" />
     <Compile Include="EFDataManager\Entities\EF_StopTime.cs" />
     <Compile Include="EFDataManager\Entities\EF_Trip.cs" />
+    <Compile Include="EFDataManager\Serialization\TimetableItem.cs" />
     <Compile Include="Helpers\AdvancedEnumConverter.cs" />
     <Compile Include="CsvDataManager\GtfsModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
