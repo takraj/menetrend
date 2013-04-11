@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,20 @@ namespace MTR.Common
             double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
             return R * c * 1000;
+        }
+
+        /// <summary>
+        /// Recreates a directory path
+        /// </summary>
+        /// <param name="path"></param>
+        public static void recreateFolder(string path)
+        {
+            bool IsExists = System.IO.Directory.Exists(path);
+            if (IsExists)
+            {
+                Directory.Delete(path, true);
+            }
+            System.IO.Directory.CreateDirectory(path);
         }
     }
 }

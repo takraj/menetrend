@@ -1,5 +1,6 @@
 ﻿using MTR.BusinessLogic.DataManager;
 using MTR.BusinessLogic.DataTransformer;
+using MTR.BusinessLogic.Pathfinder.Dijkstra;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,19 +17,56 @@ namespace MTR.ConsoleApp
             Console.WriteLine("Configuring database...");
             DbDataManager.initDatabase(Environment.CurrentDirectory + "budapest_gtfs/");
 
-            //FindStopGroups();
+            //CreateStopGroups();
             //CreateGraph();
             //GetTimetable();
-            GetNextDeparture();
+            //GetNextDeparture();
             //CreateTimetableCache();
+            //GetGraphMap();
+            RunDijkstra();
 
             Console.WriteLine("-- DONE --");
             Console.ReadKey();
         }
 
+        static void RunDijkstra()
+        {
+            Console.WriteLine("Press any key to get a random route. Terminate with '.' key.");
+            char key;
+            while ((key = Console.ReadKey().KeyChar).CompareTo('.') != 0)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Running Dijkstra...");
+                var stopwatch = new Stopwatch();
+
+                stopwatch.Start();
+                var rnd = new Random();
+                var src = rnd.Next(100, 5000);
+                var dst = rnd.Next(100, 5000);
+                new DijkstraPathfinder().GetShortestRoute(src, dst, new DateTime(2013, 03, 01, 19, 0, 0));
+                // new DijkstraPathfinder().GetShortestRoute(3240, 2841, new DateTime(2013, 03, 01, 19, 0, 0)); // test
+                stopwatch.Stop();
+
+                Console.WriteLine("\t Idő: " + (stopwatch.ElapsedMilliseconds / 1000.0) + "s");
+            }
+        }
+
+        static void GetGraphMap()
+        {
+            Console.WriteLine("Getting Graph Map...");
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            Console.WriteLine("Count of StopGroups  :\t" + DbDataManager.GetStopGroupsFromDb().Keys.Count);
+            Console.WriteLine("CountOfStopsWithEdges:\t" + GraphTransformer.GetGraphMap().Keys.Count);
+            stopwatch.Stop();
+
+            Console.WriteLine("\t Idő: " + (stopwatch.ElapsedMilliseconds / 1000.0) + "s");
+        }
+
         static void GetNextDeparture()
         {
-            Console.WriteLine("Press any key to get next departure. Terminate with '.' key.");
+            Console.WriteLine("Press a key to get next departure. Terminate with '.' key.");
             Console.WriteLine("Press 'c' for cache or press 'd' for DB retreival.");
             char key;
             while ((key = Console.ReadKey().KeyChar).CompareTo('.') != 0)
@@ -96,7 +134,7 @@ namespace MTR.ConsoleApp
 
         static void FindStopGroups()
         {
-            Console.Write("Creating Groups...");
+            Console.Write("Finding Groups...");
             var stopwatch = new Stopwatch();
             
             stopwatch.Start();
@@ -105,6 +143,20 @@ namespace MTR.ConsoleApp
             stopwatch.Stop();
 
             Console.WriteLine("\t" + stopGroups.Count + " / " + allStops.Count + "\t" + (stopwatch.ElapsedMilliseconds / 1000.0) + "s");
+        }
+
+        static void CreateStopGroups()
+        {
+            Console.WriteLine("Creating Groups...");
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            Console.WriteLine("Before: " + DbDataManager.GetStopGroupsFromDb().Keys.Count);
+            GraphTransformer.CreateStopGroups(100);
+            Console.WriteLine("After: " + DbDataManager.GetStopGroupsFromDb().Keys.Count);
+            stopwatch.Stop();
+
+            Console.WriteLine("\t Idő: " + (stopwatch.ElapsedMilliseconds / 1000.0) + "s");
         }
     }
 }

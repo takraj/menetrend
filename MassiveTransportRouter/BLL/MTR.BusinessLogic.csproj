@@ -44,11 +44,15 @@
     <Compile Include="DataTransformer\CostCalculator.cs" />
     <Compile Include="DataTransformer\GraphBuilder.cs" />
     <Compile Include="DataTransformer\GraphTransformer.cs" />
+    <Compile Include="Pathfinder\Dijkstra\CompleteNode.cs" />
+    <Compile Include="Pathfinder\Dijkstra\DijkstraPathfinder.cs" />
+    <Compile Include="Pathfinder\Dijkstra\Edge.cs" />
+    <Compile Include="Pathfinder\Dijkstra\Node.cs" />
+    <Compile Include="Pathfinder\Dijkstra\RouteEdge.cs" />
+    <Compile Include="Pathfinder\Dijkstra\TransferEdge.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pathfinder\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\BLCommon\MTR.BusinessLogic.Common.csproj">
       <Project>{01be9468-e7aa-46e3-98c4-3cff229f5f2b}</Project>

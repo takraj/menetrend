@@ -64,6 +64,7 @@
     <Compile Include="EFDataManager\Entities\EF_Route.cs" />
     <Compile Include="EFDataManager\Entities\EF_Shape.cs" />
     <Compile Include="EFDataManager\Entities\EF_Stop.cs" />
+    <Compile Include="EFDataManager\Entities\EF_StopRouteStopEdge.cs" />
     <Compile Include="EFDataManager\Entities\EF_StopTime.cs" />
     <Compile Include="EFDataManager\Entities\EF_Trip.cs" />
     <Compile Include="EFDataManager\Serialization\TimetableItem.cs" />

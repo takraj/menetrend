@@ -21,6 +21,7 @@ namespace MTR.DataAccess.EFDataManager.Entities
         public String StopName { get; set; }
         public Double StopLatitude { get; set; }
         public Double StopLongitude { get; set; }
+        public int? GroupId { get; set; }
 
         public virtual EF_Stop ParentStation { get; set; }
 

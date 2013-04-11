@@ -13,7 +13,7 @@ namespace MTR.WebApp.Controllers
         {
             ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
 
-            DbDataManager.GetRoute();
+            //DbDataManager.GetRoute();
 
             return View();
         }

@@ -19,6 +19,7 @@ namespace MTR.DataAccess.EFDataManager
         public DbSet<EF_Shape> Shapes { get; set; }
         public DbSet<EF_Trip> Trips { get; set; }
         public DbSet<EF_StopTime> StopTimes { get; set; }
+        public DbSet<EF_StopRouteStopEdge> StopEdges { get; set; }
 
         public static string ConnectionString
         {

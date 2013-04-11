@@ -15,10 +15,11 @@ namespace MTR.BusinessLogic.Common.POCO
         public Double StopLatitude;
         public Double StopLongitude;
         public E_LocationType LocationType;
-        public String ParentStation;
+        public int? ParentStation;
+        public int? GroupId;
         public E_WheelchairSupport WheelchairBoarding;
 
-        public Stop(int dbid, string id, string name, double lat, double lon, E_LocationType loctype, String parentStation, E_WheelchairSupport wheelchair)
+        public Stop(int dbid, string id, string name, double lat, double lon, E_LocationType loctype, int? parentStation, E_WheelchairSupport wheelchair, int? gid)
         {
             this.DbId = dbid;
             this.StopId = id;
@@ -28,6 +29,7 @@ namespace MTR.BusinessLogic.Common.POCO
             this.LocationType = loctype;
             this.ParentStation = parentStation;
             this.WheelchairBoarding = wheelchair;
+            this.GroupId = gid;
         }
 
         public bool HasSimilarNameTo(string subjectName)

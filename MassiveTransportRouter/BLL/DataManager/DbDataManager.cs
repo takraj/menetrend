@@ -25,7 +25,7 @@ namespace MTR.BusinessLogic.DataManager
         public static List<VMDL_Stop> GetAllStops()
         {
             var result = new List<MTR.WebApp.Common.ViewModels.VMDL_Stop>();
-            DbManager.GetAllStops().ForEach(s => result.Add(new VMDL_Stop(s.StopId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, s.ParentStation, s.WheelchairBoarding)));
+            DbManager.GetAllStops().ForEach(s => result.Add(new VMDL_Stop(s.DbId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, s.ParentStation, s.WheelchairBoarding)));
             return result;
         }
 
@@ -41,11 +41,16 @@ namespace MTR.BusinessLogic.DataManager
 
             GraphTransformer.GetStopGroups(maxDistance).ForEach(sg => {
                 var stops = new List<VMDL_Stop>();
-                sg.GetStops().ForEach(s => stops.Add(new VMDL_Stop(s.StopId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, s.ParentStation, s.WheelchairBoarding)));
+                sg.GetStops().ForEach(s => stops.Add(new VMDL_Stop(s.DbId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, s.ParentStation, s.WheelchairBoarding)));
                 result.Add(new VMDL_StopGroup(stops, sg.HasDifferentNames, sg.avgLatitude, sg.avgLongitude, sg.name));
             });
 
             return result;
+        }
+
+        public static Dictionary<int, List<int>> GetStopGroupsFromDb()
+        {
+            return DbManager.GetStopGroups();
         }
 
         /// <summary>

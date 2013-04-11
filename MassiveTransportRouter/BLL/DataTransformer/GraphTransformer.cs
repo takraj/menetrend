@@ -10,6 +10,84 @@ namespace MTR.BusinessLogic.DataTransformer
 {
     public class GraphTransformer
     {
+        public static void CreateStopGroups(double maxDistance)
+        {
+            var result = new List<StopGroup>();
+            var allStops = DbManager.GetAllStops();
+
+            // A feldolgozás szekvenciális, nem lehet hatékonyan párhuzamosítani!
+            allStops.ForEach(stop =>
+            {
+                // Only if the current stop is not contained by a stopgroup
+                if (!result.Exists(sg => sg.GetStops().Contains(stop)))
+                {
+                    bool createNewGroup = true;
+
+                    foreach (StopGroup sg in result)
+                    {
+                        // Similar names (one contains the other & length difference is small)
+                        // Example: "Cinkota" VS "Cinkota H"
+                        if (sg.GetStops().Exists(s => s.HasSimilarNameTo(stop.StopName)))
+                        {
+                            sg.AddStop(stop);
+                            createNewGroup = false;
+                            break;
+                        }
+
+                        // Not similar name, but it's near
+                        else if (sg.GetMaxDistanceTo(stop.StopLatitude, stop.StopLongitude) <= maxDistance)
+                        {
+                            sg.AddStop(stop);
+                            createNewGroup = false;
+                            break;
+                        }
+                    }
+
+                    if (createNewGroup)
+                    {
+                        var sg = new StopGroup();
+                        sg.AddStop(stop);
+                        result.Add(sg);
+                    }
+                }
+            });
+
+            // szóljunk az adatbázisnak, hogy végezze el az UPDATE-eket
+            Console.WriteLine("Updating database...");
+            DbManager.UpdateStopGroups(result);
+        }
+
+        public static Dictionary<int, Dictionary<int, List<int>>> GetGraphMap()
+        {
+            var routesOfStops = new Dictionary<int, Dictionary<int, List<int>>>();
+            DbManager.GetEdgesFromDatabase().ForEach(
+                edge =>
+                {
+                    #region Első szint
+                    if (!routesOfStops.ContainsKey(edge.StopId))
+                    {
+                        // kulcs létrehozása, ha nem létezik
+                        routesOfStops.Add(edge.StopId, new Dictionary<int, List<int>>());
+                    }
+                    Dictionary<int, List<int>> stopsOfRoutes;
+                    routesOfStops.TryGetValue(edge.StopId, out stopsOfRoutes);
+                    #endregion
+
+                    #region Második szint
+                    if (!stopsOfRoutes.ContainsKey(edge.RouteId))
+                    {
+                        // kulcs létrehozása, ha nem létezik
+                        stopsOfRoutes.Add(edge.RouteId, new List<int>());
+                    }
+                    List<int> stops;
+                    stopsOfRoutes.TryGetValue(edge.RouteId, out stops);
+                    stops.Add(edge.nextStopId);
+                    #endregion
+                });
+
+            return routesOfStops;
+        }
+
         /// <summary>
         /// Creates and returns the stopgroups
         /// </summary>

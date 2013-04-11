@@ -90,12 +90,23 @@ namespace MTR.BusinessLogic.DataTransformer
                     }
 
                     if (isDebug) Console.Write("" + stop.DbId + "#" + routeId + " (" + stopSet.Count + ")");
+                    var edgeList = new LinkedList<StopRouteStopEdge>();
                     foreach (Stop nextStop in stopSet)
                     {
                         // [stop.DbId, routeId, nextStop.DbId] hozzáadása az adatbázishoz
+                        edgeList.AddLast(new StopRouteStopEdge {
+                            StopId = stop.DbId,
+                            RouteId = routeId,
+                            nextStopId = nextStop.DbId
+                        });
+
                         if (isDebug) Console.Write(" | " + nextStop.DbId);
                         counter++;
                     }
+
+                    // Átadás az adatrétegnek... azt csinál vele amit akar...
+                    DbManager.AddEdgesToDatabase(edgeList);
+
                     Console.WriteLine();
                 }
             }         // end of allStops foreach

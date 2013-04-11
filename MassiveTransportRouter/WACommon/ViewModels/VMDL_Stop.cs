@@ -9,15 +9,15 @@ namespace MTR.WebApp.Common.ViewModels
 {
     public class VMDL_Stop
     {
-        public String StopId;
+        public int StopId;
         public String StopName;
         public Double StopLatitude;
         public Double StopLongitude;
         public E_LocationType LocationType;
-        public String ParentStation;
+        public int? ParentStation;
         public E_WheelchairSupport WheelchairBoarding;
 
-        public VMDL_Stop(string id, string name, double lat, double lon, E_LocationType loctype, String parentStation, E_WheelchairSupport wheelchair)
+        public VMDL_Stop(int id, string name, double lat, double lon, E_LocationType loctype, int? parentStation, E_WheelchairSupport wheelchair)
         {
             this.StopId = id;
             this.StopName = name;

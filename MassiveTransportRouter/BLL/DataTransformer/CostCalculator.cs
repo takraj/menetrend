@@ -22,7 +22,7 @@ namespace MTR.BusinessLogic.DataTransformer
         public static void GetNextDeparture()
         {
             TimeSpan? t;
-            if ((t = DbManager.GetNextDeparture(new DateTime(2013, 03, 01), DateTime.Now.TimeOfDay, 93, 2774)) != null)
+            if ((t = DbManager.GetNextDeparture(new DateTime(2013, 03, 01), DateTime.Now.TimeOfDay, 125, 3247)) != null)
             {
                 Console.Write("FOUND: " + ((TimeSpan)t).ToString());
             } else {
@@ -30,12 +30,33 @@ namespace MTR.BusinessLogic.DataTransformer
             }
         }
 
+        public static TimeSpan? GetNextDeparture(DateTime when, int routeId, int stopId)
+        {
+            TimeSpan? t;
+            if ((t = DbManager.GetNextDepartureFromCache(when, when.TimeOfDay, routeId, stopId)) != null)
+            {
+                return t;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static void GetNextDepartureFromCache()
         {
             TimeSpan? t;
-            if ((t = DbManager.GetNextDepartureFromCache(new DateTime(2013, 03, 01), DateTime.Now.TimeOfDay, 93, 2774)) != null)
+            if ((t = DbManager.GetNextDepartureFromCache(new DateTime(2013, 03, 01), DateTime.Now.TimeOfDay, 125, 3247)) != null)
             {
                 Console.Write("FOUND: " + ((TimeSpan)t).ToString());
+                if (GetNextDeparture(new DateTime(2013, 03, 01, 19, 10, 0), 125, 3247) == null)
+                {
+                    Console.Write("#null");
+                }
+                else
+                {
+                    Console.Write("#ok");
+                }
             }
             else
             {

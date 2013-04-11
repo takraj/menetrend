@@ -4,6 +4,7 @@ using ProtoBuf;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,8 @@ namespace MTR.DataAccess.EFDataManager
 {
     public class DbManager
     {
-        private static string cacheDir = "cache";
+        private static string cacheRootDir = "cache";
+        private static string cacheTimetablesDir = "timetables";
         private static string cacheExt = ".dat";
 
         /// <summary>
@@ -28,11 +30,40 @@ namespace MTR.DataAccess.EFDataManager
             {
                 foreach (EF_Stop s in db.Stops.ToList())
                 {
-                    result.Add(new BusinessLogic.Common.POCO.Stop(s.Id, s.OriginalId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, (s.ParentStation != null) ? s.ParentStation.OriginalId : null, s.WheelchairBoarding));
+                    result.Add(new BusinessLogic.Common.POCO.Stop(s.Id, s.OriginalId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, (s.ParentStation != null) ? (int?)s.ParentStation.Id : null, s.WheelchairBoarding, s.GroupId));
                 }
             }
 
             return result;
+        }
+
+        public static MTR.BusinessLogic.Common.POCO.Route GetRouteById(int routeId)
+        {
+            using (var db = new EF_GtfsDbContext())
+            {
+                return (from dbRoute in db.Routes
+                       where dbRoute.Id == routeId
+                       select new MTR.BusinessLogic.Common.POCO.Route
+                       {
+                           AgencyId = dbRoute.AgencyId.Id,
+                           DbId = dbRoute.Id,
+                           OriginalId = dbRoute.OriginalId,
+                           RouteColor = dbRoute.RouteColor,
+                           RouteDescription = dbRoute.RouteDescription,
+                           RouteShortName = dbRoute.RouteShortName,
+                           RouteTextColor = dbRoute.RouteTextColor,
+                           RouteType = dbRoute.RouteType
+                       }).Single();
+            }
+        }
+
+        public static MTR.BusinessLogic.Common.POCO.Stop GetStopById(int stopId)
+        {
+            using (var db = new EF_GtfsDbContext())
+            {
+                var s = db.Stops.Single(stop => stop.Id == stopId);
+                return new BusinessLogic.Common.POCO.Stop(s.Id, s.OriginalId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, (s.ParentStation != null) ? (int?)s.ParentStation.Id : null, s.WheelchairBoarding, s.GroupId);
+            }
         }
 
         /// <summary>
@@ -82,7 +113,7 @@ namespace MTR.DataAccess.EFDataManager
                 foreach (EF_StopTime stoptime in db.StopTimes.Where(st => st.TripId.Id == trip.DbId).OrderBy(st => st.StopSequence).ToList())
                 {
                     var s = stoptime.StopId;
-                    result.Add(new BusinessLogic.Common.POCO.Stop(s.Id, s.OriginalId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, (s.ParentStation != null) ? s.ParentStation.OriginalId : null, s.WheelchairBoarding));
+                    result.Add(new BusinessLogic.Common.POCO.Stop(s.Id, s.OriginalId, s.StopName, s.StopLatitude, s.StopLongitude, s.LocationType, (s.ParentStation != null) ? (int?)s.ParentStation.Id : null, s.WheelchairBoarding, s.GroupId));
                 }
             }
 
@@ -99,9 +130,11 @@ namespace MTR.DataAccess.EFDataManager
         /// <returns></returns>
         public static TimeSpan? GetNextDepartureFromCache(DateTime date, TimeSpan referenceTime, int routeId, int stopId)
         {
+            string timetableCachePathRoot = cacheRootDir + System.IO.Path.DirectorySeparatorChar + cacheTimetablesDir + System.IO.Path.DirectorySeparatorChar;
+
             try
             {
-                using (var file = File.OpenRead("cache\\" + routeId.ToString() + "-" + stopId.ToString() + cacheExt))
+                using (var file = File.OpenRead(timetableCachePathRoot + routeId.ToString() + "-" + stopId.ToString() + cacheExt))
                 {
                     var timetable = Serializer.Deserialize<List<TimetableItem>>(file); // Eleve rendezett lista!
 
@@ -282,6 +315,7 @@ namespace MTR.DataAccess.EFDataManager
         public static void CreateTimetableAssociativeCache()
         {
             ulong counter = 0;
+            string timetableCachePathRoot = cacheRootDir + System.IO.Path.DirectorySeparatorChar + cacheTimetablesDir + System.IO.Path.DirectorySeparatorChar;
 
             using (var db = new EF_GtfsDbContext())
             {
@@ -328,29 +362,19 @@ namespace MTR.DataAccess.EFDataManager
                 }
                 Console.WriteLine();
 
+                Console.WriteLine("Recreating directory...");
+                MTR.Common.Utility.recreateFolder(timetableCachePathRoot);
+
                 Console.WriteLine("Creating files...");
-
-                #region Create / Reset cache directory
-                
-                bool IsExists = System.IO.Directory.Exists(cacheDir);
-                if (IsExists)
-                {
-                    Console.WriteLine("Recreating cache directory...");
-                    Directory.Delete(cacheDir, true);
-                }
-                System.IO.Directory.CreateDirectory(cacheDir);
-
-                #endregion
-
                 foreach (var key in timetableDict.Keys)
                 {
                     List<TimetableItem> values;
                     timetableDict.TryGetValue(key, out values);
 
                     // Flush
-                    using (var file = File.Create(cacheDir + "\\" + key + ".dat"))
+                    using (var file = File.Create(timetableCachePathRoot + key + ".dat"))
                     {
-                        Console.Write("-- WRITING FILE: " + cacheDir + "\\" + key + cacheExt + " --");
+                        Console.Write("-- WRITING FILE: " + timetableCachePathRoot + key + cacheExt + " --");
                         Serializer.Serialize(file, values.OrderBy(v => v.DepartureTick)); // Bináris szerializáló! Nagyon gyors! (protobuf-net)
                         Console.WriteLine(" [OK, "+ values.Count +" items written]");
                     }
@@ -420,6 +444,85 @@ namespace MTR.DataAccess.EFDataManager
                 foreach (EF_StopTime st in times.ToArray())
                 {
                     result.Add(new BusinessLogic.Common.POCO.StopTime(st.Id, st.TripId.Id, st.StopId.Id, st.ArrivalTime, st.DepartureTime, st.StopSequence, st.ShapeDistanceTraveled));
+                }
+            }
+
+            return result;
+        }
+
+        public static void AddEdgesToDatabase(IEnumerable<MTR.BusinessLogic.Common.POCO.StopRouteStopEdge> edgeList)
+        {
+            using (var db = new EF_GtfsDbContext())
+            {
+                foreach (var edge in edgeList)
+                {
+                    var source = db.Stops.First(s => s.Id == edge.StopId);
+                    var destination = db.Stops.First(s => s.Id == edge.nextStopId);
+                    var route = db.Routes.First(r => r.Id == edge.RouteId);
+
+                    db.StopEdges.Add(new EF_StopRouteStopEdge {
+                        SourceStop = source,
+                        ViaRoute = route,
+                        DestinationStop = destination
+                    });
+                }
+                db.SaveChanges();
+            }
+        }
+
+        public static List<MTR.BusinessLogic.Common.POCO.StopRouteStopEdge> GetEdgesFromDatabase()
+        {
+            using (var db = new EF_GtfsDbContext())
+            {
+                return (from edges in db.StopEdges
+                       select new MTR.BusinessLogic.Common.POCO.StopRouteStopEdge
+                       {
+                           StopId = edges.SourceStop.Id,
+                           RouteId = edges.ViaRoute.Id,
+                           nextStopId = edges.DestinationStop.Id
+                       }).ToList();
+            }
+        }
+
+        public static void UpdateStopGroups(IEnumerable<MTR.BusinessLogic.Common.POCO.StopGroup> groups)
+        {
+            using (var db = new EF_GtfsDbContext())
+            {
+                var allStops = db.Stops.ToList();
+
+                int i = 0;
+                foreach (var sg in groups)
+                {
+                    i++;
+                    foreach (var stop in sg.GetStops()) {
+                        var subject = allStops.First(db_stop => db_stop.Id == stop.DbId);
+                        subject.GroupId = i;
+                        Console.WriteLine("stop.DbId = " + stop.DbId + " | group = " + i + " --> subject.GroupId = " + subject.GroupId);
+                    }
+                }
+                db.SaveChanges();
+            }
+        }
+
+        public static Dictionary<int, List<int>> GetStopGroups()
+        {
+            var result = new Dictionary<int, List<int>>();
+
+            using (var db = new EF_GtfsDbContext())
+            {
+                foreach (var stop in db.Stops.ToArray())
+                {
+                    if (stop.GroupId != null)
+                    {
+                        if (!result.ContainsKey((int)stop.GroupId))
+                        {
+                            result.Add((int)stop.GroupId, new List<int>());
+                        }
+
+                        List<int> values;
+                        result.TryGetValue((int)stop.GroupId, out values);
+                        values.Add(stop.Id);
+                    }
                 }
             }
 
