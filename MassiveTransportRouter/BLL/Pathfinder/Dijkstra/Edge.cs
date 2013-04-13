@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace MTR.BusinessLogic.Pathfinder.Dijkstra
 {
-    interface Edge
+    public interface Edge
     {
         int? GetCost();
+        Edge Clone();
     }
 }

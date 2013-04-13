@@ -44,12 +44,16 @@
     <Compile Include="DataTransformer\CostCalculator.cs" />
     <Compile Include="DataTransformer\GraphBuilder.cs" />
     <Compile Include="DataTransformer\GraphTransformer.cs" />
+    <Compile Include="Pathfinder\Dijkstra\BinaryHeapPriorityQueue.cs" />
     <Compile Include="Pathfinder\Dijkstra\CompleteNode.cs" />
     <Compile Include="Pathfinder\Dijkstra\DijkstraPathfinder.cs" />
     <Compile Include="Pathfinder\Dijkstra\Edge.cs" />
+    <Compile Include="Pathfinder\Dijkstra\FastDijkstraPathfinder.cs" />
     <Compile Include="Pathfinder\Dijkstra\Node.cs" />
+    <Compile Include="Pathfinder\Dijkstra\PriorityQueue.cs" />
     <Compile Include="Pathfinder\Dijkstra\RouteEdge.cs" />
     <Compile Include="Pathfinder\Dijkstra\TransferEdge.cs" />
+    <Compile Include="Pathfinder\PathfinderAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

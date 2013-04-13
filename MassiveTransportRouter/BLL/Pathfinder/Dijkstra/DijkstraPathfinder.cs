@@ -11,51 +11,28 @@ using System.Threading.Tasks;
 
 namespace MTR.BusinessLogic.Pathfinder.Dijkstra
 {
-    public class DijkstraPathfinder
+    public class DijkstraPathfinder : PathfinderAlgorithm
     {
-        private Dictionary<int, Stop> _allStops;                            // StopId -> Stop
-        private Dictionary<int, Dictionary<int, List<int>>> _graphMap;      // StopId -> RouteId -> nextStopId
-        private Dictionary<int, List<int>> _stopGroups;                     // GroupId -> StopId
+        protected bool _parallel = false;
 
-        public DijkstraPathfinder() {
-            var dbStops = DbManager.GetAllStops();
-
-            _allStops = dbStops.ToDictionary(s => s.DbId);
-            _graphMap = GraphTransformer.GetGraphMap();
-            _stopGroups = new Dictionary<int, List<int>>();
-
-            // StopGroup asszociatív lista inicializációja
-            foreach (var stop in dbStops.Where(s => s.GroupId != null))
-            {
-                if (!_stopGroups.ContainsKey((int)stop.GroupId))
-                {
-                    _stopGroups.Add((int)stop.GroupId, new List<int>());
-                }
-
-                List<int> values;
-                _stopGroups.TryGetValue((int)stop.GroupId, out values);
-                values.Add(stop.DbId);
-            }
+        public DijkstraPathfinder(bool parallel = true)
+        {
+            Initialize();
+            _parallel = parallel;
         }
 
-        private Stop GetStopById(int stopId)
+        public override void GetShortestRoute(int sourceStopId, int destinationStopId, DateTime when)
         {
-            Stop s;
-            _allStops.TryGetValue(stopId, out s);
-            return s;
-        }
-
-        public void GetShortestRoute(int sourceStopId, int destinationStopId, DateTime when)
-        {
-            Console.WriteLine("Looking for route between '" + GetStopById(sourceStopId).StopName + "' and '" + GetStopById(destinationStopId).StopName + "'");
+            Console.WriteLine("Looking for route between '" + GetStop(sourceStopId).StopName + "' and '" + GetStop(destinationStopId).StopName + "'");
 
             var completeNodes = new List<CompleteNode>();
             var inclompleteNodes = new List<Node>();
-            
+
             bool traceComplete = false;
 
             // Kezdetben csak a forráspont van kész, nem vezet hozzá semmi
-            completeNodes.Add(new CompleteNode {
+            completeNodes.Add(new CompleteNode
+            {
                 stopId = sourceStopId,
                 departureTime = when.TimeOfDay,
                 viaNode = null,
@@ -64,7 +41,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
             });
 
             // Mindenki mást pedig várakozik a kifejtésre
-            foreach (var stop in _allStops.Values.Where(s => s.DbId != sourceStopId))
+            foreach (var stop in AllStops.Where(s => s.DbId != sourceStopId))
             {
                 inclompleteNodes.Add(new Node
                 {
@@ -72,6 +49,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                 });
             }
 
+            // Az útvonalkereső hurok
             while ((!traceComplete) && (inclompleteNodes.Count > 0))
             {
                 Console.WriteLine("Iteration: " + completeNodes.Count + " cnodes, " + inclompleteNodes.Count + " icnodes");
@@ -80,7 +58,9 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                 var lck = new Object();
                 var garbage = new ConcurrentBag<CompleteNode>();
 
-                completeNodes.AsParallel().ForAll(
+                if (_parallel)
+                {
+                    completeNodes.AsParallel().ForAll(
                     currentNode =>
                     {
                         var candidate = GetNextCompleteNode(currentNode, inclompleteNodes, when);
@@ -103,10 +83,37 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                             garbage.Add(currentNode);
                         }
                     });
+                }
+                else
+                {
+                    completeNodes.ForEach(
+                    currentNode =>
+                    {
+                        var candidate = GetNextCompleteNode(currentNode, inclompleteNodes, when);
+
+                        if (candidate != null)
+                        {
+                            // van kimenő él
+
+                            // atomi művelet!!
+                            lock (lck)
+                            {
+                                if ((nextNode == null) || (candidate.departureTime < nextNode.departureTime))
+                                {
+                                    nextNode = candidate;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            garbage.Add(currentNode);
+                        }
+                    });
+                }
 
                 if (nextNode == null)
                 {
-                    Console.WriteLine("No route between '" + GetStopById(sourceStopId).StopName + "' and '" + GetStopById(destinationStopId).StopName + "'");
+                    Console.WriteLine("No route between '" + GetStop(sourceStopId).StopName + "' and '" + GetStop(destinationStopId).StopName + "'");
                     break;
                 }
 
@@ -123,120 +130,140 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                 if (nextNode.stopId == destinationStopId)
                 {
                     traceComplete = true;
-                    Console.WriteLine("Trace complete between '" + GetStopById(sourceStopId).StopName + "' and '" + GetStopById(destinationStopId).StopName + "'");
+                    Console.WriteLine("Trace complete between '" + GetStop(sourceStopId).StopName + "' and '" + GetStop(destinationStopId).StopName + "'");
                     Console.WriteLine("Shortest Route Found. # of used routes: " + nextNode.usedRouteIds.Count + " | arrival: " + nextNode.departureTime.ToString());
 
                     nextNode.usedEdges.Reverse().ToList().ForEach(
-                        e => {
+                        e =>
+                        {
                             Console.WriteLine(e.GetType().Name + " " + e.ToString());
                         });
                 }
             }
         }
 
-        private CompleteNode GetNextCompleteNode(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when)
+        protected List<CompleteNode> GetRouteCandidates(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when)
+        {
+            var candidates = new List<CompleteNode>();
+            var routes = GetRoutes(currentNode.stopId);
+
+            if (routes == null)
+            {
+                return candidates;
+            }
+
+            foreach (var routeId in routes)
+            {
+                bool isKnownRouteId = currentNode.usedRouteIds.Contains(routeId);
+                if (!(isKnownRouteId && (currentNode.usedRouteIds.Peek() != routeId)))
+                {
+                    // A járatok nem újrafelhasználhatóak!
+
+                    foreach (var stop in GetEndpoints(currentNode.stopId, routeId))
+                    {
+                        if (!incompleteNodes.Exists(ic => ic.stopId == stop.DbId))
+                        {
+                            // Csak akkor foglalkozzunk vele, ha még nem dolgoztuk fel
+                            continue;
+                        }
+
+                        var edge = new RouteEdge(stop.DbId, routeId, when, currentNode.departureTime);
+                        var edgeCost = edge.GetCost();
+
+                        if (edgeCost != null)
+                        {
+                            var usedEdges = new Stack<Edge>(currentNode.usedEdges.Reverse());
+                            usedEdges.Push(edge);
+
+                            var usedRouteIds = new Stack<int>(currentNode.usedRouteIds.Reverse());
+                            if (!isKnownRouteId)
+                            {
+                                usedRouteIds.Push(routeId);
+                            }
+
+                            if (usedRouteIds.Count <= 5)
+                            {
+                                candidates.Add(new CompleteNode
+                                {
+                                    stopId = stop.DbId,
+                                    viaNode = currentNode,
+                                    departureTime = currentNode.departureTime.Add(new TimeSpan(0, (int)edgeCost, 0)),
+                                    usedEdges = usedEdges,
+                                    usedRouteIds = new Stack<int>(usedRouteIds.Reverse())
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            return candidates;
+        }
+
+        protected List<CompleteNode> GetTransferCandidates(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when)
+        {
+            var candidates = new List<CompleteNode>();
+
+            int? groupId = GetStop(currentNode.stopId).GroupId;
+
+            if (groupId != null)
+            {
+                var stopsInGroup = GetStopsInGroup(groupId);
+                if (stopsInGroup == null)
+                {
+                    return candidates;
+                }
+
+                foreach (var stop in stopsInGroup)
+                {
+                    if (stop.DbId == currentNode.stopId)
+                    {
+                        // Saját magunkkal nem foglalkozunk
+                        continue;
+                    }
+
+                    if (!incompleteNodes.Exists(ic => ic.stopId == stop.DbId))
+                    {
+                        // Csak akkor foglalkozzunk vele, ha még nem dolgoztuk fel
+                        continue;
+                    }
+
+                    var edge = new TransferEdge();
+                    var edgeCost = edge.GetCost();
+
+                    if (edgeCost != null)
+                    {
+                        var usedEdges = new Stack<Edge>(currentNode.usedEdges.Reverse());
+                        usedEdges.Push(edge);
+
+                        candidates.Add(new CompleteNode
+                        {
+                            stopId = stop.DbId,
+                            viaNode = currentNode,
+                            departureTime = currentNode.departureTime.Add(new TimeSpan(0, (int)edgeCost, 0)),
+                            usedEdges = usedEdges,
+                            usedRouteIds = new Stack<int>(currentNode.usedRouteIds.Reverse())
+                        });
+                    }
+                }
+            }
+
+            return candidates;
+        }
+
+        protected virtual CompleteNode GetNextCompleteNode(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when)
         {
             try
             {
                 var candidates = new List<CompleteNode>();
-
-                Dictionary<int, List<int>> stopsOfRoutes;
-                _graphMap.TryGetValue(currentNode.stopId, out stopsOfRoutes);
-
-                #region Élek keresése útvonalak alapján (parallel)
-                stopsOfRoutes.Keys.ToList().ForEach(
-                    routeId =>
-                    {
-                        bool isKnownRouteId = currentNode.usedRouteIds.Contains(routeId);
-                        if (!(isKnownRouteId && (currentNode.usedRouteIds.Peek() != routeId)))
-                        {
-                            // A járatok nem újrafelhasználhatóak
-
-                            List<int> stops;
-                            stopsOfRoutes.TryGetValue(routeId, out stops);
-
-                            stops.ForEach(
-                                stopId =>
-                                {
-                                    if (incompleteNodes.Exists(ic => ic.stopId == stopId))
-                                    {
-                                        // Csak akkor foglalkozzunk vele, ha még nem dolgoztuk fel
-
-                                        var edge = new RouteEdge(stopId, routeId, when, currentNode.departureTime);
-                                        var edgeCost = edge.GetCost();
-
-                                        if (edgeCost != null)
-                                        {
-                                            var usedEdges = new Stack<Edge>(currentNode.usedEdges.Reverse());
-                                            usedEdges.Push(edge);
-
-                                            var usedRouteIds = new Stack<int>(currentNode.usedRouteIds.Reverse());
-                                            if (!isKnownRouteId)
-                                            {
-                                                usedRouteIds.Push(routeId);
-                                            }
-
-                                            if (usedRouteIds.Count <= 5)
-                                            {
-                                                candidates.Add(new CompleteNode
-                                                {
-                                                    stopId = stopId,
-                                                    viaNode = currentNode,
-                                                    departureTime = currentNode.departureTime.Add(new TimeSpan(0, (int)edgeCost, 0)),
-                                                    usedEdges = usedEdges,
-                                                    usedRouteIds = new Stack<int>(usedRouteIds.Reverse())
-                                                });
-                                            }
-                                        }
-                                    }
-                                });
-                        }
-                    });
-                #endregion
-
-                #region Élek keresése átszállás alapján (parallel)
-                int? groupId = GetStopById(currentNode.stopId).GroupId;
-
-                if (groupId != null)
-                {
-                    List<int> stopsInSameGroup = null;
-                    _stopGroups.TryGetValue((int)groupId, out stopsInSameGroup);
-
-                    if (stopsInSameGroup != null)
-                    {
-                        stopsInSameGroup.Where(id => id != currentNode.stopId).ToList().ForEach(
-                            stopId =>
-                            {
-                                if (incompleteNodes.Exists(ic => ic.stopId == stopId))
-                                {
-                                    // Csak akkor foglalkozzunk vele, ha még nem dolgoztuk fel
-
-                                    var edge = new TransferEdge();
-                                    var edgeCost = edge.GetCost();
-
-                                    if (edgeCost != null)
-                                    {
-                                        var usedEdges = new Stack<Edge>(currentNode.usedEdges.Reverse());
-                                        usedEdges.Push(edge);
-
-                                        candidates.Add(new CompleteNode
-                                        {
-                                            stopId = stopId,
-                                            viaNode = currentNode,
-                                            departureTime = currentNode.departureTime.Add(new TimeSpan(0, (int)edgeCost, 0)),
-                                            usedEdges = usedEdges,
-                                            usedRouteIds = new Stack<int>(currentNode.usedRouteIds.Reverse())
-                                        });
-                                    }
-                                }
-                            });
-                    }
-                }
-                #endregion
+                candidates.AddRange(GetRouteCandidates(currentNode, incompleteNodes, when));
+                candidates.AddRange(GetTransferCandidates(currentNode, incompleteNodes, when));
 
                 #region A legolcsóbb továbblépés megkeresése
+                {
                     var minimalDeparture = candidates.Min(c => c.departureTime);
                     return candidates.First(c => c.departureTime == minimalDeparture);
+                }
                 #endregion
             }
             catch

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MTR.BusinessLogic.Pathfinder.Dijkstra
 {
-    class RouteEdge : Edge
+    public class RouteEdge : Edge
     {
         private int _toStopId;
         private int _routeId;
@@ -23,6 +23,11 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
             _routeId = routeId;
             _date = date;
             _time = time;
+        }
+
+        public Edge Clone()
+        {
+            return new RouteEdge(_toStopId, _routeId, new DateTime(_date.Ticks), new TimeSpan(_time.Ticks));
         }
 
         public int? GetCost() {

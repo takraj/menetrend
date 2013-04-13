@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MTR.BusinessLogic.Pathfinder.Dijkstra
 {
-    class TransferEdge : Edge
+    public class TransferEdge : Edge
     {
         public int? GetCost()
         {
@@ -16,6 +16,11 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
         public override string ToString()
         {
             return "(fel-/leszállás)";
+        }
+
+        public Edge Clone()
+        {
+            return new TransferEdge();
         }
     }
 }

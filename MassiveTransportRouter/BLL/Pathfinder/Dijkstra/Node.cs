@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MTR.BusinessLogic.Pathfinder.Dijkstra
 {
-    class Node
+    public class Node
     {
         public int stopId;
     }

@@ -120,6 +120,9 @@ namespace MTR.DataAccess.EFDataManager
             return result;
         }
 
+        private static Dictionary<string, List<TimetableItem>> timetables = new Dictionary<string,List<TimetableItem>>();
+        private static object lck = new Object();
+
         /// <summary>
         /// A következő indulási időpontot adja meg, cacheből
         /// </summary>
@@ -134,39 +137,49 @@ namespace MTR.DataAccess.EFDataManager
 
             try
             {
-                using (var file = File.OpenRead(timetableCachePathRoot + routeId.ToString() + "-" + stopId.ToString() + cacheExt))
+                string filename = timetableCachePathRoot + routeId.ToString() + "-" + stopId.ToString() + cacheExt;
+                List<TimetableItem> timetable = null;
+
+                lock (lck)
                 {
-                    var timetable = Serializer.Deserialize<List<TimetableItem>>(file); // Eleve rendezett lista!
-
-                    // Szűrés napra:
-                    switch (date.DayOfWeek)
+                    if (!timetables.ContainsKey(filename))
                     {
-                        case DayOfWeek.Monday:
-                            timetable = timetable.Where(t => t.ValidOnMonday).ToList();
-                            break;
-                        case DayOfWeek.Tuesday:
-                            timetable = timetable.Where(t => t.ValidOnTuesday).ToList();
-                            break;
-                        case DayOfWeek.Wednesday:
-                            timetable = timetable.Where(t => t.ValidOnWednesday).ToList();
-                            break;
-                        case DayOfWeek.Thursday:
-                            timetable = timetable.Where(t => t.ValidOnThursday).ToList();
-                            break;
-                        case DayOfWeek.Friday:
-                            timetable = timetable.Where(t => t.ValidOnFriday).ToList();
-                            break;
-                        case DayOfWeek.Saturday:
-                            timetable = timetable.Where(t => t.ValidOnSaturday).ToList();
-                            break;
-                        case DayOfWeek.Sunday:
-                            timetable = timetable.Where(t => t.ValidOnSunday).ToList();
-                            break;
+                        using (var file = File.OpenRead(filename))
+                        {
+                            timetables.Add(filename, Serializer.Deserialize<List<TimetableItem>>(file).ToList()); // Eleve rendezett lista!
+                        }
                     }
-
-                    return TimeSpan.FromTicks(timetable.First(ti => (ti.DepartureTick > referenceTime.Ticks)
-                        && (ti.ValidFromTick <= date.Ticks) && (ti.ValidToTick >= date.Ticks)).DepartureTick);
+                    timetable = timetables[filename];
                 }
+
+                // Szűrés napra:
+                switch (date.DayOfWeek)
+                {
+                    case DayOfWeek.Monday:
+                        timetable = timetable.Where(t => t.ValidOnMonday).ToList();
+                        break;
+                    case DayOfWeek.Tuesday:
+                        timetable = timetable.Where(t => t.ValidOnTuesday).ToList();
+                        break;
+                    case DayOfWeek.Wednesday:
+                        timetable = timetable.Where(t => t.ValidOnWednesday).ToList();
+                        break;
+                    case DayOfWeek.Thursday:
+                        timetable = timetable.Where(t => t.ValidOnThursday).ToList();
+                        break;
+                    case DayOfWeek.Friday:
+                        timetable = timetable.Where(t => t.ValidOnFriday).ToList();
+                        break;
+                    case DayOfWeek.Saturday:
+                        timetable = timetable.Where(t => t.ValidOnSaturday).ToList();
+                        break;
+                    case DayOfWeek.Sunday:
+                        timetable = timetable.Where(t => t.ValidOnSunday).ToList();
+                        break;
+                }
+
+                return TimeSpan.FromTicks(timetable.First(ti => (ti.DepartureTick > referenceTime.Ticks)
+                    && (ti.ValidFromTick <= date.Ticks) && (ti.ValidToTick >= date.Ticks)).DepartureTick);
             }
             catch
             {

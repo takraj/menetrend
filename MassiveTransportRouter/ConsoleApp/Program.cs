@@ -19,9 +19,10 @@ namespace MTR.ConsoleApp
 
             //CreateStopGroups();
             //CreateGraph();
+            //CreateTimetableCache();
+
             //GetTimetable();
             //GetNextDeparture();
-            //CreateTimetableCache();
             //GetGraphMap();
             RunDijkstra();
 
@@ -43,8 +44,8 @@ namespace MTR.ConsoleApp
                 var rnd = new Random();
                 var src = rnd.Next(100, 5000);
                 var dst = rnd.Next(100, 5000);
-                new DijkstraPathfinder().GetShortestRoute(src, dst, new DateTime(2013, 03, 01, 19, 0, 0));
-                // new DijkstraPathfinder().GetShortestRoute(3240, 2841, new DateTime(2013, 03, 01, 19, 0, 0)); // test
+                new FastDijkstraPathfinder().GetShortestRoute(src, dst, new DateTime(2013, 03, 01, 19, 0, 0));
+                //new FastDijkstraPathfinder().GetShortestRoute(3240, 2841, new DateTime(2013, 03, 01, 19, 0, 0)); // test
                 stopwatch.Stop();
 
                 Console.WriteLine("\t Idő: " + (stopwatch.ElapsedMilliseconds / 1000.0) + "s");
