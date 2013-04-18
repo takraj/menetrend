@@ -54,6 +54,7 @@
     <Compile Include="Pathfinder\Dijkstra\RouteEdge.cs" />
     <Compile Include="Pathfinder\Dijkstra\TransferEdge.cs" />
     <Compile Include="Pathfinder\PathfinderAlgorithm.cs" />
+    <Compile Include="Pathfinder\PathfinderManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

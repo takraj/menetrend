@@ -17,18 +17,24 @@ namespace MTR.DataAccess.CsvDataManager
     /// </summary>
     public class GtfsDatabase
     {
+        private static bool _databaseRecreated = false;
+
         /// <summary>
         /// Sets up the database initializer & runs a query to create the database
         /// if it does not exist.
         /// </summary>
         /// <param name="BasePath">Directory path to the GTFS files</param>
-        public static void initDatabase(string BasePath)
+        public static bool initDatabase(string BasePath)
         {
+            _databaseRecreated = false;
+
             Database.SetInitializer<EF_GtfsDbContext>(new GtfsDbInitializer(BasePath));
             using (var db = new EF_GtfsDbContext())
             {
                 db.Agencies.Load();
             }
+
+            return _databaseRecreated;
         }
 
         private class GtfsDbInitializer : DropCreateDatabaseIfModelChanges<EF_GtfsDbContext>
@@ -43,6 +49,7 @@ namespace MTR.DataAccess.CsvDataManager
             protected override void Seed(EF_GtfsDbContext context)
             {
                 importCsv(basepath);
+                _databaseRecreated = true;
             }
         }
 

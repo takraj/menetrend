@@ -1,5 +1,6 @@
 ﻿using MTR.BusinessLogic.Common.POCO;
 using MTR.BusinessLogic.DataTransformer;
+using MTR.BusinessLogic.Pathfinder.Dijkstra;
 using MTR.DataAccess.EFDataManager;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace MTR.BusinessLogic.Pathfinder
             isInitialized = true;
         }
 
-        public abstract void GetShortestRoute(int sourceStopId, int destinationStopId, DateTime when);
+        public abstract List<Edge> GetShortestRoute(int sourceStopId, int destinationStopId, DateTime when);
 
         protected IEnumerable<Stop> AllStops
         {

@@ -13,18 +13,16 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
 {
     public class DijkstraPathfinder : PathfinderAlgorithm
     {
-        protected bool _parallel = false;
-
-        public DijkstraPathfinder(bool parallel = true)
+        public DijkstraPathfinder()
         {
             Initialize();
-            _parallel = parallel;
         }
 
-        public override void GetShortestRoute(int sourceStopId, int destinationStopId, DateTime when)
+        public override List<Edge> GetShortestRoute(int sourceStopId, int destinationStopId, DateTime when)
         {
             Console.WriteLine("Looking for route between '" + GetStop(sourceStopId).StopName + "' and '" + GetStop(destinationStopId).StopName + "'");
 
+            var result = new List<Edge>();
             var completeNodes = new List<CompleteNode>();
             var inclompleteNodes = new List<Node>();
 
@@ -58,7 +56,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                 var lck = new Object();
                 var garbage = new ConcurrentBag<CompleteNode>();
 
-                if (_parallel)
+                #region Következő csomópont keresése
                 {
                     completeNodes.AsParallel().ForAll(
                     currentNode =>
@@ -84,32 +82,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                         }
                     });
                 }
-                else
-                {
-                    completeNodes.ForEach(
-                    currentNode =>
-                    {
-                        var candidate = GetNextCompleteNode(currentNode, inclompleteNodes, when);
-
-                        if (candidate != null)
-                        {
-                            // van kimenő él
-
-                            // atomi művelet!!
-                            lock (lck)
-                            {
-                                if ((nextNode == null) || (candidate.departureTime < nextNode.departureTime))
-                                {
-                                    nextNode = candidate;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            garbage.Add(currentNode);
-                        }
-                    });
-                }
+                #endregion
 
                 if (nextNode == null)
                 {
@@ -131,18 +104,28 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                 {
                     traceComplete = true;
                     Console.WriteLine("Trace complete between '" + GetStop(sourceStopId).StopName + "' and '" + GetStop(destinationStopId).StopName + "'");
-                    Console.WriteLine("Shortest Route Found. # of used routes: " + nextNode.usedRouteIds.Count + " | arrival: " + nextNode.departureTime.ToString());
+                    Console.WriteLine("Shortest path Found. # of used routes: " + nextNode.usedRouteIds.Count + " | arrival: " + nextNode.departureTime.ToString());
 
-                    nextNode.usedEdges.Reverse().ToList().ForEach(
+                    result.AddRange(nextNode.usedEdges.Reverse());
+                    result.ToList().ForEach(
                         e =>
                         {
                             Console.WriteLine(e.GetType().Name + " " + e.ToString());
                         });
                 }
             }
+
+            return result;
         }
 
-        protected List<CompleteNode> GetRouteCandidates(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when)
+        /// <summary>
+        /// currentNode-ból járművel elérhető csomópontok és azok költsége (incompleteNodes-ból válogatva)
+        /// </summary>
+        /// <param name="currentNode"></param>
+        /// <param name="incompleteNodes"></param>
+        /// <param name="when"></param>
+        /// <returns></returns>
+        protected List<CompleteNode> GetRouteCandidates(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when, int? limitOfRoutes = 5)
         {
             var candidates = new List<CompleteNode>();
             var routes = GetRoutes(currentNode.stopId);
@@ -173,6 +156,20 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                         if (edgeCost != null)
                         {
                             var usedEdges = new Stack<Edge>(currentNode.usedEdges.Reverse());
+
+                            #region Check for hidden transfers
+                            {
+                                if ((usedEdges.Count > 0) && (usedEdges.Peek() is RouteEdge))
+                                {
+                                    if (((RouteEdge)usedEdges.Peek()).RouteId != edge.RouteId)
+                                    {
+                                        usedEdges.Push(new TransferEdge(edge.GetDestinationStopId(), currentNode.departureTime));
+                                        edgeCost += usedEdges.Peek().GetCost();
+                                    }
+                                }
+                            }
+                            #endregion
+
                             usedEdges.Push(edge);
 
                             var usedRouteIds = new Stack<int>(currentNode.usedRouteIds.Reverse());
@@ -181,7 +178,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                                 usedRouteIds.Push(routeId);
                             }
 
-                            if (usedRouteIds.Count <= 5)
+                            if ((limitOfRoutes == null) || (usedRouteIds.Count <= limitOfRoutes))
                             {
                                 candidates.Add(new CompleteNode
                                 {
@@ -200,6 +197,13 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
             return candidates;
         }
 
+        /// <summary>
+        /// currentNode-ból gyaloglással elérhető csomópontok és azok költsége (incompleteNodes-ból válogatva)
+        /// </summary>
+        /// <param name="currentNode"></param>
+        /// <param name="incompleteNodes"></param>
+        /// <param name="when"></param>
+        /// <returns></returns>
         protected List<CompleteNode> GetTransferCandidates(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when)
         {
             var candidates = new List<CompleteNode>();
@@ -228,7 +232,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                         continue;
                     }
 
-                    var edge = new TransferEdge();
+                    var edge = new TransferEdge(stop.DbId, currentNode.departureTime);
                     var edgeCost = edge.GetCost();
 
                     if (edgeCost != null)
@@ -251,6 +255,13 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
             return candidates;
         }
 
+        /// <summary>
+        /// Új kifejtett csomópont választása
+        /// </summary>
+        /// <param name="currentNode"></param>
+        /// <param name="incompleteNodes"></param>
+        /// <param name="when"></param>
+        /// <returns></returns>
         protected virtual CompleteNode GetNextCompleteNode(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when)
         {
             try

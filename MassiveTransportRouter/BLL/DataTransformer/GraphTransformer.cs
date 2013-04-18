@@ -27,15 +27,16 @@ namespace MTR.BusinessLogic.DataTransformer
                     {
                         // Similar names (one contains the other & length difference is small)
                         // Example: "Cinkota" VS "Cinkota H"
-                        if (sg.GetStops().Exists(s => s.HasSimilarNameTo(stop.StopName)))
-                        {
-                            sg.AddStop(stop);
-                            createNewGroup = false;
-                            break;
-                        }
+                        // Megj.: sajnos van azonos nevű megálló nagyon távoli helyeken is... -> fals átszállás
+                        //if (sg.GetStops().Exists(s => s.HasSimilarNameTo(stop.StopName)))
+                        //{
+                        //    sg.AddStop(stop);
+                        //    createNewGroup = false;
+                        //    break;
+                        //}
 
                         // Not similar name, but it's near
-                        else if (sg.GetMaxDistanceTo(stop.StopLatitude, stop.StopLongitude) <= maxDistance)
+                        if (sg.GetMaxDistanceTo(stop.StopLatitude, stop.StopLongitude) <= maxDistance)
                         {
                             sg.AddStop(stop);
                             createNewGroup = false;

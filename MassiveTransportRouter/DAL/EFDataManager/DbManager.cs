@@ -14,6 +14,7 @@ namespace MTR.DataAccess.EFDataManager
 {
     public class DbManager
     {
+        private static string _appHomeDir = Directory.GetCurrentDirectory();
         private static string cacheRootDir = "cache";
         private static string cacheTimetablesDir = "timetables";
         private static string cacheExt = ".dat";
@@ -123,6 +124,35 @@ namespace MTR.DataAccess.EFDataManager
         private static Dictionary<string, List<TimetableItem>> timetables = new Dictionary<string,List<TimetableItem>>();
         private static object lck = new Object();
 
+        public static void LoadCache(string appHomeDir = "")
+        {
+            if (appHomeDir != "")
+            {
+                _appHomeDir = appHomeDir;
+            }
+            else
+            {
+                _appHomeDir = Directory.GetCurrentDirectory();
+            }
+
+            string timetableCachePathRoot = _appHomeDir + Path.DirectorySeparatorChar + cacheRootDir + Path.DirectorySeparatorChar + cacheTimetablesDir + Path.DirectorySeparatorChar;
+
+            foreach (var path in Directory.GetFiles(timetableCachePathRoot, "*" + cacheExt))
+            {
+                string filename = timetableCachePathRoot + path.Split(Path.DirectorySeparatorChar).Last();
+                lock (lck)
+                {
+                    if (!timetables.ContainsKey(filename))
+                    {
+                        using (var file = File.OpenRead(path))
+                        {
+                            timetables.Add(filename, Serializer.Deserialize<List<TimetableItem>>(file).ToList()); // Eleve rendezett lista!
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// A következő indulási időpontot adja meg, cacheből
         /// </summary>
@@ -133,7 +163,7 @@ namespace MTR.DataAccess.EFDataManager
         /// <returns></returns>
         public static TimeSpan? GetNextDepartureFromCache(DateTime date, TimeSpan referenceTime, int routeId, int stopId)
         {
-            string timetableCachePathRoot = cacheRootDir + System.IO.Path.DirectorySeparatorChar + cacheTimetablesDir + System.IO.Path.DirectorySeparatorChar;
+            string timetableCachePathRoot = _appHomeDir + Path.DirectorySeparatorChar + cacheRootDir + System.IO.Path.DirectorySeparatorChar + cacheTimetablesDir + System.IO.Path.DirectorySeparatorChar;
 
             try
             {
@@ -325,10 +355,19 @@ namespace MTR.DataAccess.EFDataManager
         /// A szolgáltatási rendet gyorsítótárazza, asszociatív módon,
         /// fájlokba csoportosítva járatok-megállók alapján
         /// </summary>
-        public static void CreateTimetableAssociativeCache()
+        public static void CreateTimetableAssociativeCache(string appHomeDir = "")
         {
+            if (appHomeDir != "")
+            {
+                _appHomeDir = appHomeDir;
+            }
+            else
+            {
+                _appHomeDir = Directory.GetCurrentDirectory();
+            }
+
             ulong counter = 0;
-            string timetableCachePathRoot = cacheRootDir + System.IO.Path.DirectorySeparatorChar + cacheTimetablesDir + System.IO.Path.DirectorySeparatorChar;
+            string timetableCachePathRoot = _appHomeDir + Path.DirectorySeparatorChar + cacheRootDir + Path.DirectorySeparatorChar + cacheTimetablesDir + Path.DirectorySeparatorChar;
 
             using (var db = new EF_GtfsDbContext())
             {

@@ -1,6 +1,8 @@
 ﻿using MTR.BusinessLogic.DataManager;
+using MTR.BusinessLogic.Pathfinder;
 using MTR.DataAccess.Helpers;
 using MTR.WebApp.Common.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -13,24 +15,42 @@ namespace MTR.WebApp.Controllers
         {
             ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
 
-            //DbDataManager.GetRoute();
-
             return View();
         }
 
-        public ActionResult TestMap()
+        public ActionResult TestMap(string stopFrom = "", string stopTo = "")
         {
-            var StopsToShow = new List<VMDL_Stop>();
+            var rnd = new Random();
+            var src = rnd.Next(100, 5000);
+            var dst = rnd.Next(100, 5000);
             var allStops = DbDataManager.GetAllStops();
-            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Nyugati")));
-            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Oktogon")));
-            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Blaha Lujza tér")));
-            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Petőfi híd")));
-            StopsToShow.Add(allStops.First(l => l.StopName.Contains("Budafoki út")));
 
-            ViewBag.Message = "Google Maps teszt";
+            if (stopFrom != "" && stopTo != "")
+            {
+                try
+                {
+                    src = allStops.First(s => s.StopName == stopFrom).StopId;
+                    dst = allStops.First(s => s.StopName == stopTo).StopId;
+                }
+                catch
+                {
+                    // dummy
+                }
+            }
+
+            var now = DateTime.Now.TimeOfDay;
+            var instructionsToShow = PathfinderManager.GetRoute(src, dst, new DateTime(2013, 03, 01, now.Hours, now.Minutes, now.Seconds));
+            ViewBag.StopNames = allStops.Select(s => s.StopName).Distinct().ToArray();
+
+            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Nyugati")));
+            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Oktogon")));
+            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Blaha Lujza tér")));
+            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Petőfi híd")));
+            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Budafoki út")));
+
+            ViewBag.Message = "Random útvonal teszt";
             Utility.SetupCulture();
-            return View(StopsToShow);
+            return View(instructionsToShow);
         }
 
         public ActionResult StopGroups()

@@ -1,7 +1,10 @@
 ﻿using MTR.BusinessLogic.DataManager;
+using MTR.BusinessLogic.DataTransformer;
+using MTR.BusinessLogic.Pathfinder;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -26,7 +29,9 @@ namespace MTR.WebApp
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
-            DbDataManager.initDatabase(HttpRuntime.AppDomainAppPath + "budapest_gtfs/");
+            DbDataManager.initDatabase(HttpRuntime.AppDomainAppPath + "budapest_gtfs/", HttpRuntime.AppDomainAppPath + Path.DirectorySeparatorChar);
+            DbDataManager.LoadCache(HttpRuntime.AppDomainAppPath + Path.DirectorySeparatorChar);
+            PathfinderManager.InitializePathfinders();
         }
     }
 }

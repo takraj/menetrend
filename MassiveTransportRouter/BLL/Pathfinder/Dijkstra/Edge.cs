@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MTR.BusinessLogic.Common.POCO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
     {
         int? GetCost();
         Edge Clone();
+        int GetDestinationStopId();
+        string GetTimeString();
     }
 }

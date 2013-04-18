@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Helpers\Utility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\VMDL_RouteInstruction.cs" />
     <Compile Include="ViewModels\VMDL_Stop.cs" />
     <Compile Include="ViewModels\VMDL_StopGroup.cs" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MTR.WebApp.Common.ViewModels.VMDL_Stop>
+﻿@model IEnumerable<MTR.WebApp.Common.ViewModels.VMDL_RouteInstruction>
 @using System.Web.Script.Serialization
 @{
     ViewBag.Title = "Teszt oldal";
@@ -14,10 +14,22 @@
 </article>
 
 <aside>
-    <h3>Opciók</h3>
-    <p>
-        Itt még nincs semmi, de lesz.
-    </p>
+    @using (Html.BeginForm())
+    {
+        <h3>Opciók</h3>
+        <br />
+        <div class="ui-widget">
+            <label for="stopFrom">Honnan: </label>
+            <input name="stopFrom" id="stopFrom" />
+        </div>
+        <br />
+        <div class="ui-widget">
+            <label for="stopTo">Hova: </label>
+            <input name="stopTo" id="stopTo" />
+        </div>
+        <br />
+        <input type="submit" value="Keresés" />
+    }
     <ul>
         <li>@Html.ActionLink("Home", "Index", "Home")</li>
     </ul>
@@ -39,7 +51,21 @@
             // Add Waypoints + Markers
             @Html.Raw("var markers = " + new JavaScriptSerializer().Serialize(Model) + ";")
             markers.forEach(function (marker, i) {
-                MTR.MapTools.addMarkerToMap(marker.StopLatitude, marker.StopLongitude, "#" + (i+1) + " -- " + marker.StopName);
+                var description = "#" + (i + 1) + " -- " + marker.stop.StopName;
+                if ((i != 0) && (i != markers.length - 1)) {
+                    if (marker.isTransfer) {
+                        description = description + "<br /><strong>Átszállás</strong>";
+                    } else {
+                        description = description + "<br />Járat: <strong>" + marker.routeName + "</strong>";
+                    }
+                }
+
+                if (i == markers.length - 1) {
+                    description = description + "<br />Érkezés: <strong>" + marker.timeString + "</strong>";
+                } else {
+                    description = description + "<br />Indulás: <strong>" + marker.timeString + "</strong>";
+                }
+                MTR.MapTools.addMarkerToMap(marker.stop.StopLatitude, marker.stop.StopLongitude, description);
             });
 
             // draw path
@@ -48,5 +74,21 @@
             // setup infoWindows
             MTR.MapTools.setupInfoWindows();
         }
+    </script>
+
+    @Scripts.Render("~/bundles/jquery");
+    @Scripts.Render("~/bundles/jqueryui");
+
+    <script>
+        $(function () {
+            @Html.Raw("var availableTags = " + new JavaScriptSerializer().Serialize(ViewBag.StopNames) + ";")
+
+            $("#stopFrom").autocomplete({
+                source: availableTags
+            });
+            $("#stopTo").autocomplete({
+                source: availableTags
+            });
+        });
     </script>
 }

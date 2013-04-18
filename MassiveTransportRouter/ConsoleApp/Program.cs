@@ -32,6 +32,9 @@ namespace MTR.ConsoleApp
 
         static void RunDijkstra()
         {
+            Console.WriteLine("Loading cache...");
+            DbDataManager.LoadCache();
+
             Console.WriteLine("Press any key to get a random route. Terminate with '.' key.");
             char key;
             while ((key = Console.ReadKey().KeyChar).CompareTo('.') != 0)

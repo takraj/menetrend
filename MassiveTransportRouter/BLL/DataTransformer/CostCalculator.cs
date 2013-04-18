@@ -14,9 +14,9 @@ namespace MTR.BusinessLogic.DataTransformer
             DbManager.GetTimetable(new DateTime(2013, 03, 01));
         }
 
-        public static void CreateTimetableCache()
+        public static void CreateTimetableCache(string appHomeDir = "")
         {
-            DbManager.CreateTimetableAssociativeCache();
+            DbManager.CreateTimetableAssociativeCache(appHomeDir);
         }
 
         public static void GetNextDeparture()

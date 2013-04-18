@@ -1,4 +1,5 @@
-﻿using MTR.BusinessLogic.DataTransformer;
+﻿using MTR.BusinessLogic.Common.POCO;
+using MTR.BusinessLogic.DataTransformer;
 using MTR.DataAccess.EFDataManager;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,23 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
         public Edge Clone()
         {
             return new RouteEdge(_toStopId, _routeId, new DateTime(_date.Ticks), new TimeSpan(_time.Ticks));
+        }
+
+        public int GetDestinationStopId()
+        {
+            return _toStopId;
+        }
+
+        private TimeSpan? GetNextDeparture()
+        {
+            var when = new DateTime(_date.Year, _date.Month, _date.Day, _time.Hours, _time.Minutes, _time.Seconds);
+            return CostCalculator.GetNextDeparture(when, _routeId, _toStopId);
+        }
+
+        public string GetTimeString()
+        {
+            var nextDeparture = GetNextDeparture();
+            return (nextDeparture != null) ? ((TimeSpan)nextDeparture).ToString(@"hh\:mm") : "";
         }
 
         public int? GetCost() {

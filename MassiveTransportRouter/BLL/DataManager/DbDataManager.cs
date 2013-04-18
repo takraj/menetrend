@@ -13,9 +13,14 @@ namespace MTR.BusinessLogic.DataManager
 {
     public class DbDataManager
     {
-        public static void initDatabase(string BasePath)
+        public static void initDatabase(string BasePath, string appHomeDir = "")
         {
-            GtfsDatabase.initDatabase(BasePath);
+            if (GtfsDatabase.initDatabase(BasePath))
+            {
+                GraphTransformer.CreateStopGroups(200);
+                GraphBuilder.BuildGraph();
+                CostCalculator.CreateTimetableCache(appHomeDir);
+            }
         }
 
         /// <summary>
@@ -51,6 +56,11 @@ namespace MTR.BusinessLogic.DataManager
         public static Dictionary<int, List<int>> GetStopGroupsFromDb()
         {
             return DbManager.GetStopGroups();
+        }
+
+        public static void LoadCache(string appHomeDir = "")
+        {
+            DbManager.LoadCache(appHomeDir);
         }
 
         /// <summary>
