@@ -17,5 +17,9 @@ namespace MTR.DataAccess.EFDataManager.Entities
         public virtual EF_Stop SourceStop { get; set; }
         public virtual EF_Route ViaRoute { get; set; }
         public virtual EF_Stop DestinationStop { get; set; }
+        public virtual EF_Shape AssignedShape { get; set; }
+
+        public Int32 SourceDistance { get; set; }
+        public Int32 DestinationDistance { get; set; }
     }
 }

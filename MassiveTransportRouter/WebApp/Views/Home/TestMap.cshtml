@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<MTR.WebApp.Common.ViewModels.VMDL_RouteInstruction>
 @using System.Web.Script.Serialization
 @{
-    ViewBag.Title = "Teszt oldal";
+    ViewBag.Title = "Útvonaltervezés";
 }
 
 <hgroup class="title">
@@ -10,6 +10,7 @@
 </hgroup>
 
 <article>
+    <div class="pathInfo"><strong>@Html.Raw(Model.First().stop.StopName)</strong> és <strong>@Html.Raw(Model.Last().stop.StopName)</strong> között</div>
     <div id="map_canvas" style="width: 650px; height: 650px"></div>
 </article>
 
@@ -19,20 +20,103 @@
         <h3>Opciók</h3>
         <br />
         <div class="ui-widget">
-            <label for="stopFrom">Honnan: </label>
-            <input name="stopFrom" id="stopFrom" />
+            <label for="stopFrom">Honnan:</label>
+            <input name="stopFrom" id="stopFrom" value="@Html.Raw(Model.First().stop.StopName)" />
         </div>
         <br />
         <div class="ui-widget">
-            <label for="stopTo">Hova: </label>
-            <input name="stopTo" id="stopTo" />
+            <label for="stopTo">Hova:</label>
+            <input name="stopTo" id="stopTo" value="@Html.Raw(Model.Last().stop.StopName)" />
         </div>
         <br />
         <input type="submit" value="Keresés" />
     }
-    <ul>
-        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    </ul>
+
+    <p class="summaryIcons">
+        @{
+            var routeNames = Model.Where(m => !m.isTransfer).Select(m => m.routeName).Distinct().ToList();
+            var routeLists = new Dictionary<string, List<MTR.WebApp.Common.ViewModels.VMDL_RouteInstruction>>();
+            
+            foreach (var routeName in routeNames)
+            {
+                routeLists.Add(routeName, Model.Where(m => m.routeName == routeName).ToList());
+                var sample = Model.First(m => m.routeName == routeName);
+                var bgcolor = sample.routeColor;
+                var color = sample.routeTextColor;
+                
+                <span class="routeNameBox" style="background-color: #@Html.Raw(bgcolor); color: #@Html.Raw(color)">@Html.Raw(routeName)</span>
+            
+                if (routeName != routeNames.Last()) { 
+                    <span class="routeTransferBox"></span>
+                }
+            }
+
+            try
+            {
+                if (Model.ElementAt(1).isTransfer)
+                {
+                    routeLists[routeNames.First()].Insert(0, Model.ElementAt(1));
+                }
+                else
+                {
+                    routeLists[routeNames.First()].Insert(0, Model.ElementAt(0));
+                }
+
+                {
+                    for (int i = (Model.Count() - 2); i > 2; i--)
+                    {
+                        if (Model.ElementAt(i).isTransfer)
+                        {
+                            routeLists[Model.ElementAt(i + 1).routeName].Insert(0, Model.ElementAt(i));
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                //dummy
+            }
+        }
+    </p>
+
+    <p class="summaryTime">
+        <strong>@Html.Raw(Model.First().timeString)</strong> - <strong>@Html.Raw(Model.Last().timeString)</strong>
+        <span class="instructionNote">(@Html.Raw((int) (new TimeSpan(Model.Last().timeTicks - Model.First().timeTicks).TotalMinutes)) perc)</span>
+    </p>
+
+    <fieldset class="routeDetails">
+        <legend>Részletes útiterv</legend>
+        @{
+            foreach (var routeName in routeNames)
+            {
+                var sample = Model.First(m => m.routeName == routeName);
+                var bgcolor = sample.routeColor;
+                var color = sample.routeTextColor;
+                
+                <span class="routeNameBox" style="background-color: #@Html.Raw(bgcolor); color: #@Html.Raw(color)">@Html.Raw(routeName)</span>
+                <ul>
+                    <li>
+                        @Html.Raw(routeLists[routeName].First().stop.StopName)
+                        <span class="instructionNote">
+                            (@Html.Raw((routeLists[routeName].First().timeString)))
+                        </span>
+                    </li>
+                    @if (routeLists[routeName].Count > 2)
+                    {
+                    <li class="instructionNote">
+                        (@Html.Raw(routeLists[routeName].Count - 2) köztes megálló)
+                    </li>
+                    }
+                    <li>
+                        @Html.Raw(routeLists[routeName].Last().stop.StopName)
+                        <span class="instructionNote">
+                            (@Html.Raw(routeLists[routeName].Last().timeString + ")")
+                        </span>
+                    </li>
+                </ul>
+            }
+        }
+    </fieldset>
 </aside>
 
 @section Scripts {
@@ -48,31 +132,39 @@
             // CreateMap
             MTR.MapTools.createMap("map_canvas");
 
-            // Add Waypoints + Markers
-            @Html.Raw("var markers = " + new JavaScriptSerializer().Serialize(Model) + ";")
-            markers.forEach(function (marker, i) {
-                var description = "#" + (i + 1) + " -- " + marker.stop.StopName;
-                if ((i != 0) && (i != markers.length - 1)) {
-                    if (marker.isTransfer) {
-                        description = description + "<br /><strong>Átszállás</strong>";
-                    } else {
-                        description = description + "<br />Járat: <strong>" + marker.routeName + "</strong>";
-                    }
-                }
-
-                if (i == markers.length - 1) {
-                    description = description + "<br />Érkezés: <strong>" + marker.timeString + "</strong>";
-                } else {
-                    description = description + "<br />Indulás: <strong>" + marker.timeString + "</strong>";
-                }
-                MTR.MapTools.addMarkerToMap(marker.stop.StopLatitude, marker.stop.StopLongitude, description);
+            // Add Waypoints
+            @Html.Raw("var routeInstructions = " + new JavaScriptSerializer().Serialize(Model) + ";")
+            routeInstructions.forEach(function (routeInstruction, i) {
+                MTR.MapTools.addNode(routeInstruction.stop.StopLatitude, routeInstruction.stop.StopLongitude);
             });
 
-            // draw path
-            MTR.MapTools.drawPath();
+            // Add Markers
+            @{
+                foreach (var routeName in routeNames)
+                {
+                    var sample = Model.First(m => m.routeName == routeName);
+                    var bgcolor = sample.routeColor;
+                    var color = sample.routeTextColor;
+                    string labelcontent = "<span class='routeNameBox routeNameBoxLabel' style='background-color: #" + bgcolor + "; color: #" + color + "'>" + routeName + "</span>";
+                    string popupcontent = "<span class='routeNameBox' style='background-color: #" + bgcolor + "; color: #" + color + "'>" + routeName + "</span>";
+                    popupcontent += "<ol>";
+                    routeLists[routeName].ForEach(l => popupcontent += "<li>" + l.stop.StopName + " <span class='instructionNote'>(" + l.timeString + ")</span></li>");
+                    popupcontent += "</ol>";
+                    
+                    var transferPoint = routeLists[routeName].First();
+                    
+                    @Html.Raw("MTR.MapTools.addMarkerToMap(" + transferPoint.stop.StopLatitude + "," + transferPoint.stop.StopLongitude + ",\"" + routeName + ": " + transferPoint.stop.StopName + "\", \"" + labelcontent + "\", \"" + popupcontent + "\");");
+                }
+            }
 
-            // setup infoWindows
-            MTR.MapTools.setupInfoWindows();
+            var lastInstruction = routeInstructions[routeInstructions.length - 1];
+            MTR.MapTools.addMarkerToMap(lastInstruction.stop.StopLatitude, lastInstruction.stop.StopLongitude, lastInstruction.stop.StopName);
+
+                // draw path
+                MTR.MapTools.drawPath();
+
+                // setup infoWindows
+                MTR.MapTools.setupInfoWindows();
         }
     </script>
 
@@ -81,13 +173,13 @@
 
     <script>
         $(function () {
-            @Html.Raw("var availableTags = " + new JavaScriptSerializer().Serialize(ViewBag.StopNames) + ";")
+            @Html.Raw("var stopsList = " + new JavaScriptSerializer().Serialize(ViewBag.StopNames) + ";")
 
             $("#stopFrom").autocomplete({
-                source: availableTags
+                source: stopsList
             });
             $("#stopTo").autocomplete({
-                source: availableTags
+                source: stopsList
             });
         });
     </script>

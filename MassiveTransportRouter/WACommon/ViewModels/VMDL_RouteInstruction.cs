@@ -10,7 +10,10 @@ namespace MTR.WebApp.Common.ViewModels
     {
         public VMDL_Stop stop;
         public string routeName;
+        public string routeColor;
+        public string routeTextColor;
         public string timeString;
+        public long timeTicks;
         public bool isTransfer;
     }
 }

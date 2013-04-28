@@ -18,18 +18,27 @@ MTR.MapTools.createMap = function (tag) {
 
     // Container Variables, Arrays
     MTR.MapTools.nodes = new Array();
+    MTR.MapTools.pathCoords = new Array();
+}
+
+// Adds a node for the route path
+MTR.MapTools.addNode = function (lat, lon) {
+    MTR.MapTools.pathCoords.push(new google.maps.LatLng(lat, lon));
 }
 
 // Adds a Marker to the Map
-MTR.MapTools.addMarkerToMap = function(lat, lon, title) {
+MTR.MapTools.addMarkerToMap = function(lat, lon, title, labelcontent, popupcontent) {
     var myLatlng = new google.maps.LatLng(lat, lon);
     MTR.MapTools.nodes.push({
-        marker: new google.maps.Marker({
+        marker: new MarkerWithLabel({
             position: myLatlng,
             map: MTR.MapTools.map,
-            title: title
+            title: title,
+            labelContent: labelcontent,
+            labelAnchor: new google.maps.Point(15, 0)
         }),
-        infoWindow: null
+        infoWindow: null,
+        popupcontent: popupcontent
     });
 }
 
@@ -56,12 +65,13 @@ MTR.MapTools.createInfoWindow = function(node, content, isOpened) {
 // Setup infoWindows
 MTR.MapTools.setupInfoWindows = function () {
     MTR.MapTools.nodes.forEach(function (node, index) {
-        if (index == 0) {
-            MTR.MapTools.createInfoWindow(node, "Kezdőpont: " + node.marker.title, true);
-        } else if (index == (MTR.MapTools.nodes.length - 1)) {
+        if (index == (MTR.MapTools.nodes.length - 1)) {
             MTR.MapTools.createInfoWindow(node, "Végpont: " + node.marker.title, true);
+            node.marker.setIcon("https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=flag|ADDE63");
+            var shadow = new google.maps.MarkerImage("https://maps.gstatic.com/mapfiles/ms2/micons/msmarker.shadow.png", null, null, new google.maps.Point(16, 32));
+            node.marker.setShadow(shadow);
         } else {
-            MTR.MapTools.createInfoWindow(node, "<i>Köztes pont: " + node.marker.title + "</i>", false);
+            MTR.MapTools.createInfoWindow(node, node.popupcontent, false);
         }
     });
 }
@@ -70,7 +80,7 @@ MTR.MapTools.setupInfoWindows = function () {
 MTR.MapTools.drawPath = function () {
     // Draw Route
     var line = new google.maps.Polyline({
-        path: MTR.MapTools.getNodeCoords(),
+        path: MTR.MapTools.pathCoords,
         strokeColor: "#0000FF",
         strokeOpacity: 1.0,
         strokeWeight: 2,

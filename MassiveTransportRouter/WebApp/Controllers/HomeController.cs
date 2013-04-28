@@ -31,24 +31,19 @@ namespace MTR.WebApp.Controllers
                 {
                     src = allStops.First(s => s.StopName == stopFrom).StopId;
                     dst = allStops.First(s => s.StopName == stopTo).StopId;
+                    ViewBag.Message = "";
                 }
                 catch
                 {
-                    // dummy
+                    ViewBag.Message = "Random útvonal";
                 }
             }
 
             var now = DateTime.Now.TimeOfDay;
-            var instructionsToShow = PathfinderManager.GetRoute(src, dst, new DateTime(2013, 03, 01, now.Hours, now.Minutes, now.Seconds));
+            //var instructionsToShow = PathfinderManager.GetRoute(src, dst, new DateTime(2013, 03, 01, now.Hours, now.Minutes, now.Seconds));
+            var instructionsToShow = PathfinderManager.GetRoute(src, dst, DateTime.Now);
             ViewBag.StopNames = allStops.Select(s => s.StopName).Distinct().ToArray();
-
-            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Nyugati")));
-            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Oktogon")));
-            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Blaha Lujza tér")));
-            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Petőfi híd")));
-            //StopsToShow.Add(allStops.First(l => l.StopName.Contains("Budafoki út")));
-
-            ViewBag.Message = "Random útvonal teszt";
+            
             Utility.SetupCulture();
             return View(instructionsToShow);
         }

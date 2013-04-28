@@ -47,11 +47,15 @@ namespace MTR.BusinessLogic.Pathfinder
                 // kezdőpont
                 var toStop = DbManager.GetStopById(src);
                 var vmdlStop = new VMDL_Stop(toStop.DbId, toStop.StopName, toStop.StopLatitude, toStop.StopLongitude, toStop.LocationType, toStop.ParentStation, toStop.WheelchairBoarding);
+                var ts = datetime.TimeOfDay.ToString(@"hh\:mm");
                 result.Add(new VMDL_RouteInstruction
                 {
                     isTransfer = true,
                     routeName = "Lábbusz",
-                    timeString = datetime.TimeOfDay.ToString(@"hh\:mm"),
+                    routeColor = "#FFFFFF",
+                    routeTextColor = "#000000",
+                    timeString = ts,
+                    timeTicks = TimeSpan.ParseExact(ts, @"hh\:mm", System.Globalization.CultureInfo.InvariantCulture).Ticks,
                     stop = vmdlStop
                 });
             }
@@ -65,7 +69,10 @@ namespace MTR.BusinessLogic.Pathfinder
                 {
                     isTransfer = (edge is TransferEdge),
                     routeName = (edge is TransferEdge) ? "Lábbusz" : DbManager.GetRouteById(((RouteEdge)edge).RouteId).RouteShortName,
+                    routeColor = (edge is TransferEdge) ? "#FFFFFF" : DbManager.GetRouteById(((RouteEdge)edge).RouteId).RouteColor,
+                    routeTextColor = (edge is TransferEdge) ? "#000000" : DbManager.GetRouteById(((RouteEdge)edge).RouteId).RouteTextColor,
                     timeString = edge.GetTimeString(),
+                    timeTicks = TimeSpan.ParseExact(edge.GetTimeString(), @"hh\:mm", System.Globalization.CultureInfo.InvariantCulture).Ticks,
                     stop = vmdlStop
                 });
             }
