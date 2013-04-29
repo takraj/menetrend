@@ -40,8 +40,8 @@ namespace MTR.WebApp.Controllers
             }
 
             var now = DateTime.Now.TimeOfDay;
-            //var instructionsToShow = PathfinderManager.GetRoute(src, dst, new DateTime(2013, 03, 01, now.Hours, now.Minutes, now.Seconds));
-            var instructionsToShow = PathfinderManager.GetRoute(src, dst, DateTime.Now);
+            var instructionsToShow = PathfinderManager.GetRoute(src, dst, new DateTime(2013, 03, 01, now.Hours, now.Minutes, now.Seconds));
+            //var instructionsToShow = PathfinderManager.GetRoute(src, dst, DateTime.Now);
             ViewBag.StopNames = allStops.Select(s => s.StopName).Distinct().ToArray();
             
             Utility.SetupCulture();
