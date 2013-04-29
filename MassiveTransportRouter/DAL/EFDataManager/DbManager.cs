@@ -392,19 +392,55 @@ namespace MTR.DataAccess.EFDataManager
 
                 // create result: Berakja egy szótárba, ahol a kulcs a megfelelő RouteId-StopId pár
                 var timetableDict = new Dictionary<string, List<TimetableItem>>();
+                Console.WriteLine("Recreating directory...");
+                MTR.Common.Utility.recreateFolder(timetableCachePathRoot);
                 Console.WriteLine("Running query...");
-                foreach (var t in times)
+                foreach (var db_stoptime in db.StopTimes.OrderBy(e => e.TripId.RouteId.Id).ThenBy(e => e.StopId.Id))
                 {
+                    var t = new TimetableItem
+                    {
+                        RouteDbId = db_stoptime.TripId.RouteId.Id,
+                        StopDbId = db_stoptime.StopId.Id,
+                        ValidFrom = db_stoptime.TripId.ServiceId.StartDate,
+                        ValidTo = db_stoptime.TripId.ServiceId.EndDate,
+                        ValidOnMonday = db_stoptime.TripId.ServiceId.Monday,
+                        ValidOnTuesday = db_stoptime.TripId.ServiceId.Tuesday,
+                        ValidOnWednesday = db_stoptime.TripId.ServiceId.Wednesday,
+                        ValidOnThursday = db_stoptime.TripId.ServiceId.Thursday,
+                        ValidOnFriday = db_stoptime.TripId.ServiceId.Friday,
+                        ValidOnSaturday = db_stoptime.TripId.ServiceId.Saturday,
+                        ValidOnSunday = db_stoptime.TripId.ServiceId.Sunday,
+                        Departure = db_stoptime.DepartureTime
+                    };
                     string filename = t.RouteDbId.ToString() + "-" + t.StopDbId.ToString();
 
                     if (!timetableDict.ContainsKey(filename))
                     {
+                        if (timetableDict.Keys.Count > 0)
+                        {
+                            Console.WriteLine();
+
+                            Console.WriteLine("Creating files...");
+                            foreach (var key in timetableDict.Keys)
+                            {
+                                var values = timetableDict[key];
+
+                                // Flush
+                                using (var file = File.Create(timetableCachePathRoot + key + ".dat"))
+                                {
+                                    Console.Write("-- WRITING FILE: " + timetableCachePathRoot + key + cacheExt + " --");
+                                    Serializer.Serialize(file, values.OrderBy(v => v.DepartureTick)); // Bináris szerializáló! Nagyon gyors! (protobuf-net)
+                                    Console.WriteLine(" [OK, " + values.Count + " items written]");
+                                }
+                            }
+
+                            Console.WriteLine();
+                        }
+                        timetableDict.Clear();
                         timetableDict.Add(filename, new List<TimetableItem>());
                     }
 
-                    List<TimetableItem> values;
-                    timetableDict.TryGetValue(filename, out values);
-                    values.Add(t);
+                    timetableDict[filename].Add(t);
 
                     counter++;
                     if ((counter % 100000) == 0)
@@ -412,23 +448,20 @@ namespace MTR.DataAccess.EFDataManager
                         Console.WriteLine((counter / 100000).ToString() + " x 100K processed");
                     }
                 }
-                Console.WriteLine();
 
-                Console.WriteLine("Recreating directory...");
-                MTR.Common.Utility.recreateFolder(timetableCachePathRoot);
+                Console.WriteLine();
 
                 Console.WriteLine("Creating files...");
                 foreach (var key in timetableDict.Keys)
                 {
-                    List<TimetableItem> values;
-                    timetableDict.TryGetValue(key, out values);
+                    var values = timetableDict[key];
 
                     // Flush
                     using (var file = File.Create(timetableCachePathRoot + key + ".dat"))
                     {
                         Console.Write("-- WRITING FILE: " + timetableCachePathRoot + key + cacheExt + " --");
                         Serializer.Serialize(file, values.OrderBy(v => v.DepartureTick)); // Bináris szerializáló! Nagyon gyors! (protobuf-net)
-                        Console.WriteLine(" [OK, "+ values.Count +" items written]");
+                        Console.WriteLine(" [OK, " + values.Count + " items written]");
                     }
                 }
             }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MTR.BusinessLogic.DataManager
@@ -17,9 +18,11 @@ namespace MTR.BusinessLogic.DataManager
         {
             if (GtfsDatabase.initDatabase(BasePath))
             {
-                GraphTransformer.CreateStopGroups(200);
-                GraphBuilder.BuildGraph();
                 CostCalculator.CreateTimetableCache(appHomeDir);
+                Parallel.Invoke(
+                    () => GraphTransformer.CreateStopGroups(200),
+                    () => GraphBuilder.BuildGraph()
+                    );
             }
         }
 
