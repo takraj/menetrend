@@ -159,6 +159,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
 
                             #region Check for hidden transfers
                             {
+                                // Ha ugyanannál a megállónál száll át...
                                 if ((usedEdges.Count > 0) && (usedEdges.Peek() is RouteEdge))
                                 {
                                     if (((RouteEdge)usedEdges.Peek()).RouteId != edge.RouteId)
@@ -184,7 +185,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                                 {
                                     stopId = stop.DbId,
                                     viaNode = currentNode,
-                                    departureTime = currentNode.departureTime.Add(new TimeSpan(0, (int)edgeCost, 0)),
+                                    departureTime = currentNode.departureTime.Add(TimeSpan.FromMinutes((int)edgeCost)),
                                     usedEdges = usedEdges,
                                     usedRouteIds = new Stack<int>(usedRouteIds.Reverse())
                                 });
@@ -207,6 +208,12 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
         protected List<CompleteNode> GetTransferCandidates(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when)
         {
             var candidates = new List<CompleteNode>();
+
+            if ((currentNode.usedEdges.Count > 0) && (currentNode.usedEdges.Peek() is TransferEdge))
+            {
+                // Ha az előző művelet átszállás volt, akkor ne szálljunk át mégegyszer
+                return candidates;
+            }
 
             int? groupId = GetStop(currentNode.stopId).GroupId;
 
@@ -232,7 +239,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                         continue;
                     }
 
-                    var edge = new TransferEdge(stop.DbId, currentNode.departureTime);
+                    var edge = new TransferEdge(stop.DbId, currentNode.departureTime, this.GetStop(currentNode.stopId), this.GetStop(stop.DbId));
                     var edgeCost = edge.GetCost();
 
                     if (edgeCost != null)
@@ -244,7 +251,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                         {
                             stopId = stop.DbId,
                             viaNode = currentNode,
-                            departureTime = currentNode.departureTime.Add(new TimeSpan(0, (int)edgeCost, 0)),
+                            departureTime = currentNode.departureTime.Add(TimeSpan.FromMinutes((int)edgeCost)),
                             usedEdges = usedEdges,
                             usedRouteIds = new Stack<int>(currentNode.usedRouteIds.Reverse())
                         });

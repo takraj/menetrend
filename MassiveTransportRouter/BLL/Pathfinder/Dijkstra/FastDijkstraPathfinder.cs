@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -107,10 +108,17 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
         protected override CompleteNode GetNextCompleteNode(CompleteNode currentNode, List<Node> incompleteNodes, DateTime when)
         {
             var queue = _priorityQueues[Thread.CurrentThread];
-            var candidates = new List<CompleteNode>();
-            
-            candidates.AddRange(GetRouteCandidates(currentNode, incompleteNodes, when, null));
-            candidates.AddRange(GetTransferCandidates(currentNode, incompleteNodes, when));
+            var candidates = new ConcurrentBag<CompleteNode>();
+
+            Parallel.Invoke(
+            () =>
+            {
+                GetRouteCandidates(currentNode, incompleteNodes, when, null).ForEach(c => candidates.Add(c));
+            },
+            () =>
+            {
+                GetTransferCandidates(currentNode, incompleteNodes, when).ForEach(c => candidates.Add(c));
+            });
 
             foreach (var cnode in candidates)
             {
