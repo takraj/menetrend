@@ -15,5 +15,11 @@ namespace MTR.WebApp.Common.ViewModels
         public string timeString;
         public long timeTicks;
         public bool isTransfer;
+        public string debugComment;
+
+        public override string ToString()
+        {
+            return stop.StopName + " (" + timeString + ")";
+        }
     }
 }

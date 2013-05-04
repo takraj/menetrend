@@ -81,7 +81,17 @@
 
     <p class="summaryTime">
         <strong>@Html.Raw(Model.First().timeString)</strong> - <strong>@Html.Raw(Model.Last().timeString)</strong>
-        <span class="instructionNote">(@Html.Raw((int) (new TimeSpan(Model.Last().timeTicks - Model.First().timeTicks).TotalMinutes)) perc)</span>
+        @{
+            var travelToTime = new TimeSpan(Model.Last().timeTicks);
+            var travelFromTime = new TimeSpan(Model.First().timeTicks);
+            var travelTimeMinutes = (travelToTime - travelFromTime).TotalMinutes;
+
+            if (travelTimeMinutes < 0) {
+                travelTimeMinutes = ((new TimeSpan(23, 59, 59)) - travelFromTime).TotalMinutes + travelToTime.TotalMinutes;
+                travelTimeMinutes = Math.Ceiling(travelTimeMinutes);
+            }
+        }
+        <span class="instructionNote">(@Html.Raw((int) travelTimeMinutes) perc)</span>
     </p>
 
     <fieldset class="routeDetails">

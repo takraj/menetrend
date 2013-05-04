@@ -164,7 +164,8 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                                 {
                                     if (((RouteEdge)usedEdges.Peek()).RouteId != edge.RouteId)
                                     {
-                                        usedEdges.Push(new TransferEdge(edge.GetDestinationStopId(), currentNode.departureTime));
+                                        var stp = GetStop(currentNode.stopId);
+                                        usedEdges.Push(new TransferEdge(stp.DbId, currentNode.departureTime, stp, stp));
                                         edgeCost += usedEdges.Peek().GetCost();
                                     }
                                 }
@@ -222,9 +223,11 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                 var stopsInGroup = GetStopsInGroup(groupId);
                 if (stopsInGroup == null)
                 {
+                    // Ha árva vagyok, akkor üreset adok vissza
                     return candidates;
                 }
 
+                // Szomszédok vizsgálata
                 foreach (var stop in stopsInGroup)
                 {
                     if (stop.DbId == currentNode.stopId)

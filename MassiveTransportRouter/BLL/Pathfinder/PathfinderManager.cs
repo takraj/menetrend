@@ -55,8 +55,9 @@ namespace MTR.BusinessLogic.Pathfinder
                     routeColor = "#FFFFFF",
                     routeTextColor = "#000000",
                     timeString = ts,
-                    timeTicks = TimeSpan.ParseExact(ts, @"hh\:mm", System.Globalization.CultureInfo.InvariantCulture).Ticks,
-                    stop = vmdlStop
+                    timeTicks = datetime.TimeOfDay.Ticks,
+                    stop = vmdlStop,
+                    debugComment = "Kezdőpont"
                 });
             }
 
@@ -73,7 +74,8 @@ namespace MTR.BusinessLogic.Pathfinder
                     routeTextColor = (edge is TransferEdge) ? "#000000" : DbManager.GetRouteById(((RouteEdge)edge).RouteId).RouteTextColor,
                     timeString = edge.GetTimeString(),
                     timeTicks = TimeSpan.ParseExact(edge.GetTimeString(), @"hh\:mm", System.Globalization.CultureInfo.InvariantCulture).Ticks,
-                    stop = vmdlStop
+                    stop = vmdlStop,
+                    debugComment = edge.ToString()
                 });
             }
 
