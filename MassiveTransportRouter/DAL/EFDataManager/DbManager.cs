@@ -121,7 +121,7 @@ namespace MTR.DataAccess.EFDataManager
             return result;
         }
 
-        private static Dictionary<string, List<TimetableItem>> timetables = new Dictionary<string,List<TimetableItem>>();
+        private static ConcurrentDictionary<string, List<TimetableItem>> timetables = new ConcurrentDictionary<string,List<TimetableItem>>();
         private static object lck = new Object();
 
         public static void LoadCache(string appHomeDir = "")
@@ -137,20 +137,17 @@ namespace MTR.DataAccess.EFDataManager
 
             string timetableCachePathRoot = _appHomeDir + Path.DirectorySeparatorChar + cacheRootDir + Path.DirectorySeparatorChar + cacheTimetablesDir + Path.DirectorySeparatorChar;
 
-            foreach (var path in Directory.GetFiles(timetableCachePathRoot, "*" + cacheExt))
+            Directory.GetFiles(timetableCachePathRoot, "*" + cacheExt).AsParallel().ForAll(path =>
             {
                 string filename = timetableCachePathRoot + path.Split(Path.DirectorySeparatorChar).Last();
-                lock (lck)
+                if (!timetables.ContainsKey(filename))
                 {
-                    if (!timetables.ContainsKey(filename))
+                    using (var file = File.OpenRead(path))
                     {
-                        using (var file = File.OpenRead(path))
-                        {
-                            timetables.Add(filename, Serializer.Deserialize<List<TimetableItem>>(file).ToList()); // Eleve rendezett lista!
-                        }
+                        timetables.TryAdd(filename, Serializer.Deserialize<List<TimetableItem>>(file).ToList()); // Eleve rendezett lista!
                     }
                 }
-            }
+            });
         }
 
         /// <summary>
@@ -176,7 +173,7 @@ namespace MTR.DataAccess.EFDataManager
                     {
                         using (var file = File.OpenRead(filename))
                         {
-                            timetables.Add(filename, Serializer.Deserialize<List<TimetableItem>>(file).ToList()); // Eleve rendezett lista!
+                            timetables.TryAdd(filename, Serializer.Deserialize<List<TimetableItem>>(file).ToList()); // Eleve rendezett lista!
                         }
                     }
                     timetable = timetables[filename];
@@ -208,7 +205,8 @@ namespace MTR.DataAccess.EFDataManager
                         break;
                 }
 
-                return TimeSpan.FromTicks(timetable.First(ti => (ti.DepartureTick > referenceTime.Ticks)
+                var delta = new TimeSpan(0, 0, 30).Ticks;
+                return TimeSpan.FromTicks(timetable.First(ti => (ti.DepartureTick > (referenceTime.Ticks + delta))
                     && (ti.ValidFromTick <= date.Ticks) && (ti.ValidToTick >= date.Ticks)).DepartureTick);
             }
             catch
@@ -229,10 +227,11 @@ namespace MTR.DataAccess.EFDataManager
         {
             using (var db = new EF_GtfsDbContext())
             {
+                var delta = new TimeSpan(0, 0, 30);
                 var query = from stoptimes in db.StopTimes
                             where ((stoptimes.StopId.Id == stopId)
                                 && (stoptimes.TripId.RouteId.Id == routeId)
-                                && (stoptimes.DepartureTime > referenceTime)
+                                && (stoptimes.DepartureTime > (referenceTime + delta))
                                 && (stoptimes.TripId.ServiceId.StartDate <= date)
                                 && (stoptimes.TripId.ServiceId.EndDate >= date))
                             orderby stoptimes.DepartureTime ascending

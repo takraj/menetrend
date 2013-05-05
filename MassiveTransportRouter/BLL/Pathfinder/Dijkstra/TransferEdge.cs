@@ -32,7 +32,7 @@ namespace MTR.BusinessLogic.Pathfinder.Dijkstra
                         dstStop.StopLatitude, dstStop.StopLongitude
                     );
 
-                _cost = 1 + (int)(distanceInMetres * 0.015);        // 1 km kb 15 perc (4kmph)
+                _cost = 2 + (int)(distanceInMetres * 0.015);        // 1 km kb 15 perc (4kmph)
             }
             else
             {

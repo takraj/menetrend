@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -30,8 +31,11 @@ namespace MTR.WebApp
             AuthConfig.RegisterAuth();
 
             DbDataManager.initDatabase(HttpRuntime.AppDomainAppPath + "budapest_gtfs/", HttpRuntime.AppDomainAppPath + Path.DirectorySeparatorChar);
-            DbDataManager.LoadCache(HttpRuntime.AppDomainAppPath + Path.DirectorySeparatorChar);
-            PathfinderManager.InitializePathfinders();
+
+            Parallel.Invoke(
+                () => DbDataManager.LoadCache(HttpRuntime.AppDomainAppPath + Path.DirectorySeparatorChar),
+                () => PathfinderManager.InitializePathfinders()
+            );
         }
     }
 }
