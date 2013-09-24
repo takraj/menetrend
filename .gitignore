@@ -18,3 +18,4 @@ budapest_gtfs
 # Database
 *.mdf
 *.ldf
+*.autosave
