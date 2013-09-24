@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TUSZ.Interfaces")]
+[assembly: AssemblyTitle("TUSZ.CommonClasses")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TUSZ.Interfaces")]
+[assembly: AssemblyProduct("TUSZ.CommonClasses")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("95a52664-35c9-458c-a236-eef5419067d5")]
+[assembly: Guid("d684d2d5-9f0a-464a-befa-6dd6ebe79a9c")]
 
 // Version information for an assembly consists of the following four values:
 //

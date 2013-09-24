@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.PathfinderCore", "TUSZ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.DataRepository", "TUSZ.DataRepository\TUSZ.DataRepository.csproj", "{F0A2DB4A-75A3-4514-9675-69177449E3E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.Interfaces", "TUSZ.Interfaces\TUSZ.Interfaces.csproj", "{EEE437EA-DA7F-4A20-B329-B4081C365876}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.CommonClasses", "TUSZ.CommonClasses\TUSZ.CommonClasses.csproj", "{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,10 @@ Global
 		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EEE437EA-DA7F-4A20-B329-B4081C365876}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EEE437EA-DA7F-4A20-B329-B4081C365876}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EEE437EA-DA7F-4A20-B329-B4081C365876}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EEE437EA-DA7F-4A20-B329-B4081C365876}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

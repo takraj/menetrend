@@ -43,9 +43,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TUSZ.Interfaces\TUSZ.Interfaces.csproj">
-      <Project>{eee437ea-da7f-4a20-b329-b4081c365876}</Project>
-      <Name>TUSZ.Interfaces</Name>
+    <ProjectReference Include="..\TUSZ.CommonClasses\TUSZ.CommonClasses.csproj">
+      <Project>{bd6b7c43-e491-44ac-a18d-93a9ff983da8}</Project>
+      <Name>TUSZ.CommonClasses</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
