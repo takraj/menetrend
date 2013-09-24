@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.WebApplication", "TUSZ.WebApplication\TUSZ.WebApplication.csproj", "{F39DD75D-338F-4E75-8586-C5E8DED57AA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.PathfinderCore", "TUSZ.PathfinderCore\TUSZ.PathfinderCore.csproj", "{3087E479-02EE-425B-9E45-B8BA7FB3219A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.DataRepository", "TUSZ.DataRepository\TUSZ.DataRepository.csproj", "{F0A2DB4A-75A3-4514-9675-69177449E3E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.Interfaces", "TUSZ.Interfaces\TUSZ.Interfaces.csproj", "{EEE437EA-DA7F-4A20-B329-B4081C365876}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F39DD75D-338F-4E75-8586-C5E8DED57AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F39DD75D-338F-4E75-8586-C5E8DED57AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F39DD75D-338F-4E75-8586-C5E8DED57AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F39DD75D-338F-4E75-8586-C5E8DED57AA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3087E479-02EE-425B-9E45-B8BA7FB3219A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3087E479-02EE-425B-9E45-B8BA7FB3219A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3087E479-02EE-425B-9E45-B8BA7FB3219A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3087E479-02EE-425B-9E45-B8BA7FB3219A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE437EA-DA7F-4A20-B329-B4081C365876}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE437EA-DA7F-4A20-B329-B4081C365876}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE437EA-DA7F-4A20-B329-B4081C365876}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEE437EA-DA7F-4A20-B329-B4081C365876}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
