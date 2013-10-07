@@ -75,8 +75,31 @@ namespace GTFSConverter
             }
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
 
+            partialTime.Restart();
+            Console.Write("Compacting database...");
+            var cdb = new GTFSCompacter(db).MakeCompactModels();
+            Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
+
+            partialTime.Restart();
+            Console.Write("Serializing compact database...");
+            using (var file = System.IO.File.Create(basedir + "gtfs_compact.dat"))
+            {
+                ProtoBuf.Serializer.Serialize(file, cdb);
+            }
+            Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
+
+            partialTime.Restart();
+            Console.Write("Deserializing compact database...");
+            using (var file = System.IO.File.OpenRead(basedir + "gtfs_compact.dat"))
+            {
+                cdb = ProtoBuf.Serializer.Deserialize<CompactGTFSDB>(file);
+            }
+            Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
+
             partialTime.Stop();
             totalTime.Stop();
+
+            db = null;
 
             Console.WriteLine();
             Console.WriteLine("Idő: " + (totalTime.ElapsedMilliseconds / 1000.0) + "s");

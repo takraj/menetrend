@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace GTFSConverter
 {
+    [ProtoContract]
     class CompactGTFSDB
     {
         [ProtoMember(1)]

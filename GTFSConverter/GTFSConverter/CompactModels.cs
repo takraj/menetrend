@@ -100,9 +100,6 @@ namespace GTFSConverter
         public ushort stop_id { get; set; }             // STRING -> USHORT
 
         [ProtoMember(5)]
-        public byte stop_sequence { get; set; }         // INT -> BYTE
-
-        [ProtoMember(6)]
         public uint shape_dist_traveled { get; set; } // DOUBLE -> UINT
     }
 
@@ -191,9 +188,6 @@ namespace GTFSConverter
         public double shape_pt_lon { get; set; }
 
         [ProtoMember(4)]
-        public uint shape_pt_sequence { get; set; }   // INT -> UINT
-
-        [ProtoMember(5)]
         public uint shape_dist_traveled { get; set; } // DOUBLE -> UINT
     }
 

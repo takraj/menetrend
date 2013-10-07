@@ -19,14 +19,30 @@ namespace GTFSConverter
 
         public ushort GetDaysFrom2000(string date)
         {
-            var dprovided = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            var d2000 = new DateTime(2000, 0, 0);
+            var dprovided = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture);
+            var d2000 = new DateTime(2000, 1, 1);
             return (ushort) (dprovided - d2000).TotalDays;
+        }
+
+        public ushort MinutesFromLastMidnight(string time)
+        {
+            var time_components = time.Split(':');
+            if (time_components.Length >= 2)
+            {
+                var hours = ushort.Parse(time_components[0]);
+                var minutes = ushort.Parse(time_components[1]);
+
+                return (ushort) ((hours * 60) + minutes);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public SimpleRGB ExtractColor(string htmlColor)
         {
-            var color = ColorTranslator.FromHtml(htmlColor);
+            var color = ColorTranslator.FromHtml("#" + htmlColor);
             return new SimpleRGB()
             {
                 red = color.R,
@@ -204,7 +220,79 @@ namespace GTFSConverter
                     }
                 }
 
+                result.shapes = new List<CompactGTFS_Shape>();
+                foreach (var shape in db.shapes)
+                {
+                    var compact_shape = new CompactGTFS_Shape()
+                    {
+                        shape_id = shape_ids[shape.shape_id],
+                        shape_dist_traveled = (uint)shape.shape_dist_traveled,
+                        shape_pt_lat = (float)shape.shape_pt_lat,
+                        shape_pt_lon = (float)shape.shape_pt_lon
+                    };
+
+                    result.shapes.Add(compact_shape);
+                }
+
                 // Kicsit át kellene alakítani, mert ez nagyon ineffektíven van most tárolva. EZ EGY VONAL!
+            }
+            #endregion
+
+            #region Trips
+            var trip_ids = new Dictionary<string, uint>();
+            var block_ids = new Dictionary<string, uint>();
+            {
+                uint nextId = 0;
+                uint nextBlockId = 0;
+                foreach (var trip in db.trips)
+                {
+                    if (!trip_ids.ContainsKey(trip.trip_id))
+                    {
+                        trip_ids.Add(trip.trip_id, nextId++);
+                    }
+
+                    if (!block_ids.ContainsKey(trip.block_id))
+                    {
+                        block_ids.Add(trip.block_id, nextBlockId++);
+                    }
+                }
+
+                result.trips = new List<CompactGTFS_Trip>();
+                foreach (var trip in db.trips)
+                {
+                    var compact_trip = new CompactGTFS_Trip()
+                    {
+                        trip_id = trip_ids[trip.trip_id],
+                        route_id = route_ids[trip.route_id],
+                        service_id = service_ids[trip.service_id],
+                        trip_headsign = trip.trip_headsign,
+                        shape_id = shape_ids[trip.shape_id],
+                        wheelchair_accessible = trip.wheelchair_accessible == 1,
+                        is_forward_trip = trip.direction_id == 0,
+                        block_id = block_ids[trip.block_id]
+                    };
+
+                    result.trips.Add(compact_trip);
+                }
+            }
+            #endregion
+
+            #region Stop Times
+            {
+                result.stop_times = new List<CompactGTFS_StopTime>();
+                foreach (var stop_time in db.stop_times)
+                {
+                    var compact_stop_time = new CompactGTFS_StopTime()
+                    {
+                        stop_id = stop_ids[stop_time.stop_id],
+                        trip_id = trip_ids[stop_time.trip_id],
+                        shape_dist_traveled = (uint) stop_time.shape_dist_traveled,
+                        arrival_time = MinutesFromLastMidnight(stop_time.arrival_time),
+                        departure_time = MinutesFromLastMidnight(stop_time.departure_time)
+                    };
+
+                    result.stop_times.Add(compact_stop_time);
+                }
             }
             #endregion
 
