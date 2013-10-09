@@ -192,7 +192,7 @@ namespace GTFSConverter
     }
 
     [ProtoContract]
-    public class SimpleRGB
+    public struct SimpleRGB
     {
         [ProtoMember(1)]
         public byte red { get; set; }

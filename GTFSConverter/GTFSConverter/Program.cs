@@ -19,7 +19,7 @@ namespace GTFSConverter
             var db = new GTFSDB();
 
             var partialTime = new Stopwatch();
-            /*partialTime.Start();
+            partialTime.Start();
             Console.Write("Reading agencies...");
             db.agencies = GTFSReader.Read<GTFS_Agency>(basedir + GTFS_Agency.SourceFilename).ToList();
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
@@ -86,8 +86,7 @@ namespace GTFSConverter
             {
                 ProtoBuf.Serializer.Serialize(file, cdb);
             }
-            Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s"); */
-            CompactGTFSDB cdb = null;
+            Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
 
             partialTime.Restart();
             Console.Write("Deserializing compact database...");

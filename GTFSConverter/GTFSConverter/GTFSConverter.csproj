@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="CompactGTFSDB.cs" />
     <Compile Include="CompactModels.cs" />
+    <Compile Include="CompactReferencedGTFSDB.cs" />
     <Compile Include="GTFSCompacter.cs" />
     <Compile Include="GTFSDB.cs" />
     <Compile Include="GTFSReader.cs" />
