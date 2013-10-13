@@ -11,7 +11,7 @@ namespace GTFSConverter
     {
         static void Main(string[] args)
         {
-            const string basedir = "G:\\budapest_gtfs\\";
+            const string basedir = "C:\\budapest_gtfs\\";
 
             var totalTime = new Stopwatch();
             totalTime.Start();

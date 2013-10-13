@@ -54,6 +54,16 @@ namespace GTFSConverter.CRGTFS
     }
 
     [ProtoContract]
+    public struct TripDate
+    {
+        [ProtoMember(1)]
+        ulong date;
+
+        [ProtoMember(2, AsReference = true)]
+        Trip trip;
+    }
+
+    [ProtoContract]
     public struct StopTime
     {
         [ProtoMember(1, AsReference = true)]
@@ -88,43 +98,22 @@ namespace GTFSConverter.CRGTFS
     [ProtoContract]
     public class Route
     {
-        [ProtoMember(1, AsReference = true)]
-        List<Trip> mondayTrips;
+        [ProtoMember(1, AsReference = false)]
+        List<TripDate> dates;
 
-        [ProtoMember(2, AsReference = true)]
-        List<Trip> tuesdayTrips;
-
-        [ProtoMember(3, AsReference = true)]
-        List<Trip> wednesdayTrips;
-
-        [ProtoMember(4, AsReference = true)]
-        List<Trip> thursdayTrips;
-
-        [ProtoMember(5, AsReference = true)]
-        List<Trip> fridayTrips;
-
-        [ProtoMember(6, AsReference = true)]
-        List<Trip> saturdayTrips;
-
-        [ProtoMember(7, AsReference = true)]
-        List<Trip> sundayTrips;
-
-        [ProtoMember(8, AsReference = true)]
-        List<Trip> exceptionTrips;
-
-        [ProtoMember(9)]
+        [ProtoMember(2)]
         string name;
 
-        [ProtoMember(10)]
+        [ProtoMember(3)]
         string description;
 
-        [ProtoMember(11)]
+        [ProtoMember(4)]
         byte type;
 
-        [ProtoMember(12, AsReference = false)]
+        [ProtoMember(5, AsReference = false)]
         RGB colour;
 
-        [ProtoMember(13, AsReference = false)]
+        [ProtoMember(6, AsReference = false)]
         RGB textColour;
     }
 
@@ -134,25 +123,13 @@ namespace GTFSConverter.CRGTFS
         [ProtoMember(1)]
         string headsign;
 
-        [ProtoMember(2)]
-        ulong startDate;
-
         [ProtoMember(3)]
-        ulong endDate;
+        ushort endTime;
 
         [ProtoMember(4)]
-        ushort dailyStartTime;
-
-        [ProtoMember(5)]
-        ushort dailyEndTime;
-
-        [ProtoMember(6)]
         bool wheelchairSupport;
 
-        [ProtoMember(7, IsPacked=true)]
-        List<ulong> noService;
-
-        [ProtoMember(8, AsReference=false)]
+        [ProtoMember(5, AsReference=false)]
         List<StopTime> stopTimes;
     }
 }
