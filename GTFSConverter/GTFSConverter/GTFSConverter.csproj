@@ -48,16 +48,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompactGTFSDB.cs" />
-    <Compile Include="CompactModels.cs" />
-    <Compile Include="CompactReferencedGTFSDB.cs" />
-    <Compile Include="GTFSCompacter.cs" />
-    <Compile Include="GTFSDB.cs" />
-    <Compile Include="GTFSReader.cs" />
-    <Compile Include="Models.cs" />
+    <Compile Include="CGTFS\CompactGTFSDB.cs" />
+    <Compile Include="CGTFS\CompactModels.cs" />
+    <Compile Include="CRGTFS\CompactReferencedGTFSDB.cs" />
+    <Compile Include="CGTFS\GTFSCompacter.cs" />
+    <Compile Include="GTFS\GTFSDB.cs" />
+    <Compile Include="GTFS\GTFSReader.cs" />
+    <Compile Include="GTFS\Models.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RGTFSComapcter.cs" />
+    <Compile Include="CRGTFS\RGTFSComapcter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
