@@ -40,7 +40,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,8 +52,16 @@
   <ItemGroup>
     <Compile Include="CGTFS\CompactGTFSDB.cs" />
     <Compile Include="CGTFS\CompactModels.cs" />
+    <Compile Include="CRGTFS\CompacterTasks\CalculateStopRouteRelationships.cs" />
+    <Compile Include="CRGTFS\CompacterTasks\CalculateTransferDistances.cs" />
+    <Compile Include="CRGTFS\CompacterTasks\CalculateTripDates.cs" />
+    <Compile Include="CRGTFS\CompacterTasks\PrepareTrips.cs" />
+    <Compile Include="CRGTFS\CompacterTasks\PrepareRoutes.cs" />
+    <Compile Include="CRGTFS\CompacterTasks\PrepareStops.cs" />
     <Compile Include="CRGTFS\CompactReferencedGTFSDB.cs" />
     <Compile Include="CGTFS\GTFSCompacter.cs" />
+    <Compile Include="CRGTFS\Pathfinder\AStarPathfinder.cs" />
+    <Compile Include="CRGTFS\Pathfinder\TransitGraphWrapper.cs" />
     <Compile Include="GTFS\GTFSDB.cs" />
     <Compile Include="GTFS\GTFSReader.cs" />
     <Compile Include="GTFS\Models.cs" />
@@ -63,6 +73,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

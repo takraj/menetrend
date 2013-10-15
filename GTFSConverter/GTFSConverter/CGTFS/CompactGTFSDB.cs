@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace GTFSConverter
 {
     [ProtoContract]
-    class CompactGTFSDB
+    public class CompactGTFSDB
     {
         [ProtoMember(1)]
         public List<CompactGTFS_Agency> agencies;

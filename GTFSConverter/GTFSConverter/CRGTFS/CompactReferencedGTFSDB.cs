@@ -10,126 +10,136 @@ namespace GTFSConverter.CRGTFS
     [ProtoContract]
     public class TransitDB
     {
-        [ProtoMember(1, AsReference = true)]
-        List<Stop> stops;
+        [ProtoMember(1)]
+        public List<Stop> stops;
 
-        [ProtoMember(2, AsReference = true)]
-        List<Route> routes;
+        [ProtoMember(2)]
+        public List<Route> routes;
 
-        [ProtoMember(3, AsReference = true)]
-        List<Trip> trips;
+        [ProtoMember(3)]
+        public List<Trip> trips;
+    }
+
+    public class OriginalMaps
+    {
+        public Dictionary<object, Stop> originalStopMap = new Dictionary<object, Stop>();
+        public Dictionary<object, Route> originalRouteMap = new Dictionary<object, Route>();
+        public Dictionary<object, Trip> originalTripMap = new Dictionary<object, Trip>();
     }
 
     [ProtoContract]
     public struct LatLng
     {
         [ProtoMember(1)]
-        float latitude;
+        public float latitude;
 
         [ProtoMember(2)]
-        float longitude;
+        public float longitude;
     }
 
     [ProtoContract]
     public struct RGB
     {
         [ProtoMember(1)]
-        byte r;
+        public byte r;
 
         [ProtoMember(2)]
-        byte g;
+        public byte g;
 
         [ProtoMember(3)]
-        byte b;
+        public byte b;
     }
 
     [ProtoContract]
     public struct Transfer
     {
-        [ProtoMember(1, AsReference = true)]
-        Stop toStop;
+        [ProtoMember(1)]
+        public int toStopIndex;
 
         [ProtoMember(2)]
-        float distance;
+        public float distance;
     }
 
     [ProtoContract]
     public struct TripDate
     {
         [ProtoMember(1)]
-        ulong date;
+        public ushort date;
 
-        [ProtoMember(2, AsReference = true)]
-        Trip trip;
+        [ProtoMember(2)]
+        public int tripIndex;
     }
 
     [ProtoContract]
     public struct StopTime
     {
-        [ProtoMember(1, AsReference = true)]
-        Stop stop;
+        [ProtoMember(1)]
+        public int stopIndex;
 
         [ProtoMember(2)]
-        ushort arrivalTime;
+        public ushort arrivalTime;
 
         [ProtoMember(3)]
-        byte waitingTime;
+        public byte waitingTime;
 
-        [ProtoMember(4, AsReference = false)]
-        List<LatLng> shapeSegmentsBefore;
+        [ProtoMember(4)]
+        public List<LatLng> shapeSegmentsBefore;
     }
 
     [ProtoContract]
     public class Stop
     {
         [ProtoMember(1)]
-        string name;
+        public string name;
 
-        [ProtoMember(2, AsReference = false)]
-        LatLng position;
+        [ProtoMember(2)]
+        public LatLng position;
 
-        [ProtoMember(3, AsReference = false)]
-        List<Transfer> transfers;
+        [ProtoMember(3)]
+        public List<Transfer> transfers;
 
-        [ProtoMember(4, AsReference = true)]
-        List<Route> knownRoutes;
+        [ProtoMember(4)]
+        public List<int> knownRoutes;
+
+        [ProtoMember(5)]
+        public int idx;
     }
 
     [ProtoContract]
     public class Route
     {
-        [ProtoMember(1, AsReference = false)]
-        List<TripDate> dates;
+        [ProtoMember(1)]
+        public List<TripDate> dates;
 
         [ProtoMember(2)]
-        string name;
+        public string name;
 
         [ProtoMember(3)]
-        string description;
+        public string description;
 
         [ProtoMember(4)]
-        byte type;
+        public byte type;
 
-        [ProtoMember(5, AsReference = false)]
-        RGB colour;
+        [ProtoMember(5)]
+        public RGB colour;
 
-        [ProtoMember(6, AsReference = false)]
-        RGB textColour;
+        [ProtoMember(6)]
+        public RGB textColour;
     }
 
     [ProtoContract]
     public class Trip
     {
         [ProtoMember(1)]
-        string headsign;
+        public string headsign;
 
         [ProtoMember(3)]
-        ushort endTime;
+        public ushort endTime;
 
         [ProtoMember(4)]
-        bool wheelchairSupport;
+        public bool wheelchairSupport;
 
-        [ProtoMember(5, AsReference=false)]
-        List<StopTime> stopTimes;
+        [ProtoMember(5)]
+        public List<StopTime> stopTimes;
     }
 }
