@@ -9,51 +9,34 @@ namespace GTFSConverter.CRGTFS
 {
     public partial class RGTFSCompacter
     {
+        ushort GetDistance(Stop stop1, Stop stop2)
+        {
+            var coordA = new GeoCoordinate(stop1.position.latitude, stop1.position.longitude);
+            var coordB = new GeoCoordinate(stop2.position.latitude, stop2.position.longitude);
+
+            return (ushort) coordA.GetDistanceTo(coordB);
+        }
+
         void CalculateTransferDistances(ref TransitDB tdb, ref OriginalMaps originalMaps)
         {
-            ulong iteration = 0;
-            var lck = new Object();
+            var countOfStops = tdb.stops.Count();
+            var stopIndices = Enumerable.Range(0, countOfStops - 1).ToArray();
 
-            foreach (var stop_collector in tdb.stops)
-            {
-                if ((++iteration) % 100 == 0)
+            var allStops = tdb.stops;
+            var stopDistanceMatrix = new uint[countOfStops * countOfStops];
+
+            stopIndices.AsParallel().ForAll(i => {
+                stopDistanceMatrix[i * i] = 0;
+
+                for (int j = (i + 1); j < countOfStops; j++)
                 {
-                    Console.Write('.');
+                    var distance = GetDistance(allStops[i], allStops[j]);
+                    stopDistanceMatrix[(i * countOfStops) + j] = distance;
+                    stopDistanceMatrix[(j * countOfStops) + i] = distance;
                 }
+            });
 
-                tdb.stops.AsParallel().ForAll(stop_subject =>
-                {
-                    if (stop_collector == stop_subject)
-                    {
-                        return;
-                    }
-
-                    lock (lck)
-                    {
-                        if (stop_collector.transfers.Exists(tr => tr.toStopIndex == stop_subject.idx))
-                        {
-                            return;
-                        }
-                    }
-
-                    var coordA = new GeoCoordinate(stop_collector.position.latitude, stop_collector.position.longitude);
-                    var coordB = new GeoCoordinate(stop_subject.position.latitude, stop_subject.position.longitude);
-
-                    var transfer = new Transfer
-                    {
-                        toStopIndex = stop_subject.idx,
-                        distance = (float) coordA.GetDistanceTo(coordB)
-                    };
-
-                    lock (lck)
-                    {
-                        stop_collector.transfers.Add(transfer);
-                    }
-
-                    transfer.toStopIndex = stop_collector.idx;
-                    stop_subject.transfers.Add(transfer);
-                });
-            }
+            tdb.stopDistanceMatrix = stopDistanceMatrix;
         }
     }
 }

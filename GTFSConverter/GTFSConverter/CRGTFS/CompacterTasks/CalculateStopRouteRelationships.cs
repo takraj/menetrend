@@ -14,7 +14,7 @@ namespace GTFSConverter.CRGTFS
             var cstoptimeDictionary = db.stop_times.GroupBy(st => st.trip_id).ToDictionary(st => st.Key, st => st.ToList());
 
             var routeIndexes = new Dictionary<Route, int>();
-            for (int i = 0; i < tdb.routes.Count; i++)
+            for (int i = 0; i < tdb.routes.Count(); i++)
             {
                 routeIndexes[tdb.routes.ElementAt(i)] = i;
             }

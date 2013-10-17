@@ -14,9 +14,15 @@ namespace GTFSConverter.CRGTFS
             var serviceDictionary = db.trips.GroupBy(t => t.service_id).ToDictionary(t => t.Key, t => t.ToList());
 
             var tripIndexes = new Dictionary<Trip, int>();
-            for (int i = 0; i < tdb.trips.Count; i++)
+            for (int i = 0; i < tdb.trips.Count(); i++)
             {
                 tripIndexes[tdb.trips.ElementAt(i)] = i;
+            }
+
+            var routeDatesToAdd = new Dictionary<Route, List<TripDate>>();
+            foreach (var r in tdb.routes)
+            {
+                routeDatesToAdd[r] = new List<TripDate>();
             }
 
             foreach (var calendar in db.calendars)
@@ -53,7 +59,7 @@ namespace GTFSConverter.CRGTFS
                                 date = startDate,
                                 tripIndex = tripIndexes[rtrip]
                             };
-                            rroute.dates.Add(dateToInsert);
+                            routeDatesToAdd[rroute].Add(dateToInsert);
                         }
                     }
 
@@ -72,8 +78,13 @@ namespace GTFSConverter.CRGTFS
                         date = calendar_addition.date,
                         tripIndex = tripIndexes[rtrip]
                     };
-                    rroute.dates.Add(dateToInsert);
+                    routeDatesToAdd[rroute].Add(dateToInsert);
                 }
+            }
+
+            foreach (var r in tdb.routes)
+            {
+                r.dates = routeDatesToAdd[r].ToArray();
             }
         }
 

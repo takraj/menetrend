@@ -11,13 +11,19 @@ namespace GTFSConverter.CRGTFS
     public class TransitDB
     {
         [ProtoMember(1)]
-        public List<Stop> stops;
+        public Stop[] stops;
 
         [ProtoMember(2)]
-        public List<Route> routes;
+        public Route[] routes;
 
         [ProtoMember(3)]
-        public List<Trip> trips;
+        public Trip[] trips;
+
+        [ProtoMember(4)]
+        public uint[] stopDistanceMatrix;
+
+        [ProtoMember(5)]
+        public List<ShapeVector> shapeMatrix;
     }
 
     public class OriginalMaps
@@ -25,6 +31,14 @@ namespace GTFSConverter.CRGTFS
         public Dictionary<object, Stop> originalStopMap = new Dictionary<object, Stop>();
         public Dictionary<object, Route> originalRouteMap = new Dictionary<object, Route>();
         public Dictionary<object, Trip> originalTripMap = new Dictionary<object, Trip>();
+        public Dictionary<object, int> originalShapeIndexMap = new Dictionary<object, int>();
+    }
+
+    [ProtoContract]
+    public struct ShapeVector
+    {
+        [ProtoMember(1)]
+        public float[] verticesVector;
     }
 
     [ProtoContract]
@@ -51,16 +65,6 @@ namespace GTFSConverter.CRGTFS
     }
 
     [ProtoContract]
-    public struct Transfer
-    {
-        [ProtoMember(1)]
-        public int toStopIndex;
-
-        [ProtoMember(2)]
-        public float distance;
-    }
-
-    [ProtoContract]
     public struct TripDate
     {
         [ProtoMember(1)]
@@ -74,16 +78,13 @@ namespace GTFSConverter.CRGTFS
     public struct StopTime
     {
         [ProtoMember(1)]
-        public int stopIndex;
+        public int[] refIndices;
 
         [ProtoMember(2)]
         public ushort arrivalTime;
 
         [ProtoMember(3)]
         public byte waitingTime;
-
-        [ProtoMember(4)]
-        public List<LatLng> shapeSegmentsBefore;
     }
 
     [ProtoContract]
@@ -96,12 +97,9 @@ namespace GTFSConverter.CRGTFS
         public LatLng position;
 
         [ProtoMember(3)]
-        public List<Transfer> transfers;
+        public HashSet<int> knownRoutes;
 
         [ProtoMember(4)]
-        public List<int> knownRoutes;
-
-        [ProtoMember(5)]
         public int idx;
     }
 
@@ -109,7 +107,7 @@ namespace GTFSConverter.CRGTFS
     public class Route
     {
         [ProtoMember(1)]
-        public List<TripDate> dates;
+        public TripDate[] dates;
 
         [ProtoMember(2)]
         public string name;
@@ -140,6 +138,6 @@ namespace GTFSConverter.CRGTFS
         public bool wheelchairSupport;
 
         [ProtoMember(5)]
-        public List<StopTime> stopTimes;
+        public StopTime[] stopTimes;
     }
 }

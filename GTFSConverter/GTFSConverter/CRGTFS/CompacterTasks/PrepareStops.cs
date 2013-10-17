@@ -10,7 +10,7 @@ namespace GTFSConverter.CRGTFS
     {
         void PrepareStops(ref TransitDB tdb, ref OriginalMaps originalMaps)
         {
-            tdb.stops = new List<Stop>();
+            var stops = new List<Stop>();
 
             foreach (var cstop in db.stops)
             {
@@ -22,14 +22,15 @@ namespace GTFSConverter.CRGTFS
                         latitude = (float)cstop.stop_lat,
                         longitude = (float)cstop.stop_lon
                     },
-                    knownRoutes = new List<int>(),
-                    transfers = new List<Transfer>(),
-                    idx = tdb.stops.Count
+                    knownRoutes = new HashSet<int>(),
+                    idx = stops.Count
                 };
 
-                tdb.stops.Add(rstop);
+                stops.Add(rstop);
                 originalMaps.originalStopMap[cstop.stop_id] = rstop;
             }
+
+            tdb.stops = stops.ToArray();
         }
     }
 }

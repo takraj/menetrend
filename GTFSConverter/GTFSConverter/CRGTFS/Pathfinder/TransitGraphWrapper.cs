@@ -63,7 +63,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     continue;
                 }
 
-                for (int i = 1; i < trip.stopTimes.Count; i++)
+                for (int i = 1; i < trip.stopTimes.Count(); i++)
                 {
                     var currentStopTime = trip.stopTimes.ElementAt(i-1);
                     var nextStopTime = trip.stopTimes.ElementAt(i);
@@ -76,7 +76,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                         {
                             byWalking = false,
                             fromStop = currentStop,
-                            toStop = tdb.stops.ElementAt(nextStopTime.stopIndex),
+                            toStop = tdb.stops.ElementAt(nextStopTime.refIndices[0]),
                             fromStopTime = currentStopTime,
                             viaStopTime = nextStopTime,
                             viaRoute = route,
@@ -92,14 +92,26 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
         public List<Edge> GetTransferEdges(Stop stop)
         {
-            return (from transfer in stop.transfers
-                    select new Edge
-                    {
-                        fromStop = stop,
-                        toStop = tdb.stops.ElementAt(transfer.toStopIndex),
-                        byWalking = true,
-                        cost = (ushort)(GetWalkingCostInMinutes(transfer.distance) + 1)
-                    }).ToList();
+            var result = new List<Edge>();
+
+            for (int i = 0; i < tdb.stops.Length; i++)
+            {
+                if (i == stop.idx)
+                {
+                    continue;
+                }
+
+                var distance = tdb.stopDistanceMatrix[(stop.idx * tdb.stops.Length) + i];
+
+                result.Add(new Edge {
+                    fromStop = stop,
+                    toStop = tdb.stops.ElementAt(i),
+                    byWalking = true,
+                    cost = (ushort)(GetWalkingCostInMinutes(distance) + 1)
+                });
+            }
+
+            return result;
         }
 
         public ushort GetWalkingCostInMinutes(float distanceInMetres)

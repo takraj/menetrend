@@ -22,6 +22,8 @@ namespace GTFSConverter.CRGTFS
 
             PrepareStops(ref tdb, ref originalMaps);
             Console.Write('|');
+            PrepareShapes(ref tdb, ref originalMaps);
+            Console.Write('|');
             PrepareRoutes(ref tdb, ref originalMaps);
             Console.Write('|');
             PrepareTrips(ref tdb, ref originalMaps);
@@ -29,7 +31,7 @@ namespace GTFSConverter.CRGTFS
             CalculateStopRouteRelationships(ref tdb, ref originalMaps);
             Console.Write('|');
             CalculateTripDates(ref tdb, ref originalMaps);
-            Console.Write('|');
+            Console.Write('*');
             CalculateTransferDistances(ref tdb, ref originalMaps);
 
             return tdb;

@@ -10,10 +10,10 @@ namespace GTFSConverter.CRGTFS
     {
         void PrepareRoutes(ref TransitDB tdb, ref OriginalMaps originalMaps)
         {
-            tdb.routes = new List<Route>();
+            var routes = new List<Route>();
 
-            foreach (var croute in db.routes) {
-
+            foreach (var croute in db.routes)
+            {
                 var rroute = new Route
                 {
                     name = croute.route_short_name,
@@ -31,12 +31,14 @@ namespace GTFSConverter.CRGTFS
                         g = croute.route_text_color.green,
                         b = croute.route_text_color.blue
                     },
-                    dates = new List<TripDate>()
+                    dates = new TripDate[0]
                 };
 
-                tdb.routes.Add(rroute);
+                routes.Add(rroute);
                 originalMaps.originalRouteMap[croute.route_id] = rroute;
             }
+
+            tdb.routes = routes.ToArray();
         }
     }
 }
