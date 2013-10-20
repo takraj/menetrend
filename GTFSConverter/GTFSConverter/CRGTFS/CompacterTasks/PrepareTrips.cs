@@ -11,6 +11,7 @@ namespace GTFSConverter.CRGTFS
         void PrepareTrips(ref TransitDB tdb, ref OriginalMaps originalMaps)
         {
             var trips = new List<Trip>();
+            var headsigns = new List<string>();
 
             var cstoptimes = db.stop_times.GroupBy(st => st.trip_id).ToDictionary(st => st.Key, st => st.ToList());
             var cshapeseg = db.shapes.GroupBy(sh => sh.shape_id).ToDictionary(sh => sh.Key, sh => sh.ToList());
@@ -46,9 +47,16 @@ namespace GTFSConverter.CRGTFS
                     rstoptimes.Add(rstoptime);
                 }
 
+                if (!originalMaps.headsignMap.ContainsKey(ctrip.trip_headsign))
+                {
+                    headsigns.Add(ctrip.trip_headsign);
+                    originalMaps.headsignMap[ctrip.trip_headsign] = headsigns.Count;
+                }
+                var headsignIdx = originalMaps.headsignMap[ctrip.trip_headsign];
+
                 var rtrip = new Trip
                 {
-                    headsign = ctrip.trip_headsign,
+                    headsignIdx = headsignIdx,
                     wheelchairSupport = ctrip.wheelchair_accessible,
                     stopTimes = rstoptimes.ToArray(),
                     endTime = rstoptimes.Last().arrivalTime
@@ -59,6 +67,7 @@ namespace GTFSConverter.CRGTFS
             }
 
             tdb.trips = trips.ToArray();
+            tdb.headsigns = headsigns.ToArray();
         }
     }
 }

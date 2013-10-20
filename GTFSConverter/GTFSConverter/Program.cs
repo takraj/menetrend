@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -8,178 +9,14 @@ using System.Threading.Tasks;
 
 namespace GTFSConverter
 {
-    [ProtoBuf.ProtoContract]
-    struct Proba
-    {
-        [ProtoBuf.ProtoMember(1)]
-        public bool thisIsAFlag;
-
-        [ProtoBuf.ProtoMember(2)]
-        public bool thisIsAnotherFlag;
-
-        [ProtoBuf.ProtoMember(3)]
-        public string thisIsAString;
-
-        [ProtoBuf.ProtoMember(4)]
-        public byte thisIsAByte;
-
-        [ProtoBuf.ProtoMember(5)]
-        public ulong thisIsALong;
-    }
-
-    [ProtoBuf.ProtoContract]
-    struct TwoBooleansProba
-    {
-        [ProtoBuf.ProtoMember(1)]
-        public bool thisIsAFlag;
-
-        [ProtoBuf.ProtoMember(2)]
-        public bool thisIsAnotherFlag;
-    }
-
-    [ProtoBuf.ProtoContract]
-    struct TwoBytesProba
-    {
-        [ProtoBuf.ProtoMember(1)]
-        public byte thisIsAByte;
-
-        [ProtoBuf.ProtoMember(2)]
-        public byte thisIsAnotherByte;
-    }
-
-    [ProtoBuf.ProtoContract]
-    struct ThreeBooleansProba
-    {
-        [ProtoBuf.ProtoMember(1)]
-        public bool thisIsAFlag;
-
-        [ProtoBuf.ProtoMember(2)]
-        public bool thisIsAnotherFlag;
-
-        [ProtoBuf.ProtoMember(3)]
-        public bool thisIsTheThirdFlag;
-    }
-
-    [ProtoBuf.ProtoContract]
-    struct ThreeBytesProba
-    {
-        [ProtoBuf.ProtoMember(1)]
-        public byte thisIsAByte;
-
-        [ProtoBuf.ProtoMember(2)]
-        public byte thisIsAnotherByte;
-
-        [ProtoBuf.ProtoMember(3)]
-        public byte thisIsTheThirdByte;
-    }
-
     class Program
     {
-        private static string basedir = "C:\\budapest_gtfs\\";
-
-        static void testDataStructures()
-        {
-            using (var file = System.IO.File.Create(basedir + "test-complex-struct.proto"))
-            {
-                ProtoBuf.Serializer.Serialize(file, new Proba
-                {
-                    thisIsAFlag = false,
-                    thisIsAnotherFlag = true,
-                    thisIsAString = "Apple",
-                    thisIsAByte = 0xA1,
-                    thisIsALong = 0xA2
-                });
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-two-booleans-struct.proto"))
-            {
-                ProtoBuf.Serializer.Serialize(file, new TwoBooleansProba
-                {
-                    thisIsAFlag = false,
-                    thisIsAnotherFlag = true
-                });
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-byte.proto"))
-            {
-                byte toSerialize = 0xA1;
-                ProtoBuf.Serializer.Serialize(file, toSerialize);
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-array-two-bytes.proto"))
-            {
-                byte[] toSerialize = { 0xA1, 0xA2 };
-                ProtoBuf.Serializer.Serialize(file, toSerialize);
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-list-two-bytes.proto"))
-            {
-                byte[] toSerialize = { 0xA1, 0xA2 };
-                ProtoBuf.Serializer.Serialize(file, toSerialize.ToList());
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-struct-two-bytes.proto"))
-            {
-                ProtoBuf.Serializer.Serialize(file, new TwoBytesProba
-                {
-                    thisIsAByte = 0xA1,
-                    thisIsAnotherByte = 0xA2
-                });
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-array-three-bytes.proto"))
-            {
-                byte[] toSerialize = { 0xA1, 0xA2, 0xA3 };
-                ProtoBuf.Serializer.Serialize(file, toSerialize);
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-list-three-bytes.proto"))
-            {
-                byte[] toSerialize = { 0xA1, 0xA2, 0xA3 };
-                ProtoBuf.Serializer.Serialize(file, toSerialize.ToList());
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-struct-three-bytes.proto"))
-            {
-                ProtoBuf.Serializer.Serialize(file, new ThreeBytesProba
-                {
-                    thisIsAByte = 0xA1,
-                    thisIsAnotherByte = 0xA2,
-                    thisIsTheThirdByte = 0xA3
-                });
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-array-500-bytes.proto"))
-            {
-                byte[] toSerialize = new byte[500];
-
-                for (var i = 0; i < toSerialize.Count(); i++)
-                {
-                    toSerialize[i] = 0xFA;
-                }
-
-                ProtoBuf.Serializer.Serialize(file, toSerialize);
-            }
-
-            using (var file = System.IO.File.Create(basedir + "test-array-5M-bytes.proto"))
-            {
-                byte[] toSerialize = new byte[5000000];
-
-                for (var i = 0; i < toSerialize.Count(); i++)
-                {
-                    toSerialize[i] = 0xFA;
-                }
-
-                ProtoBuf.Serializer.Serialize(file, toSerialize);
-            }
-        }
+        private static string basedir = @"C:\budapest_gtfs\";
 
         static void Main(string[] args)
         {
             var totalTime = new Stopwatch();
             totalTime.Start();
-
-            //testDataStructures();
 
             //var db = ReadGTFS();
             //SerializeGTFS(ref db);
@@ -200,16 +37,49 @@ namespace GTFSConverter
             Console.ReadKey();
         }
 
+        private static string CreateResourceDirectory(string dirname)
+        {
+            string path = Path.Combine(basedir, dirname);
+
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+
+            Directory.CreateDirectory(path);
+
+            return path;
+        }
+
         private static GTFSConverter.CRGTFS.TransitDB DeserializeTransitGTFS()
         {
             GTFSConverter.CRGTFS.TransitDB tdb = null;
             var partialTime = new Stopwatch();
             partialTime.Start();
             Console.Write("Deserializing transit database...");
-            using (var file = System.IO.File.OpenRead(basedir + "gtfs_transit.dat"))
+
+            tdb = new CRGTFS.TransitDB();
+
+            using (var file = System.IO.File.OpenRead(Path.Combine(basedir, "Core", "routes.dat")))
             {
-                tdb = ProtoBuf.Serializer.Deserialize<GTFSConverter.CRGTFS.TransitDB>(file);
+                tdb.routes = ProtoBuf.Serializer.Deserialize<GTFSConverter.CRGTFS.Route[]>(file);
             }
+
+            using (var file = System.IO.File.OpenRead(Path.Combine(basedir, "Core", "trips.dat")))
+            {
+                tdb.trips = ProtoBuf.Serializer.Deserialize<GTFSConverter.CRGTFS.Trip[]>(file);
+            }
+
+            using (var file = System.IO.File.OpenRead(Path.Combine(basedir, "Core", "stops.dat")))
+            {
+                tdb.stops = ProtoBuf.Serializer.Deserialize<GTFSConverter.CRGTFS.Stop[]>(file);
+            }
+
+            using (var file = System.IO.File.OpenRead(Path.Combine(basedir, "Core", "headsigns.dat")))
+            {
+                tdb.headsigns = ProtoBuf.Serializer.Deserialize<string[]>(file);
+            }
+
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
             return tdb;
         }
@@ -219,10 +89,56 @@ namespace GTFSConverter
             var partialTime = new Stopwatch();
             partialTime.Start();
             Console.Write("Serializing transit database...");
-            using (var file = System.IO.File.Create(basedir + "gtfs_transit.dat"))
+
+            var coredir = CreateResourceDirectory("Core");
+
+            using (var file = System.IO.File.Create(Path.Combine(coredir, "routes.dat")))
             {
-                ProtoBuf.Serializer.Serialize(file, tdb);
+                ProtoBuf.Serializer.Serialize(file, tdb.routes);
             }
+
+            using (var file = System.IO.File.Create(Path.Combine(coredir, "trips.dat")))
+            {
+                ProtoBuf.Serializer.Serialize(file, tdb.trips);
+            }
+
+            using (var file = System.IO.File.Create(Path.Combine(coredir, "stops.dat")))
+            {
+                ProtoBuf.Serializer.Serialize(file, tdb.stops);
+            }
+
+            using (var file = System.IO.File.Create(Path.Combine(coredir, "headsigns.dat")))
+            {
+                ProtoBuf.Serializer.Serialize(file, tdb.headsigns);
+            }
+
+            var shapesdir = CreateResourceDirectory("Shapes");
+
+            for (int i = 0; i < tdb.shapeMatrix.Count; i++ )
+            {
+                using (var file = System.IO.File.Create(Path.Combine(shapesdir, "shape_" + i + ".dat")))
+                {
+                    ProtoBuf.Serializer.Serialize(file, tdb.shapeMatrix.ElementAt(i));
+                }
+            }
+
+            var dmatrixdir = CreateResourceDirectory("StopDistanceMatrix");
+            
+            for (int i = 0; i < tdb.stops.Length; i++)
+            {
+                var data = new List<float>();
+
+                for (int j = 0; j < tdb.stops.Length; j++)
+                {
+                    data.Add(tdb.stopDistanceMatrix[(i * tdb.stops.Length) + j]);
+                }
+
+                using (var file = System.IO.File.Create(Path.Combine(dmatrixdir, "stop_" + i + ".dat")))
+                {
+                    ProtoBuf.Serializer.Serialize(file, data.ToArray());
+                }
+            }
+
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
         }
 

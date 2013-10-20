@@ -20,10 +20,13 @@ namespace GTFSConverter.CRGTFS
         public Trip[] trips;
 
         [ProtoMember(4)]
-        public uint[] stopDistanceMatrix;
+        public int[] stopDistanceMatrix;
 
         [ProtoMember(5)]
         public List<ShapeVector> shapeMatrix;
+
+        [ProtoMember(6)]
+        public string[] headsigns;
     }
 
     public class OriginalMaps
@@ -32,6 +35,7 @@ namespace GTFSConverter.CRGTFS
         public Dictionary<object, Route> originalRouteMap = new Dictionary<object, Route>();
         public Dictionary<object, Trip> originalTripMap = new Dictionary<object, Trip>();
         public Dictionary<object, int> originalShapeIndexMap = new Dictionary<object, int>();
+        public Dictionary<string, int> headsignMap = new Dictionary<string, int>();
     }
 
     [ProtoContract]
@@ -101,6 +105,9 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(4)]
         public int idx;
+
+        [ProtoMember(5)]
+        public int[] nearbyStops;
     }
 
     [ProtoContract]
@@ -129,7 +136,7 @@ namespace GTFSConverter.CRGTFS
     public class Trip
     {
         [ProtoMember(1)]
-        public string headsign;
+        public int headsignIdx;
 
         [ProtoMember(3)]
         public ushort endTime;
