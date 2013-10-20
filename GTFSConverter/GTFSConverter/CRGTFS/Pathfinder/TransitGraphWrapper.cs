@@ -48,44 +48,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
         public Edge? FindTravelEdgeOnRoute(Stop currentStop, DateTime currentDateTime, ushort currentDate, Route route)
         {
-            foreach (var tripdate in route.dates)
-            {
-                if (tripdate.date < (currentDate - 1))
-                {
-                    continue;
-                }
-
-                var trip = tdb.trips.ElementAt(tripdate.tripIndex);
-                var tdate = ConvertBackToDate(tripdate.date);
-
-                if (tdate.AddMinutes(trip.endTime) < currentDateTime)
-                {
-                    continue;
-                }
-
-                for (int i = 1; i < trip.stopTimes.Count(); i++)
-                {
-                    var currentStopTime = trip.stopTimes.ElementAt(i-1);
-                    var nextStopTime = trip.stopTimes.ElementAt(i);
-
-                    var currentStopDeparts = tdate.AddMinutes(currentStopTime.arrivalTime + currentStopTime.waitingTime);
-
-                    if (currentStopDeparts >= currentDateTime)
-                    {
-                        return new Edge
-                        {
-                            byWalking = false,
-                            fromStop = currentStop,
-                            toStop = tdb.stops.ElementAt(nextStopTime.refIndices[0]),
-                            fromStopTime = currentStopTime,
-                            viaStopTime = nextStopTime,
-                            viaRoute = route,
-                            viaTrip = trip,
-                            cost = (ushort)(tdate.AddMinutes(nextStopTime.arrivalTime) - currentDateTime).TotalMinutes
-                        };
-                    }
-                }
-            }
+            // TODO
 
             return null;
         }

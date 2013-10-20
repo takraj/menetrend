@@ -139,6 +139,39 @@ namespace GTFSConverter
                 }
             }
 
+            var tripDatesDir = CreateResourceDirectory("TripDates");
+
+            foreach (var route in tdb.routeDatesMap.Keys)
+            {
+                var routeDir = CreateResourceDirectory(Path.Combine(tripDatesDir, "route_" + route.idx));
+
+                var dates = tdb.routeDatesMap[route].GroupBy(td => td.date).ToDictionary(td => td.Key, td => td.Select(tripdate => tripdate.tripIndex));
+
+                foreach (var date in dates.Keys)
+                {
+                    using (var file = System.IO.File.Create(Path.Combine(routeDir, "trips_for_date_" + date + ".dat")))
+                    {
+                        var data = dates[date].OrderBy(tripIndex => tdb.trips[tripIndex].stopTimes[0].arrivalTime);
+                        ProtoBuf.Serializer.Serialize(file, data.ToArray());
+                    }
+                }
+            }
+
+            for (int i = 0; i < tdb.stops.Length; i++)
+            {
+                var data = new List<float>();
+
+                for (int j = 0; j < tdb.stops.Length; j++)
+                {
+                    data.Add(tdb.stopDistanceMatrix[(i * tdb.stops.Length) + j]);
+                }
+
+                using (var file = System.IO.File.Create(Path.Combine(dmatrixdir, "stop_" + i + ".dat")))
+                {
+                    ProtoBuf.Serializer.Serialize(file, data.ToArray());
+                }
+            }
+
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
         }
 

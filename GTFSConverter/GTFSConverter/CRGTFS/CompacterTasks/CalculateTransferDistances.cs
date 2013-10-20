@@ -20,7 +20,7 @@ namespace GTFSConverter.CRGTFS
         void CalculateTransferDistances(ref TransitDB tdb, ref OriginalMaps originalMaps)
         {
             var countOfStops = tdb.stops.Count();
-            var stopIndices = Enumerable.Range(0, countOfStops - 1).ToArray();
+            var stopIndices = Enumerable.Range(0, countOfStops).ToArray();
 
             var allStops = tdb.stops;
             var stopDistanceMatrix = new int[countOfStops * countOfStops];

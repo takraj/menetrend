@@ -31,7 +31,8 @@ namespace GTFSConverter.CRGTFS
                         g = croute.route_text_color.green,
                         b = croute.route_text_color.blue
                     },
-                    dates = new TripDate[0]
+                    dates = new ushort[0],
+                    idx = routes.Count
                 };
 
                 routes.Add(rroute);

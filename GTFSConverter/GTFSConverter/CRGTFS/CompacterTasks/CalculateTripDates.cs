@@ -19,10 +19,10 @@ namespace GTFSConverter.CRGTFS
                 tripIndexes[tdb.trips.ElementAt(i)] = i;
             }
 
-            var routeDatesToAdd = new Dictionary<Route, List<TripDate>>();
+            tdb.routeDatesMap = new Dictionary<Route, List<TripDate>>();
             foreach (var r in tdb.routes)
             {
-                routeDatesToAdd[r] = new List<TripDate>();
+                tdb.routeDatesMap[r] = new List<TripDate>();
             }
 
             foreach (var calendar in db.calendars)
@@ -59,7 +59,7 @@ namespace GTFSConverter.CRGTFS
                                 date = startDate,
                                 tripIndex = tripIndexes[rtrip]
                             };
-                            routeDatesToAdd[rroute].Add(dateToInsert);
+                            tdb.routeDatesMap[rroute].Add(dateToInsert);
                         }
                     }
 
@@ -78,13 +78,29 @@ namespace GTFSConverter.CRGTFS
                         date = calendar_addition.date,
                         tripIndex = tripIndexes[rtrip]
                     };
-                    routeDatesToAdd[rroute].Add(dateToInsert);
+                    tdb.routeDatesMap[rroute].Add(dateToInsert);
                 }
             }
 
             foreach (var r in tdb.routes)
             {
-                r.dates = routeDatesToAdd[r].ToArray();
+                var minimumDate = tdb.routeDatesMap[r].Min(td => td.date);
+                var maximumDate = tdb.routeDatesMap[r].Max(td => td.date);
+
+                var dates = new List<ushort>();
+                dates.Add(minimumDate);
+                dates.Add(maximumDate);
+
+                foreach (var date in Enumerable.Range(minimumDate, maximumDate - minimumDate + 1))
+                {
+                    if (!tdb.routeDatesMap[r].Exists(td => td.date == date))
+                    {
+                        dates.Add((ushort)date);
+                    }
+                }
+
+                r.dates = dates.ToArray();
+                var trips = tdb.trips;
             }
         }
 

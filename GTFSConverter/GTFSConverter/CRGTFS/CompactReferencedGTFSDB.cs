@@ -7,26 +7,15 @@ using System.Threading.Tasks;
 
 namespace GTFSConverter.CRGTFS
 {
-    [ProtoContract]
     public class TransitDB
     {
-        [ProtoMember(1)]
         public Stop[] stops;
-
-        [ProtoMember(2)]
         public Route[] routes;
-
-        [ProtoMember(3)]
         public Trip[] trips;
-
-        [ProtoMember(4)]
         public int[] stopDistanceMatrix;
-
-        [ProtoMember(5)]
         public List<ShapeVector> shapeMatrix;
-
-        [ProtoMember(6)]
         public string[] headsigns;
+        public Dictionary<Route, List<TripDate>> routeDatesMap;
     }
 
     public class OriginalMaps
@@ -41,6 +30,12 @@ namespace GTFSConverter.CRGTFS
     [ProtoContract]
     public struct ShapeVector
     {
+        /// <summary>
+        /// {lat, lng, lat, lng, lat, lng, ...}
+        /// 
+        /// shapeData[i].lat = verticesVector[(i * 2) + 0]
+        /// shapeData[i].lng = verticesVector[(i * 2) + 1]
+        /// </summary>
         [ProtoMember(1)]
         public float[] verticesVector;
     }
@@ -81,6 +76,9 @@ namespace GTFSConverter.CRGTFS
     [ProtoContract]
     public struct StopTime
     {
+        /// <summary>
+        /// {stopIdx, shapeIdx, shapeDistanceTravelled}
+        /// </summary>
         [ProtoMember(1)]
         public int[] refIndices;
 
@@ -106,6 +104,9 @@ namespace GTFSConverter.CRGTFS
         [ProtoMember(4)]
         public int idx;
 
+        /// <summary>
+        /// list of stop indices
+        /// </summary>
         [ProtoMember(5)]
         public int[] nearbyStops;
     }
@@ -113,8 +114,11 @@ namespace GTFSConverter.CRGTFS
     [ProtoContract]
     public class Route
     {
+        /// <summary>
+        /// {minDate, maxDate, noService1, noService2, noService3, ...}
+        /// </summary>
         [ProtoMember(1)]
-        public TripDate[] dates;
+        public ushort[] dates;
 
         [ProtoMember(2)]
         public string name;
@@ -130,6 +134,9 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(6)]
         public RGB textColour;
+
+        [ProtoMember(7)]
+        public int idx;
     }
 
     [ProtoContract]
