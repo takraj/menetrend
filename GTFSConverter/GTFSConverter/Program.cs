@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GTFSConverter.CRGTFS.Storage;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -25,10 +26,10 @@ namespace GTFSConverter
             //SerializeCompactGTFS(cdb);
 
             var cdb = DeserializeCompactGTFS();
-            var tdb = CreateReferencedGTFS(cdb);
-            SerializeTransitGTFS(tdb);
 
-            tdb = DeserializeTransitGTFS();
+            IStorageManager storageManager = new FilesystemStorageManager(basedir);
+            SerializeTransitGTFS(CreateReferencedGTFS(cdb), storageManager);
+            DeserializeTransitGTFS(storageManager);
 
             totalTime.Stop();
             Console.WriteLine();
@@ -37,125 +38,24 @@ namespace GTFSConverter
             Console.ReadKey();
         }
 
-        private static string CreateResourceDirectory(string dirname)
+        private static void DeserializeTransitGTFS(IStorageManager storageManager)
         {
-            string path = Path.Combine(basedir, dirname);
-
-            if (Directory.Exists(path))
-            {
-                Directory.Delete(path, true);
-            }
-
-            Directory.CreateDirectory(path);
-
-            return path;
-        }
-
-        private static GTFSConverter.CRGTFS.TransitDB DeserializeTransitGTFS()
-        {
-            GTFSConverter.CRGTFS.TransitDB tdb = null;
             var partialTime = new Stopwatch();
             partialTime.Start();
             Console.Write("Deserializing transit database...");
 
-            tdb = new CRGTFS.TransitDB();
-
-            using (var file = System.IO.File.OpenRead(Path.Combine(basedir, "Core", "routes.dat")))
-            {
-                tdb.routes = ProtoBuf.Serializer.Deserialize<GTFSConverter.CRGTFS.Route[]>(file);
-            }
-
-            using (var file = System.IO.File.OpenRead(Path.Combine(basedir, "Core", "trips.dat")))
-            {
-                tdb.trips = ProtoBuf.Serializer.Deserialize<GTFSConverter.CRGTFS.Trip[]>(file);
-            }
-
-            using (var file = System.IO.File.OpenRead(Path.Combine(basedir, "Core", "stops.dat")))
-            {
-                tdb.stops = ProtoBuf.Serializer.Deserialize<GTFSConverter.CRGTFS.Stop[]>(file);
-            }
-
-            using (var file = System.IO.File.OpenRead(Path.Combine(basedir, "Core", "headsigns.dat")))
-            {
-                tdb.headsigns = ProtoBuf.Serializer.Deserialize<string[]>(file);
-            }
+            storageManager.LoadDatabase();
 
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
-            return tdb;
         }
 
-        private static void SerializeTransitGTFS(GTFSConverter.CRGTFS.TransitDB tdb)
+        private static void SerializeTransitGTFS(GTFSConverter.CRGTFS.TransitDB tdb, IStorageManager storageManager)
         {
             var partialTime = new Stopwatch();
             partialTime.Start();
             Console.Write("Serializing transit database...");
 
-            var coredir = CreateResourceDirectory("Core");
-
-            using (var file = System.IO.File.Create(Path.Combine(coredir, "routes.dat")))
-            {
-                ProtoBuf.Serializer.Serialize(file, tdb.routes);
-            }
-
-            using (var file = System.IO.File.Create(Path.Combine(coredir, "trips.dat")))
-            {
-                ProtoBuf.Serializer.Serialize(file, tdb.trips);
-            }
-
-            using (var file = System.IO.File.Create(Path.Combine(coredir, "stops.dat")))
-            {
-                ProtoBuf.Serializer.Serialize(file, tdb.stops);
-            }
-
-            using (var file = System.IO.File.Create(Path.Combine(coredir, "headsigns.dat")))
-            {
-                ProtoBuf.Serializer.Serialize(file, tdb.headsigns);
-            }
-
-            var shapesdir = CreateResourceDirectory("Shapes");
-
-            for (int i = 0; i < tdb.shapeMatrix.Count; i++ )
-            {
-                using (var file = System.IO.File.Create(Path.Combine(shapesdir, "shape_" + i + ".dat")))
-                {
-                    ProtoBuf.Serializer.Serialize(file, tdb.shapeMatrix.ElementAt(i));
-                }
-            }
-
-            var dmatrixdir = CreateResourceDirectory("StopDistanceMatrix");
-            
-            for (int i = 0; i < tdb.stops.Length; i++)
-            {
-                var data = new List<float>();
-
-                for (int j = 0; j < tdb.stops.Length; j++)
-                {
-                    data.Add(tdb.stopDistanceMatrix[(i * tdb.stops.Length) + j]);
-                }
-
-                using (var file = System.IO.File.Create(Path.Combine(dmatrixdir, "stop_" + i + ".dat")))
-                {
-                    ProtoBuf.Serializer.Serialize(file, data.ToArray());
-                }
-            }
-
-            var tripDatesDir = CreateResourceDirectory("TripDates");
-
-            foreach (var route in tdb.routeDatesMap.Keys)
-            {
-                var routeDir = CreateResourceDirectory(Path.Combine(tripDatesDir, "route_" + route.idx));
-
-                var dates = tdb.routeDatesMap[route].GroupBy(td => td.date).ToDictionary(td => td.Key, td => td.Select(tripdate => tripdate.tripIndex));
-
-                foreach (var date in dates.Keys)
-                {
-                    using (var file = System.IO.File.Create(Path.Combine(routeDir, "trips_for_date_" + date + ".dat")))
-                    {
-                        var data = dates[date].OrderBy(tripIndex => tdb.trips[tripIndex].stopTimes[0].arrivalTime);
-                        ProtoBuf.Serializer.Serialize(file, data.ToArray());
-                    }
-                }
-            }
+            storageManager.CreateDatabase(tdb);
 
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
         }
