@@ -157,21 +157,6 @@ namespace GTFSConverter
                 }
             }
 
-            for (int i = 0; i < tdb.stops.Length; i++)
-            {
-                var data = new List<float>();
-
-                for (int j = 0; j < tdb.stops.Length; j++)
-                {
-                    data.Add(tdb.stopDistanceMatrix[(i * tdb.stops.Length) + j]);
-                }
-
-                using (var file = System.IO.File.Create(Path.Combine(dmatrixdir, "stop_" + i + ".dat")))
-                {
-                    ProtoBuf.Serializer.Serialize(file, data.ToArray());
-                }
-            }
-
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
         }
 

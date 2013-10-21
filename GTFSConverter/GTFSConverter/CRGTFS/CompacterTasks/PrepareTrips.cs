@@ -41,7 +41,8 @@ namespace GTFSConverter.CRGTFS
                             shapeIndex,
                             (int)fromDistance,
                             (int)cstoptime.shape_dist_traveled
-                        }
+                        },
+                        tripIndex = trips.Count
                     };
 
                     rstoptimes.Add(rstoptime);
@@ -59,7 +60,9 @@ namespace GTFSConverter.CRGTFS
                     headsignIdx = headsignIdx,
                     wheelchairSupport = ctrip.wheelchair_accessible,
                     stopTimes = rstoptimes.ToArray(),
-                    endTime = rstoptimes.Last().arrivalTime
+                    endTime = rstoptimes.Last().arrivalTime,
+                    idx = trips.Count,
+                    routeIndex = originalMaps.originalRouteMap[ctrip.route_id].idx
                 };
 
                 trips.Add(rtrip);

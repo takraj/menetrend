@@ -63,6 +63,8 @@
     <Compile Include="CGTFS\GTFSCompacter.cs" />
     <Compile Include="CRGTFS\Pathfinder\AStarPathfinder.cs" />
     <Compile Include="CRGTFS\Pathfinder\TransitGraphWrapper.cs" />
+    <Compile Include="CRGTFS\Storage\FilesystemStorageManager.cs" />
+    <Compile Include="CRGTFS\Storage\IStorageManager.cs" />
     <Compile Include="GTFS\GTFSDB.cs" />
     <Compile Include="GTFS\GTFSReader.cs" />
     <Compile Include="GTFS\Models.cs" />

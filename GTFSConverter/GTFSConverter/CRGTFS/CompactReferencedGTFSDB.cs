@@ -20,10 +20,10 @@ namespace GTFSConverter.CRGTFS
 
     public class OriginalMaps
     {
-        public Dictionary<object, Stop> originalStopMap = new Dictionary<object, Stop>();
-        public Dictionary<object, Route> originalRouteMap = new Dictionary<object, Route>();
-        public Dictionary<object, Trip> originalTripMap = new Dictionary<object, Trip>();
-        public Dictionary<object, int> originalShapeIndexMap = new Dictionary<object, int>();
+        public Dictionary<ushort, Stop> originalStopMap = new Dictionary<ushort, Stop>();
+        public Dictionary<ushort, Route> originalRouteMap = new Dictionary<ushort, Route>();
+        public Dictionary<uint, Trip> originalTripMap = new Dictionary<uint, Trip>();
+        public Dictionary<ushort, int> originalShapeIndexMap = new Dictionary<ushort, int>();
         public Dictionary<string, int> headsignMap = new Dictionary<string, int>();
     }
 
@@ -82,11 +82,20 @@ namespace GTFSConverter.CRGTFS
         [ProtoMember(1)]
         public int[] refIndices;
 
+        /// <summary>
+        /// Érkezés: Éjfél óta eltelt percek.
+        /// </summary>
         [ProtoMember(2)]
         public ushort arrivalTime;
 
+        /// <summary>
+        /// Percek
+        /// </summary>
         [ProtoMember(3)]
         public byte waitingTime;
+
+        [ProtoMember(4)]
+        public int tripIndex;
     }
 
     [ProtoContract]
@@ -115,6 +124,7 @@ namespace GTFSConverter.CRGTFS
     public class Route
     {
         /// <summary>
+        /// Kivételek (napok 2000 óta)
         /// {minDate, maxDate, noService1, noService2, noService3, ...}
         /// </summary>
         [ProtoMember(1)]
@@ -153,5 +163,11 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(5)]
         public StopTime[] stopTimes;
+
+        [ProtoMember(6)]
+        public int idx;
+
+        [ProtoMember(7)]
+        public int routeIndex;
     }
 }
