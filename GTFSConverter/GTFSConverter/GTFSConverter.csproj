@@ -35,6 +35,9 @@
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip.Reduced">
+      <HintPath>..\packages\DotNetZip.Reduced.1.9.1.8\lib\net20\Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
@@ -65,6 +68,7 @@
     <Compile Include="CRGTFS\Pathfinder\TransitGraphWrapper.cs" />
     <Compile Include="CRGTFS\Storage\FilesystemStorageManager.cs" />
     <Compile Include="CRGTFS\Storage\IStorageManager.cs" />
+    <Compile Include="CRGTFS\Storage\ZipStorageManager.cs" />
     <Compile Include="GTFS\GTFSDB.cs" />
     <Compile Include="GTFS\GTFSReader.cs" />
     <Compile Include="GTFS\Models.cs" />

@@ -27,7 +27,7 @@ namespace GTFSConverter
 
             var cdb = DeserializeCompactGTFS();
 
-            IStorageManager storageManager = new FilesystemStorageManager(basedir);
+            IStorageManager storageManager = new ZipStorageManager(basedir);
             SerializeTransitGTFS(CreateReferencedGTFS(cdb), storageManager);
             DeserializeTransitGTFS(storageManager);
 
