@@ -28,6 +28,20 @@ namespace GTFSConverter.CRGTFS.Storage
         int[] GetStopDistanceVector(int stopIndex);
         TripDate[] GetTripsForDate(int routeIndex, ushort day);
 
-        int CountOfStops {get;}
+        int CountOfStops { get; }
+
+        Proxies.StopListProxy Stops { get; }
+        Proxies.TripListProxy Trips { get; }
+        Proxies.ShapeVectorListProxy Shapes { get; }
+        Proxies.StopDistanceVectorListProxy StopDistanceMatrix { get; }
+        Proxies.HeadsignListProxy Headsigns { get; }
+        Proxies.RouteListProxy Routes { get; }
+
+        IEnumerator<Stop> CreateStopEnumerator();
+        IEnumerator<Trip> CreateTripEnumerator();
+        IEnumerator<ShapeVector> CreateShapeVectorEnumerator();
+        IEnumerator<int[]> CreateStopDistanceVectorEnumerator();
+        IEnumerator<string> CreateHeadsignEnumerator();
+        IEnumerator<Route> CreateRouteEnumerator();
     }
 }

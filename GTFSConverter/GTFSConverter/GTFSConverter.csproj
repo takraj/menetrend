@@ -68,6 +68,13 @@
     <Compile Include="CRGTFS\Pathfinder\TransitGraphWrapper.cs" />
     <Compile Include="CRGTFS\Storage\FilesystemStorageManager.cs" />
     <Compile Include="CRGTFS\Storage\IStorageManager.cs" />
+    <Compile Include="CRGTFS\Storage\Proxies\HeadsignListProxy.cs" />
+    <Compile Include="CRGTFS\Storage\Proxies\ListProxyBase.cs" />
+    <Compile Include="CRGTFS\Storage\Proxies\RouteListProxy.cs" />
+    <Compile Include="CRGTFS\Storage\Proxies\ShapeVectorListProxy.cs" />
+    <Compile Include="CRGTFS\Storage\Proxies\StopDistanceVectorListProxy.cs" />
+    <Compile Include="CRGTFS\Storage\Proxies\StopListProxy.cs" />
+    <Compile Include="CRGTFS\Storage\Proxies\TripListProxy.cs" />
     <Compile Include="CRGTFS\Storage\ZipStorageManager.cs" />
     <Compile Include="GTFS\GTFSDB.cs" />
     <Compile Include="GTFS\GTFSReader.cs" />

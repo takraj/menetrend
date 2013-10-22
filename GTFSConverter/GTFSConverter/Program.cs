@@ -1,12 +1,7 @@
 ﻿using GTFSConverter.CRGTFS.Storage;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTFSConverter
 {
@@ -25,10 +20,10 @@ namespace GTFSConverter
             //var cdb = CreateCompactGTFS(db);
             //SerializeCompactGTFS(cdb);
 
-            var cdb = DeserializeCompactGTFS();
+            //var cdb = DeserializeCompactGTFS();
 
             IStorageManager storageManager = new ZipStorageManager(basedir);
-            SerializeTransitGTFS(CreateReferencedGTFS(cdb), storageManager);
+            //SerializeTransitGTFS(CreateReferencedGTFS(cdb), storageManager);
             DeserializeTransitGTFS(storageManager);
 
             totalTime.Stop();
