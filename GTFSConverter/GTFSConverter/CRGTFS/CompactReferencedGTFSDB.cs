@@ -38,6 +38,11 @@ namespace GTFSConverter.CRGTFS
         /// </summary>
         [ProtoMember(1)]
         public float[] verticesVector;
+
+        public override string ToString()
+        {
+            return String.Format("ShapeVector: len/2 = {0}", verticesVector.Length / 2);
+        }
     }
 
     [ProtoContract]
@@ -48,6 +53,11 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(2)]
         public float longitude;
+
+        public override string ToString()
+        {
+            return String.Format("LatLng: {0}, {1}", latitude, longitude);
+        }
     }
 
     [ProtoContract]
@@ -61,6 +71,11 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(3)]
         public byte b;
+
+        public override string ToString()
+        {
+            return String.Format("RGB: {0}, {1}, {2}", r, g, b);
+        }
     }
 
     [ProtoContract]
@@ -71,6 +86,11 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(2)]
         public int tripIndex;
+
+        public override string ToString()
+        {
+            return String.Format("TripDate: {0} for trip {1}", Utility.ConvertBackToDate(date), tripIndex);
+        }
     }
 
     [ProtoContract]
@@ -96,6 +116,11 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(4)]
         public int tripIndex;
+
+        public override string ToString()
+        {
+            return String.Format("StopTime: arrives {0} waits {1} for trip {2}", arrivalTime, waitingTime, tripIndex);
+        }
     }
 
     [ProtoContract]
@@ -114,10 +139,31 @@ namespace GTFSConverter.CRGTFS
         public int idx;
 
         /// <summary>
-        /// list of stop indices
+        /// {stopIdx, stopDst, stopIdx, stopDst, stopIdx, stopDst, ...}
         /// </summary>
         [ProtoMember(5)]
         public int[] nearbyStops;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Stop)
+            {
+                var other = (Stop)obj;
+                return (this.idx == other.idx);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.idx.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Stop: {0} (idx={1})", name, idx);
+        }
     }
 
     [ProtoContract]
@@ -147,6 +193,27 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(7)]
         public int idx;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Route)
+            {
+                var other = (Route)obj;
+                return (this.idx == other.idx);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.idx.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Route: {0} (idx={1}, type={2})", name, idx, type);
+        }
     }
 
     [ProtoContract]
@@ -169,5 +236,26 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(7)]
         public int routeIndex;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Trip)
+            {
+                var other = (Trip)obj;
+                return (this.idx == other.idx);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.idx.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Trip: ends at {0}:{1} (headsign={2}, idx={3})", endTime/60, endTime%60, headsignIdx, idx);
+        }
     }
 }

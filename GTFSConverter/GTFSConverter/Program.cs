@@ -1,4 +1,5 @@
-﻿using GTFSConverter.CRGTFS.Storage;
+﻿using GTFSConverter.CRGTFS.Pathfinder;
+using GTFSConverter.CRGTFS.Storage;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -21,10 +22,20 @@ namespace GTFSConverter
             //SerializeCompactGTFS(cdb);
 
             //var cdb = DeserializeCompactGTFS();
+            //var referencedGTFS = CreateReferencedGTFS(cdb);
 
-            IStorageManager storageManager = new ZipStorageManager(basedir);
-            //SerializeTransitGTFS(CreateReferencedGTFS(cdb), storageManager);
+            IStorageManager storageManager = new FilesystemStorageManager(basedir);
+            //SerializeTransitGTFS(referencedGTFS, storageManager);
             DeserializeTransitGTFS(storageManager);
+
+            Console.WriteLine("Gráf inicializálás...");
+            var pathfinder = new DijkstraPathfinder(new TransitGraph(storageManager));
+            var source = storageManager.GetStop(130);
+            var destination = storageManager.GetStop(477);
+            Console.WriteLine("SOURCE: " + source.name + " (" + source.idx + ")");
+            Console.WriteLine("DESTINATION: " + destination.name + " (" + destination.idx + ")");
+            Console.WriteLine("Keresés...");
+            pathfinder.CalculateShortestRoute(source, destination, new DateTime(2013, 2, 15, 15, 0, 0));
 
             totalTime.Stop();
             Console.WriteLine();

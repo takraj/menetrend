@@ -64,7 +64,7 @@ namespace GTFSConverter.CRGTFS
 
                     stopDstVector.Add(
                         new StopDistanceElement {
-                            stop = stop,
+                            stop = tdb.stops[i],
                             dst = tdb.stopDistanceMatrix[(stop.idx * countOfStops) + i]
                         });
                 }

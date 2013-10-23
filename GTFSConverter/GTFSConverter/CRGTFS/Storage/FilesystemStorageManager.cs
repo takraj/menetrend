@@ -28,7 +28,7 @@ namespace GTFSConverter.CRGTFS.Storage
 
         private const string SHAPE_FS_DAT = "shape_{0}.dat";
         private const string STOP_FS_DAT = "stop_{0}.dat";
-        private const string ROUTE_FS_DIR = "route_{0}.dat";
+        private const string ROUTE_FS_DIR = "route_{0}";
         private const string TRIPS_FOR_DATE_FS_DAT = "trips_for_date_{0}.dat";
         #endregion
 
@@ -108,7 +108,7 @@ namespace GTFSConverter.CRGTFS.Storage
 
                 for (int i = 0; i < tdb.stops.Length; i++)
                 {
-                    var data = new List<float>();
+                    var data = new List<int>();
 
                     for (int j = 0; j < tdb.stops.Length; j++)
                     {
@@ -227,7 +227,8 @@ namespace GTFSConverter.CRGTFS.Storage
 
             using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, TRIP_DATES_DIR, routeFolder, dateFilename)))
             {
-                dateVector = ProtoBuf.Serializer.Deserialize<TripDate[]>(file);
+                dateVector = ProtoBuf.Serializer.Deserialize<int[]>(file)
+                    .Select(idx => new TripDate { tripIndex = idx, date = day }).ToArray();
             }
 
             return dateVector;

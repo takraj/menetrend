@@ -35,11 +35,17 @@
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Hippie">
+      <HintPath>..\packages\Hippie.1.5\lib\portable-win+net40+sl40+wp\Hippie.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip.Reduced">
       <HintPath>..\packages\DotNetZip.Reduced.1.9.1.8\lib\net20\Ionic.Zip.Reduced.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="Slinky">
+      <HintPath>..\packages\Slinky.Unchecked.1.6\lib\portable-win+net40+sl40+wp\Slinky.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,6 +57,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Thrower">
+      <HintPath>..\packages\Thrower.0.9.8\lib\portable-win+net40+sl40+wp\Thrower.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CGTFS\CompactGTFSDB.cs" />
@@ -64,8 +73,12 @@
     <Compile Include="CRGTFS\CompacterTasks\PrepareStops.cs" />
     <Compile Include="CRGTFS\CompactReferencedGTFSDB.cs" />
     <Compile Include="CGTFS\GTFSCompacter.cs" />
-    <Compile Include="CRGTFS\Pathfinder\AStarPathfinder.cs" />
-    <Compile Include="CRGTFS\Pathfinder\TransitGraphWrapper.cs" />
+    <Compile Include="CRGTFS\Pathfinder\Action.cs" />
+    <Compile Include="CRGTFS\Pathfinder\DijkstraPathfinder.cs" />
+    <Compile Include="CRGTFS\Pathfinder\DynamicNode.cs" />
+    <Compile Include="CRGTFS\Pathfinder\History.cs" />
+    <Compile Include="CRGTFS\Pathfinder\IPathfinder.cs" />
+    <Compile Include="CRGTFS\Pathfinder\TransitGraph.cs" />
     <Compile Include="CRGTFS\Storage\FilesystemStorageManager.cs" />
     <Compile Include="CRGTFS\Storage\IStorageManager.cs" />
     <Compile Include="CRGTFS\Storage\Proxies\HeadsignListProxy.cs" />
@@ -76,6 +89,7 @@
     <Compile Include="CRGTFS\Storage\Proxies\StopListProxy.cs" />
     <Compile Include="CRGTFS\Storage\Proxies\TripListProxy.cs" />
     <Compile Include="CRGTFS\Storage\ZipStorageManager.cs" />
+    <Compile Include="CRGTFS\Utility.cs" />
     <Compile Include="GTFS\GTFSDB.cs" />
     <Compile Include="GTFS\GTFSReader.cs" />
     <Compile Include="GTFS\Models.cs" />

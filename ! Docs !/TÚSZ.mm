@@ -120,7 +120,7 @@
 <node CREATED="1382206882605" ID="ID_435841401" MODIFIED="1382206893304" TEXT="M&#x171;veletek">
 <node CREATED="1382206893839" ID="ID_647210148" MODIFIED="1382207687884" TEXT="CreateNextDynamicNodes()">
 <node CREATED="1382206961049" ID="ID_477686749" MODIFIED="1382207003040" TEXT="A history figyelembev&#xe9;tel&#xe9;vel"/>
-<node CREATED="1382207010714" ID="ID_1103642166" MODIFIED="1382208900781" TEXT="Milyen lehet&#x151;s&#xe9;gek vannak &#xfa;j stat node-ra l&#xe9;pni?">
+<node CREATED="1382207010714" ID="ID_1103642166" MODIFIED="1382524258261" TEXT="Milyen lehet&#x151;s&#xe9;gek vannak &#xfa;j stat node-ra l&#xe9;pni?">
 <node CREATED="1382208248357" ID="ID_1702780616" MODIFIED="1382208253752" TEXT="Tov&#xe1;bbutaz&#xe1;s"/>
 <node CREATED="1382208254203" ID="ID_374832647" MODIFIED="1382208998376" TEXT="Gyalogl&#xe1;s (lesz&#xe1;ll&#xe1;s + s&#xe9;ta a k&#xf6;zeli meg&#xe1;ll&#xf3;k egyik&#xe9;be)">
 <node CREATED="1382207746342" ID="ID_608159998" MODIFIED="1382208175490" TEXT="possibleTransfers : list">
@@ -131,7 +131,8 @@
 </node>
 <node CREATED="1382216354681" ID="ID_440555985" MODIFIED="1382216365660" TEXT="De csak akkor kell sz&#xe1;molni, ha nincs tiltva"/>
 </node>
-<node CREATED="1382208281581" ID="ID_544054299" MODIFIED="1382216176145" TEXT="M&#xe1;sik route-ra &#xe1;tsz&#xe1;ll&#xe1;s">
+<node CREATED="1382515330312" ID="ID_1946994333" MODIFIED="1382515518789" TEXT="Felsz&#xe1;ll&#xe1;s egy j&#xe1;ratra"/>
+<node CREATED="1382208281581" ID="ID_544054299" MODIFIED="1382524220844" TEXT="M&#xe1;sik route-ra &#xe1;tsz&#xe1;ll&#xe1;s">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1382208324742" ID="ID_420582466" MODIFIED="1382208333865" TEXT="Mi van, ha a k&#xf6;vetkez&#x151; az gar&#xe1;zsmenet?">
 <node CREATED="1382208453158" ID="ID_1028229139" MODIFIED="1382208461345" TEXT="Szerencs&#xe9;tlen nem tud tov&#xe1;bb utazni..."/>
@@ -147,7 +148,7 @@
 <node CREATED="1382208860596" ID="ID_1934799737" MODIFIED="1382208870811" TEXT="Lehet esetleg headsign vizsg&#xe1;lat helyette"/>
 </node>
 </node>
-<node CREATED="1382209411653" ID="ID_625429762" MODIFIED="1382209432204" TEXT="null, ha csak tov&#xe1;bbutaz&#xe1;s lehets&#xe9;ges, de nem lehet tov&#xe1;bbutazni"/>
+<node CREATED="1382209411653" ID="ID_625429762" MODIFIED="1382476817765" TEXT="&#xfc;res lista, ha csak tov&#xe1;bbutaz&#xe1;s lehets&#xe9;ges, de nem lehet tov&#xe1;bbutazni"/>
 <node CREATED="1382209993570" ID="ID_565761227" MODIFIED="1382216379344" TEXT="Ha egyszer m&#xe1;r kisz&#xe1;molta, mentse el, legk&#xf6;zelebb ne sz&#xe1;molja ki">
 <icon BUILTIN="messagebox_warning"/>
 </node>
