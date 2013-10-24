@@ -80,7 +80,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 stop = lastAction.stop,
                 route = lastAction.route,
                 startDate = lastAction.endDate,
-                endDate = lastAction.endDate.AddMinutes(1)
+                endDate = lastAction.endDate.AddMinutes(5)
             };
             #endregion
 
@@ -95,7 +95,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 {
                     usedRoutes = this.history.usedRoutes,
                     lastUsedRoute = this.history.lastUsedRoute,
-                    actions = new List<Action>(this.history.actions)
+                    actions = new List<Action>(this.history.actions),
+                    totalWalkingTime = this.history.totalWalkingTime
                 }
             };
             referenceNode.history.actions.Add(getOffAction);
@@ -130,7 +131,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     {
                         actions = new List<Action>(referenceNode.history.actions),
                         lastUsedRoute = getOnAction.route,
-                        usedRoutes = new HashSet<Route>(referenceNode.history.usedRoutes)
+                        usedRoutes = new HashSet<Route>(referenceNode.history.usedRoutes),
+                        totalWalkingTime = referenceNode.history.totalWalkingTime
                     }
                 };
                 addDynamicNode.history.actions.Add(getOnAction);
@@ -158,7 +160,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     stop = lastAction.stop,
                     route = lastAction.route,
                     startDate = lastAction.endDate,
-                    endDate = lastAction.endDate.AddMinutes(1)
+                    endDate = lastAction.endDate.AddMinutes(5)
                 };
                 #endregion
 
@@ -173,7 +175,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     {
                         usedRoutes = this.history.usedRoutes,
                         lastUsedRoute = this.history.lastUsedRoute,
-                        actions = new List<Action>(this.history.actions)
+                        actions = new List<Action>(this.history.actions),
+                        totalWalkingTime = this.history.totalWalkingTime
                     }
                 };
                 referenceNode.history.actions.Add(getOffAction);
@@ -209,7 +212,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     {
                         actions = new List<Action>(referenceNode.history.actions),
                         lastUsedRoute = getOnAction.route,
-                        usedRoutes = new HashSet<Route>(referenceNode.history.usedRoutes)
+                        usedRoutes = new HashSet<Route>(referenceNode.history.usedRoutes),
+                        totalWalkingTime = referenceNode.history.totalWalkingTime
                     }
                 };
                 addDynamicNode.history.actions.Add(getOnAction);
@@ -236,14 +240,14 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     stop = lastAction.stop,
                     route = lastAction.route,
                     startDate = lastAction.endDate,
-                    endDate = lastAction.endDate.AddMinutes(1)
+                    endDate = lastAction.endDate.AddMinutes(5)
                 };
                 #endregion
             }
 
             for (int i = 0; i < this.stop.nearbyStops.Length; i += 2 )
             {
-                //if (this.stop.nearbyStops[i + 1] > 200)
+                //if (this.stop.nearbyStops[i + 1] > 500)
                 //{
                 //    continue;
                 //}
@@ -269,7 +273,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     {
                         usedRoutes = this.history.usedRoutes,
                         lastUsedRoute = this.history.lastUsedRoute,
-                        actions = new List<Action>()
+                        actions = new List<Action>(),
+                        totalWalkingTime = this.history.totalWalkingTime + cost
                     };
                     addDynamicNode.history.actions.AddRange(this.history.actions);
                     addDynamicNode.history.actions.Add(getOffAction);
@@ -307,7 +312,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
             {
                 actions = new List<Action>(),
                 lastUsedRoute = this.history.lastUsedRoute,
-                usedRoutes = this.history.usedRoutes
+                usedRoutes = this.history.usedRoutes,
+                totalWalkingTime = this.history.totalWalkingTime
             };
             newHistory.actions.AddRange(this.history.actions);
             newHistory.actions.Add(addTravelAction);

@@ -30,7 +30,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 {
                     actions = new List<Action>(),
                     lastUsedRoute = null,
-                    usedRoutes = new HashSet<Route>()
+                    usedRoutes = new HashSet<Route>(),
+                    totalWalkingTime = 0
                 },
                 graph = this.graph,
                 currentTime = now
@@ -53,6 +54,11 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 foreach (var nextNode in currentNode.GetNextDynamicNodes())
                 {
                     if (closedSet.Contains(nextNode))
+                    {
+                        continue;
+                    }
+
+                    if (nextNode.history.totalWalkingTime > 10)
                     {
                         continue;
                     }
