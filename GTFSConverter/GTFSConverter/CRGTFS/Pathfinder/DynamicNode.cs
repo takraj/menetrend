@@ -91,7 +91,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 stop = lastAction.stop,
                 route = lastAction.route,
                 startDate = lastAction.endDate,
-                endDate = lastAction.endDate.AddMinutes(5)
+                endDate = lastAction.endDate.AddMinutes(graph.costOfGettingOff)
             };
             #endregion
 
@@ -174,7 +174,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     stop = lastAction.stop,
                     route = lastAction.route,
                     startDate = lastAction.endDate,
-                    endDate = lastAction.endDate.AddMinutes(5)
+                    endDate = lastAction.endDate.AddMinutes(graph.costOfGettingOff)
                 };
                 #endregion
 
@@ -204,7 +204,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
             foreach (var changeOption in changeOptions)
             {
-                if ((changeOption.arrivalTime - referenceNode.currentTime).TotalMinutes > 60)
+                if ((changeOption.arrivalTime - referenceNode.currentTime).TotalMinutes > graph.maxWaitingMinutesForNextTrip)
                 {
                     continue;
                 }
@@ -263,17 +263,17 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     stop = lastAction.stop,
                     route = lastAction.route,
                     startDate = lastAction.endDate,
-                    endDate = lastAction.endDate.AddMinutes(5)
+                    endDate = lastAction.endDate.AddMinutes(graph.costOfGettingOff)
                 };
                 #endregion
             }
 
             for (int i = 0; i < this.stop.nearbyStops.Length; i += 2 )
             {
-                //if (this.stop.nearbyStops[i + 1] > 500)
-                //{
-                //    continue;
-                //}
+                if (this.stop.nearbyStops[i + 1] > graph.maxWalkingDistancePerChange)
+                {
+                    continue;
+                }
 
                 Stop stopDest = graph.GetStopByIndex(this.stop.nearbyStops[i]);
                 double cost = graph.GetWalkingCostBetween(this.stop, stopDest);

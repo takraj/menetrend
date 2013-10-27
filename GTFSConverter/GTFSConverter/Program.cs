@@ -101,7 +101,7 @@ namespace GTFSConverter
             var partialTime = new Stopwatch();
             partialTime.Start();
             Console.Write("Creating referenced database...");
-            var tdb = new GTFSConverter.CRGTFS.RGTFSCompacter(cdb).CreateReferencedDB();
+            var tdb = new GTFSConverter.CRGTFS.RGTFSCompacter(cdb).CreateReferencedDB(25);
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
 
             return tdb;

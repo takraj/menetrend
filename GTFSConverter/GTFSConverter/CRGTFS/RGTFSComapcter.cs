@@ -15,7 +15,7 @@ namespace GTFSConverter.CRGTFS
             this.db = db;
         }
 
-        public TransitDB CreateReferencedDB()
+        public TransitDB CreateReferencedDB(int countOfTransfersPerStop)
         {
             var tdb = new TransitDB();
             var originalMaps = new OriginalMaps();
@@ -33,6 +33,8 @@ namespace GTFSConverter.CRGTFS
             CalculateTripDates(ref tdb, ref originalMaps);
             Console.Write('*');
             CalculateTransferDistances(ref tdb, ref originalMaps);
+            Console.Write('#');
+            SetupNearbyStops(ref tdb, countOfTransfersPerStop);
 
             return tdb;
         }

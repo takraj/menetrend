@@ -37,8 +37,6 @@ namespace GTFSConverter.CRGTFS
             });
 
             tdb.stopDistanceMatrix = stopDistanceMatrix;
-
-            SetupNearbyStops(ref tdb);
         }
 
         struct StopDistanceElement
@@ -47,7 +45,7 @@ namespace GTFSConverter.CRGTFS
             public int dst;
         }
 
-        void SetupNearbyStops(ref TransitDB tdb)
+        void SetupNearbyStops(ref TransitDB tdb, int countOfTransfersPerStop)
         {
             var countOfStops = tdb.stops.Count();
 
@@ -72,7 +70,7 @@ namespace GTFSConverter.CRGTFS
                 var orderedStopDstVector = stopDstVector.OrderBy(sdv => sdv.dst).ToArray();
                 var nearbyStops = new List<int>();
 
-                for (int i = 0; (i < 25) && (i < orderedStopDstVector.Length); i++)
+                for (int i = 0; (i < countOfTransfersPerStop) && (i < orderedStopDstVector.Length); i++)
                 {
                     nearbyStops.Add(orderedStopDstVector[i].stop.idx);
                     nearbyStops.Add(orderedStopDstVector[i].dst);

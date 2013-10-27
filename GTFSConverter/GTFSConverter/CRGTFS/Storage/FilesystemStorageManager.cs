@@ -152,25 +152,38 @@ namespace GTFSConverter.CRGTFS.Storage
 
         public void LoadDatabase()
         {
-            using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, ROUTES_DAT)))
+            Parallel.Invoke(
+            () =>
             {
-                routes = ProtoBuf.Serializer.Deserialize<Route[]>(file);
-            }
+                using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, ROUTES_DAT)))
+                {
+                    routes = ProtoBuf.Serializer.Deserialize<Route[]>(file);
+                }
+            },
 
-            using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, TRIPS_DAT)))
+            () =>
             {
-                trips = ProtoBuf.Serializer.Deserialize<Trip[]>(file);
-            }
+                using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, TRIPS_DAT)))
+                {
+                    trips = ProtoBuf.Serializer.Deserialize<Trip[]>(file);
+                }
+            },
 
-            using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, STOPS_DAT)))
+            () =>
             {
-                stops = ProtoBuf.Serializer.Deserialize<Stop[]>(file);
-            }
+                using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, STOPS_DAT)))
+                {
+                    stops = ProtoBuf.Serializer.Deserialize<Stop[]>(file);
+                }
+            },
 
-            using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, HEADSIGNS_DAT)))
+            () =>
             {
-                headsigns = ProtoBuf.Serializer.Deserialize<string[]>(file);
-            }
+                using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, HEADSIGNS_DAT)))
+                {
+                    headsigns = ProtoBuf.Serializer.Deserialize<string[]>(file);
+                }
+            });
         }
 
         public string GetHeadsign(int headsignIndex)

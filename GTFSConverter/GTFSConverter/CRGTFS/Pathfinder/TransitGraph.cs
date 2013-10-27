@@ -15,7 +15,14 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
     public class TransitGraph
     {
+        public double walkingSpeed = 83;
+        public double maxWalkingMinutes = 10;
+        public double maxWalkingDistancePerChange = 500;
+        public double maxWaitingMinutesForNextTrip = 60;
+        public double costOfGettingOff = 5;
+
         private IStorageManager storageManager;
+
         public TransitGraph(IStorageManager storageManager)
         {
             this.storageManager = storageManager;
@@ -148,9 +155,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
         /// <returns>Gyaloglási idő, percekben.</returns>
         public double GetWalkingCostBetween(Stop stop1, Stop stop2)
         {
-            const double WALKING_SPEED = 83.0;
-
-            return Math.Ceiling(GetDistanceBetween(stop1, stop2) / WALKING_SPEED);
+            return Math.Ceiling(GetDistanceBetween(stop1, stop2) / this.walkingSpeed);
         }
 
         public int GetDistanceBetween(Stop stop1, Stop stop2)

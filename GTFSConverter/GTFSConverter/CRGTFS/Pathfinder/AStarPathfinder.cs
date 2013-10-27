@@ -11,7 +11,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
     {
         protected TransitGraph graph;
         protected int[] stopDistances;
-        protected int fScale; // TRUE: felülről becsül, FALSE: alulról becsül
+        protected int fScale;
 
         public AStarPathfinder(TransitGraph graph, int[] stopDistances, int fScale = 2000)
         {
@@ -63,7 +63,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
                 foreach (var nextNode in currentNode.Value.GetNextDynamicNodes())
                 {
-                    if (nextNode.history.totalWalkingTime > 10)
+                    if (nextNode.history.totalWalkingTime > graph.maxWalkingMinutes)
                     {
                         continue;
                     }
