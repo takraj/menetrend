@@ -19,6 +19,10 @@ namespace GTFSConverter.CRGTFS.Storage
         private Trip[] trips;
         private string[] headsigns;
 
+        private ZipFile zipStopDistanceVector;
+        private ZipFile zipTripsForDate;
+        private ZipFile zipShapes;
+
         #region Constants
         private const string CORE_ZIP = "Core.zip";
         private const string SHAPES_ZIP = "Shapes.zip";
@@ -39,6 +43,10 @@ namespace GTFSConverter.CRGTFS.Storage
         {
             this.rootDirectory = rootDirectory;
             this.useNoCompression = useNoCompression;
+
+            this.zipShapes = null;
+            this.zipTripsForDate = null;
+            this.zipShapes = null;
         }
 
         public void CreateDatabase(TransitDB tdb)
@@ -190,6 +198,10 @@ namespace GTFSConverter.CRGTFS.Storage
                     stream.Position = 0;
                     headsigns = ProtoBuf.Serializer.Deserialize<string[]>(stream);
                 }
+
+                zipTripsForDate = new ZipFile(Path.Combine(rootDirectory, TRIP_DATES_ZIP));
+                zipStopDistanceVector = new ZipFile(Path.Combine(rootDirectory, STOP_DISTANCE_MATRIX_ZIP));
+                zipShapes = new ZipFile(Path.Combine(rootDirectory, SHAPES_ZIP));
             }
         }
 
@@ -217,11 +229,11 @@ namespace GTFSConverter.CRGTFS.Storage
         {
             ShapeVector result;
 
-            using (var zip = new ZipFile(Path.Combine(rootDirectory, SHAPES_ZIP)))
+            lock (zipShapes)
             {
                 using (var stream = new MemoryStream())
                 {
-                    zip[String.Format(SHAPE_FS_DAT, shapeIndex)].Extract(stream);
+                    zipShapes[String.Format(SHAPE_FS_DAT, shapeIndex)].Extract(stream);
                     stream.Position = 0;
                     result = ProtoBuf.Serializer.Deserialize<ShapeVector>(stream);
                 }
@@ -234,11 +246,11 @@ namespace GTFSConverter.CRGTFS.Storage
         {
             int[] result;
 
-            using (var zip = new ZipFile(Path.Combine(rootDirectory, STOP_DISTANCE_MATRIX_ZIP)))
+            lock (zipStopDistanceVector)
             {
                 using (var stream = new MemoryStream())
                 {
-                    zip[String.Format(STOP_FS_DAT, stopIndex)].Extract(stream);
+                    zipStopDistanceVector[String.Format(STOP_FS_DAT, stopIndex)].Extract(stream);
                     stream.Position = 0;
                     result = ProtoBuf.Serializer.Deserialize<int[]>(stream);
                 }
@@ -251,11 +263,11 @@ namespace GTFSConverter.CRGTFS.Storage
         {
             TripDate[] result;
 
-            using (var zip = new ZipFile(Path.Combine(rootDirectory, TRIP_DATES_ZIP)))
+            lock (zipTripsForDate)
             {
                 using (var stream = new MemoryStream())
                 {
-                    zip[String.Format(TRIPS_FOR_DATE_FS_DAT, routeIndex, day)].Extract(stream);
+                    zipTripsForDate[String.Format(TRIPS_FOR_DATE_FS_DAT, routeIndex, day)].Extract(stream);
                     stream.Position = 0;
                     result = ProtoBuf.Serializer.Deserialize<int[]>(stream)
                         .Select(idx => new TripDate { tripIndex = idx, date = day }).ToArray();

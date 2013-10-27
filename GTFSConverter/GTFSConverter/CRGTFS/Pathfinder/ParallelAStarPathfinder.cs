@@ -3,30 +3,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GTFSConverter.CRGTFS.Pathfinder
 {
-    public class AStarPathfinder : IPathfinder
+    public class ParallelAStarPathfinder : AStarPathfinder
     {
-        protected TransitGraph graph;
-        protected int[] stopDistances;
-        protected int fScale; // TRUE: felülről becsül, FALSE: alulról becsül
+        public ParallelAStarPathfinder(TransitGraph graph, int[] stopDistances, int fScale = 2000)
+            : base(graph, stopDistances, fScale) { }
 
-        public AStarPathfinder(TransitGraph graph, int[] stopDistances, int fScale = 2000)
+        private void CalculateNextNodes(Object node)
         {
-            this.graph = graph;
-            this.stopDistances = stopDistances;
-            this.fScale = fScale;
+            lock (node)
+            {
+                ((DynamicNode)node).GetNextDynamicNodes();
+            }
         }
 
-        protected virtual long fValue(DynamicNode node, Stop destinationStop, DateTime epoch)
-        {
-            long remainingDistance = stopDistances[node.stop.idx];
-            return node.currentTime.AddMinutes(remainingDistance / fScale).Ticks;
-        }
-
-        public virtual List<Action> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
+        public override List<Action> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
         {
             var staticMap = new Dictionary<Stop, SortedSet<DynamicNode>>();
             var openSet = HeapFactory.NewBinaryHeap<DynamicNode, long>();
@@ -61,28 +56,33 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     return currentNode.Value.history.actions.ToList();
                 }
 
-                foreach (var nextNode in currentNode.Value.GetNextDynamicNodes())
+                lock (currentNode.Value)
                 {
-                    if (nextNode.history.totalWalkingTime > 10)
+                    foreach (var nextNode in currentNode.Value.GetNextDynamicNodes())
                     {
-                        continue;
-                    }
-
-                    if (staticMap.ContainsKey(nextNode.stop))
-                    {
-                        if (staticMap[nextNode.stop].Min.CompareTo(nextNode) < 1)
+                        if (nextNode.history.totalWalkingTime > 10)
                         {
-                            nextNode.onlyTravelActionNextTime = true;
+                            continue;
                         }
-                    }
-                    else
-                    {
-                        staticMap[nextNode.stop] = new SortedSet<DynamicNode>();
-                    }
 
-                    if (staticMap[nextNode.stop].Add(nextNode))
-                    {
-                        openSet.Add(nextNode, fValue(nextNode, destinationStop, now));
+                        if (staticMap.ContainsKey(nextNode.stop))
+                        {
+                            if (staticMap[nextNode.stop].Min.CompareTo(nextNode) < 1)
+                            {
+                                nextNode.onlyTravelActionNextTime = true;
+                            }
+                        }
+                        else
+                        {
+                            staticMap[nextNode.stop] = new SortedSet<DynamicNode>();
+                        }
+
+                        ThreadPool.QueueUserWorkItem(CalculateNextNodes, nextNode);
+
+                        if (staticMap[nextNode.stop].Add(nextNode))
+                        {
+                            openSet.Add(nextNode, fValue(nextNode, destinationStop, now));
+                        }
                     }
                 }
             }

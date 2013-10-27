@@ -7,14 +7,14 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 {
     public class DijkstraPathfinder : IPathfinder
     {
-        private TransitGraph graph;
+        protected TransitGraph graph;
 
         public DijkstraPathfinder(TransitGraph graph)
         {
             this.graph = graph;
         }
 
-        public List<Action> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
+        public virtual List<Action> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
         {
             var staticMap = new Dictionary<Stop, SortedSet<DynamicNode>>();
             var openSet = HeapFactory.NewBinaryHeap<DynamicNode>();

@@ -6,14 +6,9 @@ using System.Threading;
 
 namespace GTFSConverter.CRGTFS.Pathfinder
 {
-    class ParallelDijkstraPathfinder : IPathfinder
+    class ParallelDijkstraPathfinder : DijkstraPathfinder
     {
-        private TransitGraph graph;
-
-        public ParallelDijkstraPathfinder(TransitGraph graph)
-        {
-            this.graph = graph;
-        }
+        public ParallelDijkstraPathfinder(TransitGraph graph) : base(graph) { }
 
         private void CalculateNextNodes(Object node)
         {
@@ -23,7 +18,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
             }
         }
 
-        public List<Action> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
+        public override List<Action> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
         {
             var staticMap = new Dictionary<Stop, SortedSet<DynamicNode>>();
             var openSet = HeapFactory.NewBinaryHeap<DynamicNode>();

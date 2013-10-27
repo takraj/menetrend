@@ -204,6 +204,11 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
             foreach (var changeOption in changeOptions)
             {
+                if ((changeOption.arrivalTime - referenceNode.currentTime).TotalMinutes > 60)
+                {
+                    continue;
+                }
+
                 #region GetOnAction inicializálása
                 var tripOption = graph.GetTripByIndex(changeOption.stopTime.tripIndex);
                 var getOnAction = new GetOnAction

@@ -72,7 +72,7 @@ namespace GTFSConverter.CRGTFS
                 var orderedStopDstVector = stopDstVector.OrderBy(sdv => sdv.dst).ToArray();
                 var nearbyStops = new List<int>();
 
-                for (int i = 0; (i < 50) && (i < orderedStopDstVector.Length); i++)
+                for (int i = 0; (i < 25) && (i < orderedStopDstVector.Length); i++)
                 {
                     nearbyStops.Add(orderedStopDstVector[i].stop.idx);
                     nearbyStops.Add(orderedStopDstVector[i].dst);

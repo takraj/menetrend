@@ -24,7 +24,7 @@ namespace GTFSConverter
             //var cdb = DeserializeCompactGTFS();
             //var referencedGTFS = CreateReferencedGTFS(cdb);
 
-            IStorageManager storageManager = new FilesystemStorageManager(basedir);
+            IStorageManager storageManager = new ZipStorageManager(basedir);
             //SerializeTransitGTFS(referencedGTFS, storageManager);
 
             DeserializeTransitGTFS(storageManager);
@@ -46,22 +46,29 @@ namespace GTFSConverter
             var source = storageManager.GetStop(430);
             var destination = storageManager.GetStop(477);
             var graph = new TransitGraph(storageManager);
-            var pathfinder = new AStarPathfinder(graph, storageManager.GetStopDistanceVector(destination.idx));
-            //var pathfinder = new DijkstraPathfinder(graph);
+            var pathfinder = new ParallelAStarPathfinder(graph, storageManager.GetStopDistanceVector(destination.idx), 500);
+            //var pathfinder = new ParallelDijkstraPathfinder(graph);
             Console.WriteLine("SOURCE: " + source.name + " (" + source.idx + ")");
             Console.WriteLine("DESTINATION: " + destination.name + " (" + destination.idx + ")");
             Console.WriteLine("Keresés...");
-            var result = pathfinder.CalculateShortestRoute(source, destination, new DateTime(2013, 2, 15, 23, 0, 0));
-
-            for (int i = 0; i < result.Count; i++)
+            try
             {
-                Console.WriteLine(result[i]);
+                var result = pathfinder.CalculateShortestRoute(source, destination, new DateTime(2013, 2, 15, 15, 0, 0));
 
-                if ((result[i] is GetOffAction) && (i < (result.Count - 1)))
+                for (int i = 0; i < result.Count; i++)
                 {
-                    var walkTime = graph.GetWalkingCostBetween(result[i].stop, result[i + 1].stop);
-                    Console.WriteLine(String.Format("WalkTime: {0}", walkTime));
+                    Console.WriteLine(result[i]);
+
+                    if ((result[i] is GetOffAction) && (i < (result.Count - 1)))
+                    {
+                        var walkTime = graph.GetWalkingCostBetween(result[i].stop, result[i + 1].stop);
+                        Console.WriteLine(String.Format("WalkTime: {0}", walkTime));
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
 
             Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
