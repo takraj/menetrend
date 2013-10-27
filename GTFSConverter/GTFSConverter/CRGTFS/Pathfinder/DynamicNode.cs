@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace GTFSConverter.CRGTFS.Pathfinder
 {
-    public class DynamicNode
+    public class DynamicNode : IComparable<DynamicNode>
     {
         public History history;
         public DateTime currentTime;
         public Stop stop;
         public TransitGraph graph;
         public bool onlyTravelActionNextTime;
+        public bool mustGetOn;
 
         private List<DynamicNode> nextDynamicNodes;
 
@@ -42,8 +43,15 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     {
                         var lastAction = history.actions.Last();
 
-                        nextDynamicNodes.AddRange(GetNextDynamicNodesByWalkAction(lastAction));
-                        nextDynamicNodes.AddRange(GetNextDynamicNodesByChangeRouteAction(lastAction));
+                        if (!(lastAction is GetOnAction))
+                        {
+                            if (!mustGetOn)
+                            {
+                                nextDynamicNodes.AddRange(GetNextDynamicNodesByWalkAction(lastAction));
+                            }
+
+                            nextDynamicNodes.AddRange(GetNextDynamicNodesByChangeRouteAction(lastAction));
+                        }
 
                         /*
                          * Ha véletlen garázsmenetet fogtunk ki, megpróbálhatunk visszaszállni.
@@ -62,7 +70,10 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     }
                     else
                     {
-                        nextDynamicNodes.AddRange(GetNextDynamicNodesByWalkAction(null));
+                        if (!mustGetOn)
+                        {
+                            nextDynamicNodes.AddRange(GetNextDynamicNodesByWalkAction(null));
+                        }
                         nextDynamicNodes.AddRange(GetNextDynamicNodesByChangeRouteAction(null));
                     }
                 }
@@ -90,6 +101,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 currentTime = getOffAction.endDate,
                 graph = this.graph,
                 onlyTravelActionNextTime = false,
+                mustGetOn = false,
                 stop = this.stop,
                 history = new History
                 {
@@ -127,12 +139,14 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     onlyTravelActionNextTime = false,
                     graph = referenceNode.graph,
                     currentTime = getOnAction.endDate,
+                    mustGetOn = false,
                     history = new History
                     {
                         actions = new List<Action>(referenceNode.history.actions),
                         lastUsedRoute = getOnAction.route,
                         usedRoutes = new HashSet<Route>(referenceNode.history.usedRoutes),
-                        totalWalkingTime = referenceNode.history.totalWalkingTime
+                        totalWalkingTime = referenceNode.history.totalWalkingTime,
+                        totalDistance = referenceNode.history.totalDistance
                     }
                 };
                 addDynamicNode.history.actions.Add(getOnAction);
@@ -170,13 +184,15 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     currentTime = getOffAction.endDate,
                     graph = this.graph,
                     onlyTravelActionNextTime = false,
+                    mustGetOn = false,
                     stop = this.stop,
                     history = new History
                     {
                         usedRoutes = this.history.usedRoutes,
                         lastUsedRoute = this.history.lastUsedRoute,
                         actions = new List<Action>(this.history.actions),
-                        totalWalkingTime = this.history.totalWalkingTime
+                        totalWalkingTime = this.history.totalWalkingTime,
+                        totalDistance = this.history.totalDistance
                     }
                 };
                 referenceNode.history.actions.Add(getOffAction);
@@ -206,6 +222,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 {
                     stop = referenceNode.stop,
                     onlyTravelActionNextTime = false,
+                    mustGetOn = false,
                     graph = referenceNode.graph,
                     currentTime = getOnAction.endDate,
                     history = new History
@@ -213,7 +230,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                         actions = new List<Action>(referenceNode.history.actions),
                         lastUsedRoute = getOnAction.route,
                         usedRoutes = new HashSet<Route>(referenceNode.history.usedRoutes),
-                        totalWalkingTime = referenceNode.history.totalWalkingTime
+                        totalWalkingTime = referenceNode.history.totalWalkingTime,
+                        totalDistance = referenceNode.history.totalDistance
                     }
                 };
                 addDynamicNode.history.actions.Add(getOnAction);
@@ -253,7 +271,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 //}
 
                 Stop stopDest = graph.GetStopByIndex(this.stop.nearbyStops[i]);
-                int cost = graph.GetWalkingCostBetween(this.stop, stopDest);
+                double cost = graph.GetWalkingCostBetween(this.stop, stopDest);
 
                 #region DynamicNode inicializálása
                 var addDynamicNode = new DynamicNode
@@ -262,7 +280,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     history = this.history,
                     onlyTravelActionNextTime = false,
                     stop = stopDest,
-                    currentTime = this.currentTime.AddMinutes(cost)
+                    currentTime = this.currentTime.AddMinutes(cost),
+                    mustGetOn = true
                 };
                 #endregion
 
@@ -274,7 +293,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                         usedRoutes = this.history.usedRoutes,
                         lastUsedRoute = this.history.lastUsedRoute,
                         actions = new List<Action>(),
-                        totalWalkingTime = this.history.totalWalkingTime + cost
+                        totalWalkingTime = this.history.totalWalkingTime + cost,
+                        totalDistance = this.history.totalDistance + graph.GetDistanceBetween(this.stop, stopDest)
                     };
                     addDynamicNode.history.actions.AddRange(this.history.actions);
                     addDynamicNode.history.actions.Add(getOffAction);
@@ -313,7 +333,8 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 actions = new List<Action>(),
                 lastUsedRoute = this.history.lastUsedRoute,
                 usedRoutes = this.history.usedRoutes,
-                totalWalkingTime = this.history.totalWalkingTime
+                totalWalkingTime = this.history.totalWalkingTime,
+                totalDistance = this.history.totalDistance + graph.GetDistanceBetween(this.stop, addTravelAction.stop)
             };
             newHistory.actions.AddRange(this.history.actions);
             newHistory.actions.Add(addTravelAction);
@@ -325,6 +346,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 stop = this.graph.GetStopByIndex(nextStopTime.refIndices[0]),
                 graph = this.graph,
                 onlyTravelActionNextTime = false,
+                mustGetOn = false,
                 currentTime = lastAction.endDate.AddMinutes(addMinutes),
                 history = newHistory
             };
@@ -402,6 +424,16 @@ namespace GTFSConverter.CRGTFS.Pathfinder
             {
                 return "Uninitialized DynamicNode";
             }
+        }
+
+        public int CompareTo(object obj)
+        {
+            return this.CompareTo((DynamicNode)obj);
+        }
+
+        public int CompareTo(DynamicNode other)
+        {
+            return this.currentTime.CompareTo(other.currentTime);
         }
     }
 }

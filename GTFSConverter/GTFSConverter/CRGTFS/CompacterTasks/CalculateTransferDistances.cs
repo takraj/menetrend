@@ -26,7 +26,7 @@ namespace GTFSConverter.CRGTFS
             var stopDistanceMatrix = new int[countOfStops * countOfStops];
 
             stopIndices.AsParallel().ForAll(i => {
-                stopDistanceMatrix[i * i] = 0;
+                stopDistanceMatrix[(i * countOfStops) + i] = 0;
 
                 for (int j = (i + 1); j < countOfStops; j++)
                 {
@@ -69,13 +69,13 @@ namespace GTFSConverter.CRGTFS
                         });
                 }
 
-                var orderedStopDstVector = stopDstVector.OrderBy(sdv => sdv.dst);
+                var orderedStopDstVector = stopDstVector.OrderBy(sdv => sdv.dst).ToArray();
                 var nearbyStops = new List<int>();
 
-                for (int i = 0; (i < 50) && (i < stopDstVector.Count); i++)
+                for (int i = 0; (i < 50) && (i < orderedStopDstVector.Length); i++)
                 {
-                    nearbyStops.Add(stopDstVector[i].stop.idx);
-                    nearbyStops.Add(stopDstVector[i].dst);
+                    nearbyStops.Add(orderedStopDstVector[i].stop.idx);
+                    nearbyStops.Add(orderedStopDstVector[i].dst);
                 }
 
                 stop.nearbyStops = nearbyStops.ToArray();

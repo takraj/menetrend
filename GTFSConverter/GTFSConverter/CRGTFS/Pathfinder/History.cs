@@ -11,6 +11,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
         public HashSet<Route> usedRoutes;
         public Route lastUsedRoute;
         public List<Action> actions;
-        public int totalWalkingTime;
+        public double totalWalkingTime;
+        public int totalDistance;
     }
 }

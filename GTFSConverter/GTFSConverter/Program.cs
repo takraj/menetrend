@@ -26,34 +26,45 @@ namespace GTFSConverter
 
             IStorageManager storageManager = new FilesystemStorageManager(basedir);
             //SerializeTransitGTFS(referencedGTFS, storageManager);
+
             DeserializeTransitGTFS(storageManager);
-
-            Console.WriteLine("Gráf inicializálás...");
-            var graph = new TransitGraph(storageManager);
-            var pathfinder = new DijkstraPathfinder(graph);
-            var source = storageManager.GetStop(430);
-            var destination = storageManager.GetStop(477);
-            Console.WriteLine("SOURCE: " + source.name + " (" + source.idx + ")");
-            Console.WriteLine("DESTINATION: " + destination.name + " (" + destination.idx + ")");
-            Console.WriteLine("Keresés...");
-            var result = pathfinder.CalculateShortestRoute(source, destination, new DateTime(2013, 2, 15, 15, 0, 0));
-
-            for (int i = 0; i < result.Count; i++)
-            {
-                Console.WriteLine(result[i]);
-
-                if (result[i] is GetOffAction)
-                {
-                    var walkTime = graph.GetWalkingCostBetween(result[i].stop, result[i + 1].stop);
-                    Console.WriteLine(String.Format("WalkTime: {0}", walkTime));
-                }
-            }
+            CalculateShorthestRoute(storageManager);
 
             totalTime.Stop();
             Console.WriteLine();
             Console.WriteLine("Idő: " + (totalTime.ElapsedMilliseconds / 1000.0) + "s");
             Console.WriteLine("Nyomj meg egy billentyűt...");
             Console.ReadKey();
+        }
+
+        private static void CalculateShorthestRoute(IStorageManager storageManager)
+        {
+            var partialTime = new Stopwatch();
+            partialTime.Start();
+
+            Console.WriteLine("Gráf inicializálás...");
+            var source = storageManager.GetStop(430);
+            var destination = storageManager.GetStop(477);
+            var graph = new TransitGraph(storageManager);
+            var pathfinder = new AStarPathfinder(graph, storageManager.GetStopDistanceVector(destination.idx));
+            //var pathfinder = new DijkstraPathfinder(graph);
+            Console.WriteLine("SOURCE: " + source.name + " (" + source.idx + ")");
+            Console.WriteLine("DESTINATION: " + destination.name + " (" + destination.idx + ")");
+            Console.WriteLine("Keresés...");
+            var result = pathfinder.CalculateShortestRoute(source, destination, new DateTime(2013, 2, 15, 23, 0, 0));
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                Console.WriteLine(result[i]);
+
+                if ((result[i] is GetOffAction) && (i < (result.Count - 1)))
+                {
+                    var walkTime = graph.GetWalkingCostBetween(result[i].stop, result[i + 1].stop);
+                    Console.WriteLine(String.Format("WalkTime: {0}", walkTime));
+                }
+            }
+
+            Console.WriteLine(" " + (partialTime.ElapsedMilliseconds / 1000.0) + "s");
         }
 
         private static void DeserializeTransitGTFS(IStorageManager storageManager)

@@ -146,27 +146,32 @@ namespace GTFSConverter.CRGTFS.Pathfinder
         /// <param name="stop1"></param>
         /// <param name="stop2"></param>
         /// <returns>Gyaloglási idő, percekben.</returns>
-        public int GetWalkingCostBetween(Stop stop1, Stop stop2)
+        public double GetWalkingCostBetween(Stop stop1, Stop stop2)
         {
-            const int WALKING_SPEED = 83;
+            const double WALKING_SPEED = 83.0;
 
+            return Math.Ceiling(GetDistanceBetween(stop1, stop2) / WALKING_SPEED);
+        }
+
+        public int GetDistanceBetween(Stop stop1, Stop stop2)
+        {
             for (int i = 0; i < stop1.nearbyStops.Length; i += 2)
             {
-                if (i == stop2.idx)
+                if (stop1.nearbyStops[i] == stop2.idx)
                 {
-                    return stop1.nearbyStops[i + 1] / WALKING_SPEED;
+                    return stop1.nearbyStops[i + 1];
                 }
             }
 
             for (int i = 0; i < stop2.nearbyStops.Length; i += 2)
             {
-                if (i == stop1.idx)
+                if (stop2.nearbyStops[i] == stop1.idx)
                 {
-                    return stop2.nearbyStops[i + 1] / WALKING_SPEED;
+                    return stop2.nearbyStops[i + 1];
                 }
             }
 
-            return storageManager.GetStopDistanceVector(stop1.idx)[stop2.idx] / WALKING_SPEED;
+            return storageManager.GetStopDistanceVector(stop1.idx)[stop2.idx];
         }
     }
 }

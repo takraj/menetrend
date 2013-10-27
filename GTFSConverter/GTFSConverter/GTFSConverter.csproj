@@ -74,10 +74,12 @@
     <Compile Include="CRGTFS\CompactReferencedGTFSDB.cs" />
     <Compile Include="CGTFS\GTFSCompacter.cs" />
     <Compile Include="CRGTFS\Pathfinder\Action.cs" />
+    <Compile Include="CRGTFS\Pathfinder\AStarPathfinder.cs" />
     <Compile Include="CRGTFS\Pathfinder\DijkstraPathfinder.cs" />
     <Compile Include="CRGTFS\Pathfinder\DynamicNode.cs" />
     <Compile Include="CRGTFS\Pathfinder\History.cs" />
     <Compile Include="CRGTFS\Pathfinder\IPathfinder.cs" />
+    <Compile Include="CRGTFS\Pathfinder\ParallelDijkstraPathfinder.cs" />
     <Compile Include="CRGTFS\Pathfinder\TransitGraph.cs" />
     <Compile Include="CRGTFS\Storage\FilesystemStorageManager.cs" />
     <Compile Include="CRGTFS\Storage\IStorageManager.cs" />

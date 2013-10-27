@@ -2,22 +2,40 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GTFSConverter.CRGTFS.Pathfinder
 {
-    public class DijkstraPathfinder : IPathfinder
+    public class AStarPathfinder : IPathfinder
     {
         private TransitGraph graph;
+        private int[] stopDistances;
 
-        public DijkstraPathfinder(TransitGraph graph)
+        public AStarPathfinder(TransitGraph graph, int[] stopDistances)
         {
             this.graph = graph;
+            this.stopDistances = stopDistances;
+        }
+
+        protected long fValue(DynamicNode node, Stop destinationStop)
+        {
+            long walkingCost = stopDistances[node.stop.idx] / 1000; // 60 kmph
+            return node.currentTime.AddMinutes(walkingCost).Ticks;
+        }
+
+        protected long fValue(DynamicNode node, Stop destinationStop, DateTime epoch)
+        {
+            long walkingCost = stopDistances[node.stop.idx];
+            walkingCost += node.history.totalDistance;
+
+            return walkingCost;
         }
 
         public List<Action> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
         {
             var staticMap = new Dictionary<Stop, SortedSet<DynamicNode>>();
-            var openSet = HeapFactory.NewBinaryHeap<DynamicNode>();
+            var openSet = HeapFactory.NewBinaryHeap<DynamicNode, long>();
 
             var firstDynamicNode = new DynamicNode
             {
@@ -38,18 +56,18 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
             staticMap[sourceStop] = new SortedSet<DynamicNode>();
             staticMap[sourceStop].Add(firstDynamicNode);
-            openSet.Add(firstDynamicNode);
+            openSet.Add(firstDynamicNode, fValue(firstDynamicNode, destinationStop));
 
             while (openSet.Count > 0)
             {
                 var currentNode = openSet.RemoveMin();
 
-                if (currentNode.stop == destinationStop)
+                if (currentNode.Value.stop == destinationStop)
                 {
-                    return currentNode.history.actions.ToList();
+                    return currentNode.Value.history.actions.ToList();
                 }
 
-                foreach (var nextNode in currentNode.GetNextDynamicNodes())
+                foreach (var nextNode in currentNode.Value.GetNextDynamicNodes())
                 {
                     if (nextNode.history.totalWalkingTime > 10)
                     {
@@ -70,7 +88,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
                     if (staticMap[nextNode.stop].Add(nextNode))
                     {
-                        openSet.Add(nextNode);
+                        openSet.Add(nextNode, fValue(nextNode, destinationStop));
                     }
                 }
             }
