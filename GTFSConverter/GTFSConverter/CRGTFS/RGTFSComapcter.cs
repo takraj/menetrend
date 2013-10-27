@@ -20,21 +20,52 @@ namespace GTFSConverter.CRGTFS
             var tdb = new TransitDB();
             var originalMaps = new OriginalMaps();
 
-            PrepareStops(ref tdb, ref originalMaps);
-            Console.Write('|');
-            PrepareShapes(ref tdb, ref originalMaps);
-            Console.Write('|');
-            PrepareRoutes(ref tdb, ref originalMaps);
-            Console.Write('|');
+            Parallel.Invoke(
+                () =>
+                {
+                    PrepareStops(ref tdb, ref originalMaps);
+                    Console.Write('|');
+                },
+
+                () =>
+                {
+                    PrepareShapes(ref tdb, ref originalMaps);
+                    Console.Write('|');
+                },
+
+                () =>
+                {
+                    PrepareRoutes(ref tdb, ref originalMaps);
+                    Console.Write('|');
+                });
+
             PrepareTrips(ref tdb, ref originalMaps);
             Console.Write('|');
-            CalculateStopRouteRelationships(ref tdb, ref originalMaps);
-            Console.Write('|');
-            CalculateTripDates(ref tdb, ref originalMaps);
-            Console.Write('*');
-            CalculateTransferDistances(ref tdb, ref originalMaps);
+
+            Parallel.Invoke(
+                () =>
+                {
+                    CalculateStopRouteRelationships(ref tdb, ref originalMaps);
+                    Console.Write('|');
+                },
+
+                () =>
+                {
+                    CalculateTripDates(ref tdb, ref originalMaps);
+                    Console.Write('*');
+                },
+
+                () =>
+                {
+                    CalculateTransferDistances(ref tdb, ref originalMaps);
+                    Console.Write('#');
+                });
+
+            CalculateFirstLastArrivals(tdb, originalMaps);
             Console.Write('#');
+
             SetupNearbyStops(ref tdb, countOfTransfersPerStop);
+            Console.Write('#');
 
             return tdb;
         }

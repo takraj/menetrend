@@ -100,7 +100,6 @@ namespace GTFSConverter.CRGTFS
                 }
 
                 r.dates = dates.ToArray();
-                var trips = tdb.trips;
             }
         }
 

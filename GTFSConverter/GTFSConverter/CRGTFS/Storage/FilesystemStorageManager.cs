@@ -91,14 +91,15 @@ namespace GTFSConverter.CRGTFS.Storage
             {
                 var shapesdir = CreateResourceDirectory(SHAPES_DIR);
 
-                for (int i = 0; i < tdb.shapeMatrix.Count; i++)
-                {
-                    string filename = String.Format(SHAPE_FS_DAT, i);
-                    using (var file = System.IO.File.Create(Path.Combine(shapesdir, filename)))
+                Enumerable.Range(0, tdb.shapeMatrix.Count).AsParallel().ForAll(
+                    i =>
                     {
-                        ProtoBuf.Serializer.Serialize(file, tdb.shapeMatrix.ElementAt(i));
-                    }
-                }
+                        string filename = String.Format(SHAPE_FS_DAT, i);
+                        using (var file = System.IO.File.Create(Path.Combine(shapesdir, filename)))
+                        {
+                            ProtoBuf.Serializer.Serialize(file, tdb.shapeMatrix.ElementAt(i));
+                        }
+                    });
             }
             #endregion
 
@@ -106,21 +107,22 @@ namespace GTFSConverter.CRGTFS.Storage
             {
                 var dmatrixdir = CreateResourceDirectory(STOP_DISTANCE_MATRIX_DIR);
 
-                for (int i = 0; i < tdb.stops.Length; i++)
-                {
-                    var data = new List<int>();
-
-                    for (int j = 0; j < tdb.stops.Length; j++)
+                Enumerable.Range(0, tdb.stops.Length).AsParallel().ForAll(
+                    i =>
                     {
-                        data.Add(tdb.stopDistanceMatrix[(i * tdb.stops.Length) + j]);
-                    }
+                        var data = new List<int>();
 
-                    string filename = String.Format(STOP_FS_DAT, i);
-                    using (var file = System.IO.File.Create(Path.Combine(dmatrixdir, filename)))
-                    {
-                        ProtoBuf.Serializer.Serialize(file, data.ToArray());
-                    }
-                }
+                        for (int j = 0; j < tdb.stops.Length; j++)
+                        {
+                            data.Add(tdb.stopDistanceMatrix[(i * tdb.stops.Length) + j]);
+                        }
+
+                        string filename = String.Format(STOP_FS_DAT, i);
+                        using (var file = System.IO.File.Create(Path.Combine(dmatrixdir, filename)))
+                        {
+                            ProtoBuf.Serializer.Serialize(file, data.ToArray());
+                        }
+                    });
             }
             #endregion
 
@@ -128,24 +130,25 @@ namespace GTFSConverter.CRGTFS.Storage
             {
                 var tripDatesDir = CreateResourceDirectory(TRIP_DATES_DIR);
 
-                foreach (var route in tdb.routeDatesMap.Keys)
-                {
-                    string routeDirName = String.Format(ROUTE_FS_DIR, route.idx);
-                    var routeDir = CreateResourceDirectory(Path.Combine(tripDatesDir, routeDirName));
-
-                    var dates = tdb.routeDatesMap[route].GroupBy(td => td.date).ToDictionary(
-                        td => td.Key, td => td.Select(tripdate => tripdate.tripIndex));
-
-                    foreach (var date in dates.Keys)
+                tdb.routeDatesMap.Keys.AsParallel().ForAll(
+                    route =>
                     {
-                        string filename = String.Format(TRIPS_FOR_DATE_FS_DAT, date);
-                        using (var file = System.IO.File.Create(Path.Combine(routeDir, filename)))
+                        string routeDirName = String.Format(ROUTE_FS_DIR, route.idx);
+                        var routeDir = CreateResourceDirectory(Path.Combine(tripDatesDir, routeDirName));
+
+                        var dates = tdb.routeDatesMap[route].GroupBy(td => td.date).ToDictionary(
+                            td => td.Key, td => td.Select(tripdate => tripdate.tripIndex));
+
+                        foreach (var date in dates.Keys)
                         {
-                            var data = dates[date].OrderBy(tripIndex => tdb.trips[tripIndex].stopTimes[0].arrivalTime);
-                            ProtoBuf.Serializer.Serialize(file, data.ToArray());
+                            string filename = String.Format(TRIPS_FOR_DATE_FS_DAT, date);
+                            using (var file = System.IO.File.Create(Path.Combine(routeDir, filename)))
+                            {
+                                var data = dates[date].OrderBy(tripIndex => tdb.trips[tripIndex].stopTimes[0].arrivalTime);
+                                ProtoBuf.Serializer.Serialize(file, data.ToArray());
+                            }
                         }
-                    }
-                }
+                    });
             }
             #endregion
         }

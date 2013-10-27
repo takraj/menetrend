@@ -51,120 +51,134 @@ namespace GTFSConverter.CRGTFS.Storage
 
         public void CreateDatabase(TransitDB tdb)
         {
-            #region Core
-            using (ZipFile zip = new ZipFile())
-            {
-                if (this.useNoCompression)
+            Parallel.Invoke(
+                () =>
                 {
-                    zip.CompressionLevel = CompressionLevel.None;
-                }
-
-                using (var stream = new MemoryStream())
-                {
-                    ProtoBuf.Serializer.Serialize(stream, tdb.routes);
-                    zip.AddEntry(ROUTES_DAT, stream.ToArray());
-                }
-
-                using (var stream = new MemoryStream())
-                {
-                    ProtoBuf.Serializer.Serialize(stream, tdb.trips);
-                    zip.AddEntry(TRIPS_DAT, stream.ToArray());
-                }
-
-                using (var stream = new MemoryStream())
-                {
-                    ProtoBuf.Serializer.Serialize(stream, tdb.stops);
-                    zip.AddEntry(STOPS_DAT, stream.ToArray());
-                }
-
-                using (var stream = new MemoryStream())
-                {
-                    ProtoBuf.Serializer.Serialize(stream, tdb.headsigns);
-                    zip.AddEntry(HEADSIGNS_DAT, stream.ToArray());
-                }
-
-                zip.Save(Path.Combine(rootDirectory, CORE_ZIP));
-            }
-            #endregion
-            
-            #region Shapes
-            using (ZipFile zip = new ZipFile())
-            {
-                if (this.useNoCompression)
-                {
-                    zip.CompressionLevel = CompressionLevel.None;
-                }
-
-                for (int i = 0; i < tdb.shapeMatrix.Count; i++)
-                {
-                    using (var stream = new MemoryStream())
+                    #region Core
+                    using (ZipFile zip = new ZipFile())
                     {
-                        ProtoBuf.Serializer.Serialize(stream, tdb.shapeMatrix.ElementAt(i));
-                        zip.AddEntry(String.Format(SHAPE_FS_DAT, i), stream.ToArray());
-                    }
-                }
+                        if (this.useNoCompression)
+                        {
+                            zip.CompressionLevel = CompressionLevel.None;
+                        }
 
-                zip.Save(Path.Combine(rootDirectory, SHAPES_ZIP));
-            }
-            #endregion
-
-            #region StopDistanceMatrix
-            using (ZipFile zip = new ZipFile())
-            {
-                if (this.useNoCompression)
-                {
-                    zip.CompressionLevel = CompressionLevel.None;
-                }
-
-                for (int i = 0; i < tdb.stops.Length; i++)
-                {
-                    var data = new List<int>();
-
-                    for (int j = 0; j < tdb.stops.Length; j++)
-                    {
-                        data.Add(tdb.stopDistanceMatrix[(i * tdb.stops.Length) + j]);
-                    }
-
-                    using (var stream = new MemoryStream())
-                    {
-                        ProtoBuf.Serializer.Serialize(stream, data.ToArray());
-                        zip.AddEntry(String.Format(STOP_FS_DAT, i), stream.ToArray());
-                    }
-                }
-
-                zip.Save(Path.Combine(rootDirectory, STOP_DISTANCE_MATRIX_ZIP));
-            }
-            #endregion
-
-            #region TripDates
-            using (ZipFile zip = new ZipFile())
-            {
-                zip.CompressionLevel = CompressionLevel.BestSpeed;
-
-                if (this.useNoCompression)
-                {
-                    zip.CompressionLevel = CompressionLevel.None;
-                }
-
-                foreach (var route in tdb.routeDatesMap.Keys)
-                {
-                    var dates = tdb.routeDatesMap[route].GroupBy(td => td.date).ToDictionary(
-                        td => td.Key, td => td.Select(tripdate => tripdate.tripIndex));
-
-                    foreach (var date in dates.Keys)
-                    {
                         using (var stream = new MemoryStream())
                         {
-                            var data = dates[date].OrderBy(tripIndex => tdb.trips[tripIndex].stopTimes[0].arrivalTime);
-                            ProtoBuf.Serializer.Serialize(stream, data.ToArray());
-                            zip.AddEntry(String.Format(TRIPS_FOR_DATE_FS_DAT, route.idx, date), stream.ToArray());
+                            ProtoBuf.Serializer.Serialize(stream, tdb.routes);
+                            zip.AddEntry(ROUTES_DAT, stream.ToArray());
                         }
-                    }
-                }
 
-                zip.Save(Path.Combine(rootDirectory, TRIP_DATES_ZIP));
-            }
-            #endregion
+                        using (var stream = new MemoryStream())
+                        {
+                            ProtoBuf.Serializer.Serialize(stream, tdb.trips);
+                            zip.AddEntry(TRIPS_DAT, stream.ToArray());
+                        }
+
+                        using (var stream = new MemoryStream())
+                        {
+                            ProtoBuf.Serializer.Serialize(stream, tdb.stops);
+                            zip.AddEntry(STOPS_DAT, stream.ToArray());
+                        }
+
+                        using (var stream = new MemoryStream())
+                        {
+                            ProtoBuf.Serializer.Serialize(stream, tdb.headsigns);
+                            zip.AddEntry(HEADSIGNS_DAT, stream.ToArray());
+                        }
+
+                        zip.Save(Path.Combine(rootDirectory, CORE_ZIP));
+                    }
+                    #endregion
+                },
+
+                () =>
+                {
+                    #region Shapes
+                    using (ZipFile zip = new ZipFile())
+                    {
+                        if (this.useNoCompression)
+                        {
+                            zip.CompressionLevel = CompressionLevel.None;
+                        }
+
+                        for (int i = 0; i < tdb.shapeMatrix.Count; i++)
+                        {
+                            using (var stream = new MemoryStream())
+                            {
+                                ProtoBuf.Serializer.Serialize(stream, tdb.shapeMatrix.ElementAt(i));
+                                zip.AddEntry(String.Format(SHAPE_FS_DAT, i), stream.ToArray());
+                            }
+                        }
+
+                        zip.Save(Path.Combine(rootDirectory, SHAPES_ZIP));
+                    }
+                    #endregion
+                },
+
+                () =>
+                {
+                    #region StopDistanceMatrix
+                    using (ZipFile zip = new ZipFile())
+                    {
+                        if (this.useNoCompression)
+                        {
+                            zip.CompressionLevel = CompressionLevel.None;
+                        }
+
+                        for (int i = 0; i < tdb.stops.Length; i++)
+                        {
+                            var data = new List<int>();
+
+                            for (int j = 0; j < tdb.stops.Length; j++)
+                            {
+                                data.Add(tdb.stopDistanceMatrix[(i * tdb.stops.Length) + j]);
+                            }
+
+                            using (var stream = new MemoryStream())
+                            {
+                                ProtoBuf.Serializer.Serialize(stream, data.ToArray());
+                                zip.AddEntry(String.Format(STOP_FS_DAT, i), stream.ToArray());
+                            }
+                        }
+
+                        zip.Save(Path.Combine(rootDirectory, STOP_DISTANCE_MATRIX_ZIP));
+                    }
+                    #endregion
+                },
+
+                () =>
+                {
+                    #region TripDates
+                    using (ZipFile zip = new ZipFile())
+                    {
+                        zip.CompressionLevel = CompressionLevel.BestSpeed;
+
+                        if (this.useNoCompression)
+                        {
+                            zip.CompressionLevel = CompressionLevel.None;
+                        }
+
+                        foreach (var route in tdb.routeDatesMap.Keys)
+                        {
+                            var dates = tdb.routeDatesMap[route].GroupBy(td => td.date).ToDictionary(
+                                td => td.Key, td => td.Select(tripdate => tripdate.tripIndex));
+
+                            foreach (var date in dates.Keys)
+                            {
+                                using (var stream = new MemoryStream())
+                                {
+                                    var data = dates[date].OrderBy(tripIndex => tdb.trips[tripIndex].stopTimes[0].arrivalTime);
+                                    ProtoBuf.Serializer.Serialize(stream, data.ToArray());
+                                    zip.AddEntry(String.Format(TRIPS_FOR_DATE_FS_DAT, route.idx, date), stream.ToArray());
+                                }
+                            }
+                        }
+
+                        zip.Save(Path.Combine(rootDirectory, TRIP_DATES_ZIP));
+                    }
+                    #endregion
+                }
+            );
         }
 
         public void LoadDatabase()

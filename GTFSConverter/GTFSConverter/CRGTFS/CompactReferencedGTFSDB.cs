@@ -1,5 +1,6 @@
 ﻿using ProtoBuf;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +21,11 @@ namespace GTFSConverter.CRGTFS
 
     public class OriginalMaps
     {
-        public Dictionary<ushort, Stop> originalStopMap = new Dictionary<ushort, Stop>();
-        public Dictionary<ushort, Route> originalRouteMap = new Dictionary<ushort, Route>();
-        public Dictionary<uint, Trip> originalTripMap = new Dictionary<uint, Trip>();
-        public Dictionary<ushort, int> originalShapeIndexMap = new Dictionary<ushort, int>();
-        public Dictionary<string, int> headsignMap = new Dictionary<string, int>();
+        public IDictionary<ushort, Stop> originalStopMap = new ConcurrentDictionary<ushort, Stop>();
+        public IDictionary<ushort, Route> originalRouteMap = new ConcurrentDictionary<ushort, Route>();
+        public IDictionary<uint, Trip> originalTripMap = new ConcurrentDictionary<uint, Trip>();
+        public IDictionary<ushort, int> originalShapeIndexMap = new ConcurrentDictionary<ushort, int>();
+        public IDictionary<string, int> headsignMap = new ConcurrentDictionary<string, int>();
     }
 
     [ProtoContract]
@@ -97,7 +98,7 @@ namespace GTFSConverter.CRGTFS
     public struct StopTime
     {
         /// <summary>
-        /// {stopIdx, shapeIdx, shapeDistanceTravelled}
+        /// {stopIdx, tripIdx, shapeIdx, shapeDistanceTravelled}
         /// </summary>
         [ProtoMember(1)]
         public int[] refIndices;
@@ -114,12 +115,9 @@ namespace GTFSConverter.CRGTFS
         [ProtoMember(3)]
         public byte waitingTime;
 
-        [ProtoMember(4)]
-        public int tripIndex;
-
         public override string ToString()
         {
-            return String.Format("StopTime: arrives {0} waits {1} for trip {2}", arrivalTime, waitingTime, tripIndex);
+            return String.Format("StopTime: arrives {0} waits {1} for trip {2}", arrivalTime, waitingTime, refIndices[1]);
         }
     }
 
@@ -143,6 +141,12 @@ namespace GTFSConverter.CRGTFS
         /// </summary>
         [ProtoMember(5)]
         public int[] nearbyStops;
+
+        [ProtoMember(6)]
+        public ushort firstTripArrives;
+
+        [ProtoMember(7)]
+        public ushort lastTripArrives;
 
         public override bool Equals(object obj)
         {
@@ -236,6 +240,9 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(7)]
         public int routeIndex;
+
+        [ProtoMember(8)]
+        public int stopSequenceHint;
 
         public override bool Equals(object obj)
         {

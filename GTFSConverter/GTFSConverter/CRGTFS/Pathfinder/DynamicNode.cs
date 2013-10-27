@@ -120,7 +120,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
             if (changeOption != null)
             {
                 #region GetOnAction inicializálása
-                var tripOption = graph.GetTripByIndex(changeOption.stopTime.tripIndex);
+                var tripOption = graph.GetTripByIndex(changeOption.stopTime.refIndices[1]);
                 var getOnAction = new GetOnAction
                 {
                     startDate = referenceNode.currentTime,
@@ -210,7 +210,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 }
 
                 #region GetOnAction inicializálása
-                var tripOption = graph.GetTripByIndex(changeOption.stopTime.tripIndex);
+                var tripOption = graph.GetTripByIndex(changeOption.stopTime.refIndices[1]);
                 var getOnAction = new GetOnAction
                 {
                     startDate = referenceNode.currentTime,

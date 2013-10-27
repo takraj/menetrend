@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="CGTFS\CompactGTFSDB.cs" />
     <Compile Include="CGTFS\CompactModels.cs" />
+    <Compile Include="CRGTFS\CompacterTasks\CalculateFirstLastArrivals.cs" />
     <Compile Include="CRGTFS\CompacterTasks\CalculateStopRouteRelationships.cs" />
     <Compile Include="CRGTFS\CompacterTasks\CalculateTransferDistances.cs" />
     <Compile Include="CRGTFS\CompacterTasks\CalculateTripDates.cs" />
