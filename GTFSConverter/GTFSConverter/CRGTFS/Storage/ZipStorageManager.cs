@@ -273,9 +273,9 @@ namespace GTFSConverter.CRGTFS.Storage
             return result;
         }
 
-        public TripDate[] GetTripsForDate(int routeIndex, ushort day)
+        public int[] GetTripsForDate(int routeIndex, ushort day)
         {
-            TripDate[] result;
+            int[] result;
 
             lock (zipTripsForDate)
             {
@@ -283,8 +283,7 @@ namespace GTFSConverter.CRGTFS.Storage
                 {
                     zipTripsForDate[String.Format(TRIPS_FOR_DATE_FS_DAT, routeIndex, day)].Extract(stream);
                     stream.Position = 0;
-                    result = ProtoBuf.Serializer.Deserialize<int[]>(stream)
-                        .Select(idx => new TripDate { tripIndex = idx, date = day }).ToArray();
+                    result = ProtoBuf.Serializer.Deserialize<int[]>(stream);
                 }
             }
 

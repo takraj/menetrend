@@ -26,7 +26,7 @@ namespace GTFSConverter.CRGTFS.Storage
 
         ShapeVector GetShape(int shapeIndex);
         int[] GetStopDistanceVector(int stopIndex);
-        TripDate[] GetTripsForDate(int routeIndex, ushort day);
+        int[] GetTripsForDate(int routeIndex, ushort day);
 
         int CountOfStops { get; }
 

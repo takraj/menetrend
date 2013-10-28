@@ -63,7 +63,7 @@ namespace GTFSConverter.CRGTFS
                     endTime = rstoptimes.Last().arrivalTime,
                     idx = trips.Count,
                     routeIndex = originalMaps.originalRouteMap[ctrip.route_id].idx,
-                    stopSequenceHint = String.Join(",", rstoptimes.OrderBy(st => st.arrivalTime).Select(st => st.refIndices[0])).GetHashCode()
+                    stopSequenceHint = String.Join(",", rstoptimes.OrderBy(st => st.arrivalTime).Select(st => st.StopIndex)).GetHashCode()
                 };
 
                 trips.Add(rtrip);

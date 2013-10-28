@@ -4,19 +4,20 @@
 <node CREATED="1382805802594" ID="ID_1873782628" MODIFIED="1382805828384" POSITION="left" TEXT="Core">
 <node CREATED="1382905866922" ID="ID_406014267" MODIFIED="1382905885064" TEXT="Compacter">
 <node CREATED="1382905889400" ID="ID_621214633" MODIFIED="1382906088733" TEXT="&#xda;j mez&#x151;k felv&#xe9;tele">
-<node CREATED="1382905924554" ID="ID_381791084" MODIFIED="1382913190192" TEXT="Stop :: min/max TripDate.arrivalTime">
+<node CREATED="1382905924554" ID="ID_381791084" MODIFIED="1382982628540" TEXT="Stop :: min/max TripDate.arrivalTime">
 <icon BUILTIN="button_ok"/>
-<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1382905951368" ID="ID_826231796" MODIFIED="1382914043823" TEXT="Trip :: StopSequenceHash">
+<node CREATED="1382905951368" ID="ID_826231796" MODIFIED="1382981527170" TEXT="Trip :: StopSequenceHash">
 <icon BUILTIN="button_ok"/>
-<icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1382905996257" ID="ID_1328535424" MODIFIED="1382914341426" TEXT="MetaData :: CountOf... &#xe9;s valid from/to mez&#x151;kkel">
 <icon BUILTIN="idea"/>
 </node>
 </node>
 <node CREATED="1382906104080" ID="ID_1996414862" MODIFIED="1382910718225" TEXT="P&#xe1;rhuzamos&#xed;t&#xe1;s">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1382980761342" ID="ID_981816762" MODIFIED="1382981236618" TEXT="Propterty-k a t&#xf6;mb&#xf6;s elemekre">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -38,8 +39,8 @@
 <node CREATED="1382906144283" ID="ID_193815463" MODIFIED="1382909850992" TEXT="P&#xe1;rhuzamos soros&#xed;t&#xe1;sok">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1382911883270" ID="ID_1177224552" MODIFIED="1382914202595" TEXT="Ne TripDate-et adjon vissza">
-<icon BUILTIN="yes"/>
+<node CREATED="1382911883270" ID="ID_1177224552" MODIFIED="1382994478576" TEXT="Ne TripDate-et adjon vissza">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1382805899407" ID="ID_1450030836" MODIFIED="1382805903486" TEXT="Pathfinder">
@@ -116,7 +117,9 @@
 <node CREATED="1382806590056" ID="ID_1362517174" MODIFIED="1382906448897" TEXT="WCF">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1382806628549" ID="ID_461970467" MODIFIED="1382806639407" TEXT="Protobuf"/>
+<node CREATED="1382806628549" ID="ID_461970467" MODIFIED="1382994526137" TEXT="Protobuf">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1382806584741" ID="ID_1159943843" MODIFIED="1382906452328" POSITION="right" TEXT="Mobil">
 <icon BUILTIN="yes"/>

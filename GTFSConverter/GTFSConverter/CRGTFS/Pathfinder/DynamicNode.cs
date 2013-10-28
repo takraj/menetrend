@@ -60,9 +60,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                         {
                             var getBackNode = GetNextDynamicNodeByGetBackAction((TravelAction)lastAction);
 
-                            if ((getBackNode != null)
-                                && (getBackNode.history.actions.Last().trip.stopTimes.Length
-                                            > lastAction.trip.stopTimes.Length))
+                            if (getBackNode != null)
                             {
                                 nextDynamicNodes.Add(getBackNode);
                             }
@@ -120,7 +118,12 @@ namespace GTFSConverter.CRGTFS.Pathfinder
             if (changeOption != null)
             {
                 #region GetOnAction inicializálása
-                var tripOption = graph.GetTripByIndex(changeOption.stopTime.refIndices[1]);
+                var tripOption = graph.GetTripByIndex(changeOption.stopTime.TripIndex);
+                if (tripOption.stopSequenceHint == lastAction.trip.stopSequenceHint)
+                {
+                    return null;
+                }
+
                 var getOnAction = new GetOnAction
                 {
                     startDate = referenceNode.currentTime,
@@ -199,6 +202,12 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 #endregion
             }
 
+            if (((referenceNode.stop.firstTripArrives - referenceNode.currentTime.TimeOfDay.TotalMinutes) > graph.maxWaitingMinutesForNextTrip)
+                && ((referenceNode.currentTime.TimeOfDay.TotalMinutes - referenceNode.stop.lastTripArrives) > graph.maxWaitingMinutesForNextTrip))
+            {
+                return result;
+            }
+
             var changeOptions = graph.GetChangeOptions(referenceNode.stop,
                 referenceNode.currentTime, referenceNode.history.usedRoutes);
 
@@ -210,7 +219,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 }
 
                 #region GetOnAction inicializálása
-                var tripOption = graph.GetTripByIndex(changeOption.stopTime.refIndices[1]);
+                var tripOption = graph.GetTripByIndex(changeOption.stopTime.TripIndex);
                 var getOnAction = new GetOnAction
                 {
                     startDate = referenceNode.currentTime,
@@ -285,7 +294,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                     history = this.history,
                     onlyTravelActionNextTime = false,
                     stop = stopDest,
-                    currentTime = this.currentTime.AddMinutes(cost),
+                    currentTime = (getOffAction == null) ? this.currentTime.AddMinutes(cost) : getOffAction.endDate.AddMinutes(cost),
                     mustGetOn = true
                 };
                 #endregion
@@ -327,7 +336,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                 fromStopTime = lastAction.toStopTime,
                 toStopTime = nextStopTime,
                 trip = lastAction.trip,
-                stop = this.graph.GetStopByIndex(nextStopTime.refIndices[0]),
+                stop = this.graph.GetStopByIndex(nextStopTime.StopIndex),
                 route = lastAction.route
             };
             #endregion
@@ -348,7 +357,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
             #region DynamicNode inicializálása
             var dynamicNode = new DynamicNode
             {
-                stop = this.graph.GetStopByIndex(nextStopTime.refIndices[0]),
+                stop = this.graph.GetStopByIndex(nextStopTime.StopIndex),
                 graph = this.graph,
                 onlyTravelActionNextTime = false,
                 mustGetOn = false,

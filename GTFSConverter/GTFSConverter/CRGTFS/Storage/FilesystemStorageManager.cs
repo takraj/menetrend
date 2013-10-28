@@ -235,16 +235,15 @@ namespace GTFSConverter.CRGTFS.Storage
             return dstVector;
         }
 
-        public TripDate[] GetTripsForDate(int routeIndex, ushort day)
+        public int[] GetTripsForDate(int routeIndex, ushort day)
         {
             string dateFilename = String.Format(TRIPS_FOR_DATE_FS_DAT, day);
             string routeFolder = String.Format(ROUTE_FS_DIR, routeIndex);
-            TripDate[] dateVector;
+            int[] dateVector;
 
             using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, TRIP_DATES_DIR, routeFolder, dateFilename)))
             {
-                dateVector = ProtoBuf.Serializer.Deserialize<int[]>(file)
-                    .Select(idx => new TripDate { tripIndex = idx, date = day }).ToArray();
+                dateVector = ProtoBuf.Serializer.Deserialize<int[]>(file);
             }
 
             return dateVector;

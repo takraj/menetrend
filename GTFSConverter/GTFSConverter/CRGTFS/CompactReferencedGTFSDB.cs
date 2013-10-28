@@ -115,9 +115,29 @@ namespace GTFSConverter.CRGTFS
         [ProtoMember(3)]
         public byte waitingTime;
 
+        public int StopIndex
+        {
+            get { return refIndices[0]; }
+        }
+
+        public int TripIndex
+        {
+            get { return refIndices[1]; }
+        }
+
+        public int ShapeIndex
+        {
+            get { return refIndices[2]; }
+        }
+
+        public int ShapeDistanceTravelled
+        {
+            get { return refIndices[3]; }
+        }
+
         public override string ToString()
         {
-            return String.Format("StopTime: arrives {0} waits {1} for trip {2}", arrivalTime, waitingTime, refIndices[1]);
+            return String.Format("StopTime: arrives {0} waits {1} for trip {2}", arrivalTime, waitingTime, TripIndex);
         }
     }
 
@@ -197,6 +217,21 @@ namespace GTFSConverter.CRGTFS
 
         [ProtoMember(7)]
         public int idx;
+
+        public ushort MinDate
+        {
+            get { return dates[0]; }
+        }
+
+        public ushort MaxDate
+        {
+            get { return dates[1]; }
+        }
+
+        public IEnumerable<ushort> NoServiceDates
+        {
+            get { return dates.Skip(2); }
+        }
 
         public override bool Equals(object obj)
         {

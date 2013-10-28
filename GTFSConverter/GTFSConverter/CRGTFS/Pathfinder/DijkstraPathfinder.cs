@@ -51,7 +51,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
                 foreach (var nextNode in currentNode.GetNextDynamicNodes())
                 {
-                    if (nextNode.history.totalWalkingTime > graph.maxWalkingMinutes)
+                    if (nextNode.history.totalWalkingTime > graph.maxTotalWalkingMinutes)
                     {
                         continue;
                     }

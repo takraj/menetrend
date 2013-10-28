@@ -39,21 +39,24 @@ namespace GTFSConverter
 
         private static void CalculateShorthestRoute(IStorageManager storageManager)
         {
-            var partialTime = new Stopwatch();
-            partialTime.Start();
-
             Console.WriteLine("Gráf inicializálás...");
-            var source = storageManager.GetStop(430);
-            var destination = storageManager.GetStop(477);
+            //var source = storageManager.GetStop(430);
+            //var destination = storageManager.GetStop(477);
+            var source = storageManager.Stops.Where(s => s.name.Contains("Petőfi híd")).First();
+            var destination = storageManager.Stops.Where(s => s.name.Contains("Árpád híd")).First();
             var graph = new TransitGraph(storageManager);
             var pathfinder = new ParallelAStarPathfinder(graph, storageManager.GetStopDistanceVector(destination.idx), 500);
             //var pathfinder = new ParallelDijkstraPathfinder(graph);
             Console.WriteLine("SOURCE: " + source.name + " (" + source.idx + ")");
             Console.WriteLine("DESTINATION: " + destination.name + " (" + destination.idx + ")");
             Console.WriteLine("Keresés...");
+
+            var partialTime = new Stopwatch();
+            partialTime.Start();
+
             try
             {
-                var result = pathfinder.CalculateShortestRoute(source, destination, new DateTime(2013, 2, 15, 15, 0, 0));
+                var result = pathfinder.CalculateShortestRoute(source, destination, new DateTime(2013, 2, 20, 15, 0, 0));
 
                 for (int i = 0; i < result.Count; i++)
                 {

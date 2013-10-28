@@ -15,11 +15,11 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
     public class TransitGraph
     {
-        public double walkingSpeed = 83;
-        public double maxWalkingMinutes = 10;
+        public double walkingSpeed = 70;
+        public double maxTotalWalkingMinutes = 30;
         public double maxWalkingDistancePerChange = 500;
         public double maxWaitingMinutesForNextTrip = 60;
-        public double costOfGettingOff = 5;
+        public double costOfGettingOff = 2;
 
         private IStorageManager storageManager;
 
@@ -71,9 +71,9 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
         public ChangeOption FindNextStopTimeOnRoute(Stop stop, DateTime currentDate, Route route)
         {
-            var exceptons = new HashSet<ushort>(route.dates.Skip(2));
-            DateTime minDate = Utility.ConvertBackToDate(route.dates[0]);
-            DateTime maxDate = Utility.ConvertBackToDate(route.dates[1]);
+            var exceptons = new HashSet<ushort>(route.NoServiceDates);
+            DateTime minDate = Utility.ConvertBackToDate(route.MinDate);
+            DateTime maxDate = Utility.ConvertBackToDate(route.MaxDate);
 
             if (currentDate > maxDate)
             {
@@ -86,8 +86,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
              * Ez a valóságban még országos vonatoknál is csak néhány óra...
              */
 
-            var iteratorDate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day);
-            iteratorDate = iteratorDate.AddDays(-1);
+            var iteratorDate = currentDate.AddDays(-1).Date;
 
             if (iteratorDate < minDate)
             {
@@ -106,7 +105,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
 
                 // Az adott napon közlekedő tripeken végigmegyünk...
                 var tripDates = storageManager.GetTripsForDate(route.idx, Utility.GetDaysFrom2000(iteratorDate));
-                foreach (var trip in tripDates.Select(td => storageManager.GetTrip(td.tripIndex)))
+                foreach (var trip in tripDates.Select(tripIndex => storageManager.GetTrip(tripIndex)))
                 {
                     /*
                      * Kiszámoljuk, hogy mikor érne véget a trip.
@@ -128,7 +127,7 @@ namespace GTFSConverter.CRGTFS.Pathfinder
                         /*
                          * (a megfelelő megállóra vonatkozik) && (currentDate < arrivalTime)
                          */
-                        if ((trip.stopTimes[i].refIndices[0] == stop.idx) && (arrivalTime > currentDate))
+                        if ((trip.stopTimes[i].StopIndex == stop.idx) && (arrivalTime > currentDate))
                         {
                             return new ChangeOption
                             {
