@@ -101,12 +101,12 @@
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1382887734180" ID="ID_132698568" MODIFIED="1382906429241" TEXT="&#xd6;ssze kell csomagolni">
-<icon BUILTIN="yes"/>
+<node CREATED="1382887734180" ID="ID_132698568" MODIFIED="1383001147641" TEXT="&#xd6;ssze kell csomagolni">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1382906251727" ID="ID_1578128823" MODIFIED="1382906436991" POSITION="right" TEXT="&#xda;jra l&#xe9;trehozni a projektet">
-<icon BUILTIN="yes"/>
+<node CREATED="1382906251727" ID="ID_1578128823" MODIFIED="1383001157065" POSITION="right" TEXT="&#xda;jra l&#xe9;trehozni a projektet">
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1382806575234" ID="ID_1681206847" MODIFIED="1382906445418" POSITION="right" TEXT="Web">
 <icon BUILTIN="yes"/>

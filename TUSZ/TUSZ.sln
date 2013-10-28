@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.WebApplication", "TUSZ.WebApplication\TUSZ.WebApplication.csproj", "{F39DD75D-338F-4E75-8586-C5E8DED57AA5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.WebApp", "TUSZ.WebApp\TUSZ.WebApp.csproj", "{6DC20866-C2EF-4F55-A658-DD0557F5C11C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.PathfinderCore", "TUSZ.PathfinderCore\TUSZ.PathfinderCore.csproj", "{3087E479-02EE-425B-9E45-B8BA7FB3219A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.Common", "TUSZ.Common\TUSZ.Common.csproj", "{A4550F9F-9D20-4E68-BECC-3736BF78AC3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.DataRepository", "TUSZ.DataRepository\TUSZ.DataRepository.csproj", "{F0A2DB4A-75A3-4514-9675-69177449E3E0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.CommonClasses", "TUSZ.CommonClasses\TUSZ.CommonClasses.csproj", "{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.GRAFIT", "TUSZ.GRAFIT\TUSZ.GRAFIT.csproj", "{FD5544FE-E680-45B8-8D14-5470764435A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,22 +13,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F39DD75D-338F-4E75-8586-C5E8DED57AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F39DD75D-338F-4E75-8586-C5E8DED57AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F39DD75D-338F-4E75-8586-C5E8DED57AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F39DD75D-338F-4E75-8586-C5E8DED57AA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3087E479-02EE-425B-9E45-B8BA7FB3219A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3087E479-02EE-425B-9E45-B8BA7FB3219A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3087E479-02EE-425B-9E45-B8BA7FB3219A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3087E479-02EE-425B-9E45-B8BA7FB3219A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0A2DB4A-75A3-4514-9675-69177449E3E0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD6B7C43-E491-44AC-A18D-93A9FF983DA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DC20866-C2EF-4F55-A658-DD0557F5C11C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DC20866-C2EF-4F55-A658-DD0557F5C11C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DC20866-C2EF-4F55-A658-DD0557F5C11C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DC20866-C2EF-4F55-A658-DD0557F5C11C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4550F9F-9D20-4E68-BECC-3736BF78AC3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4550F9F-9D20-4E68-BECC-3736BF78AC3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4550F9F-9D20-4E68-BECC-3736BF78AC3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4550F9F-9D20-4E68-BECC-3736BF78AC3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD5544FE-E680-45B8-8D14-5470764435A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD5544FE-E680-45B8-8D14-5470764435A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD5544FE-E680-45B8-8D14-5470764435A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD5544FE-E680-45B8-8D14-5470764435A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
