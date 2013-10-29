@@ -754,3 +754,54 @@ tr.pager td {
             margin: 0;
         }
 }
+
+/* ----------- custom --------*/
+
+.routeDetails {
+    padding-top: 14px;
+    width: 280px;
+}
+
+.routeNameBox {
+    padding: 3px;
+    margin-left: 2px;
+    margin-top: 5px;
+    border: 1px;
+    border-style: solid;
+    border-color: #000;
+    background-color: #e80c4d;
+    color: #fff;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.routeNameBoxLabel {
+    font-size: 9px;
+}
+
+fieldset > .routeNameBox {
+    margin: 0px;
+}
+
+.routeTransferBox {
+    background-image: url('transfer-arrow-right.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: -2px;
+    display: inline-block;
+}
+
+.instructionNote {
+    color: #999;
+    font-style:italic;
+}
+
+.summaryIcons {
+    width: 300px;
+}

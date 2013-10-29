@@ -8,7 +8,7 @@ using TUSZ.GRAFIT.Graph;
 
 namespace TUSZ.GRAFIT.Pathfinder
 {
-    class ParallelDijkstraPathfinder : DijkstraPathfinder
+    public class ParallelDijkstraPathfinder : DijkstraPathfinder
     {
         public ParallelDijkstraPathfinder(TransitGraph graph) : base(graph) { }
 

@@ -1,0 +1,150 @@
+﻿@model TUSZ.WebApp.Models.VM_Plan
+@using System.Web.Script.Serialization
+
+@{
+    ViewBag.Title = "Útvonaltervezés";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+    <h2>@ViewBag.Message</h2>
+</hgroup>
+
+<article>
+    <div class="pathInfo"><strong>@Html.Raw(Model.source.name)</strong> és <strong>@Html.Raw(Model.destination.name)</strong> között</div>
+    <div id="map_canvas" style="width: 650px; height: 650px"></div>
+</article>
+
+<aside>
+    @using (Html.BeginForm())
+    {
+        <h3>Opciók</h3>
+        <br />
+        <div class="ui-widget">
+            <label for="stopFrom">Honnan:</label>
+            <input name="stopFrom" id="stopFrom" value="@Html.Raw(Model.source.name)" />
+        </div>
+        <br />
+        <div class="ui-widget">
+            <label for="stopTo">Hova:</label>
+            <input name="stopTo" id="stopTo" value="@Html.Raw(Model.destination.name)" />
+        </div>
+        <br />
+        <input type="submit" value="Keresés" />
+    }
+
+    <p class="summaryIcons">
+        @{            
+            foreach (var travel_group in Model.travel_groups)
+            {                
+                <span class="routeNameBox" style="background-color: #@Html.Raw(travel_group.route.html_base_color); color: #@Html.Raw(travel_group.route.html_text_color)">@Html.Raw(travel_group.route.name)</span>
+            
+                if (travel_group != Model.travel_groups.Last()) { 
+                    <span class="routeTransferBox"></span>
+                }
+            }
+        }
+    </p>
+
+    <p class="summaryTime">
+        <strong>@Html.Raw(Model.plan_begins.TimeOfDay.ToString(@"hh\:mm"))</strong> - <strong>@Html.Raw(Model.plan_ends.TimeOfDay.ToString(@"hh\:mm"))</strong>
+        @{
+            var travelTimeMinutes = (Model.plan_ends - Model.plan_begins).TotalMinutes;
+        }
+        <span class="instructionNote">(@Html.Raw((int) travelTimeMinutes) perc)</span>
+    </p>
+
+    <fieldset class="routeDetails">
+        <legend>Részletes útiterv</legend>
+        @{
+            foreach (var travel_group in Model.travel_groups)
+            {                
+                <span class="routeNameBox" style="background-color: #@Html.Raw(travel_group.route.html_base_color); color: #@Html.Raw(travel_group.route.html_text_color)">@Html.Raw(travel_group.route.name)</span>
+                <ul>
+                    <li>
+                        @Html.Raw(travel_group.passed_stops.First(tg => !tg.getOnOff).stop.name)
+                        <span class="instructionNote">
+                            (@Html.Raw(travel_group.passed_stops.First(tg => !tg.getOnOff).when.TimeOfDay.ToString(@"hh\:mm")))
+                        </span>
+                    </li>
+                    @if (travel_group.passed_stops.Where(tg => !tg.getOnOff).Count() > 2)
+                    {
+                    <li class="instructionNote">
+                        (@Html.Raw(travel_group.passed_stops.Where(tg => !tg.getOnOff).Count() - 2) köztes megálló)
+                    </li>
+                    }
+                    <li>
+                        @Html.Raw(travel_group.passed_stops.Last(tg => !tg.getOnOff).stop.name)
+                        <span class="instructionNote">
+                            (@Html.Raw(travel_group.passed_stops.Last(tg => !tg.getOnOff).when.TimeOfDay.ToString(@"hh\:mm")))
+                        </span>
+                    </li>
+                </ul>
+            }
+        }
+    </fieldset>
+</aside>
+
+@section Scripts {
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
+    </script>
+
+    @Scripts.Render("~/bundles/maptools");
+
+    <script type="text/javascript">
+        window.onunload = function () { }
+        window.onload = function () {
+            // CreateMap
+            MTR.MapTools.createMap("map_canvas");
+
+            // Add Waypoints
+            @Html.Raw("var model = " + new JavaScriptSerializer().Serialize(Model) + ";")
+            model.travel_groups.forEach(function (group, i) {
+                group.passed_stops.forEach(function (pstop, j) {
+                    MTR.MapTools.addNode(pstop.lat, pstop.lng);
+                });
+            });
+
+            // Add Markers
+            @{
+                foreach (var travel_group in Model.travel_groups)
+                {
+                    string labelcontent = "<span class='routeNameBox routeNameBoxLabel' style='background-color: #" + travel_group.route.html_base_color + "; color: #" + travel_group.route.html_text_color + "'>" + travel_group.route.name + "</span>";
+                    string popupcontent = "<span class='routeNameBox' style='background-color: #" + travel_group.route.html_base_color + "; color: #" + travel_group.route.html_text_color + "'>" + travel_group.route.name + "</span>";
+                    popupcontent += "<ol>";
+                    travel_group.passed_stops.Where(s => !s.getOnOff).ToList().ForEach(l => popupcontent += "<li>" + l.stop.name + " <span class='instructionNote'>(" + l.when.TimeOfDay.ToString(@"hh\:mm") + ")</span></li>");
+                    popupcontent += "</ol>";
+
+                    var transferPoint = travel_group.passed_stops.First(s => !s.getOnOff);
+                    
+                    @Html.Raw("MTR.MapTools.addMarkerToMap(" + transferPoint.stop.lat + "," + transferPoint.stop.lng + ",\"" + travel_group.route.name + ": " + transferPoint.stop.name + "\", \"" + labelcontent + "\", \"" + popupcontent + "\");");
+                }
+            }
+
+            MTR.MapTools.addMarkerToMap(model.destination.lat, model.destination.lng, model.destination.name);
+
+            // draw path
+            MTR.MapTools.drawPath();
+
+            // setup infoWindows
+            MTR.MapTools.setupInfoWindows();
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jquery");
+    @Scripts.Render("~/bundles/jqueryui");
+
+    <script>
+        $(function () {
+            @Html.Raw("var stopsList = " + new JavaScriptSerializer().Serialize(ViewBag.StopNames) + ";")
+
+            $("#stopFrom").autocomplete({
+                source: stopsList
+            });
+            $("#stopTo").autocomplete({
+                source: stopsList
+            });
+        });
+    </script>
+}
