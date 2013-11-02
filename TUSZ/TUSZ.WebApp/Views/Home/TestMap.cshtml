@@ -37,7 +37,7 @@
         @{            
             foreach (var travel_group in Model.travel_groups)
             {                
-                <span class="routeNameBox" style="background-color: #@Html.Raw(travel_group.route.html_base_color); color: #@Html.Raw(travel_group.route.html_text_color)">@Html.Raw(travel_group.route.name)</span>
+                <span class="routeNameBox" style="background-color: @Html.Raw(travel_group.route.html_base_color); color: @Html.Raw(travel_group.route.html_text_color)">@Html.Raw(travel_group.route.name)</span>
             
                 if (travel_group != Model.travel_groups.Last()) { 
                     <span class="routeTransferBox"></span>
@@ -59,7 +59,7 @@
         @{
             foreach (var travel_group in Model.travel_groups)
             {                
-                <span class="routeNameBox" style="background-color: #@Html.Raw(travel_group.route.html_base_color); color: #@Html.Raw(travel_group.route.html_text_color)">@Html.Raw(travel_group.route.name)</span>
+                <span class="routeNameBox" style="background-color: @Html.Raw(travel_group.route.html_base_color); color: @Html.Raw(travel_group.route.html_text_color)">@Html.Raw(travel_group.route.name)</span>
                 <ul>
                     <li>
                         @Html.Raw(travel_group.passed_stops.First(tg => !tg.getOnOff).stop.name)
@@ -102,7 +102,7 @@
             @Html.Raw("var model = " + new JavaScriptSerializer().Serialize(Model) + ";")
             model.travel_groups.forEach(function (group, i) {
                 group.passed_stops.forEach(function (pstop, j) {
-                    MTR.MapTools.addNode(pstop.lat, pstop.lng);
+                    MTR.MapTools.addNode(pstop.stop.lat, pstop.stop.lng);
                 });
             });
 
@@ -110,8 +110,8 @@
             @{
                 foreach (var travel_group in Model.travel_groups)
                 {
-                    string labelcontent = "<span class='routeNameBox routeNameBoxLabel' style='background-color: #" + travel_group.route.html_base_color + "; color: #" + travel_group.route.html_text_color + "'>" + travel_group.route.name + "</span>";
-                    string popupcontent = "<span class='routeNameBox' style='background-color: #" + travel_group.route.html_base_color + "; color: #" + travel_group.route.html_text_color + "'>" + travel_group.route.name + "</span>";
+                    string labelcontent = "<span class='routeNameBox routeNameBoxLabel' style='background-color: " + travel_group.route.html_base_color + "; color: " + travel_group.route.html_text_color + "'>" + travel_group.route.name + "</span>";
+                    string popupcontent = "<span class='routeNameBox' style='background-color: " + travel_group.route.html_base_color + "; color: " + travel_group.route.html_text_color + "'>" + travel_group.route.name + "</span>";
                     popupcontent += "<ol>";
                     travel_group.passed_stops.Where(s => !s.getOnOff).ToList().ForEach(l => popupcontent += "<li>" + l.stop.name + " <span class='instructionNote'>(" + l.when.TimeOfDay.ToString(@"hh\:mm") + ")</span></li>");
                     popupcontent += "</ol>";
@@ -123,6 +123,7 @@
             }
 
             MTR.MapTools.addMarkerToMap(model.destination.lat, model.destination.lng, model.destination.name);
+            MTR.MapTools.addNode(model.destination.lat, model.destination.lng);
 
             // draw path
             MTR.MapTools.drawPath();

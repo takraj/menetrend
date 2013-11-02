@@ -92,6 +92,7 @@
     <Compile Include="CRGTFS\Storage\Proxies\StopDistanceVectorListProxy.cs" />
     <Compile Include="CRGTFS\Storage\Proxies\StopListProxy.cs" />
     <Compile Include="CRGTFS\Storage\Proxies\TripListProxy.cs" />
+    <Compile Include="CRGTFS\RGTFSCompacter.cs" />
     <Compile Include="CRGTFS\Storage\ZipStorageManager.cs" />
     <Compile Include="CRGTFS\Utility.cs" />
     <Compile Include="GTFS\GTFSDB.cs" />
@@ -99,7 +100,6 @@
     <Compile Include="GTFS\Models.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CRGTFS\RGTFSComapcter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

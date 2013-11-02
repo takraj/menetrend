@@ -204,7 +204,7 @@ namespace TUSZ.GRAFIT.Graph
             }
 
             if (((referenceNode.stop.firstTripArrives - referenceNode.currentTime.TimeOfDay.TotalMinutes) > graph.maxWaitingMinutesForNextTrip)
-                && ((referenceNode.currentTime.TimeOfDay.TotalMinutes - referenceNode.stop.lastTripArrives) > graph.maxWaitingMinutesForNextTrip))
+                && (referenceNode.currentTime.TimeOfDay.TotalMinutes > referenceNode.stop.lastTripArrives))
             {
                 return result;
             }
