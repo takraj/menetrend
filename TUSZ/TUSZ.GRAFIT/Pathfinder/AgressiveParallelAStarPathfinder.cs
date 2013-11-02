@@ -10,24 +10,24 @@ using TUSZ.GRAFIT.Graph;
 
 namespace TUSZ.GRAFIT.Pathfinder
 {
-    public class ParallelAStarPathfinder : AStarPathfinder
+    public class AgressiveParallelAStarPathfinder : ParallelAStarPathfinder
     {
-        public ParallelAStarPathfinder(TransitGraph graph, int[] stopDistances, int fScale = 2000)
+        public AgressiveParallelAStarPathfinder(TransitGraph graph, int[] stopDistances, int fScale = 2000)
             : base(graph, stopDistances, fScale) { }
 
-        protected virtual void CalculateNextNodes(Object node)
-        {
-            lock (node)
-            {
-                ((DynamicNode)node).GetNextDynamicNodes();
-            }
-        }
-
+        /// <summary>
+        /// NEM A LEGRÖVIDEBB UTAT KERESI! Az utolsó járatra optimalizál.
+        /// </summary>
+        /// <param name="sourceStop"></param>
+        /// <param name="destinationStop"></param>
+        /// <param name="now"></param>
+        /// <returns></returns>
         public override List<Instruction> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
         {
             var staticMap = new Dictionary<Stop, SortedSet<DynamicNode>>();
             var openSet = HeapFactory.NewBinaryHeap<DynamicNode, long>();
             var firstDynamicNode = DynamicNode.CreateFirstDynamicNode(this.graph, sourceStop, now);
+            var unfoldedTrips = new HashSet<int>();
 
             staticMap[sourceStop] = new SortedSet<DynamicNode>();
             staticMap[sourceStop].Add(firstDynamicNode);
@@ -37,9 +37,46 @@ namespace TUSZ.GRAFIT.Pathfinder
             {
                 var currentNode = openSet.RemoveMin();
 
+                if (openSet.Count > 0)
+                {
+                    ThreadPool.QueueUserWorkItem(CalculateNextNodes, openSet.Min.Value);
+                }
+
                 if (currentNode.Value.stop == destinationStop)
                 {
                     return currentNode.Value.history.instructions.ToList();
+                }
+
+                if ((currentNode.Value.CurrentTrip != null)
+                    && !unfoldedTrips.Contains(currentNode.Value.CurrentTrip.idx)
+                    && currentNode.Value.history.lastInstruction is TravelAction)
+                {
+                    unfoldedTrips.Add(currentNode.Value.CurrentTrip.idx);
+                    DynamicNode byTravel = currentNode.Value.GetNextDynamicNodeByTravelAction((TravelAction)currentNode.Value.history.lastInstruction);
+                    var byTransfers = new List<DynamicNode>();
+
+                    while (byTravel != null)
+                    {
+                        if (byTravel.stop == destinationStop)
+                        {
+                            return byTravel.history.instructions.ToList();
+                        }
+
+                        foreach (var transfer in byTravel.GetNextDynamicNodesByWalkAction(byTravel.history.lastInstruction))
+                        {
+                            if (transfer.stop == destinationStop)
+                            {
+                                byTransfers.Add(transfer);
+                            }
+                        }
+
+                        byTravel = byTravel.GetNextDynamicNodeByTravelAction((TravelAction)byTravel.history.lastInstruction);
+                    }
+
+                    if (byTransfers.Count > 0)
+                    {
+                        return byTransfers.Min().history.instructions.ToList();
+                    }
                 }
 
                 lock (currentNode.Value)
@@ -63,11 +100,10 @@ namespace TUSZ.GRAFIT.Pathfinder
                             staticMap[nextNode.stop] = new SortedSet<DynamicNode>();
                         }
 
-                        ThreadPool.QueueUserWorkItem(CalculateNextNodes, nextNode);
-
                         if (staticMap[nextNode.stop].Add(nextNode))
                         {
-                            openSet.Add(nextNode, fValue(nextNode, destinationStop, now));
+                            var f = fValue(nextNode, destinationStop, now);
+                            openSet.Add(nextNode, f);
                         }
                     }
                 }

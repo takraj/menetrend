@@ -53,7 +53,7 @@ namespace TUSZ.WebApp.Controllers
 
             var now = DateTime.Now.TimeOfDay;
             
-            var plan = RoutePlannerService.Instance.Plan(src, dst, new DateTime(2013, 03, 01, now.Hours, now.Minutes, now.Seconds), "ParallelAStar");
+            var plan = RoutePlannerService.Instance.Plan(src, dst, new DateTime(2013, 03, 01, now.Hours, now.Minutes, now.Seconds), "AgressiveParallelAStar");
             //var instructionsToShow = PathfinderManager.GetRoute(src, dst, new DateTime(2013, 03, 01, 16, 21, now.Seconds));
             //var instructionsToShow = PathfinderManager.GetRoute(src, dst, DateTime.Now);
             ViewBag.StopNames = allStops.Select(s => s.name).Distinct().ToArray();

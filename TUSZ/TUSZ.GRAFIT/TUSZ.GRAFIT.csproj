@@ -58,11 +58,13 @@
     <Compile Include="Graph\History.cs" />
     <Compile Include="Graph\Instruction.cs" />
     <Compile Include="Graph\TransitGraph.cs" />
+    <Compile Include="Pathfinder\AgressiveParallelAStarPathfinder.cs" />
     <Compile Include="Pathfinder\AStarPathfinder.cs" />
     <Compile Include="Pathfinder\DijkstraPathfinder.cs" />
     <Compile Include="Pathfinder\IPathfinder.cs" />
     <Compile Include="Pathfinder\ParallelAStarPathfinder.cs" />
     <Compile Include="Pathfinder\ParallelDijkstraPathfinder.cs" />
+    <Compile Include="Pathfinder\SmartParallelAStarPathfinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\FilesystemStorageManager.cs" />
     <Compile Include="Storage\IStorageManager.cs" />

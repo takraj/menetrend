@@ -15,6 +15,7 @@ namespace TUSZ.GRAFIT.Graph
         public TransitGraph graph;
         public bool onlyTravelActionNextTime;
         public bool mustGetOn;
+        public HashSet<int> reachableStops;
 
         private List<DynamicNode> nextDynamicNodes;
 
@@ -27,13 +28,14 @@ namespace TUSZ.GRAFIT.Graph
                 nextDynamicNodes = new List<DynamicNode>();
                 if (!this.NeedsGetOnAction)
                 {
-                    TravelAction lastAction = (TravelAction)history.instructions.Last();
-
-                    try
+                    TravelAction lastAction = (TravelAction)history.lastInstruction;
+                    var byTravelAction = GetNextDynamicNodeByTravelAction(lastAction);
+                    if (byTravelAction != null)
                     {
-                        nextDynamicNodes.Add(GetNextDynamicNodeByTravelAction(lastAction));
+                        nextDynamicNodes.Add(byTravelAction);
                     }
-                    catch (Exception) {
+                    else
+                    {
                         tryGetBackToLastRoute = true;
                     }
                 }
@@ -42,7 +44,7 @@ namespace TUSZ.GRAFIT.Graph
                 {
                     if (history.instructions.Count > 0)
                     {
-                        var lastAction = history.instructions.Last();
+                        var lastAction = history.lastInstruction;
 
                         if (!(lastAction is GetOnAction))
                         {
@@ -81,6 +83,11 @@ namespace TUSZ.GRAFIT.Graph
             return nextDynamicNodes;
         }
 
+        /// <summary>
+        /// Csomópont kifejtése az utolsó járatra visszaszállással.
+        /// </summary>
+        /// <param name="lastAction"></param>
+        /// <returns></returns>
         private DynamicNode GetNextDynamicNodeByGetBackAction(TravelAction lastAction)
         {
             #region GetOffAction inicializálása
@@ -94,24 +101,8 @@ namespace TUSZ.GRAFIT.Graph
             };
             #endregion
 
-            #region Referencia DynamicNode inicializálása (GetOff benne van)
-            var referenceNode = new DynamicNode
-            {
-                currentTime = getOffAction.endDate,
-                graph = this.graph,
-                onlyTravelActionNextTime = false,
-                mustGetOn = false,
-                stop = this.stop,
-                history = new History
-                {
-                    usedRoutes = this.history.usedRoutes,
-                    lastUsedRoute = this.history.lastUsedRoute,
-                    instructions = new List<Instruction>(this.history.instructions),
-                    totalWalkingTime = this.history.totalWalkingTime
-                }
-            };
-            referenceNode.history.instructions.Add(getOffAction);
-            #endregion
+            // Referencia DynamicNode inicializálása (GetOff benne van)
+            var referenceNode = this.AppendInstruction(getOffAction);
 
             var changeOption = graph.FindNextStopTimeOnRoute(referenceNode.stop,
                 referenceNode.currentTime, referenceNode.history.lastUsedRoute);
@@ -135,34 +126,20 @@ namespace TUSZ.GRAFIT.Graph
                     toStopTime = changeOption.stopTime
                 };
                 #endregion
-
-                #region DynamicNode inicializálása
-                var addDynamicNode = new DynamicNode
-                {
-                    stop = referenceNode.stop,
-                    onlyTravelActionNextTime = false,
-                    graph = referenceNode.graph,
-                    currentTime = getOnAction.endDate,
-                    mustGetOn = false,
-                    history = new History
-                    {
-                        instructions = new List<Instruction>(referenceNode.history.instructions),
-                        lastUsedRoute = getOnAction.route,
-                        usedRoutes = new HashSet<Route>(referenceNode.history.usedRoutes),
-                        totalWalkingTime = referenceNode.history.totalWalkingTime,
-                        totalDistance = referenceNode.history.totalDistance
-                    }
-                };
-                addDynamicNode.history.instructions.Add(getOnAction);
-                addDynamicNode.history.usedRoutes.Add(getOnAction.route);
-                #endregion
-
+                
+                var addDynamicNode = referenceNode.AppendInstruction(getOnAction);
+                addDynamicNode.history.lastStopTimeIndex = changeOption.stopTimeIndex;
                 return addDynamicNode;
             }
 
             return null;
         }
 
+        /// <summary>
+        /// Csomópont kifejtése másik járatra átszállással.
+        /// </summary>
+        /// <param name="lastAction"></param>
+        /// <returns></returns>
         private List<DynamicNode> GetNextDynamicNodesByChangeRouteAction(Instruction lastAction)
         {
             var result = new List<DynamicNode>();
@@ -182,25 +159,8 @@ namespace TUSZ.GRAFIT.Graph
                 };
                 #endregion
 
-                #region Referencia DynamicNode inicializálása (GetOff benne van)
-                referenceNode = new DynamicNode
-                {
-                    currentTime = getOffAction.endDate,
-                    graph = this.graph,
-                    onlyTravelActionNextTime = false,
-                    mustGetOn = false,
-                    stop = this.stop,
-                    history = new History
-                    {
-                        usedRoutes = this.history.usedRoutes,
-                        lastUsedRoute = this.history.lastUsedRoute,
-                        instructions = new List<Instruction>(this.history.instructions),
-                        totalWalkingTime = this.history.totalWalkingTime,
-                        totalDistance = this.history.totalDistance
-                    }
-                };
-                referenceNode.history.instructions.Add(getOffAction);
-                #endregion
+                // Referencia DynamicNode inicializálása (GetOff benne van)
+                referenceNode = this.AppendInstruction(getOffAction);
             }
 
             if (((referenceNode.stop.firstTripArrives - referenceNode.currentTime.TimeOfDay.TotalMinutes) > graph.maxWaitingMinutesForNextTrip)
@@ -232,34 +192,21 @@ namespace TUSZ.GRAFIT.Graph
                 };
                 #endregion
 
-                #region DynamicNode inicializálása
-                var addDynamicNode = new DynamicNode
-                {
-                    stop = referenceNode.stop,
-                    onlyTravelActionNextTime = false,
-                    mustGetOn = false,
-                    graph = referenceNode.graph,
-                    currentTime = getOnAction.endDate,
-                    history = new History
-                    {
-                        instructions = new List<Instruction>(referenceNode.history.instructions),
-                        lastUsedRoute = getOnAction.route,
-                        usedRoutes = new HashSet<Route>(referenceNode.history.usedRoutes),
-                        totalWalkingTime = referenceNode.history.totalWalkingTime,
-                        totalDistance = referenceNode.history.totalDistance
-                    }
-                };
-                addDynamicNode.history.instructions.Add(getOnAction);
-                addDynamicNode.history.usedRoutes.Add(getOnAction.route);
-                #endregion
-
+                // DynamicNode inicializálása
+                var addDynamicNode = referenceNode.AppendInstruction(getOnAction);
+                addDynamicNode.history.lastStopTimeIndex = changeOption.stopTimeIndex;
                 result.Add(addDynamicNode);
             }
 
             return result;
         }
 
-        private List<DynamicNode> GetNextDynamicNodesByWalkAction(Instruction lastAction)
+        /// <summary>
+        /// Csomópont kifejtése sétálással.
+        /// </summary>
+        /// <param name="lastAction"></param>
+        /// <returns></returns>
+        public List<DynamicNode> GetNextDynamicNodesByWalkAction(Instruction lastAction)
         {
             var result = new List<DynamicNode>();
             Instruction getOffAction = null;
@@ -280,6 +227,11 @@ namespace TUSZ.GRAFIT.Graph
 
             for (int i = 0; i < this.stop.nearbyStops.Length; i += 2 )
             {
+                if (this.reachableStops.Contains(this.stop.nearbyStops[i + 1]))
+                {
+                    continue;
+                }
+
                 if (this.stop.nearbyStops[i + 1] > graph.maxWalkingDistancePerChange)
                 {
                     continue;
@@ -288,32 +240,18 @@ namespace TUSZ.GRAFIT.Graph
                 Stop stopDest = graph.GetStopByIndex(this.stop.nearbyStops[i]);
                 double cost = graph.GetWalkingCostBetween(this.stop, stopDest);
 
-                #region DynamicNode inicializálása
-                var addDynamicNode = new DynamicNode
-                {
-                    graph = this.graph,
-                    history = this.history,
-                    onlyTravelActionNextTime = false,
-                    stop = stopDest,
-                    currentTime = (getOffAction == null) ? this.currentTime.AddMinutes(cost) : getOffAction.endDate.AddMinutes(cost),
-                    mustGetOn = true
-                };
-                #endregion
+                // DynamicNode inicializálása
+                var addDynamicNode = this.Clone();
+                addDynamicNode.stop = stopDest;
+                onlyTravelActionNextTime = false;
+                addDynamicNode.mustGetOn = true;
+                addDynamicNode.currentTime = (getOffAction == null) ? this.currentTime.AddMinutes(cost) : getOffAction.endDate.AddMinutes(cost);
 
                 if (getOffAction != null)
                 {
-                    #region DynamicNode.History inicializálása
-                    addDynamicNode.history = new History
-                    {
-                        usedRoutes = this.history.usedRoutes,
-                        lastUsedRoute = this.history.lastUsedRoute,
-                        instructions = new List<Instruction>(),
-                        totalWalkingTime = this.history.totalWalkingTime + cost,
-                        totalDistance = this.history.totalDistance + graph.GetDistanceBetween(this.stop, stopDest)
-                    };
-                    addDynamicNode.history.instructions.AddRange(this.history.instructions);
-                    addDynamicNode.history.instructions.Add(getOffAction);
-                    #endregion
+                    // DynamicNode.History inicializálása
+                    addDynamicNode.history = this.history.AppendInstruction(getOffAction, graph.GetDistanceBetween(this.stop, stopDest));
+                    addDynamicNode.history.totalWalkingTime = this.history.totalWalkingTime + cost;
                 }
 
                 result.Add(addDynamicNode);
@@ -322,12 +260,21 @@ namespace TUSZ.GRAFIT.Graph
             return result;
         }
 
-        private DynamicNode GetNextDynamicNodeByTravelAction(TravelAction lastAction)
+        /// <summary>
+        /// Csomópont kifejtése továbbutazással.
+        /// </summary>
+        /// <param name="lastAction"></param>
+        /// <returns></returns>
+        public DynamicNode GetNextDynamicNodeByTravelAction(TravelAction lastAction)
         {
-            var nextStopTime = lastAction.trip.stopTimes.First(
-                            st => (st.arrivalTime > lastAction.toStopTime.arrivalTime));
+            int nextIndex = this.history.lastStopTimeIndex + 1;
+            if ((lastAction.trip.stopTimes.Length - 2) < nextIndex)
+            {
+                return null;
+            }
 
-            var addMinutes = nextStopTime.arrivalTime - lastAction.toStopTime.arrivalTime - lastAction.toStopTime.waitingTime;
+            var nextStopTime = lastAction.trip.stopTimes[nextIndex];
+            var addMinutes = nextStopTime.arrivalTime - lastAction.toStopTime.arrivalTime;
 
             #region TravelAction inicializálása
             var addTravelAction = new TravelAction
@@ -342,32 +289,10 @@ namespace TUSZ.GRAFIT.Graph
             };
             #endregion
 
-            #region Új history inicializálása
-            var newHistory = new History()
-            {
-                instructions = new List<Instruction>(),
-                lastUsedRoute = this.history.lastUsedRoute,
-                usedRoutes = this.history.usedRoutes,
-                totalWalkingTime = this.history.totalWalkingTime,
-                totalDistance = this.history.totalDistance + graph.GetDistanceBetween(this.stop, addTravelAction.stop)
-            };
-            newHistory.instructions.AddRange(this.history.instructions);
-            newHistory.instructions.Add(addTravelAction);
-            #endregion
-
-            #region DynamicNode inicializálása
-            var dynamicNode = new DynamicNode
-            {
-                stop = this.graph.GetStopByIndex(nextStopTime.StopIndex),
-                graph = this.graph,
-                onlyTravelActionNextTime = false,
-                mustGetOn = false,
-                currentTime = lastAction.endDate.AddMinutes(addMinutes),
-                history = newHistory
-            };
-            #endregion
-
-            return dynamicNode;
+            // DynamicNode inicializálása
+            var addDynamicNode = this.AppendInstruction(addTravelAction);
+            addDynamicNode.history.lastStopTimeIndex = nextIndex;
+            return addDynamicNode;
         }
         
         public Trip CurrentTrip
@@ -449,6 +374,57 @@ namespace TUSZ.GRAFIT.Graph
         public int CompareTo(DynamicNode other)
         {
             return this.currentTime.CompareTo(other.currentTime);
+        }
+
+        public DynamicNode Clone()
+        {
+            return new DynamicNode
+            {
+                currentTime = this.currentTime,
+                graph = this.graph,
+                history = this.history,
+                mustGetOn = this.mustGetOn,
+                onlyTravelActionNextTime = this.onlyTravelActionNextTime,
+                stop = this.stop,
+                reachableStops = this.reachableStops
+            };
+        }
+
+        public DynamicNode AppendInstruction(Instruction instruction)
+        {
+            var result = this.Clone();
+            result.stop = instruction.stop;
+            result.currentTime = instruction.endDate;
+            result.onlyTravelActionNextTime = false;
+            result.mustGetOn = false;
+            result.history = this.history.AppendInstruction(instruction, this.graph.GetDistanceBetween(this.stop, instruction.stop));
+
+            if ((this.history.lastInstruction == null)
+                || (this.history.lastInstruction.trip.idx != instruction.trip.idx))
+            {
+                result.reachableStops = new HashSet<int>(result.reachableStops);
+
+                foreach (int i in instruction.trip.stopTimes.Select(st => st.StopIndex))
+                {
+                    result.reachableStops.Add(i);
+                }
+            }
+
+            return result;
+        }
+
+        public static DynamicNode CreateFirstDynamicNode(TransitGraph graph, Stop stop, DateTime datetime)
+        {
+            return new DynamicNode
+            {
+                stop = stop,
+                onlyTravelActionNextTime = false,
+                mustGetOn = false,
+                history = History.CreateEmptyHistory(),
+                graph = graph,
+                currentTime = datetime,
+                reachableStops = new HashSet<int>()
+            };
         }
     }
 }

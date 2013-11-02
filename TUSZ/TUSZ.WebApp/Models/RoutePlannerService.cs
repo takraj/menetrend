@@ -38,7 +38,7 @@ namespace TUSZ.WebApp.Models
 
         private RoutePlannerService()
         {
-            StorageManager = new ZipStorageManager(@"C:\budapest_gtfs");
+            StorageManager = new ZipStorageManager(@"C:\budapest_gtfs", useCaching: true);
             StorageManager.LoadDatabase();
             Stops = StorageManager.Stops.Select(
                 s => new VM_Stop
@@ -59,16 +59,22 @@ namespace TUSZ.WebApp.Models
             switch (algorythm)
             {
                 case "AStar":
-                    pathfinder = new AStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 500);
+                    pathfinder = new AStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1500);
                     break;
                 case "ParallelAStar":
-                    pathfinder = new ParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 500);
+                    pathfinder = new ParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1500);
                     break;
                 case "Dijkstra":
                     pathfinder = new DijkstraPathfinder(graph);
                     break;
                 case "ParallelDijkstra":
                     pathfinder = new ParallelDijkstraPathfinder(graph);
+                    break;
+                case "SmartParallelAStar":
+                    pathfinder = new SmartParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1500);
+                    break;
+                case "AgressiveParallelAStar":
+                    pathfinder = new AgressiveParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1500);
                     break;
             }
 

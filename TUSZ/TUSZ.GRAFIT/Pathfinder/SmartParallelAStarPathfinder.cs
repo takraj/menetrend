@@ -10,18 +10,10 @@ using TUSZ.GRAFIT.Graph;
 
 namespace TUSZ.GRAFIT.Pathfinder
 {
-    public class ParallelAStarPathfinder : AStarPathfinder
+    public class SmartParallelAStarPathfinder : ParallelAStarPathfinder
     {
-        public ParallelAStarPathfinder(TransitGraph graph, int[] stopDistances, int fScale = 2000)
+        public SmartParallelAStarPathfinder(TransitGraph graph, int[] stopDistances, int fScale = 2000)
             : base(graph, stopDistances, fScale) { }
-
-        protected virtual void CalculateNextNodes(Object node)
-        {
-            lock (node)
-            {
-                ((DynamicNode)node).GetNextDynamicNodes();
-            }
-        }
 
         public override List<Instruction> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
         {
@@ -36,6 +28,11 @@ namespace TUSZ.GRAFIT.Pathfinder
             while (openSet.Count > 0)
             {
                 var currentNode = openSet.RemoveMin();
+
+                if (openSet.Count > 0)
+                {
+                    ThreadPool.QueueUserWorkItem(CalculateNextNodes, openSet.Min.Value);
+                }
 
                 if (currentNode.Value.stop == destinationStop)
                 {
@@ -63,11 +60,10 @@ namespace TUSZ.GRAFIT.Pathfinder
                             staticMap[nextNode.stop] = new SortedSet<DynamicNode>();
                         }
 
-                        ThreadPool.QueueUserWorkItem(CalculateNextNodes, nextNode);
-
                         if (staticMap[nextNode.stop].Add(nextNode))
                         {
-                            openSet.Add(nextNode, fValue(nextNode, destinationStop, now));
+                            var f = fValue(nextNode, destinationStop, now);
+                            openSet.Add(nextNode, f);
                         }
                     }
                 }

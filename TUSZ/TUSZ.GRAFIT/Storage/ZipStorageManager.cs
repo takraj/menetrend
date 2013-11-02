@@ -23,6 +23,7 @@ namespace TUSZ.GRAFIT.Storage
         private ZipFile zipStopDistanceVector;
         private ZipFile zipTripsForDate;
         private ZipFile zipShapes;
+        private IDictionary<string, int[]> cache;
 
         #region Constants
         private const string CORE_ZIP = "Core.zip";
@@ -40,7 +41,7 @@ namespace TUSZ.GRAFIT.Storage
         private const string TRIPS_FOR_DATE_FS_DAT = "route_{0}_trips_for_date_{1}.dat";
         #endregion
 
-        public ZipStorageManager(string rootDirectory, bool useNoCompression = false)
+        public ZipStorageManager(string rootDirectory, bool useNoCompression = false, bool useCaching = false)
         {
             this.rootDirectory = rootDirectory;
             this.useNoCompression = useNoCompression;
@@ -48,6 +49,11 @@ namespace TUSZ.GRAFIT.Storage
             this.zipShapes = null;
             this.zipTripsForDate = null;
             this.zipShapes = null;
+
+            if (useCaching)
+            {
+                cache = new Dictionary<string, int[]>();
+            }
         }
 
         public void CreateDatabase(TransitDB tdb)
@@ -277,14 +283,25 @@ namespace TUSZ.GRAFIT.Storage
         public int[] GetTripsForDate(int routeIndex, ushort day)
         {
             int[] result;
+            string filename = String.Format(TRIPS_FOR_DATE_FS_DAT, routeIndex, day);
 
             lock (zipTripsForDate)
             {
+                if ((cache != null) && cache.ContainsKey(filename))
+                {
+                    return cache[filename];
+                }
+
                 using (var stream = new MemoryStream())
                 {
-                    zipTripsForDate[String.Format(TRIPS_FOR_DATE_FS_DAT, routeIndex, day)].Extract(stream);
+                    zipTripsForDate[filename].Extract(stream);
                     stream.Position = 0;
                     result = ProtoBuf.Serializer.Deserialize<int[]>(stream);
+                }
+
+                if (cache != null)
+                {
+                    cache[filename] = result;
                 }
             }
 

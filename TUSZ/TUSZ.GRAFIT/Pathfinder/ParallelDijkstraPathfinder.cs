@@ -24,23 +24,7 @@ namespace TUSZ.GRAFIT.Pathfinder
         {
             var staticMap = new Dictionary<Stop, SortedSet<DynamicNode>>();
             var openSet = HeapFactory.NewBinaryHeap<DynamicNode>();
-
-            var firstDynamicNode = new DynamicNode
-            {
-                stop = sourceStop,
-                onlyTravelActionNextTime = false,
-                mustGetOn = false,
-                history = new History
-                {
-                    instructions = new List<Instruction>(),
-                    lastUsedRoute = null,
-                    usedRoutes = new HashSet<Route>(),
-                    totalWalkingTime = 0,
-                    totalDistance = 0
-                },
-                graph = this.graph,
-                currentTime = now
-            };
+            var firstDynamicNode = DynamicNode.CreateFirstDynamicNode(this.graph, sourceStop, now);
 
             staticMap[sourceStop] = new SortedSet<DynamicNode>();
             staticMap[sourceStop].Add(firstDynamicNode);

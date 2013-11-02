@@ -12,10 +12,13 @@ namespace TUSZ.GRAFIT.Graph
     {
         public DateTime arrivalTime;
         public StopTime stopTime;
+        public int stopTimeIndex;
     }
 
     public class TransitGraph
     {
+        public int calls = 0;
+
         public double walkingSpeed = 70;
         public double maxTotalWalkingMinutes = 30;
         public double maxWalkingDistancePerChange = 500;
@@ -53,8 +56,10 @@ namespace TUSZ.GRAFIT.Graph
 
             var result = new List<ChangeOption>();
 
-            foreach (var route in stop.knownRoutes.Select(kridx => GetRouteByIndex(kridx)))
+            foreach (var routeIdx in stop.knownRoutes)
             {
+                var route = GetRouteByIndex(routeIdx);
+
                 if (unusableRoutes.Contains(route))
                 {
                     continue;
@@ -72,6 +77,8 @@ namespace TUSZ.GRAFIT.Graph
 
         public ChangeOption FindNextStopTimeOnRoute(Stop stop, DateTime currentDate, Route route)
         {
+            this.calls++;
+
             var exceptons = new HashSet<ushort>(route.NoServiceDates);
             DateTime minDate = Utility.ConvertBackToDate(route.MinDate);
             DateTime maxDate = Utility.ConvertBackToDate(route.MaxDate);
@@ -80,6 +87,14 @@ namespace TUSZ.GRAFIT.Graph
             {
                 // Úgyse fog már találni megfelelő opciót.
                 return null;
+            }
+
+            {
+                var limit = currentDate.AddMinutes(this.maxWaitingMinutesForNextTrip);
+                if (limit < maxDate)
+                {
+                    maxDate = limit;
+                }
             }
 
             /*
@@ -106,8 +121,9 @@ namespace TUSZ.GRAFIT.Graph
 
                 // Az adott napon közlekedő tripeken végigmegyünk...
                 var tripDates = storageManager.GetTripsForDate(route.idx, Utility.GetDaysFrom2000(iteratorDate));
-                foreach (var trip in tripDates.Select(tripIndex => storageManager.GetTrip(tripIndex)))
+                foreach (var tripIndex in tripDates)
                 {
+                    var trip = storageManager.GetTrip(tripIndex);
                     /*
                      * Kiszámoljuk, hogy mikor érne véget a trip.
                      * Már itt is fontos, hogy az előző naptól kezdjük, mert lehet, hogy
@@ -124,16 +140,26 @@ namespace TUSZ.GRAFIT.Graph
                     for (int i = 0; i < (trip.stopTimes.Length - 1); i++)
                     {
                         var arrivalTime = iteratorDate.AddMinutes(trip.stopTimes[i].arrivalTime);
+                        if (arrivalTime <= currentDate)
+                        {
+                            continue;
+                        }
+
+                        if ((arrivalTime - currentDate).TotalMinutes > this.maxWaitingMinutesForNextTrip)
+                        {
+                            break;
+                        }
 
                         /*
-                         * (a megfelelő megállóra vonatkozik) && (currentDate < arrivalTime)
+                         * a megfelelő megállóra vonatkozik
                          */
-                        if ((trip.stopTimes[i].StopIndex == stop.idx) && (arrivalTime > currentDate))
+                        if (trip.stopTimes[i].StopIndex == stop.idx)
                         {
                             return new ChangeOption
                             {
                                 arrivalTime = arrivalTime,
-                                stopTime = trip.stopTimes[i]
+                                stopTime = trip.stopTimes[i],
+                                stopTimeIndex = i
                             };
                         }
                     }
