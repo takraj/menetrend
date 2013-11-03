@@ -1,0 +1,17 @@
+﻿<configuration>
+    <system.serviceModel>
+        <bindings>
+            <basicHttpBinding>
+                <binding name="BasicHttpBinding_IRoutePlannerService" maxBufferSize="2147483647"
+                    maxReceivedMessageSize="2147483647">
+                    <security mode="None" />
+                </binding>
+            </basicHttpBinding>
+        </bindings>
+        <client>
+            <endpoint address="http://localhost:10559/WCF/RoutePlannerService.svc"
+                binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IRoutePlannerService"
+                contract="RoutePlannerService.IRoutePlannerService" name="BasicHttpBinding_IRoutePlannerService" />
+        </client>
+    </system.serviceModel>
+</configuration>

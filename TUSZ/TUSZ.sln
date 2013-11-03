@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.Common", "TUSZ.Common\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.GRAFIT", "TUSZ.GRAFIT\TUSZ.GRAFIT.csproj", "{FD5544FE-E680-45B8-8D14-5470764435A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUSZ.PhoneClient", "TUSZ.PhoneClient\TUSZ.PhoneClient.csproj", "{7C4149A7-3CE5-4939-83CD-4CB1F4D6F817}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6DC20866-C2EF-4F55-A658-DD0557F5C11C} = {6DC20866-C2EF-4F55-A658-DD0557F5C11C}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +30,12 @@ Global
 		{FD5544FE-E680-45B8-8D14-5470764435A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD5544FE-E680-45B8-8D14-5470764435A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD5544FE-E680-45B8-8D14-5470764435A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C4149A7-3CE5-4939-83CD-4CB1F4D6F817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C4149A7-3CE5-4939-83CD-4CB1F4D6F817}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C4149A7-3CE5-4939-83CD-4CB1F4D6F817}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7C4149A7-3CE5-4939-83CD-4CB1F4D6F817}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C4149A7-3CE5-4939-83CD-4CB1F4D6F817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C4149A7-3CE5-4939-83CD-4CB1F4D6F817}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

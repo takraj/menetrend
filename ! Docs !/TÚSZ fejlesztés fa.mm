@@ -109,6 +109,19 @@
 <node CREATED="1383048216916" ID="ID_1827260769" MODIFIED="1383048252095" TEXT="Legkevesebb &#xe1;tsz&#xe1;ll&#xe1;sra tervezni">
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1383479442995" ID="ID_325952344" MODIFIED="1383479662600" TEXT="Agressz&#xed;v algoritmusok">
+<icon BUILTIN="idea"/>
+<node CREATED="1383479457180" ID="ID_1003750039" MODIFIED="1383479463865" TEXT="A*">
+<node CREATED="1383479473032" ID="ID_1117062901" MODIFIED="1383479632701" TEXT="Els&#x151; j&#xf3; trip-re r&#xe1;izgulni">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1383479563956" ID="ID_443269622" MODIFIED="1383479570201" TEXT="7 vs 7E">
+<node CREATED="1383479514538" ID="ID_1095900973" MODIFIED="1383479560092" TEXT="Az els&#x151; j&#xf3; trip ut&#xe1;n m&#xe9;g az alternat&#xed;v&#xe1;kat megn&#xe9;zni"/>
+<node CREATED="1383479578808" ID="ID_1766806660" MODIFIED="1383479589187" TEXT="Legjobb alternat&#xed;va v&#xe1;laszt&#xe1;sa"/>
+</node>
+</node>
+<node CREATED="1383479464763" ID="ID_755171571" MODIFIED="1383479467902" TEXT="Dijkstra"/>
+</node>
 </node>
 <node CREATED="1382887734180" ID="ID_132698568" MODIFIED="1383001147641" TEXT="&#xd6;ssze kell csomagolni">
 <icon BUILTIN="button_ok"/>
@@ -146,9 +159,7 @@
 <node CREATED="1383048429990" ID="ID_1935776697" MODIFIED="1383048458222" TEXT="T&#xe9;rk&#xe9;pes terv WCF-el">
 <icon BUILTIN="full-3"/>
 </node>
-<node CREATED="1383048437300" ID="ID_1342166945" MODIFIED="1383048460431" TEXT="Fullos online kliens">
-<icon BUILTIN="full-4"/>
-</node>
+<node CREATED="1383048437300" ID="ID_1342166945" MODIFIED="1383479405657" TEXT="Fullos online kliens"/>
 </node>
 <node CREATED="1382906489242" ID="ID_900304626" MODIFIED="1382906493154" POSITION="right" TEXT="Friss adatb&#xe1;zis"/>
 <node CREATED="1383048533521" ID="ID_1890147084" MODIFIED="1383048543293" POSITION="right" TEXT="Dipterv1 doksi">

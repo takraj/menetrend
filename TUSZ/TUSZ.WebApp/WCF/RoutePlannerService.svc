@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="TUSZ.WebApp.WCF.RoutePlannerService" CodeBehind="RoutePlannerService.svc.cs" %>

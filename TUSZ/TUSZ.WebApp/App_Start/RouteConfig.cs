@@ -13,6 +13,9 @@ namespace TUSZ.WebApp
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.IgnoreRoute("WCF/{resource}.svc/{*pathInfo}");
+            routes.IgnoreRoute("WCF/{resource}.svc");
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

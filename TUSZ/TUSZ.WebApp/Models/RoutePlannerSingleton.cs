@@ -4,18 +4,19 @@ using System.Drawing;
 using System.Linq;
 using System.Web;
 using TUSZ.Common.GRAFIT;
+using TUSZ.Common.ViewModels;
 using TUSZ.GRAFIT.Graph;
 using TUSZ.GRAFIT.Pathfinder;
 using TUSZ.GRAFIT.Storage;
 
 namespace TUSZ.WebApp.Models
 {
-    public class RoutePlannerService
+    public class RoutePlannerSingleton
     {
-        private static RoutePlannerService _instance = null;
+        private static RoutePlannerSingleton _instance = null;
         private static Object lck = new Object();
 
-        public static RoutePlannerService Instance
+        public static RoutePlannerSingleton Instance
         {
             get
             {
@@ -23,7 +24,7 @@ namespace TUSZ.WebApp.Models
                 {
                     if (_instance == null)
                     {
-                        _instance = new RoutePlannerService();
+                        _instance = new RoutePlannerSingleton();
                     }
                 }
 
@@ -36,7 +37,7 @@ namespace TUSZ.WebApp.Models
         private readonly IStorageManager StorageManager;
         public readonly VM_Stop[] Stops;
 
-        private RoutePlannerService()
+        private RoutePlannerSingleton()
         {
             StorageManager = new ZipStorageManager(@"C:\budapest_gtfs", useCaching: true);
             StorageManager.LoadDatabase();
@@ -179,55 +180,5 @@ namespace TUSZ.WebApp.Models
                 travel_groups = travelGroups
             };
         }
-    }
-
-    public class VM_Stop
-    {
-        public int id;
-        public string name;
-        public float lat;
-        public float lng;
-    }
-
-    public class VM_Route
-    {
-        public int id;
-        public string name;
-        public string html_text_color;
-        public string html_base_color;
-    }
-
-    public class VM_PassedStop
-    {
-        public VM_Stop stop;
-        public DateTime when;
-        public bool getOnOff;
-    }
-
-    public class VM_TravelGroup
-    {
-        public VM_Route route;
-
-        public VM_Stop from;
-        public DateTime from_time;
-
-        public VM_Stop to;
-        public DateTime to_time;
-
-        public List<VM_PassedStop> passed_stops;
-    }
-
-    public class VM_Plan
-    {
-        public string algorythm_name;
-        public TimeSpan plan_time;
-
-        public DateTime plan_begins;
-        public DateTime plan_ends;
-
-        public VM_Stop source;
-        public VM_Stop destination;
-
-        public List<VM_TravelGroup> travel_groups;
     }
 }
