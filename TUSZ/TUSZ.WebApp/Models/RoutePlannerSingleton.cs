@@ -60,10 +60,10 @@ namespace TUSZ.WebApp.Models
             switch (algorythm)
             {
                 case "AStar":
-                    pathfinder = new AStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1500);
+                    pathfinder = new AStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1000);
                     break;
                 case "ParallelAStar":
-                    pathfinder = new ParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1500);
+                    pathfinder = new ParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1000);
                     break;
                 case "Dijkstra":
                     pathfinder = new DijkstraPathfinder(graph);
@@ -72,10 +72,10 @@ namespace TUSZ.WebApp.Models
                     pathfinder = new ParallelDijkstraPathfinder(graph);
                     break;
                 case "SmartParallelAStar":
-                    pathfinder = new SmartParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1500);
+                    pathfinder = new SmartParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1000);
                     break;
                 case "AgressiveParallelAStar":
-                    pathfinder = new AgressiveParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1500);
+                    pathfinder = new AgressiveParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1000);
                     break;
             }
 

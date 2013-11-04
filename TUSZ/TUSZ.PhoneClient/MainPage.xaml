@@ -29,9 +29,9 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Honnan:" VerticalAlignment="Top"/>
-            <TextBox HorizontalAlignment="Left" Height="72" Margin="10,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="436" InputScope="AddressStreet"/>
+            <TextBox x:Name="fromStop" HorizontalAlignment="Left" Height="72" Margin="10,42,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="436" InputScope="AddressStreet"/>
             <TextBlock HorizontalAlignment="Left" Margin="10,135,0,0" TextWrapping="Wrap" Text="Hova:" VerticalAlignment="Top"/>
-            <TextBox HorizontalAlignment="Left" Height="72" Margin="10,167,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="436"/>
+            <TextBox x:Name="toStop" HorizontalAlignment="Left" Height="72" Margin="10,167,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="436"/>
             <Button Content="OK" HorizontalAlignment="Left" Margin="229,289,0,0" VerticalAlignment="Top" Width="198" Click="Button_Click"/>
         </Grid>
     </Grid>
