@@ -35,6 +35,11 @@ namespace TUSZ.GRAFIT.Pathfinder
                     return currentNode.history.instructions.ToList();
                 }
 
+                if (currentNode.history.countOfRoutes > graph.maxCountOfRoutes)
+                {
+                    continue;
+                }
+
                 foreach (var nextNode in currentNode.GetNextDynamicNodes())
                 {
                     if (nextNode.history.totalWalkingTime > graph.maxTotalWalkingMinutes)

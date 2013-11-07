@@ -20,24 +20,24 @@ namespace GTFSConverter.CRGTFS
             var tdb = new TransitDB();
             var originalMaps = new OriginalMaps();
 
-            Parallel.Invoke(
-                () =>
-                {
+            //Parallel.Invoke(
+            //    () =>
+            //    {
                     PrepareStops(ref tdb, ref originalMaps);
                     Console.Write('|');
-                },
+                //},
 
-                () =>
-                {
+                //() =>
+                //{
                     PrepareShapes(ref tdb, ref originalMaps);
                     Console.Write('|');
-                },
+                //},
 
-                () =>
-                {
+                //() =>
+                //{
                     PrepareRoutes(ref tdb, ref originalMaps);
                     Console.Write('|');
-                });
+                //});
 
             PrepareTrips(ref tdb, ref originalMaps);
             Console.Write('|');

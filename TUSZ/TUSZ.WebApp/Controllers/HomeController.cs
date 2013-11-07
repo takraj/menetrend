@@ -30,7 +30,7 @@ namespace TUSZ.WebApp.Controllers
             return View();
         }
 
-        public ActionResult TestMap(string stopFrom = "", string stopTo = "")
+        public ActionResult TestMap(string stopFrom = "", string stopTo = "", string algo = "AgressiveParallelAStar")
         {
             var rnd = new Random();
             var src = rnd.Next(100, 5000);
@@ -51,11 +51,11 @@ namespace TUSZ.WebApp.Controllers
                 }
             }
 
-            var now = DateTime.Now.TimeOfDay;
-            
-            var plan = RoutePlannerSingleton.Instance.Plan(src, dst, new DateTime(2013, 03, 01, now.Hours, now.Minutes, now.Seconds), "AgressiveParallelAStar");
-            //var instructionsToShow = PathfinderManager.GetRoute(src, dst, new DateTime(2013, 03, 01, 16, 21, now.Seconds));
-            //var instructionsToShow = PathfinderManager.GetRoute(src, dst, DateTime.Now);
+            var now = DateTime.Now;
+
+            var plan = RoutePlannerSingleton.Instance.Plan(src, dst, now, algo);
+            //var plan = RoutePlannerSingleton.Instance.Plan(src, dst, new DateTime(2013, 11, 5, 12, 15, 0), algo);
+            //var plan RoutePlannerSingleton.Instance.Plan(src, dst, DateTime.Now, algo);
             ViewBag.StopNames = allStops.Select(s => s.name).Distinct().ToArray();
 
             Utility.SetupCulture();

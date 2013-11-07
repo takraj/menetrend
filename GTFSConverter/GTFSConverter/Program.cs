@@ -21,14 +21,14 @@ namespace GTFSConverter
             //var cdb = CreateCompactGTFS(db);
             //SerializeCompactGTFS(cdb);
 
-            //var cdb = DeserializeCompactGTFS();
-            //var referencedGTFS = CreateReferencedGTFS(cdb);
+            var cdb = DeserializeCompactGTFS();
+            var referencedGTFS = CreateReferencedGTFS(cdb);
 
             IStorageManager storageManager = new ZipStorageManager(basedir);
-            //SerializeTransitGTFS(referencedGTFS, storageManager);
+            SerializeTransitGTFS(referencedGTFS, storageManager);
 
-            DeserializeTransitGTFS(storageManager);
-            CalculateShorthestRoute(storageManager);
+            //DeserializeTransitGTFS(storageManager);
+            //CalculateShorthestRoute(storageManager);
 
             totalTime.Stop();
             Console.WriteLine();

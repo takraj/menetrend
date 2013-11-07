@@ -47,6 +47,11 @@ namespace TUSZ.GRAFIT.Pathfinder
                     return currentNode.Value.history.instructions.ToList();
                 }
 
+                if (currentNode.Value.history.countOfRoutes > graph.maxCountOfRoutes)
+                {
+                    continue;
+                }
+
                 if ((currentNode.Value.CurrentTrip != null)
                     && !unfoldedTrips.Contains(currentNode.Value.CurrentTrip.idx)
                     && currentNode.Value.history.lastInstruction is TravelAction)

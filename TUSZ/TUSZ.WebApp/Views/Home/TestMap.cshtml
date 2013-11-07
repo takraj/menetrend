@@ -11,7 +11,7 @@
 </hgroup>
 
 <article>
-    <div class="pathInfo"><strong>@Html.Raw(Model.source.name)</strong> és <strong>@Html.Raw(Model.destination.name)</strong> között</div>
+    <div class="pathInfo"><strong>@Html.Raw(Model.source.name)</strong> és <strong>@Html.Raw(Model.destination.name)</strong> között <br /><em>@Html.Raw(Model.algorythm_name) -- @Html.Raw(Model.plan_time.ToString(@"mm\:ss"))</em></div>
     <div id="map_canvas" style="width: 650px; height: 650px"></div>
 </article>
 
@@ -29,6 +29,9 @@
             <label for="stopTo">Hova:</label>
             <input name="stopTo" id="stopTo" value="@Html.Raw(Model.destination.name)" />
         </div>
+        <br />
+        <label for="algo">Algoritmus:</label>
+        <input type="text" name="algo" value="@Model.algorythm_name" />
         <br />
         <input type="submit" value="Keresés" />
     }

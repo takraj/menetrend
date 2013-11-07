@@ -84,6 +84,11 @@ namespace GTFSConverter.CRGTFS
 
             foreach (var r in tdb.routes)
             {
+                if (!tdb.routeDatesMap.ContainsKey(r) || (tdb.routeDatesMap[r].Count < 1))
+                {
+                    continue;
+                }
+
                 var minimumDate = tdb.routeDatesMap[r].Min(td => td.date);
                 var maximumDate = tdb.routeDatesMap[r].Max(td => td.date);
 

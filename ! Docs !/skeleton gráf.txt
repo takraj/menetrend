@@ -1,0 +1,49 @@
+Azt kell letárolni, hogy melyik Route-ból mely más Route-ok érhetõek el átszállással vagy kevés sétával.
+
+for each Route in Routes:
+   for each Stop in Route.Stops:
+      Route.Neighbours += Stop.GetRoutes().But(Route)
+      for each NeighbourStop in Stop.GetNeighboursInDistance(500):
+          Route.Neighbours += NeighbourStop.GetRoutes().But(Route)
+---
+Implementáció:
+
+Route.Stops      : HashSet, mert a sorrend nem számít, de gyorsan ellenõrizhetõnek kell lennie, hogy bent van-e valaki ebben a listában.
+Route.Neighbours : Bármilyen Collection jó. Lényeg, hogy Distinct legyen a vége.
+
+Szomszédossági mátrixként elég csak booleaneket tárolni. Ez egy kb. 350x350 mátrix lesz.
+
+---
+Számosság:
+
+Route           : <   350
+Stop            : < 5.500
+NeighbourStop   : <    25
+
+Futásidõ becslése: 350 * 5.500 * 25 = 48.125.000 iteráció
+
+---
+Elõkeresés a skeleton gráfban:
+
+Nem legrövidebb út keresés, hanem elérhetõség keresés max N db járat használatával.
+
+http://en.wikipedia.org/wiki/Depth-limited_search
+
+Komplexitás: O(|V|+|E|)
+
+---
+Miért jó?
+
+1. A bool tömb olcsón tartható a memóriában.
+2. A DLS nagyon gyorsan megmondja, hogy mely Route-ok használhatóak. Akár azt is, hogy milyen sorrendben.
+3. Sokkal kisebb lesz a keresési tér, hiszen feleslegesen nem fejtünk ki csomópontokat.
+4. Akár azt is megmondhatja, hogy milyen sorrendben lehet átszállni.
+
+Hátrány: Módosítani kell a DynamicNode osztályt egy allowList beiktatásával.
+
+Level {
+   allowedTransfers = HashSet<Route>
+   nextLevels = List<Level>
+}
+
+Mindenképp érdemes letárolni, hogy az egyes megállókban egyáltalán milyen Route-ok állhatnak meg.

@@ -21,6 +21,11 @@ namespace GTFSConverter.CRGTFS
 
             foreach (var croute in db.routes)
             {
+                if (!ctripDictionary.ContainsKey(croute.route_id))
+                {
+                    continue;
+                }
+
                 foreach (var ctrip in ctripDictionary[croute.route_id])
                 {
                     foreach (var cstoptime in cstoptimeDictionary[ctrip.trip_id])

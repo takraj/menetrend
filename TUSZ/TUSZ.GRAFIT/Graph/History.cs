@@ -16,6 +16,7 @@ namespace TUSZ.GRAFIT.Graph
         public double totalWalkingTime;
         public int totalDistance;
         public int lastStopTimeIndex;
+        public int countOfRoutes;
 
         public History Clone()
         {
@@ -27,7 +28,8 @@ namespace TUSZ.GRAFIT.Graph
                 totalWalkingTime = this.totalWalkingTime,
                 usedRoutes = this.usedRoutes,
                 lastInstruction = this.lastInstruction,
-                lastStopTimeIndex = this.lastStopTimeIndex
+                lastStopTimeIndex = this.lastStopTimeIndex,
+                countOfRoutes = this.countOfRoutes
             };
         }
 
@@ -41,13 +43,30 @@ namespace TUSZ.GRAFIT.Graph
                     totalWalkingTime = 0,
                     totalDistance = 0,
                     lastInstruction = null,
-                    lastStopTimeIndex = -1
+                    lastStopTimeIndex = -1,
+                    countOfRoutes = 0
                 };
         }
 
         public History AppendInstruction(Instruction instruction, int addDistance)
         {
             var result = this.Clone();
+
+            if (instruction is GetOnAction)
+            {
+                if (this.lastInstruction != null)
+                {
+                    if (this.lastInstruction.route.idx != instruction.route.idx)
+                    {
+                        result.countOfRoutes += 1;
+                    }
+                }
+                else
+                {
+                    result.countOfRoutes += 1;
+                }
+            }
+
             result.instructions = new List<Instruction>(this.instructions);
             result.instructions.Add(instruction);
             result.lastInstruction = instruction;

@@ -25,6 +25,15 @@ namespace TUSZ.GRAFIT.Pathfinder
         protected virtual long fValue(DynamicNode node, Stop destinationStop, DateTime epoch)
         {
             long remainingDistance = stopDistances[node.stop.idx];
+
+            /*
+             * Ez fals eredményt ad. Gyorsít az útkeresésen, de nagyobbat hibázik, mint az agresszív algoritmus.
+             */
+            //if ((node.history.lastInstruction == null) || (node.history.lastInstruction is GetOffAction))
+            //{
+            //    return node.currentTime.AddMinutes(remainingDistance / graph.walkingSpeed).Ticks;
+            //}
+
             return node.currentTime.AddMinutes(remainingDistance / fScale).Ticks;
         }
 
@@ -45,6 +54,11 @@ namespace TUSZ.GRAFIT.Pathfinder
                 if (currentNode.Value.stop == destinationStop)
                 {
                     return currentNode.Value.history.instructions.ToList();
+                }
+
+                if (currentNode.Value.history.countOfRoutes > graph.maxCountOfRoutes)
+                {
+                    continue;
                 }
 
                 foreach (var nextNode in currentNode.Value.GetNextDynamicNodes())

@@ -23,7 +23,7 @@ namespace TUSZ.WebApp.WCF
             try
             {
                 var now = DateTime.Now;
-                var result = RoutePlannerSingleton.Instance.Plan(fromStopIdx, toStopIdx, new DateTime(2013, 03, 01, now.TimeOfDay.Hours, now.TimeOfDay.Minutes, now.TimeOfDay.Seconds), "AgressiveParallelAStar");
+                var result = RoutePlannerSingleton.Instance.Plan(fromStopIdx, toStopIdx, now /* new DateTime(2013, 03, 01, now.TimeOfDay.Hours, now.TimeOfDay.Minutes, now.TimeOfDay.Seconds) */, "AgressiveParallelAStar");
                 return new VM_PlanResult
                 {
                     isFailed = false,

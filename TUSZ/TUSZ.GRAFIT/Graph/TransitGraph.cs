@@ -24,6 +24,7 @@ namespace TUSZ.GRAFIT.Graph
         public double maxWalkingDistancePerChange = 500;
         public double maxWaitingMinutesForNextTrip = 60;
         public double costOfGettingOff = 2;
+        public int maxCountOfRoutes = 4;
 
         private IStorageManager storageManager;
 
