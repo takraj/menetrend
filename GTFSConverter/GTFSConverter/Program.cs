@@ -15,18 +15,33 @@ namespace GTFSConverter
             var totalTime = new Stopwatch();
             totalTime.Start();
 
-            //var db = ReadGTFS();
-            //SerializeGTFS(ref db);
-            //db = DeserializeBinaryGTFS();
-            //var cdb = CreateCompactGTFS(db);
-            //SerializeCompactGTFS(cdb);
+            {
+                var db = ReadGTFS();
+                SerializeGTFS(ref db);
+            }
+            {
+                var db = DeserializeBinaryGTFS();
+                var cdb = CreateCompactGTFS(db);
+                db = null;
+                SerializeCompactGTFS(cdb);
+            }
+            {
+                var cdb = DeserializeCompactGTFS();
+                var referencedGTFS = CreateReferencedGTFS(cdb);
+                cdb = null;
 
-            var cdb = DeserializeCompactGTFS();
-            var referencedGTFS = CreateReferencedGTFS(cdb);
+                {
+                    IStorageManager storageManager = new ZipStorageManager(basedir);
+                    SerializeTransitGTFS(referencedGTFS, storageManager);
+                }
 
-            IStorageManager storageManager = new ZipStorageManager(basedir);
-            SerializeTransitGTFS(referencedGTFS, storageManager);
+                {
+                    IStorageManager storageManager = new FilesystemStorageManager(basedir);
+                    SerializeTransitGTFS(referencedGTFS, storageManager);
+                }
+            }
 
+            //IStorageManager storageManager = new ZipStorageManager(basedir);
             //DeserializeTransitGTFS(storageManager);
             //CalculateShorthestRoute(storageManager);
 
