@@ -16,6 +16,7 @@ namespace TUSZ.GRAFIT.Graph
         public bool onlyTravelActionNextTime;
         public bool mustGetOn;
         public HashSet<int> reachableStops;
+        public TransferTree transferTree;
 
         private List<DynamicNode> nextDynamicNodes;
 
@@ -53,7 +54,10 @@ namespace TUSZ.GRAFIT.Graph
                                 nextDynamicNodes.AddRange(GetNextDynamicNodesByWalkAction(lastAction));
                             }
 
-                            nextDynamicNodes.AddRange(GetNextDynamicNodesByChangeRouteAction(lastAction));
+                            if (this.transferTree == null || !this.transferTree.IsLeaf)
+                            {
+                                nextDynamicNodes.AddRange(GetNextDynamicNodesByChangeRouteAction(lastAction));
+                            }
                         }
 
                         /*
@@ -181,19 +185,32 @@ namespace TUSZ.GRAFIT.Graph
 
                 #region GetOnAction inicializálása
                 var tripOption = graph.GetTripByIndex(changeOption.stopTime.TripIndex);
+                var routeOption = graph.GetRouteByIndex(tripOption.routeIndex);
+
+                if ((transferTree != null) && !transferTree.IsRouteAllowed(routeOption))
+                {
+                    continue;
+                }
+
                 var getOnAction = new GetOnAction
                 {
                     startDate = referenceNode.currentTime,
                     endDate = changeOption.arrivalTime,
                     stop = referenceNode.stop,
                     trip = tripOption,
-                    route = graph.GetRouteByIndex(tripOption.routeIndex),
+                    route = routeOption,
                     toStopTime = changeOption.stopTime
                 };
                 #endregion
 
                 // DynamicNode inicializálása
                 var addDynamicNode = referenceNode.AppendInstruction(getOnAction);
+
+                if (this.transferTree != null)
+                {
+                    addDynamicNode.transferTree = this.transferTree.GetTree(routeOption);
+                }
+
                 addDynamicNode.history.lastStopTimeIndex = changeOption.stopTimeIndex;
                 result.Add(addDynamicNode);
             }
@@ -386,7 +403,8 @@ namespace TUSZ.GRAFIT.Graph
                 mustGetOn = this.mustGetOn,
                 onlyTravelActionNextTime = this.onlyTravelActionNextTime,
                 stop = this.stop,
-                reachableStops = this.reachableStops
+                reachableStops = this.reachableStops,
+                transferTree = this.transferTree
             };
         }
 
@@ -423,7 +441,8 @@ namespace TUSZ.GRAFIT.Graph
                 history = History.CreateEmptyHistory(),
                 graph = graph,
                 currentTime = datetime,
-                reachableStops = new HashSet<int>()
+                reachableStops = new HashSet<int>(),
+                transferTree = null
             };
         }
     }

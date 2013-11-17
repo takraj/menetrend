@@ -57,6 +57,7 @@
     <Compile Include="Graph\DynamicNode.cs" />
     <Compile Include="Graph\History.cs" />
     <Compile Include="Graph\Instruction.cs" />
+    <Compile Include="Graph\TransferTree.cs" />
     <Compile Include="Graph\TransitGraph.cs" />
     <Compile Include="Pathfinder\AgressiveParallelAStarPathfinder.cs" />
     <Compile Include="Pathfinder\AStarPathfinder.cs" />

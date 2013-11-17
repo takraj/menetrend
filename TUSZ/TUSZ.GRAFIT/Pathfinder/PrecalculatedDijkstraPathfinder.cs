@@ -33,9 +33,9 @@ namespace TUSZ.GRAFIT.Pathfinder
                 public List<Route> history;
             }
 
-            public List<List<Route>> GetAllPossibleSequences(Stop sourceStop, Stop destinationStop)
+            public TransferTree GetAllPossibleSequences(Stop sourceStop, Stop destinationStop)
             {
-                var result = new List<List<Route>>();
+                var result = new TransferTree();
 
                 // Közvetlen járatok
                 foreach (var route in sourceStop.knownRoutes.Select(r => graph.GetRouteByIndex(r)))
@@ -72,11 +72,34 @@ namespace TUSZ.GRAFIT.Pathfinder
                     bool possiblePath = LBFS(subject.route, destinationStop, subject.history);
                     if (possiblePath)
                     {
-                        result.Add(subject.history);
+                        BuildTree(result, subject.history);
                     }
                 }
 
                 return result;
+            }
+
+            protected void BuildTree(TransferTree tree, IEnumerable<Route> path)
+            {
+                var subTree = tree.CreateOrGetTree(path.First());
+                if (path.Count() > 1)
+                {
+                    BuildTree(subTree, path.Skip(1));
+                }
+            }
+
+            protected void TryAddNewNode(Route route, List<Route> history)
+            {
+                if (!this.visitedRoutes.Contains(route))
+                {
+                    var subHistory = new List<Route>(history);
+                    subHistory.Add(route);
+                    this.fifo.Enqueue(new RouteNode
+                    {
+                        history = subHistory,
+                        route = route
+                    });
+                }
             }
 
             protected bool LBFS(Route subject, Stop target, List<Route> history)
@@ -86,9 +109,6 @@ namespace TUSZ.GRAFIT.Pathfinder
                 {
                     return false;
                 }
-
-                var visitedRouteIdxs = new HashSet<int>(this.visitedRoutes.Select(h => h.idx));
-                var toExamine = new HashSet<int>();
 
                 // Limit elérve?
                 if (graph.maxCountOfRoutes < history.Count)
@@ -102,8 +122,18 @@ namespace TUSZ.GRAFIT.Pathfinder
                     return true;
                 }
 
-                foreach (var stop in subject.knownStops.Select(idx => graph.GetStopByIndex(idx)))
+                // Van még értelme mélyebbre menni?
+                if (graph.maxCountOfRoutes == history.Count)
                 {
+                    return false;
+                }
+
+                var toExamine = new HashSet<int>();
+
+                foreach (var stopIdx in subject.knownStops)
+                {
+                    var stop = graph.GetStopByIndex(stopIdx);
+
                     // A cél gyaloglási távolságra van?
                     for (int i = 0; i < (stop.nearbyStops.Length / 2); i++)
                     {
@@ -115,19 +145,14 @@ namespace TUSZ.GRAFIT.Pathfinder
                             }
                         }
                     }
-                    
-                    // Van még értelme mélyebbre menni?
-                    if (graph.maxCountOfRoutes == history.Count)
-                    {
-                        return false;
-                    }
 
                     // közvetlen szomszédok feltérképezése
                     foreach (var routeIdx in stop.knownRoutes)
                     {
-                        if (!toExamine.Contains(routeIdx) && !visitedRouteIdxs.Contains(routeIdx))
+                        if (toExamine.Add(routeIdx))
                         {
-                            toExamine.Add(routeIdx);
+                            var route = graph.GetRouteByIndex(routeIdx);
+                            TryAddNewNode(route, history);
                         }
                     }
 
@@ -145,30 +170,14 @@ namespace TUSZ.GRAFIT.Pathfinder
 
                             foreach (var routeIdx in neighbourStop.knownRoutes)
                             {
-                                if (!toExamine.Contains(routeIdx) && !visitedRouteIdxs.Contains(routeIdx))
+                                if (toExamine.Add(routeIdx))
                                 {
-                                    toExamine.Add(routeIdx);
+                                    var route = graph.GetRouteByIndex(routeIdx);
+                                    TryAddNewNode(route, history);
                                 }
                             }
                         }
                     }
-                }
-
-                // Új node-ok felvétele a fifo-ba
-                foreach (var route in toExamine.Select(r => graph.GetRouteByIndex(r)))
-                {
-                    if (this.visitedRoutes.Contains(route))
-                    {
-                        continue;
-                    }
-
-                    var subHistory = new List<Route>(history);
-                    subHistory.Add(route);
-                    this.fifo.Enqueue(new RouteNode
-                        {
-                            history = subHistory,
-                            route = route
-                        });
                 }
 
                 return false;
@@ -177,33 +186,19 @@ namespace TUSZ.GRAFIT.Pathfinder
 
         public override List<Instruction> CalculateShortestRoute(Stop sourceStop, Stop destinationStop, DateTime now)
         {
-            var result = new List<List<Instruction>>();
-            var allPossibleSequences = new Presearcher(graph).GetAllPossibleSequences(sourceStop, destinationStop);
-
-            foreach (var seq in allPossibleSequences)
-            {
-                var toAdd = CalculateShortestRouteOnSequence(sourceStop, destinationStop, now, seq);
-                if (toAdd == null)
-                {
-                    continue;
-                }
-
-                result.Add(toAdd);
-            }
-
-            if (result.Count < 1)
-            {
-                throw new Exception("Nem értem el a célt... Valószínűleg nem összefüggő a gráf.");
-            }
-
-            return result.OrderBy(r => r.Last().endDate).First();
+            var result = new List<Instruction>();
+            var tree = new Presearcher(graph).GetAllPossibleSequences(sourceStop, destinationStop);
+            
+            result = CalculateShortestRouteOnTree(sourceStop, destinationStop, now, tree);
+            return result;
         }
 
-        protected virtual List<Instruction> CalculateShortestRouteOnSequence(Stop sourceStop, Stop destinationStop, DateTime now, List<Route> allowedSequence)
+        protected virtual List<Instruction> CalculateShortestRouteOnTree(Stop sourceStop, Stop destinationStop, DateTime now, TransferTree tree)
         {
             var staticMap = new Dictionary<Stop, SortedSet<DynamicNode>>();
             var openSet = HeapFactory.NewBinaryHeap<DynamicNode>();
             var firstDynamicNode = DynamicNode.CreateFirstDynamicNode(this.graph, sourceStop, now);
+            firstDynamicNode.transferTree = tree;
 
             staticMap[sourceStop] = new SortedSet<DynamicNode>();
             staticMap[sourceStop].Add(firstDynamicNode);
@@ -242,13 +237,6 @@ namespace TUSZ.GRAFIT.Pathfinder
                         staticMap[nextNode.stop] = new SortedSet<DynamicNode>();
                     }
 
-                    var instructionRoutes = nextNode.history.instructions.Select(ins => ins.route).Distinct().ToArray();
-
-                    if (!CheckSequence(allowedSequence, instructionRoutes))
-                    {
-                        continue;
-                    }
-
                     if (staticMap[nextNode.stop].Add(nextNode))
                     {
                         openSet.Add(nextNode);
@@ -256,25 +244,7 @@ namespace TUSZ.GRAFIT.Pathfinder
                 }
             }
 
-            return null;
-        }
-
-        private bool CheckSequence(List<Route> allowedSequence, Route[] instructionRoutes)
-        {
-            if (instructionRoutes.Length > allowedSequence.Count)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < instructionRoutes.Length; i++)
-            {
-                if (allowedSequence.ElementAt(i) != instructionRoutes[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            throw new Exception("Nem értem el a célt... Valószínűleg nem összefüggő a gráf.");
         }
     }
 }
