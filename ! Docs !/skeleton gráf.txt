@@ -47,3 +47,6 @@ Level {
 }
 
 Mindenképp érdemes letárolni, hogy az egyes megállókban egyáltalán milyen Route-ok állhatnak meg.
+
+
+PrecalculatedDijkstra

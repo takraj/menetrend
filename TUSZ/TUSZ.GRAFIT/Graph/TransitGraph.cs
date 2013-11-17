@@ -187,6 +187,11 @@ namespace TUSZ.GRAFIT.Graph
 
         public int GetDistanceBetween(Stop stop1, Stop stop2)
         {
+            if (stop1.idx == stop2.idx)
+            {
+                return 0;
+            }
+
             for (int i = 0; i < stop1.nearbyStops.Length; i += 2)
             {
                 if (stop1.nearbyStops[i] == stop2.idx)

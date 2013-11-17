@@ -17,60 +17,109 @@ namespace TUSZ.GRAFIT.Pathfinder
         protected class Presearcher
         {
             private HashSet<Route> visitedRoutes;
+            private Queue<RouteNode> fifo;
             private TransitGraph graph;
 
             public Presearcher(TransitGraph graph)
             {
                 this.visitedRoutes = new HashSet<Route>();
                 this.graph = graph;
+                this.fifo = new Queue<RouteNode>();
+            }
+
+            protected struct RouteNode
+            {
+                public Route route;
+                public List<Route> history;
             }
 
             public List<List<Route>> GetAllPossibleSequences(Stop sourceStop, Stop destinationStop)
             {
                 var result = new List<List<Route>>();
 
+                // Közvetlen járatok
                 foreach (var route in sourceStop.knownRoutes.Select(r => graph.GetRouteByIndex(r)))
                 {
-                    result.AddRange(LDFS(route, destinationStop, new Route[] { route }.ToList()));
+                    this.fifo.Enqueue(new RouteNode
+                        {
+                            history = new Route[] { route }.ToList(),
+                            route = route
+                        });
+                }
 
-                    if (!this.visitedRoutes.Contains(route))
+                // Át kell sétálni egy másik megállóba
+                for (int i = 0; i < (sourceStop.nearbyStops.Length / 2); i++)
+                {
+                    if (sourceStop.nearbyStops[i * 2 + 1] <= graph.maxWalkingDistancePerChange)
                     {
-                        this.visitedRoutes.Add(route);
+                        var neighbourStop = graph.GetStopByIndex(sourceStop.nearbyStops[i * 2]);
+
+                        foreach (var route in sourceStop.knownRoutes.Select(r => graph.GetRouteByIndex(r)))
+                        {
+                            this.fifo.Enqueue(new RouteNode
+                            {
+                                history = new Route[] { route }.ToList(),
+                                route = route
+                            });
+                        }
+                    }
+                }
+
+                // Keresési ciklus
+                while (this.fifo.Count > 0)
+                {
+                    var subject = this.fifo.Dequeue();
+                    bool possiblePath = LBFS(subject.route, destinationStop, subject.history);
+                    if (possiblePath)
+                    {
+                        result.Add(subject.history);
                     }
                 }
 
                 return result;
             }
 
-            protected List<List<Route>> LDFS(Route subject, Stop target, List<Route> history)
+            protected bool LBFS(Route subject, Stop target, List<Route> history)
             {
-                var visitedRouteIdxs = new HashSet<int>(history.Select(h => h.idx));
-                var toExamine = new HashSet<int>();
-                var result = new List<List<Route>>();
-
-                // Limit elérve
-                if (graph.maxCountOfRoutes < history.Count)
+                // Már megnéztem?
+                if (this.visitedRoutes.Add(subject))
                 {
-                    return result;
+                    return false;
                 }
 
-                // Már megnéztem
-                if (this.visitedRoutes.Contains(subject))
+                var visitedRouteIdxs = new HashSet<int>(this.visitedRoutes.Select(h => h.idx));
+                var toExamine = new HashSet<int>();
+
+                // Limit elérve?
+                if (graph.maxCountOfRoutes < history.Count)
                 {
-                    return result;
+                    return false;
+                }
+
+                // Ez egy jó járat?
+                if (subject.knownStops.Contains(target.idx))
+                {
+                    return true;
                 }
 
                 foreach (var stop in subject.knownStops.Select(idx => graph.GetStopByIndex(idx)))
                 {
-                    // Ez egy jó járat?
-                    if (subject.knownStops.Contains(target.idx))
+                    // A cél gyaloglási távolságra van?
+                    for (int i = 0; i < (stop.nearbyStops.Length / 2); i++)
                     {
-                        result.Add(history);
-                        return result;
+                        if (stop.nearbyStops[i * 2 + 1] <= graph.maxWalkingDistancePerChange)
+                        {
+                            if (stop.nearbyStops[i * 2] == target.idx)
+                            {
+                                return true;
+                            }
+                        }
                     }
-                    else if (graph.maxCountOfRoutes == history.Count)
+                    
+                    // Van még értelme mélyebbre menni?
+                    if (graph.maxCountOfRoutes == history.Count)
                     {
-                        return result;
+                        return false;
                     }
 
                     // közvetlen szomszédok feltérképezése
@@ -105,20 +154,24 @@ namespace TUSZ.GRAFIT.Pathfinder
                     }
                 }
 
-                // Rekurzió
+                // Új node-ok felvétele a fifo-ba
                 foreach (var route in toExamine.Select(r => graph.GetRouteByIndex(r)))
                 {
+                    if (this.visitedRoutes.Contains(route))
+                    {
+                        continue;
+                    }
+
                     var subHistory = new List<Route>(history);
                     subHistory.Add(route);
-                    result.AddRange(LDFS(route, target, subHistory));
-
-                    if (!this.visitedRoutes.Contains(route))
-                    {
-                        this.visitedRoutes.Add(route);
-                    }
+                    this.fifo.Enqueue(new RouteNode
+                        {
+                            history = subHistory,
+                            route = route
+                        });
                 }
 
-                return result;
+                return false;
             }
         }
 
