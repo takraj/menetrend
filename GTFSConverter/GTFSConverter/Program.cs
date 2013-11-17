@@ -15,16 +15,16 @@ namespace GTFSConverter
             var totalTime = new Stopwatch();
             totalTime.Start();
 
-            {
-                var db = ReadGTFS();
-                SerializeGTFS(ref db);
-            }
-            {
-                var db = DeserializeBinaryGTFS();
-                var cdb = CreateCompactGTFS(db);
-                db = null;
-                SerializeCompactGTFS(cdb);
-            }
+            //{
+            //    var db = ReadGTFS();
+            //    SerializeGTFS(ref db);
+            //}
+            //{
+            //    var db = DeserializeBinaryGTFS();
+            //    var cdb = CreateCompactGTFS(db);
+            //    db = null;
+            //    SerializeCompactGTFS(cdb);
+            //}
             {
                 var cdb = DeserializeCompactGTFS();
                 var referencedGTFS = CreateReferencedGTFS(cdb);

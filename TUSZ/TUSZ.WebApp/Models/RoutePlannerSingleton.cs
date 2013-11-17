@@ -77,6 +77,9 @@ namespace TUSZ.WebApp.Models
                 case "AgressiveParallelAStar":
                     pathfinder = new AgressiveParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1000);
                     break;
+                case "PrecalculatedDijkstra":
+                    pathfinder = new PrecalculatedDijkstraPathfinder(graph);
+                    break;
             }
 
             return pathfinder.CalculateShortestRoute(source, destination, when);

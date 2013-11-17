@@ -13,12 +13,6 @@ namespace GTFSConverter.CRGTFS
             var ctripDictionary = db.trips.GroupBy(t => t.route_id).ToDictionary(t => t.Key, t => t.ToList());
             var cstoptimeDictionary = db.stop_times.GroupBy(st => st.trip_id).ToDictionary(st => st.Key, st => st.ToList());
 
-            var routeIndexes = new Dictionary<Route, int>();
-            for (int i = 0; i < tdb.routes.Count(); i++)
-            {
-                routeIndexes[tdb.routes.ElementAt(i)] = i;
-            }
-
             foreach (var croute in db.routes)
             {
                 if (!ctripDictionary.ContainsKey(croute.route_id))
@@ -38,12 +32,19 @@ namespace GTFSConverter.CRGTFS
                         var relatedRRoute = originalMaps.originalRouteMap[croute.route_id];
                         var relatedRStop = originalMaps.originalStopMap[cstoptime.stop_id];
 
-                        if (relatedRStop.knownRoutes.Contains(routeIndexes[relatedRRoute]))
+                        if (relatedRStop.knownRoutes.Contains(relatedRRoute.idx))
                         {
                             continue;
                         }
 
-                        relatedRStop.knownRoutes.Add(routeIndexes[relatedRRoute]);
+                        relatedRStop.knownRoutes.Add(relatedRRoute.idx);
+
+                        if (relatedRRoute.knownStops.Contains(relatedRStop.idx))
+                        {
+                            continue;
+                        }
+
+                        relatedRRoute.knownStops.Add(relatedRStop.idx);
                     }
                 }
             }

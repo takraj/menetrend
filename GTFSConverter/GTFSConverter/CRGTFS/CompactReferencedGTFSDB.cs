@@ -218,6 +218,9 @@ namespace GTFSConverter.CRGTFS
         [ProtoMember(7)]
         public int idx;
 
+        [ProtoMember(8)]
+        public HashSet<int> knownStops;
+
         public ushort MinDate
         {
             get { return dates[0]; }
