@@ -67,6 +67,9 @@ namespace GTFSConverter.CRGTFS
             SetupNearbyStops(ref tdb, countOfTransfersPerStop);
             Console.Write('#');
 
+            CalculateTransferMap(ref tdb);
+            Console.Write('#');
+
             return tdb;
         }
     }

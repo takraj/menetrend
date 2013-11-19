@@ -67,6 +67,7 @@
     <Compile Include="CRGTFS\CompacterTasks\CalculateFirstLastArrivals.cs" />
     <Compile Include="CRGTFS\CompacterTasks\CalculateStopRouteRelationships.cs" />
     <Compile Include="CRGTFS\CompacterTasks\CalculateTransferDistances.cs" />
+    <Compile Include="CRGTFS\CompacterTasks\CalculateTransferMap.cs" />
     <Compile Include="CRGTFS\CompacterTasks\CalculateTripDates.cs" />
     <Compile Include="CRGTFS\CompacterTasks\PrepareShapes.cs" />
     <Compile Include="CRGTFS\CompacterTasks\PrepareTrips.cs" />

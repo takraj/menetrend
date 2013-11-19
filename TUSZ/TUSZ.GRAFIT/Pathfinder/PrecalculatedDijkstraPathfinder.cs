@@ -38,8 +38,10 @@ namespace TUSZ.GRAFIT.Pathfinder
                 var result = new TransferTree();
 
                 // Közvetlen járatok
-                foreach (var route in sourceStop.knownRoutes.Select(r => graph.GetRouteByIndex(r)))
+                foreach (var routeIdx in sourceStop.knownRoutes)
                 {
+                    var route = graph.GetRouteByIndex(routeIdx);
+
                     this.fifo.Enqueue(new RouteNode
                         {
                             history = new Route[] { route }.ToList(),
@@ -54,8 +56,15 @@ namespace TUSZ.GRAFIT.Pathfinder
                     {
                         var neighbourStop = graph.GetStopByIndex(sourceStop.nearbyStops[i * 2]);
 
-                        foreach (var route in sourceStop.knownRoutes.Select(r => graph.GetRouteByIndex(r)))
+                        if (neighbourStop.knownRoutes == null)
                         {
+                            continue;
+                        }
+
+                        foreach (var routeIdx in neighbourStop.knownRoutes)
+                        {
+                            var route = graph.GetRouteByIndex(routeIdx);
+
                             this.fifo.Enqueue(new RouteNode
                             {
                                 history = new Route[] { route }.ToList(),
@@ -88,9 +97,9 @@ namespace TUSZ.GRAFIT.Pathfinder
                 }
             }
 
-            protected void TryAddNewNode(Route route, List<Route> history)
+            protected void TryAddNewNode(Route route, List<Route> history, HashSet<Route> visited)
             {
-                if (!this.visitedRoutes.Contains(route))
+                if (!visited.Contains(route))
                 {
                     var subHistory = new List<Route>(history);
                     subHistory.Add(route);
@@ -102,10 +111,10 @@ namespace TUSZ.GRAFIT.Pathfinder
                 }
             }
 
-            protected bool LBFS(Route subject, Stop target, List<Route> history)
+            protected bool LBFS(Route subjectRoute, Stop targetStop, List<Route> history)
             {
-                // Már megnéztem?
-                if (this.visitedRoutes.Add(subject))
+                // Már megnéztem? (nem igazán ad releváns megoldást)
+                if (!this.visitedRoutes.Add(subjectRoute))
                 {
                     return false;
                 }
@@ -115,9 +124,11 @@ namespace TUSZ.GRAFIT.Pathfinder
                 {
                     return false;
                 }
+                
+                var transferMap = graph.GetTransferMap(subjectRoute);
 
                 // Ez egy jó járat?
-                if (subject.knownStops.Contains(target.idx))
+                if (transferMap.reachableStopIdxs.Contains(targetStop.idx))
                 {
                     return true;
                 }
@@ -128,56 +139,14 @@ namespace TUSZ.GRAFIT.Pathfinder
                     return false;
                 }
 
-                var toExamine = new HashSet<int>();
+                var visited = this.visitedRoutes;
+                //var visited = new HashSet<Route>(history);
 
-                foreach (var stopIdx in subject.knownStops)
+                // OK, meggyőztél, menjünk tovább...
+                foreach (var routeIdx in transferMap.reachableRouteIdxs)
                 {
-                    var stop = graph.GetStopByIndex(stopIdx);
-
-                    // A cél gyaloglási távolságra van?
-                    for (int i = 0; i < (stop.nearbyStops.Length / 2); i++)
-                    {
-                        if (stop.nearbyStops[i * 2 + 1] <= graph.maxWalkingDistancePerChange)
-                        {
-                            if (stop.nearbyStops[i * 2] == target.idx)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-
-                    // közvetlen szomszédok feltérképezése
-                    foreach (var routeIdx in stop.knownRoutes)
-                    {
-                        if (toExamine.Add(routeIdx))
-                        {
-                            var route = graph.GetRouteByIndex(routeIdx);
-                            TryAddNewNode(route, history);
-                        }
-                    }
-
-                    // átszálló szomszédok feltérképezése
-                    for (int i = 0; i < (stop.nearbyStops.Length / 2); i++)
-                    {
-                        if (stop.nearbyStops[i * 2 + 1] <= graph.maxWalkingDistancePerChange)
-                        {
-                            var neighbourStop = graph.GetStopByIndex(stop.nearbyStops[i * 2]);
-
-                            if (neighbourStop.knownRoutes == null)
-                            {
-                                continue;
-                            }
-
-                            foreach (var routeIdx in neighbourStop.knownRoutes)
-                            {
-                                if (toExamine.Add(routeIdx))
-                                {
-                                    var route = graph.GetRouteByIndex(routeIdx);
-                                    TryAddNewNode(route, history);
-                                }
-                            }
-                        }
-                    }
+                    var route = graph.GetRouteByIndex(routeIdx);
+                    TryAddNewNode(route, history, visited);
                 }
 
                 return false;
@@ -244,7 +213,7 @@ namespace TUSZ.GRAFIT.Pathfinder
                 }
             }
 
-            throw new Exception("Nem értem el a célt... Valószínűleg nem összefüggő a gráf.");
+            throw new NoPathFoundException(sourceStop, destinationStop, now);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace GTFSConverter.CRGTFS.Storage
         private Route[] routes;
         private Trip[] trips;
         private string[] headsigns;
+        private List<TransferMap> transferMap;
 
         private ZipFile zipStopDistanceVector;
         private ZipFile zipTripsForDate;
@@ -33,6 +34,7 @@ namespace GTFSConverter.CRGTFS.Storage
         private const string TRIPS_DAT = "trips.dat";
         private const string STOPS_DAT = "stops.dat";
         private const string HEADSIGNS_DAT = "headsigns.dat";
+        private const string TRANSFER_MAP_DAT = "transfer_map.dat";
 
         private const string SHAPE_FS_DAT = "shape_{0}.dat";
         private const string STOP_FS_DAT = "stop_{0}.dat";
@@ -84,6 +86,12 @@ namespace GTFSConverter.CRGTFS.Storage
                         {
                             ProtoBuf.Serializer.Serialize(stream, tdb.headsigns);
                             zip.AddEntry(HEADSIGNS_DAT, stream.ToArray());
+                        }
+
+                        using (var stream = new MemoryStream())
+                        {
+                            ProtoBuf.Serializer.Serialize(stream, tdb.transferMap);
+                            zip.AddEntry(TRANSFER_MAP_DAT, stream.ToArray());
                         }
 
                         zip.Save(Path.Combine(rootDirectory, CORE_ZIP));
@@ -211,6 +219,13 @@ namespace GTFSConverter.CRGTFS.Storage
                     zip[HEADSIGNS_DAT].Extract(stream);
                     stream.Position = 0;
                     headsigns = ProtoBuf.Serializer.Deserialize<string[]>(stream);
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    zip[TRANSFER_MAP_DAT].Extract(stream);
+                    stream.Position = 0;
+                    transferMap = ProtoBuf.Serializer.Deserialize<List<TransferMap>>(stream);
                 }
 
                 zipTripsForDate = new ZipFile(Path.Combine(rootDirectory, TRIP_DATES_ZIP));

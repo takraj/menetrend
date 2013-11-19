@@ -66,7 +66,7 @@ namespace TUSZ.GRAFIT.Pathfinder
                 }
             }
 
-            throw new Exception("Nem értem el a célt... Valószínűleg nem összefüggő a gráf.");
+            throw new NoPathFoundException(sourceStop, destinationStop, now);
         }
     }
 }

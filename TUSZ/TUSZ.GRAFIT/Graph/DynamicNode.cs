@@ -267,7 +267,7 @@ namespace TUSZ.GRAFIT.Graph
                 if (getOffAction != null)
                 {
                     // DynamicNode.History inicializálása
-                    addDynamicNode.history = this.history.AppendInstruction(getOffAction, graph.GetDistanceBetween(this.stop, stopDest));
+                    addDynamicNode.history = this.history.AppendInstruction(getOffAction);
                     addDynamicNode.history.totalWalkingTime = this.history.totalWalkingTime + cost;
                 }
 
@@ -415,7 +415,7 @@ namespace TUSZ.GRAFIT.Graph
             result.currentTime = instruction.endDate;
             result.onlyTravelActionNextTime = false;
             result.mustGetOn = false;
-            result.history = this.history.AppendInstruction(instruction, this.graph.GetDistanceBetween(this.stop, instruction.stop));
+            result.history = this.history.AppendInstruction(instruction);
 
             if ((this.history.lastInstruction == null)
                 || (this.history.lastInstruction.trip.idx != instruction.trip.idx))

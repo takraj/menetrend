@@ -63,6 +63,7 @@
     <Compile Include="Pathfinder\AStarPathfinder.cs" />
     <Compile Include="Pathfinder\DijkstraPathfinder.cs" />
     <Compile Include="Pathfinder\IPathfinder.cs" />
+    <Compile Include="Pathfinder\NoPathFoundException.cs" />
     <Compile Include="Pathfinder\ParallelAStarPathfinder.cs" />
     <Compile Include="Pathfinder\ParallelDijkstraPathfinder.cs" />
     <Compile Include="Pathfinder\PrecalculatedDijkstraPathfinder.cs" />

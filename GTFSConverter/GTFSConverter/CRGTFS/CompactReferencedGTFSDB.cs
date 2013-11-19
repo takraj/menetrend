@@ -17,6 +17,7 @@ namespace GTFSConverter.CRGTFS
         public List<ShapeVector> shapeMatrix;
         public string[] headsigns;
         public Dictionary<Route, List<TripDate>> routeDatesMap;
+        public List<TransferMap> transferMap;
     }
 
     public class OriginalMaps
@@ -26,6 +27,16 @@ namespace GTFSConverter.CRGTFS
         public IDictionary<uint, Trip> originalTripMap = new ConcurrentDictionary<uint, Trip>();
         public IDictionary<ushort, int> originalShapeIndexMap = new ConcurrentDictionary<ushort, int>();
         public IDictionary<string, int> headsignMap = new ConcurrentDictionary<string, int>();
+    }
+
+    [ProtoContract]
+    public class TransferMap
+    {
+        [ProtoMember(1)]
+        public HashSet<int> reachableStopIdxs;
+
+        [ProtoMember(2)]
+        public HashSet<int> reachableRouteIdxs;
     }
 
     [ProtoContract]

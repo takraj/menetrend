@@ -14,6 +14,7 @@ namespace GTFSConverter.CRGTFS.Storage
         private Route[] routes;
         private Trip[] trips;
         private string[] headsigns;
+        private List<TransferMap> transferMap;
 
         #region Constants
         private const string CORE_DIR = "Core";
@@ -25,6 +26,7 @@ namespace GTFSConverter.CRGTFS.Storage
         private const string TRIPS_DAT = "trips.dat";
         private const string STOPS_DAT = "stops.dat";
         private const string HEADSIGNS_DAT = "headsigns.dat";
+        private const string TRANSFER_MAP_DAT = "transfer_map.dat";
 
         private const string SHAPE_FS_DAT = "shape_{0}.dat";
         private const string STOP_FS_DAT = "stop_{0}.dat";
@@ -84,6 +86,12 @@ namespace GTFSConverter.CRGTFS.Storage
                 {
                     ProtoBuf.Serializer.Serialize(file, tdb.headsigns);
                 }
+
+                using (var file = System.IO.File.Create(Path.Combine(coredir, TRANSFER_MAP_DAT)))
+                {
+                    ProtoBuf.Serializer.Serialize(file, tdb.transferMap);
+                }
+
             }
             #endregion
 
@@ -185,6 +193,14 @@ namespace GTFSConverter.CRGTFS.Storage
                 using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, HEADSIGNS_DAT)))
                 {
                     headsigns = ProtoBuf.Serializer.Deserialize<string[]>(file);
+                }
+            },
+
+            () =>
+            {
+                using (var file = System.IO.File.OpenRead(Path.Combine(rootDirectory, CORE_DIR, TRANSFER_MAP_DAT)))
+                {
+                    transferMap = ProtoBuf.Serializer.Deserialize<List<TransferMap>>(file);
                 }
             });
         }

@@ -20,30 +20,20 @@ namespace GTFSConverter.CRGTFS
                     continue;
                 }
 
+                // Végigmegy minden Trip összes StopTime-ján, hogy az egymásra hivatkozásokat feltérképezze
                 foreach (var ctrip in ctripDictionary[croute.route_id])
                 {
                     foreach (var cstoptime in cstoptimeDictionary[ctrip.trip_id])
                     {
-                        if (cstoptime == cstoptimeDictionary[ctrip.trip_id].Last())
-                        {
-                            continue;
-                        }
+                        //if (cstoptime == cstoptimeDictionary[ctrip.trip_id].Last())
+                        //{
+                        //    continue;
+                        //}
 
                         var relatedRRoute = originalMaps.originalRouteMap[croute.route_id];
                         var relatedRStop = originalMaps.originalStopMap[cstoptime.stop_id];
 
-                        if (relatedRStop.knownRoutes.Contains(relatedRRoute.idx))
-                        {
-                            continue;
-                        }
-
                         relatedRStop.knownRoutes.Add(relatedRRoute.idx);
-
-                        if (relatedRRoute.knownStops.Contains(relatedRStop.idx))
-                        {
-                            continue;
-                        }
-
                         relatedRRoute.knownStops.Add(relatedRStop.idx);
                     }
                 }

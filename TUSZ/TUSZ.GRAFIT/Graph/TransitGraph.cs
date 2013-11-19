@@ -210,5 +210,10 @@ namespace TUSZ.GRAFIT.Graph
 
             return storageManager.GetStopDistanceVector(stop1.idx)[stop2.idx];
         }
+
+        public TransferMap GetTransferMap(Route route)
+        {
+            return storageManager.GetTransferMap().ElementAt(route.idx);
+        }
     }
 }

@@ -49,4 +49,15 @@ Level {
 Mindenképp érdemes letárolni, hogy az egyes megállókban egyáltalán milyen Route-ok állhatnak meg.
 
 
+TransferMap: RouteIdx-el címezhetõ lista
+  elemei:
+      {
+         milyen megállókat ismer a route + milyen megállók érhetõk el valamely megállójából gyalog,
+         milyen route-okkal találkozik + milyen route-ok érhetõk el valamely megállójából gyalog
+      }
+  miért jó?:
+     - A 3 egymásba ágyazott for ciklus ezentúl egyetlen lookup lesz.
+  miért rossz?:
+     - a megállónkénti max gyaloglási távolság bele lesz égetve a programba.
+
 PrecalculatedDijkstra

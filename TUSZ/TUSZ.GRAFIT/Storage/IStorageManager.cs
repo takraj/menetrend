@@ -20,6 +20,8 @@ namespace TUSZ.GRAFIT.Storage
         /// </summary>
         void LoadDatabase();
 
+        List<TransferMap> GetTransferMap();
+
         string GetHeadsign(int headsignIndex);
         Route GetRoute(int routeIndex);
         Stop GetStop(int stopIndex);
