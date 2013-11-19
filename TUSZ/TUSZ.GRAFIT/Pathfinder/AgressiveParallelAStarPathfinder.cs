@@ -26,7 +26,7 @@ namespace TUSZ.GRAFIT.Pathfinder
         {
             var staticMap = new Dictionary<Stop, SortedSet<DynamicNode>>();
             var openSet = HeapFactory.NewBinaryHeap<DynamicNode, long>();
-            var firstDynamicNode = DynamicNode.CreateFirstDynamicNode(this.graph, sourceStop, now);
+            var firstDynamicNode = DynamicNode.CreateFirstDynamicNode(this.graph, sourceStop, destinationStop, now);
             var unfoldedTrips = new HashSet<int>();
 
             staticMap[sourceStop] = new SortedSet<DynamicNode>();
@@ -52,6 +52,8 @@ namespace TUSZ.GRAFIT.Pathfinder
                     continue;
                 }
 
+                #region Agresszív rész
+                // -------------------
                 if ((currentNode.Value.CurrentTrip != null)
                     && !unfoldedTrips.Contains(currentNode.Value.CurrentTrip.idx)
                     && currentNode.Value.history.lastInstruction is TravelAction)
@@ -83,6 +85,8 @@ namespace TUSZ.GRAFIT.Pathfinder
                         return byTransfers.Min().history.instructions.ToList();
                     }
                 }
+                // -------------------
+                #endregion
 
                 lock (currentNode.Value)
                 {

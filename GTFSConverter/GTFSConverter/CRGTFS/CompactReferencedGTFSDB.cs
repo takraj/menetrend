@@ -232,6 +232,9 @@ namespace GTFSConverter.CRGTFS
         [ProtoMember(8)]
         public HashSet<int> knownStops;
 
+        [ProtoMember(9)]
+        public Dictionary<string, int> optimumStop;
+
         public ushort MinDate
         {
             get { return dates[0]; }

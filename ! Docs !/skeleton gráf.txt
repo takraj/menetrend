@@ -61,3 +61,26 @@ TransferMap: RouteIdx-el címezhetõ lista
      - a megállónkénti max gyaloglási távolság bele lesz égetve a programba.
 
 PrecalculatedDijkstra
+
+
+
+******
+
+v2: Optimum-Stop algoritmus
+----------------------------
+
+Route::Dictionary<string, int> :: key = "SeqHint-StopId" -- value = StopId
+ // Ez megadja, hogy adott route, adott seqence-jének adott csak sétával elérhetõ megállója
+ // melyik megállóhoz van a legközelebb.
+
+Kifejtéskor csak akkor fejtem ki átszállási lehetõségként az adott elérhetõ megállót,
+ha az aktuális megálló a hozzá legközelebb esõ.
+
+Ez várhatóan nagyon sokat gyorsít mindenféle elõfeldolgozás nélkül.
+
+Offline feldolgozás:
+
+1. kigyûjteni, hogy milyen route milyen sequence-ekkel és azon belül milyen megállókkal rendelkezik
+2. minden route minden sequence-re kigyûjteni az elérhetõ megállókat (nem szerepelnek a sequence-ben)
+3. minden route minden sequence-nek minden elérhetõ megállójára megkeresni, hogy melyik megálló van hozzá legközelebb
+    --> letárolni az adott route dictionary-jében, megfelelõ kulcsal

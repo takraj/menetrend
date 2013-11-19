@@ -19,7 +19,7 @@ namespace TUSZ.GRAFIT.Pathfinder
         {
             var staticMap = new Dictionary<Stop, SortedSet<DynamicNode>>();
             var openSet = HeapFactory.NewBinaryHeap<DynamicNode, long>();
-            var firstDynamicNode = DynamicNode.CreateFirstDynamicNode(this.graph, sourceStop, now);
+            var firstDynamicNode = DynamicNode.CreateFirstDynamicNode(this.graph, sourceStop, destinationStop, now);
 
             staticMap[sourceStop] = new SortedSet<DynamicNode>();
             staticMap[sourceStop].Add(firstDynamicNode);

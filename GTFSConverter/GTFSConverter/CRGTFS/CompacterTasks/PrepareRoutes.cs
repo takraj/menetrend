@@ -33,7 +33,8 @@ namespace GTFSConverter.CRGTFS
                     },
                     dates = new ushort[0],
                     idx = routes.Count,
-                    knownStops = new HashSet<int>()
+                    knownStops = new HashSet<int>(),
+                    optimumStop = new Dictionary<string,int>()
                 };
 
                 routes.Add(rroute);

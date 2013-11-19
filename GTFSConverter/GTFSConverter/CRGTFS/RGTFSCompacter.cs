@@ -20,24 +20,14 @@ namespace GTFSConverter.CRGTFS
             var tdb = new TransitDB();
             var originalMaps = new OriginalMaps();
 
-            //Parallel.Invoke(
-            //    () =>
-            //    {
-                    PrepareStops(ref tdb, ref originalMaps);
-                    Console.Write('|');
-                //},
+            PrepareStops(ref tdb, ref originalMaps);
+            Console.Write('|');
 
-                //() =>
-                //{
-                    PrepareShapes(ref tdb, ref originalMaps);
-                    Console.Write('|');
-                //},
+            PrepareShapes(ref tdb, ref originalMaps);
+            Console.Write('|');
 
-                //() =>
-                //{
-                    PrepareRoutes(ref tdb, ref originalMaps);
-                    Console.Write('|');
-                //});
+            PrepareRoutes(ref tdb, ref originalMaps);
+            Console.Write('|');
 
             PrepareTrips(ref tdb, ref originalMaps);
             Console.Write('|');
@@ -46,7 +36,7 @@ namespace GTFSConverter.CRGTFS
                 () =>
                 {
                     CalculateStopRouteRelationships(ref tdb, ref originalMaps);
-                    Console.Write('|');
+                    Console.Write('*');
                 },
 
                 () =>
@@ -58,7 +48,7 @@ namespace GTFSConverter.CRGTFS
                 () =>
                 {
                     CalculateTransferDistances(ref tdb, ref originalMaps);
-                    Console.Write('#');
+                    Console.Write('*');
                 });
 
             CalculateFirstLastArrivals(tdb, originalMaps);
@@ -68,6 +58,9 @@ namespace GTFSConverter.CRGTFS
             Console.Write('#');
 
             CalculateTransferMap(ref tdb);
+            Console.Write('#');
+
+            CalculateOptimumStops(tdb);
             Console.Write('#');
 
             return tdb;

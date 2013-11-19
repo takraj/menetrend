@@ -12,6 +12,7 @@ namespace TUSZ.GRAFIT.Graph
         public History history;
         public DateTime currentTime;
         public Stop stop;
+        public Stop targetStop;
         public TransitGraph graph;
         public bool onlyTravelActionNextTime;
         public bool mustGetOn;
@@ -244,14 +245,29 @@ namespace TUSZ.GRAFIT.Graph
 
             for (int i = 0; i < this.stop.nearbyStops.Length; i += 2 )
             {
-                if (this.reachableStops.Contains(this.stop.nearbyStops[i + 1]))
+                if (this.reachableStops.Contains(this.stop.nearbyStops[i]))
                 {
                     continue;
                 }
 
-                if (this.stop.nearbyStops[i + 1] > graph.maxWalkingDistancePerChange)
+                if (this.stop.nearbyStops[i + 1] != this.targetStop.idx)
                 {
-                    continue;
+                    if (this.stop.nearbyStops[i + 1] > graph.maxWalkingDistancePerChange)
+                    {
+                        continue;
+                    }
+
+                    // Itt lenne optimális átsétálni a másik megállóba?
+                    if (getOffAction != null)
+                    {
+                        var route = graph.GetRouteByIndex(this.CurrentTrip.routeIndex);
+                        string key = this.CurrentTrip.stopSequenceHint.ToString() + "-" + this.stop.nearbyStops[i].ToString();
+
+                        if (route.optimumStop[key] != this.stop.idx)
+                        {
+                            continue; // nem itt optimális átsétálni
+                        }
+                    }
                 }
 
                 Stop stopDest = graph.GetStopByIndex(this.stop.nearbyStops[i]);
@@ -403,6 +419,7 @@ namespace TUSZ.GRAFIT.Graph
                 mustGetOn = this.mustGetOn,
                 onlyTravelActionNextTime = this.onlyTravelActionNextTime,
                 stop = this.stop,
+                targetStop = this.targetStop,
                 reachableStops = this.reachableStops,
                 transferTree = this.transferTree
             };
@@ -431,11 +448,12 @@ namespace TUSZ.GRAFIT.Graph
             return result;
         }
 
-        public static DynamicNode CreateFirstDynamicNode(TransitGraph graph, Stop stop, DateTime datetime)
+        public static DynamicNode CreateFirstDynamicNode(TransitGraph graph, Stop sourceStop, Stop targetStop, DateTime datetime)
         {
             return new DynamicNode
             {
-                stop = stop,
+                stop = sourceStop,
+                targetStop = targetStop,
                 onlyTravelActionNextTime = false,
                 mustGetOn = false,
                 history = History.CreateEmptyHistory(),
