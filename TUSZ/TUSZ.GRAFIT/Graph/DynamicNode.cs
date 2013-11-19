@@ -301,7 +301,7 @@ namespace TUSZ.GRAFIT.Graph
         public DynamicNode GetNextDynamicNodeByTravelAction(TravelAction lastAction)
         {
             int nextIndex = this.history.lastStopTimeIndex + 1;
-            if ((lastAction.trip.stopTimes.Length - 2) < nextIndex)
+            if ((lastAction.trip.stopTimes.Length - 1) < nextIndex)
             {
                 return null;
             }

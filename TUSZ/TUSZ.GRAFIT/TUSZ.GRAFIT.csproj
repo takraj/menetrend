@@ -68,6 +68,7 @@
     <Compile Include="Pathfinder\ParallelDijkstraPathfinder.cs" />
     <Compile Include="Pathfinder\PrecalculatedDijkstraPathfinder.cs" />
     <Compile Include="Pathfinder\SmartParallelAStarPathfinder.cs" />
+    <Compile Include="Pathfinder\SpeedAnalyzerAStarPathfinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\FilesystemStorageManager.cs" />
     <Compile Include="Storage\IStorageManager.cs" />

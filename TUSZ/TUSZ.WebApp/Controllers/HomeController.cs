@@ -30,7 +30,7 @@ namespace TUSZ.WebApp.Controllers
             return View();
         }
 
-        public ActionResult TestMap(string stopFrom = "", string stopTo = "", string algo = "AgressiveParallelAStar")
+        public ActionResult TestMap(string stopFrom = "", string stopTo = "", string algo = "SmartParallelAStar")
         {
             var rnd = new Random();
             var src = rnd.Next(100, 5000);

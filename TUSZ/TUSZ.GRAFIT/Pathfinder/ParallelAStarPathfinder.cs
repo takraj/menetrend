@@ -31,7 +31,7 @@ namespace TUSZ.GRAFIT.Pathfinder
 
             staticMap[sourceStop] = new SortedSet<DynamicNode>();
             staticMap[sourceStop].Add(firstDynamicNode);
-            openSet.Add(firstDynamicNode, fValue(firstDynamicNode, destinationStop, now));
+            openSet.Add(firstDynamicNode, fValue(firstDynamicNode, sourceStop, destinationStop, now));
 
             while (openSet.Count > 0)
             {
@@ -72,7 +72,7 @@ namespace TUSZ.GRAFIT.Pathfinder
 
                         if (staticMap[nextNode.stop].Add(nextNode))
                         {
-                            openSet.Add(nextNode, fValue(nextNode, destinationStop, now));
+                            openSet.Add(nextNode, fValue(nextNode, sourceStop, destinationStop, now));
                         }
                     }
                 }
