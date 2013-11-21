@@ -62,6 +62,7 @@
     <Compile Include="Pathfinder\AgressiveParallelAStarPathfinder.cs" />
     <Compile Include="Pathfinder\AStarPathfinder.cs" />
     <Compile Include="Pathfinder\DijkstraPathfinder.cs" />
+    <Compile Include="Pathfinder\FibonacciHeap.cs" />
     <Compile Include="Pathfinder\IPathfinder.cs" />
     <Compile Include="Pathfinder\NoPathFoundException.cs" />
     <Compile Include="Pathfinder\ParallelAStarPathfinder.cs" />
