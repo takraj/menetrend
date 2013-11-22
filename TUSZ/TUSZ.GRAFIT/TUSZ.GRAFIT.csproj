@@ -64,6 +64,7 @@
     <Compile Include="Pathfinder\DijkstraPathfinder.cs" />
     <Compile Include="Pathfinder\FibonacciHeap.cs" />
     <Compile Include="Pathfinder\IPathfinder.cs" />
+    <Compile Include="Pathfinder\MarkerAStarPathfinder.cs" />
     <Compile Include="Pathfinder\NoPathFoundException.cs" />
     <Compile Include="Pathfinder\ParallelAStarPathfinder.cs" />
     <Compile Include="Pathfinder\ParallelDijkstraPathfinder.cs" />

@@ -65,6 +65,9 @@ namespace TUSZ.WebApp.Models
                 case "SpeedAnalyzerAStar":
                     pathfinder = new SpeedAnalyzerAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1000);
                     break;
+                case "MarkerAStar":
+                    pathfinder = new MarkerAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1000);
+                    break;
                 case "ParallelAStar":
                     pathfinder = new ParallelAStarPathfinder(graph, StorageManager.GetStopDistanceVector(destination.idx), 1000);
                     break;
