@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2AA37BB9-1336-4521-B915-91703A71BB4F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TransitPlannerLibrary</RootNamespace>
+    <AssemblyName>TransitPlannerLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvReader">
+      <HintPath>..\packages\CsvTools.1.0.10\lib\CsvReader.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FlowerDataModel\CsvDataSource.cs" />
+    <Compile Include="FlowerDataModel\IDataSource.cs" />
+    <Compile Include="FlowerDataModel\IntegerPair.cs" />
+    <Compile Include="FlowerDataModel\IRepository.cs" />
+    <Compile Include="FlowerDataModel\MemoryRepository.cs" />
+    <Compile Include="FlowerDataModel\Metadata.cs" />
+    <Compile Include="FlowerDataModel\Route.cs" />
+    <Compile Include="FlowerDataModel\SequenceLookupData.cs" />
+    <Compile Include="FlowerDataModel\Stop.cs" />
+    <Compile Include="FlowerDataModel\StopDistance.cs" />
+    <Compile Include="FlowerDataModel\StopTime.cs" />
+    <Compile Include="FlowerDataModel\Trip.cs" />
+    <Compile Include="FlowerGraphModel\AStarPathfinderState.cs" />
+    <Compile Include="FlowerGraphModel\DijkstraPathfinderState.cs" />
+    <Compile Include="FlowerGraphModel\FlowerGraph.cs" />
+    <Compile Include="FlowerGraphModel\FlowerNode.cs" />
+    <Compile Include="FlowerGraphModel\TravellingNode.cs" />
+    <Compile Include="FlowerGraphModel\WalkingNode.cs" />
+    <Compile Include="HeapDict\HeapDict.cs" />
+    <Compile Include="PathfinderCore\GenericPathfinder.cs" />
+    <Compile Include="PathfinderCore\INode.cs" />
+    <Compile Include="PathfinderCore\IPathfinder.cs" />
+    <Compile Include="PathfinderCore\IPathfinderState.cs" />
+    <Compile Include="PathfinderCore\NoPathFoundException.cs" />
+    <Compile Include="PathfinderCore\NoPreviousNodeException.cs" />
+    <Compile Include="PriorityQueues\BinaryHeapPriorityQueue.cs" />
+    <Compile Include="PriorityQueues\IPriorityQueue.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -16,8 +16,8 @@ namespace FlowerDataModel
         protected List<Route> _routes;
         protected List<Trip> _trips;
         protected List<List<StopTime>> _sequences;
-        protected HashSet<IntegerPair> _serviceAvailability;
-        protected Dictionary<IntegerPair, SequenceLookupData> _sequenceLookup;
+        protected HashSet<int>[] _serviceAvailability;
+        protected Dictionary<int, SequenceLookupData>[] _sequenceLookup;
 
         public MemoryRepository(IDataSource dataSource)
         {
@@ -27,8 +27,6 @@ namespace FlowerDataModel
             _routes = new List<Route>();
             _trips = new List<Trip>();
             _sequences = new List<List<StopTime>>();
-            _serviceAvailability = new HashSet<IntegerPair>();
-            _sequenceLookup = new Dictionary<IntegerPair,SequenceLookupData>();
 
             this.LoadMetadata();
             this.LoadSchedules();
@@ -75,7 +73,7 @@ namespace FlowerDataModel
 
         public bool IsServiceAvailableOnDay(int serviceId, int day)
         {
-            return _serviceAvailability.Contains(new IntegerPair(serviceId, day));
+            return _serviceAvailability[day].Contains(serviceId);
         }
 
         public IEnumerable<StopTime> GetSequenceById(int id)
@@ -85,10 +83,9 @@ namespace FlowerDataModel
 
         public SequenceLookupData LookupNextStop(int sequenceId, int stopId)
         {
-            var key = new IntegerPair(sequenceId, stopId);
-            if (_sequenceLookup.ContainsKey(key))
+            if (_sequenceLookup[sequenceId].ContainsKey(stopId))
             {
-                return _sequenceLookup[key];
+                return _sequenceLookup[sequenceId][stopId];
             }
             else
             {
@@ -127,12 +124,19 @@ namespace FlowerDataModel
 
         protected void LoadSchedules()
         {
+            _serviceAvailability = new HashSet<int>[_meta.CountOfServiceDays];
+
+            for (int i = 0; i < _meta.CountOfServiceDays; i++)
+            {
+                _serviceAvailability[i] = new HashSet<int>();
+            }
+
             foreach (var data in _dataSource.GetAllSchedule())
             {
                 var service_day = int.Parse(data["service_day"]);
                 var calendar_idx = int.Parse(data["calendar_idx"]);
 
-                _serviceAvailability.Add(new IntegerPair(calendar_idx, service_day));
+                _serviceAvailability[service_day].Add(calendar_idx);
             }
         }
 
@@ -160,11 +164,19 @@ namespace FlowerDataModel
 
         protected void LoadSequenceLookup()
         {
+            _sequenceLookup = new Dictionary<int, SequenceLookupData>[_meta.CountOfSequences];
+
+            for (int i = 0; i < _meta.CountOfSequences; i++)
+            {
+                _sequenceLookup[i] = new Dictionary<int, SequenceLookupData>();
+            }
+
             foreach (var data in _dataSource.GetAllSequenceLookupData())
             {
-                var key = new IntegerPair(int.Parse(data["sequence_idx"]), int.Parse(data["stop_idx"]));
+                var seqId = int.Parse(data["sequence_idx"]);
+                var stopId = int.Parse(data["stop_idx"]);
 
-                _sequenceLookup[key] = new SequenceLookupData
+                _sequenceLookup[seqId][stopId] = new SequenceLookupData
                 {
                     DepartureTime = int.Parse(data["departure_time"]),
                     IdxInSequence = int.Parse(data["idx_in_seq"]),
