@@ -19,6 +19,8 @@ namespace TransitPlannerLibrary.FlowerDataModel
 
         bool IsServiceAvailableOnDay(int serviceId, int day);
         IEnumerable<StopTime> GetSequenceById(int id);
+        IEnumerable<Trip> GetTripsBySequence(int id);
+        IEnumerable<int> GetSequencesByStop(int id);
 
         SequenceLookupData LookupNextStop(int sequenceId, int stopId);
     }

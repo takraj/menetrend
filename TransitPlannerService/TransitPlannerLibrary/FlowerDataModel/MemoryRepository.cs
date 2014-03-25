@@ -18,6 +18,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
         protected List<StopTime>[] _sequences;
         protected HashSet<int>[] _serviceAvailability;
         protected Dictionary<int, SequenceLookupData>[] _sequenceLookup;
+        protected List<Trip>[] _tripsBySequences;
 
         #region CSV Constants
 
@@ -75,12 +76,14 @@ namespace TransitPlannerLibrary.FlowerDataModel
             this.LoadMetadata();
 
             Parallel.Invoke(
+                () => this.LoadRoutes(),
+                () => this.LoadStops(),
                 () => this.LoadSchedules(),
                 () => this.LoadSequences(),
-                () => this.LoadSequenceLookup(),
-                () => this.LoadStops(),
-                () => this.LoadRoutes()
+                () => this.LoadSequenceLookup()
                 );
+
+            this.CalculateTripsBySequences();
         }
 
         public Metadata MetaInfo
@@ -128,11 +131,21 @@ namespace TransitPlannerLibrary.FlowerDataModel
             return _sequences[id];
         }
 
+        public IEnumerable<Trip> GetTripsBySequence(int id)
+        {
+            return _tripsBySequences[id];
+        }
+
+        public IEnumerable<int> GetSequencesByStop(int id)
+        {
+            return _sequenceLookup[id].Keys;
+        }
+
         public SequenceLookupData LookupNextStop(int sequenceId, int stopId)
         {
-            if (_sequenceLookup[sequenceId].ContainsKey(stopId))
+            if (_sequenceLookup[stopId].ContainsKey(sequenceId))
             {
-                return _sequenceLookup[sequenceId][stopId];
+                return _sequenceLookup[stopId][sequenceId];
             }
             else
             {
@@ -142,7 +155,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
 
         #region Loaders
 
-        protected void LoadMetadata()
+        private void LoadMetadata()
         {
             foreach (var data in _dataSource.GetAllMetaInfo())
             {
@@ -185,7 +198,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
             }
         }
 
-        protected void LoadSchedules()
+        private void LoadSchedules()
         {
             _serviceAvailability = new HashSet<int>[_meta.CountOfServiceDays];
 
@@ -203,7 +216,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
             }
         }
 
-        protected void LoadSequences()
+        private void LoadSequences()
         {
             _sequences = new List<StopTime>[_meta.CountOfSequences];
 
@@ -227,11 +240,11 @@ namespace TransitPlannerLibrary.FlowerDataModel
             }
         }
 
-        protected void LoadSequenceLookup()
+        private void LoadSequenceLookup()
         {
-            _sequenceLookup = new Dictionary<int, SequenceLookupData>[_meta.CountOfSequences];
+            _sequenceLookup = new Dictionary<int, SequenceLookupData>[_meta.CountOfStops];
 
-            for (int i = 0; i < _meta.CountOfSequences; i++)
+            for (int i = 0; i < _meta.CountOfStops; i++)
             {
                 _sequenceLookup[i] = new Dictionary<int, SequenceLookupData>();
             }
@@ -241,7 +254,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
                 var seqId = int.Parse(data[COLUMN_SEQUENCE_INDEX]);
                 var stopId = int.Parse(data[COLUMN_STOP_INDEX]);
 
-                _sequenceLookup[seqId][stopId] = new SequenceLookupData
+                _sequenceLookup[stopId][seqId] = new SequenceLookupData
                 {
                     DepartureTime = int.Parse(data[COLUMN_DEPARTURE_TIME]),
                     IdxInSequence = int.Parse(data[COLUMN_INDEX_IN_SEQUENCE]),
@@ -251,7 +264,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
             }
         }
 
-        protected void LoadStops()
+        private void LoadStops()
         {
             _stops = new Stop[_meta.CountOfStops];
 
@@ -298,7 +311,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
             }
         }
 
-        protected void LoadRoutes()
+        private void LoadRoutes()
         {
             _routes = new Route[_meta.CountOfRoutes];
 
@@ -366,6 +379,20 @@ namespace TransitPlannerLibrary.FlowerDataModel
                 _trips[tripIdx] = item;
 
                 tripIdx++;
+            }
+        }
+
+        #endregion
+
+        #region Calculators
+
+        private void CalculateTripsBySequences()
+        {
+            _tripsBySequences = new List<Trip>[_meta.CountOfSequences];
+
+            for (int i = 0; i < _meta.CountOfSequences; i++)
+            {
+                _tripsBySequences[i] = _trips.Where(t => t.SequenceIdx == i).ToList();
             }
         }
 
