@@ -39,17 +39,12 @@ namespace TransitPlannerLibrary.FlowerGraphModel
             var todayMidnight = GetMidnight(now);
             var stop = _graph.Repository.GetStopById(_stopId);
 
-            foreach (var dst in stop.Distances)
+            foreach (var dst in stop.Distances.Where(dst => !_state.IsClosedRaw(dst.StopIdx)))
             {
-                if (!_state.IsClosedRaw(dst.StopIdx))
-                {
-                    var walkToNode = new WalkingNode(_graph, _state, dst.StopIdx);
-                    var walkToCost = now.AddHours(dst.Distance / 1000.0 / _graph.WalkingSpeed);
-                    result.Add(new KeyValuePair<FlowerNode, DateTime>(walkToNode, walkToCost));
-                }
+                var walkToNode = new WalkingNode(_graph, _state, dst.StopIdx);
+                var walkToCost = now.AddHours(dst.Distance / 1000.0 / _graph.WalkingSpeed);
+                result.Add(new KeyValuePair<FlowerNode, DateTime>(walkToNode, walkToCost));
             }
-
-            var alreadyAcceptedSequences = new HashSet<int>();
 
             foreach (int routeIdx in stop.Routes)
             {
@@ -62,12 +57,13 @@ namespace TransitPlannerLibrary.FlowerGraphModel
                         continue;
                     }
 
-                    if (alreadyAcceptedSequences.Contains(sequenceId))
+                    if (_state.IsSequenceMinEndTimeKnown(sequenceId) && _state.GetSequenceMinEndTime(sequenceId) < now)
                     {
                         continue;
                     }
 
-                    if (_state.IsSequenceMinEndTimeKnown(sequenceId) && _state.GetSequenceMinEndTime(sequenceId) < now)
+                    var lookupResult = _graph.Repository.LookupNextStop(sequenceId, _stopId);
+                    if (lookupResult == null)
                     {
                         continue;
                     }
@@ -77,13 +73,6 @@ namespace TransitPlannerLibrary.FlowerGraphModel
                     foreach (int tripId in route.TripsBySequence[sequenceId])
                     {
                         if (foundTrip)
-                        {
-                            break;
-                        }
-
-                        var lookupResult = _graph.Repository.LookupNextStop(sequenceId, _stopId);
-
-                        if (lookupResult == null)
                         {
                             break;
                         }
@@ -118,7 +107,6 @@ namespace TransitPlannerLibrary.FlowerGraphModel
                                             var nodeArrival = thisStopDeparture;
 
                                             result.Add(new KeyValuePair<FlowerNode, DateTime>(node, nodeArrival));
-                                            alreadyAcceptedSequences.Add(sequenceId);
                                             _state.UpdateSequenceMinEndTime(sequenceId, endtime);
 
                                             foundTrip = true;
