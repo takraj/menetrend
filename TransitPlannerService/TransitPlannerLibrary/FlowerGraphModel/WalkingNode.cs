@@ -46,77 +46,84 @@ namespace TransitPlannerLibrary.FlowerGraphModel
                 result.Add(new KeyValuePair<FlowerNode, DateTime>(walkToNode, walkToCost));
             }
 
-            foreach (int routeIdx in stop.Routes)
+            foreach (int sequenceId in _graph.Repository.GetSequencesByStop(_stopId))
             {
-                var route = _graph.Repository.GetRouteById(routeIdx);
-
-                foreach (int sequenceId in route.TripsBySequence.Keys)
+                if (_state.IsClosedRaw(new Pair<int, int>(sequenceId, _stopId)))
                 {
-                    if (_state.IsClosedRaw(new Pair<int, int>(sequenceId, _stopId)))
+                    continue;
+                }
+
+                if (_state.IsSequenceMinEndTimeKnown(sequenceId) && _state.GetSequenceMinEndTime(sequenceId) < now)
+                {
+                    continue;
+                }
+
+                var lookupResult = _graph.Repository.LookupNextStop(sequenceId, _stopId);
+                if (lookupResult == null)
+                {
+                    continue;
+                }
+
+                bool foundTrip = false;
+
+                foreach (int tripId in _graph.Repository.GetTripsBySequence(sequenceId))
+                {
+                    if (foundTrip)
+                    {
+                        break;
+                    }
+
+                    var trip = _graph.Repository.GetTripById(tripId);
+
+                    if (_graph.IsRouteDisabled(trip.RouteIdx))
                     {
                         continue;
                     }
 
-                    if (_state.IsSequenceMinEndTimeKnown(sequenceId) && _state.GetSequenceMinEndTime(sequenceId) < now)
+                    if (_graph.NeedsWheelchairSupport && (!trip.WheelchairAccessible))
                     {
                         continue;
                     }
 
-                    var lookupResult = _graph.Repository.LookupNextStop(sequenceId, _stopId);
-                    if (lookupResult == null)
+                    var currentMidnight = todayMidnight;
+
+                    if (trip.DayOverlap)
                     {
-                        continue;
+                        currentMidnight = now.AddMinutes((-1) * trip.Duration);
                     }
 
-                    bool foundTrip = false;
-
-                    foreach (int tripId in route.TripsBySequence[sequenceId])
+                    while (currentMidnight < maxDeparture)
                     {
-                        if (foundTrip)
+                        var delay = _graph.GetTripDelay(tripId);
+                        var endtime = currentMidnight.AddMinutes(trip.IntervalTo) + delay;
+
+                        if (now <= endtime)
                         {
-                            break;
-                        }
+                            var serviceDay = (currentMidnight - _graph.Repository.MetaInfo.MinDate).Days;
 
-                        var trip = _graph.Repository.GetTripById(tripId);
-                        var currentMidnight = todayMidnight;
-
-                        if (trip.DayOverlap)
-                        {
-                            currentMidnight = now.AddMinutes((-1) * trip.Duration);
-                        }
-
-                        while (currentMidnight < maxDeparture)
-                        {
-                            var endtime = currentMidnight.AddMinutes(trip.IntervalTo);
-
-                            if (now <= endtime)
+                            if ((serviceDay >= 0) && (_graph.Repository.IsServiceAvailableOnDay(trip.ServiceIdx, serviceDay)))
                             {
-                                var serviceDay = (currentMidnight - _graph.Repository.MetaInfo.MinDate).Days;
+                                var tripBaseTime = currentMidnight.AddMinutes(trip.IntervalFrom) + delay;
 
-                                if ((serviceDay >= 0) && (_graph.Repository.IsServiceAvailableOnDay(trip.ServiceIdx, serviceDay)))
+                                if (tripBaseTime <= maxDeparture)
                                 {
-                                    var tripBaseTime = currentMidnight.AddMinutes(trip.IntervalFrom);
+                                    var thisStopDeparture = tripBaseTime.AddMinutes(lookupResult.DepartureTime);
 
-                                    if (tripBaseTime <= maxDeparture)
+                                    if (thisStopDeparture >= (now + _graph.GetOnOffTimePerTransfer))
                                     {
-                                        var thisStopDeparture = tripBaseTime.AddMinutes(lookupResult.DepartureTime);
+                                        var node = new TravellingNode(_graph, _state, _stopId, sequenceId, tripId, tripBaseTime);
+                                        var nodeArrival = thisStopDeparture;
 
-                                        if (thisStopDeparture >= (now + _graph.GetOnOffTimePerTransfer))
-                                        {
-                                            var node = new TravellingNode(_graph, _state, _stopId, sequenceId, tripId, tripBaseTime);
-                                            var nodeArrival = thisStopDeparture;
+                                        result.Add(new KeyValuePair<FlowerNode, DateTime>(node, nodeArrival));
+                                        _state.UpdateSequenceMinEndTime(sequenceId, endtime);
 
-                                            result.Add(new KeyValuePair<FlowerNode, DateTime>(node, nodeArrival));
-                                            _state.UpdateSequenceMinEndTime(sequenceId, endtime);
-
-                                            foundTrip = true;
-                                            break;
-                                        }
+                                        foundTrip = true;
+                                        break;
                                     }
                                 }
                             }
-                            currentMidnight = currentMidnight.AddDays(1);
                         }
+                        currentMidnight = currentMidnight.AddDays(1);
                     }
                 }
             }

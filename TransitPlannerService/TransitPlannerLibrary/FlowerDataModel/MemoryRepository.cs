@@ -18,7 +18,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
         protected List<StopTime>[] _sequences;
         protected HashSet<int>[] _serviceAvailability;
         protected Dictionary<int, SequenceLookupData>[] _sequenceLookup;
-        protected List<Trip>[] _tripsBySequences;
+        protected List<int>[] _tripsBySequences;
 
         #region CSV Constants
 
@@ -131,7 +131,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
             return _sequences[id];
         }
 
-        public IEnumerable<Trip> GetTripsBySequence(int id)
+        public IEnumerable<int> GetTripsBySequence(int id)
         {
             return _tripsBySequences[id];
         }
@@ -388,16 +388,16 @@ namespace TransitPlannerLibrary.FlowerDataModel
 
         private void CalculateTripsBySequences()
         {
-            _tripsBySequences = new List<Trip>[_meta.CountOfSequences];
+            _tripsBySequences = new List<int>[_meta.CountOfSequences];
 
             for (int i = 0; i < _meta.CountOfSequences; i++)
             {
-                _tripsBySequences[i] = new List<Trip>();
+                _tripsBySequences[i] = new List<int>();
             }
 
-            foreach (var trip in _trips)
+            for (int tripId = 0; tripId < _trips.Count(); tripId++)
             {
-                _tripsBySequences[trip.SequenceIdx].Add(trip);
+                _tripsBySequences[_trips[tripId].SequenceIdx].Add(tripId);
             }
         }
 

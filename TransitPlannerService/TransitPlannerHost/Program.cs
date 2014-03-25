@@ -29,6 +29,9 @@ namespace TransitPlannerHost
 
             var pathfinder = new GenericPathfinder<FlowerNode, DateTime, DijkstraPathfinderState, BinaryHeapPriorityQueue<FlowerNode>>();
 
+            //Console.WriteLine("READY");
+            //Console.ReadKey();
+
             Console.WriteLine("Starting pathfinder...");
             var sw = new Stopwatch();
             sw.Start();
