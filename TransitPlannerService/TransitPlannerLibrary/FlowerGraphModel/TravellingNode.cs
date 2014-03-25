@@ -1,11 +1,12 @@
-﻿using FlowerDataModel;
+﻿using TransitPlannerLibrary.FlowerDataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PortableUtilityLibrary;
 
-namespace FlowerGraphModel
+namespace TransitPlannerLibrary.FlowerGraphModel
 {
     public class TravellingNode : FlowerNode
     {
@@ -33,7 +34,7 @@ namespace FlowerGraphModel
 
             var lookupResult = _graph.Repository.LookupNextStop(_sequenceId, _stopId);
 
-            if ((lookupResult != null) && (!_state.IsClosedRaw(new IntegerPair(lookupResult.NextStopIdx, _sequenceId))))
+            if ((lookupResult != null) && (!_state.IsClosedRaw(new Pair<int, int>(lookupResult.NextStopIdx, _sequenceId))))
             {
                 var nextNode = new TravellingNode(_graph, _state, lookupResult.NextStopIdx, _sequenceId, _tripId, _baseTime);
                 var nextCost = _baseTime.AddMinutes(lookupResult.NextStopArrivalTime);
@@ -68,7 +69,7 @@ namespace FlowerGraphModel
 
         public override object DistanceVectorKey
         {
-            get { return new IntegerPair(_stopId, _sequenceId); }
+            get { return new Pair<int, int>(_stopId, _sequenceId); }
         }
 
         public int TripId

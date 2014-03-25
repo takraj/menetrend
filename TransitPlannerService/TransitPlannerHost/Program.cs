@@ -1,7 +1,7 @@
-﻿using FlowerDataModel;
-using FlowerGraphModel;
-using PathfinderCore;
-using PriorityQueues;
+﻿using TransitPlannerLibrary.FlowerDataModel;
+using TransitPlannerLibrary.FlowerGraphModel;
+using TransitPlannerLibrary.PathfinderCore;
+using TransitPlannerLibrary.PriorityQueues;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

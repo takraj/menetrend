@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using HeapDict;
 
-namespace PriorityQueues
+namespace TransitPlannerLibrary.PriorityQueues
 {
     public class BinaryHeapPriorityQueue<K> : IPriorityQueue<K>
     {

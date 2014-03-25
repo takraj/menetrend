@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FlowerDataModel
+namespace TransitPlannerLibrary.FlowerDataModel
 {
     public class SequenceLookupData
     {

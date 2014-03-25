@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowerGraphModel
+namespace TransitPlannerLibrary.FlowerGraphModel
 {
     public class AStarPathfinderState : DijkstraPathfinderState
     {

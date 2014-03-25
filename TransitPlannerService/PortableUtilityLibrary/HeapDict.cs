@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 // Ported from Python: https://github.com/DanielStutzbach/heapdict
 
-namespace HeapDict
+namespace PortableUtilityLibrary
 {
     public class HeapDict<K, V> : IEnumerable<K> where V : IComparable
     {

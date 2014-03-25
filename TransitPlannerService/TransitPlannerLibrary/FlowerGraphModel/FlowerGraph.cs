@@ -1,11 +1,12 @@
-﻿using FlowerDataModel;
+﻿using TransitPlannerLibrary.FlowerDataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PortableUtilityLibrary;
 
-namespace FlowerGraphModel
+namespace TransitPlannerLibrary.FlowerGraphModel
 {
     public class FlowerGraph
     {
@@ -83,30 +84,6 @@ namespace FlowerGraphModel
         }
 
         /// <summary>
-        /// From: http://rosettacode.org/wiki/Haversine_formula#C.23
-        /// </summary>
-        protected static class Haversine
-        {
-            public static double calculate(double lat1, double lon1, double lat2, double lon2)
-            {
-                var R = 6372.8; // In kilometers
-                var dLat = toRadians(lat2 - lat1);
-                var dLon = toRadians(lon2 - lon1);
-                lat1 = toRadians(lat1);
-                lat2 = toRadians(lat2);
-
-                var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) + Math.Sin(dLon / 2) * Math.Sin(dLon / 2) * Math.Cos(lat1) * Math.Cos(lat2);
-                var c = 2 * Math.Asin(Math.Sqrt(a));
-                return R * 2 * Math.Asin(Math.Sqrt(a));
-            }
-
-            public static double toRadians(double angle)
-            {
-                return Math.PI * angle / 180.0;
-            }
-        }
-
-        /// <summary>
         /// Returns the distance between the two Stops (represented by their IDs). The unit is 'km'.
         /// </summary>
         /// <param name="stopId1">ID of the first Stop.</param>
@@ -117,7 +94,7 @@ namespace FlowerGraphModel
             var stop1 = _repository.GetStopById(stopId1);
             var stop2 = _repository.GetStopById(stopId2);
 
-            return Haversine.calculate(stop1.Latitude, stop1.Longitude, stop2.Latitude, stop2.Longitude); // km
+            return Haversine.GetDistanceBetween(stop1.Latitude, stop1.Longitude, stop2.Latitude, stop2.Longitude); // km
         }
     }
 }

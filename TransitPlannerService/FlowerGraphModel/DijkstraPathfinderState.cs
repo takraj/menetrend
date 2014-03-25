@@ -1,10 +1,10 @@
-﻿using PathfinderCore;
+﻿using TransitPlannerLibrary.PathfinderCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FlowerGraphModel
+namespace TransitPlannerLibrary.FlowerGraphModel
 {
     public class DijkstraPathfinderState : IPathfinderState<FlowerNode, DateTime>
     {

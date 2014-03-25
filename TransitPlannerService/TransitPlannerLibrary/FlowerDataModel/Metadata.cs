@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FlowerDataModel
+namespace TransitPlannerLibrary.FlowerDataModel
 {
     public class Metadata
     {
         public DateTime MinDate, MaxDate;
         public int MaxSpeed;
-        public int CountOfServiceDays, CountOfSequences;
+        public int CountOfCalendars, CountOfServiceDays, CountOfSequences;
+        public int CountOfStops, CountOfTrips, CountOfRoutes;
     }
 }

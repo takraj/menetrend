@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowerDataModel
+namespace TransitPlannerLibrary.FlowerDataModel
 {
     public class MemoryRepository : IRepository
     {

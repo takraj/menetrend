@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace FlowerDataModel
+namespace TransitPlannerLibrary.FlowerDataModel
 {
     public class CsvDataSource : IDataSource
     {

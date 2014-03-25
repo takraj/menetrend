@@ -1,11 +1,12 @@
-﻿using FlowerDataModel;
+﻿using TransitPlannerLibrary.FlowerDataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PortableUtilityLibrary;
 
-namespace FlowerGraphModel
+namespace TransitPlannerLibrary.FlowerGraphModel
 {
     public class WalkingNode : FlowerNode
     {
@@ -56,7 +57,7 @@ namespace FlowerGraphModel
 
                 foreach (int sequenceId in route.TripsBySequence.Keys)
                 {
-                    if (_state.IsClosedRaw(new IntegerPair(sequenceId, _stopId)))
+                    if (_state.IsClosedRaw(new Pair<int, int>(sequenceId, _stopId)))
                     {
                         continue;
                     }

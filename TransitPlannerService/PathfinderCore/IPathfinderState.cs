@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PathfinderCore
+namespace TransitPlannerLibrary.PathfinderCore
 {
     public interface IPathfinderState<N, C>
         where N : INode<N, C>

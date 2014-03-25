@@ -1,11 +1,11 @@
-﻿using PathfinderCore;
+﻿using TransitPlannerLibrary.PathfinderCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowerGraphModel
+namespace TransitPlannerLibrary.FlowerGraphModel
 {
     public abstract class FlowerNode : INode<FlowerNode, DateTime>
     {

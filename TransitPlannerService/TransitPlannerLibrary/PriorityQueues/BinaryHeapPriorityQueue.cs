@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using HeapDict;
+using PortableUtilityLibrary;
 
-namespace PriorityQueues
+namespace TransitPlannerLibrary.PriorityQueues
 {
     public class BinaryHeapPriorityQueue<K> : IPriorityQueue<K>
     {

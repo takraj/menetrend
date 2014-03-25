@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="FlowerDataModel\CsvDataSource.cs" />
     <Compile Include="FlowerDataModel\IDataSource.cs" />
-    <Compile Include="FlowerDataModel\IntegerPair.cs" />
     <Compile Include="FlowerDataModel\IRepository.cs" />
     <Compile Include="FlowerDataModel\MemoryRepository.cs" />
     <Compile Include="FlowerDataModel\Metadata.cs" />
@@ -60,7 +59,6 @@
     <Compile Include="FlowerGraphModel\FlowerNode.cs" />
     <Compile Include="FlowerGraphModel\TravellingNode.cs" />
     <Compile Include="FlowerGraphModel\WalkingNode.cs" />
-    <Compile Include="HeapDict\HeapDict.cs" />
     <Compile Include="PathfinderCore\GenericPathfinder.cs" />
     <Compile Include="PathfinderCore\INode.cs" />
     <Compile Include="PathfinderCore\IPathfinder.cs" />
@@ -74,7 +72,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\PortableUtilityLibrary\PortableUtilityLibrary.csproj">
+      <Project>{7643c8ee-a46f-4442-805a-e2961891a476}</Project>
+      <Name>PortableUtilityLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

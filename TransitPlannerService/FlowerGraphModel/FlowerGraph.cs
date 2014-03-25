@@ -1,11 +1,11 @@
-﻿using FlowerDataModel;
+﻿using TransitPlannerLibrary.FlowerDataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowerGraphModel
+namespace TransitPlannerLibrary.FlowerGraphModel
 {
     public class FlowerGraph
     {
