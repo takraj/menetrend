@@ -392,7 +392,12 @@ namespace TransitPlannerLibrary.FlowerDataModel
 
             for (int i = 0; i < _meta.CountOfSequences; i++)
             {
-                _tripsBySequences[i] = _trips.Where(t => t.SequenceIdx == i).ToList();
+                _tripsBySequences[i] = new List<Trip>();
+            }
+
+            foreach (var trip in _trips)
+            {
+                _tripsBySequences[trip.SequenceIdx].Add(trip);
             }
         }
 
