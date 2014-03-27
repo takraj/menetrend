@@ -10,26 +10,28 @@ namespace TransitPlannerLibrary.FlowerGraphModel
 {
     public class FlowerGraph
     {
-        protected IRepository _repository;
-        protected TimeSpan _getOnOffTime;
-        protected TimeSpan _maxWaitingTime;
-        protected double _walkingSpeed;
-        protected bool _wheelchair;
+        private static readonly TimeSpan NO_DELAY = new TimeSpan(0, 0, 0);
 
-        protected HashSet<int> _disabledRouteIds;
-        protected Dictionary<int, TimeSpan> _tripDelays;
+        private readonly IRepository _repository;
+        private readonly TimeSpan _getOnOffTime;
+        private readonly TimeSpan _maxWaitingTime;
+        private readonly double _walkingSpeed;
+        private readonly bool _wheelchair;
+
+        protected readonly bool[] _disabledRouteIds;
+        protected readonly IDictionary<int, TimeSpan> _tripDelays;
 
         /// <summary>
         /// Configures a FlowerGraph for trip planning.
         /// </summary>
         /// <param name="repository">Repository that provides the underlying data model.</param>
-        /// <param name="disabledVehicleTypes">HashSet containing the unusable route IDs.</param>
+        /// <param name="disabledVehicleTypes">Enumerable list of unusable route IDs.</param>
         /// <param name="tripDelays">TripID -> AmountOfDelay.</param>
         /// <param name="getOnOffTime">The amount of time that is needed to get on or off a vehicle.</param>
         /// <param name="maxWaitingTime">The maximum willingness to wait at a stop.</param>
         /// <param name="walkingSpeed">Speed of walking in km/h units.</param>
         /// <param name="walkingSpeed">Only enable that subgraph where wheelchair is supported.</param>
-        public FlowerGraph(IRepository repository, HashSet<int> disabledRouteIds, Dictionary<int, TimeSpan> tripDelays, TimeSpan getOnOffTime, TimeSpan maxWaitingTime, double walkingSpeed, bool needsWheelchairSupport)
+        public FlowerGraph(IRepository repository, IEnumerable<int> disabledRouteIds, IDictionary<int, TimeSpan> tripDelays, TimeSpan getOnOffTime, TimeSpan maxWaitingTime, double walkingSpeed, bool needsWheelchairSupport)
         {
             _repository = repository;
             _getOnOffTime = getOnOffTime;
@@ -37,7 +39,12 @@ namespace TransitPlannerLibrary.FlowerGraphModel
             _walkingSpeed = walkingSpeed;
             _wheelchair = needsWheelchairSupport;
 
-            _disabledRouteIds = disabledRouteIds;
+            _disabledRouteIds = new bool[_repository.MetaInfo.CountOfRoutes];
+            foreach (var i in disabledRouteIds)
+            {
+                _disabledRouteIds[i] = true;
+            }
+
             _tripDelays = tripDelays;
         }
 
@@ -79,7 +86,7 @@ namespace TransitPlannerLibrary.FlowerGraphModel
             }
             else
             {
-                return new TimeSpan(0, 0, 0);
+                return NO_DELAY;
             }
         }
 
@@ -104,7 +111,7 @@ namespace TransitPlannerLibrary.FlowerGraphModel
         /// <returns>Boolean value.</returns>
         public bool IsRouteDisabled(int routeId)
         {
-            return _disabledRouteIds.Contains(routeId);
+            return _disabledRouteIds[routeId];
         }
     }
 }
