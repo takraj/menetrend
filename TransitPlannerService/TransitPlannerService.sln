@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitPlannerWcfHost", "Tr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitPlannerContracts", "TransitPlannerContracts\TransitPlannerContracts.csproj", "{CCEFB389-BAFC-452C-A623-02836C2E31FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitPlannerWebApp", "TransitPlannerWebApp\TransitPlannerWebApp.csproj", "{ED2DEC2C-1D5D-415F-A402-9583BC8E86F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcApplication1", "MvcApplication1\MvcApplication1.csproj", "{6EA21C3F-4B52-498E-9DAC-901A03FA3F8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,14 @@ Global
 		{CCEFB389-BAFC-452C-A623-02836C2E31FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCEFB389-BAFC-452C-A623-02836C2E31FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCEFB389-BAFC-452C-A623-02836C2E31FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED2DEC2C-1D5D-415F-A402-9583BC8E86F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED2DEC2C-1D5D-415F-A402-9583BC8E86F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED2DEC2C-1D5D-415F-A402-9583BC8E86F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED2DEC2C-1D5D-415F-A402-9583BC8E86F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EA21C3F-4B52-498E-9DAC-901A03FA3F8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EA21C3F-4B52-498E-9DAC-901A03FA3F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EA21C3F-4B52-498E-9DAC-901A03FA3F8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EA21C3F-4B52-498E-9DAC-901A03FA3F8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
