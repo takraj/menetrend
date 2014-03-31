@@ -27,9 +27,12 @@ namespace TransitPlannerLibrary.FlowerGraphModel
 
             if (!_state.IsClosedRaw(_stopId))
             {
-                var walkNode = new WalkingNode(_graph, _state, _stopId);
-                var cost = _state.GetCost(this) + _graph.GetOnOffTimePerTransfer;
-                result.Add(new KeyValuePair<FlowerNode, DateTime>(walkNode, cost));
+                if ((!_graph.NeedsWheelchairSupport) || _graph.Repository.GetStopById(_stopId).HasWheelchairSupport)
+                {
+                    var walkNode = new WalkingNode(_graph, _state, _stopId);
+                    var cost = _state.GetCost(this) + _graph.GetOnOffTimePerTransfer;
+                    result.Add(new KeyValuePair<FlowerNode, DateTime>(walkNode, cost));
+                }
             }
 
             var lookupResult = _graph.Repository.LookupNextStop(_sequenceId, _stopId);

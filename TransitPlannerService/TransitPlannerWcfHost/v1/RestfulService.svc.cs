@@ -124,7 +124,20 @@ namespace TransitPlannerWcfHost
             var startNode = new WalkingNode(graph, parameters.from);
             var endNode = new WalkingNode(graph, parameters.to);
 
-            var state = new AStarPathfinderState(graph, startNode, endNode, when); // legyen kívülről állítható majd...
+            DijkstraPathfinderState state = null;
+
+            if (parameters.use_algorithm == Constants.ASTAR_ALGORITHM)
+            {
+                state = new AStarPathfinderState(graph, startNode, endNode, when);
+            }
+            else if (parameters.use_algorithm == Constants.DIJKSTRA_ALGORITHM)
+            {
+                state = new DijkstraPathfinderState(startNode, endNode, when);
+            }
+            else
+            {
+                throw new WebFaultException(HttpStatusCode.NotImplemented);
+            }
 
             try
             {
@@ -152,6 +165,7 @@ namespace TransitPlannerWcfHost
                 to = to,
                 trip_delays = new List<IntegerPair>(),
                 walking_speed = DEFAULT_WALKING_SPEED,
+                use_algorithm = Constants.ASTAR_ALGORITHM,
                 when = new TransitDateTime
                 {
                     year = year,
@@ -180,11 +194,11 @@ namespace TransitPlannerWcfHost
 
             if (state is AStarPathfinderState)
             {
-                result.algorithm = "astar";
+                result.algorithm = Constants.ASTAR_ALGORITHM;
             }
             else
             {
-                result.algorithm = "dijkstra";
+                result.algorithm = Constants.DIJKSTRA_ALGORITHM;
             }
 
             var first_entry = path.First();

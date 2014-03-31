@@ -28,6 +28,9 @@ namespace TransitPlannerContracts
         public bool needs_wheelchair_support;
 
         [DataMember]
+        public string use_algorithm;
+
+        [DataMember]
         public List<int> disabled_route_ids;
 
         [DataMember]
