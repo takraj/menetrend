@@ -65,6 +65,11 @@ namespace TransitPlannerLibrary.FlowerDataModel
         private const string COLUMN_TRIP_INTERVAL_TO = "trip_interval_to";
         private const string COLUMN_SERVICE_INDEX = "service_idx";
         private const string COLUMN_WHEELCHAIR_ACCESSIBLE = "wheelchair_accessible";
+        private const string COLUMN_WHEELCHAIR_SUPPORT = "wheelchair_support";
+        private const string COLUMN_STOP_POSTAL_CODE = "stop_postal_code";
+        private const string COLUMN_STOP_CITY = "stop_city";
+        private const string COLUMN_STOP_STREET = "stop_street";
+        private const string COLUMN_TRIP_HEADSIGN = "trip_headsign";
 
         #endregion
 
@@ -275,7 +280,11 @@ namespace TransitPlannerLibrary.FlowerDataModel
                 {
                     Name = data[COLUMN_STOP_NAME],
                     Latitude = double.Parse(data[COLUMN_STOP_LATITUDE], CultureInfo.InvariantCulture),
-                    Longitude = double.Parse(data[COLUMN_STOP_LONGITUDE], CultureInfo.InvariantCulture)
+                    Longitude = double.Parse(data[COLUMN_STOP_LONGITUDE], CultureInfo.InvariantCulture),
+                    HasWheelchairSupport = (data[COLUMN_WHEELCHAIR_SUPPORT] == "1"),
+                    PostalCode = data[COLUMN_STOP_POSTAL_CODE],
+                    City = data[COLUMN_STOP_CITY],
+                    Street = data[COLUMN_STOP_STREET]
                 };
 
                 i++;
@@ -353,6 +362,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
             {
                 var item = new Trip
                 {
+                    Headsign = data[COLUMN_TRIP_HEADSIGN],
                     DayOverlap = data[COLUMN_DAY_OVERLAP] == YES,
                     Duration = int.Parse(data[COLUMN_TRIP_DURATION]),
                     IntervalFrom = int.Parse(data[COLUMN_TRIP_INTERVAL_FROM]),

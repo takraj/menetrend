@@ -7,6 +7,7 @@ namespace TransitPlannerLibrary.FlowerDataModel
 {
     public class Trip
     {
+        public string Headsign;
         public int RouteIdx, ServiceIdx, SequenceIdx;
         public int IntervalFrom, IntervalTo, Duration;
         public bool DayOverlap;
