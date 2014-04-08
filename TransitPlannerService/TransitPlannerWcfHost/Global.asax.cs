@@ -33,8 +33,8 @@ namespace TransitPlannerWcfHost
             }
 
             var dataSource = new CsvDataSource(transitDataLocation);
-            CommonData.repository = new MemoryRepository(dataSource);
-            CommonData.pathfinder = new GenericPathfinder<FlowerNode, DateTime, DijkstraPathfinderState, BinaryHeapPriorityQueue<FlowerNode>>();
+            Common.repository = new MemoryRepository(dataSource);
+            Common.pathfinder = new GenericPathfinder<FlowerNode, DateTime, DijkstraPathfinderState, BinaryHeapPriorityQueue<FlowerNode>>();
         }
 
         protected void Session_Start(object sender, EventArgs e)

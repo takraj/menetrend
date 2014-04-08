@@ -2,45 +2,39 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.ServiceModel.Web;
 using System.Text;
 using TransitPlannerContracts;
-using TransitPlannerLibrary.FlowerDataModel;
 using TransitPlannerLibrary.FlowerGraphModel;
 using TransitPlannerLibrary.PathfinderCore;
 
-namespace TransitPlannerWcfHost
+namespace TransitPlannerWcfHost.v1
 {
-    public class RestfulService : IRestfulService
+    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "SoapService" in code, svc and config file together.
+    // NOTE: In order to launch WCF Test Client for testing this service, please select SoapService.svc or SoapService.svc.cs at the Solution Explorer and start debugging.
+    public class SoapService : ISoapService
     {
-        public List<TransitStop> GetAllStops()
+        public List<TransitPlannerContracts.TransitStop> GetAllStops()
         {
             return GetStops(string.Empty);
         }
 
-        public List<TransitStop> GetStops(string filter)
+        public List<TransitPlannerContracts.TransitStop> GetStops(string filter)
         {
             var lst = Common.FilterStops(filter);
 
             if (lst.Count < 1)
             {
-                if (filter != string.Empty)
-                {
-                    throw new WebFaultException(HttpStatusCode.NotFound);
-                }
-                else
-                {
-                    throw new WebFaultException(HttpStatusCode.NoContent);
-                }
+                throw new ArgumentException();
             }
 
             return lst;
         }
 
-        public TransitStop GetStop(int id)
+        
+
+        public TransitPlannerContracts.TransitStop GetStop(int id)
         {
             try
             {
@@ -48,11 +42,11 @@ namespace TransitPlannerWcfHost
             }
             catch (IndexOutOfRangeException)
             {
-                throw new WebFaultException(HttpStatusCode.NotFound);
+                throw new ArgumentException();
             }
         }
 
-        public TransitPlan GetPlan(TransitPlanRequestParameters parameters)
+        public TransitPlannerContracts.TransitPlan GetPlan(TransitPlannerContracts.TransitPlanRequestParameters parameters)
         {
             var delays = new Dictionary<int, TimeSpan>();
             foreach (var item in parameters.trip_delays)
@@ -74,12 +68,12 @@ namespace TransitPlannerWcfHost
             }
             catch (IndexOutOfRangeException)
             {
-                throw new WebFaultException(HttpStatusCode.NotFound);
+                throw new ArgumentException();
             }
 
             if ((when < Common.repository.MetaInfo.MinDate) || (when > Common.repository.MetaInfo.MaxDate))
             {
-                throw new WebFaultException(HttpStatusCode.NotFound);
+                throw new ArgumentException();
             }
 
             var startNode = new WalkingNode(graph, parameters.from);
@@ -97,20 +91,13 @@ namespace TransitPlannerWcfHost
             }
             else
             {
-                throw new WebFaultException(HttpStatusCode.NotImplemented);
+                throw new NotImplementedException();
             }
 
-            try
-            {
-                return Common.CreateTransitPlan(state, graph);
-            }
-            catch (NoPathFoundException)
-            {
-                throw new WebFaultException(HttpStatusCode.NoContent);
-            }
+            return Common.CreateTransitPlan(state, graph);
         }
 
-        public TransitPlan GetSimplePlan(int from, int to, int year, int month, int day, int hour, int minute)
+        public TransitPlannerContracts.TransitPlan GetSimplePlan(int from, int to, int year, int month, int day, int hour, int minute)
         {
             var parameters = new TransitPlanRequestParameters
             {

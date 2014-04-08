@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="TransitPlannerWcfHost.v1.SoapService" CodeBehind="SoapService.svc.cs" %>
