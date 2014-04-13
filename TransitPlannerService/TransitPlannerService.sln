@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitPlannerContracts", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitPlannerWeb", "TransitPlannerWeb\TransitPlannerWeb.csproj", "{76882710-6338-4F6D-AE19-12580E00C7BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitPlannerMobile", "TransitPlannerMobile\TransitPlannerMobile.csproj", "{FA9059A7-B960-44C9-9A4B-CF90E84CF58D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,12 @@ Global
 		{76882710-6338-4F6D-AE19-12580E00C7BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76882710-6338-4F6D-AE19-12580E00C7BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76882710-6338-4F6D-AE19-12580E00C7BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA9059A7-B960-44C9-9A4B-CF90E84CF58D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA9059A7-B960-44C9-9A4B-CF90E84CF58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA9059A7-B960-44C9-9A4B-CF90E84CF58D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{FA9059A7-B960-44C9-9A4B-CF90E84CF58D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA9059A7-B960-44C9-9A4B-CF90E84CF58D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA9059A7-B960-44C9-9A4B-CF90E84CF58D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
