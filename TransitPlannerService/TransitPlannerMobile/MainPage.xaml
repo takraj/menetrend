@@ -7,13 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls" 
+    xmlns:C4F="clr-namespace:Coding4Fun.Toolkit.Controls;assembly=Coding4Fun.Toolkit.Controls"
     x:Class="TransitPlannerMobile.MainPage"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True" BackKeyPress="PhoneApplicationPage_BackKeyPress">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -23,83 +24,108 @@
             <controls:PivotItem Header="Tervezés">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    
+                    <ScrollViewer Grid.Row="0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                        <TextBlock HorizontalAlignment="Left" Width="80"  Margin="10,0,0,0" TextWrapping="NoWrap" Text="Honnan:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
-                        <toolkit:AutoCompleteBox Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0"/>
-                        <Button Name="btnUseLocationFrom" Width="76" Height="76" Margin="0" Grid.Column="2" Grid.Row="0" Padding="0">
-                            <Image Source="/Icons/dark/appbar.radar.png" />
-                        </Button>
+                                <TextBlock HorizontalAlignment="Left" Width="80"  Margin="10,0,0,0" TextWrapping="NoWrap" Text="Honnan:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
+                                <toolkit:AutoCompleteBox Name="tbPlanFrom" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0"/>
+                                <Button Name="btnUseLocationFrom" Width="76" Height="76" Margin="0" Grid.Column="2" Grid.Row="0" Padding="0" Click="btnUseLocationFrom_Click">
+                                    <Image Source="/Icons/dark/appbar.radar.png" />
+                                </Button>
 
-                        <TextBlock HorizontalAlignment="Left" Width="80" Margin="10,0,0,0" TextWrapping="NoWrap" Text="Hova:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
-                        <toolkit:AutoCompleteBox Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"/>
-                        <Button Name="btnUseLocationTo" Width="76" Height="76" Margin="0" Grid.Column="2" Grid.Row="1" Padding="0">
-                            <Image Source="/Icons/dark/appbar.radar.png" />
-                        </Button>
-                    </Grid>
+                                <TextBlock HorizontalAlignment="Left" Width="80" Margin="10,0,0,0" TextWrapping="NoWrap" Text="Hova:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
+                                <toolkit:AutoCompleteBox Name="tbPlanTo" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"/>
+                                <Button Name="btnUseLocationTo" Width="76" Height="76" Margin="0" Grid.Column="2" Grid.Row="1" Padding="0" Click="btnUseLocationTo_Click">
+                                    <Image Source="/Icons/dark/appbar.radar.png" />
+                                </Button>
+                            </Grid>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="2*" MinWidth="160"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <toolkit:DatePicker Name="dpPlanDate" Height="76"  Margin="0" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                                <toolkit:TimePicker Name="dpPlanTime" Height="76" Margin="0" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
+                                <Button Name="btnNow" Content="most" Height="76" Margin="0" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Click="btnNow_Click"/>
+                            </Grid>
+
+                            <CheckBox Name="cbWheelchair" Content="Csak akadálymentes útvonal" Grid.Row="2" />
+
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto" MinWidth="200"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Letiltott járművek:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
+                                <Button Name="btnSelectDisabledRoutes" Content="2 típus" Grid.Column="1" Grid.Row="0" Click="btnSelectDisabledRoutes_Click"/>
+
+                                <TextBlock Text="Gyaloglási sebesség:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
+                                <Button Name="btnSelectWalkingSpeed" Content="Átlagos" Grid.Column="1" Grid.Row="1" Click="btnSelectWalkingSpeed_Click">
+                                    <toolkit:ContextMenuService.ContextMenu>
+                                        <toolkit:ContextMenu>
+                                            <toolkit:MenuItem Name="optSlowWalk" Header="Lassú"/>
+                                            <toolkit:MenuItem Name="optNormalWalk" Header="Átlagos"/>
+                                            <toolkit:MenuItem Name="optFastWalk" Header="Gyors"/>
+                                        </toolkit:ContextMenu>
+                                    </toolkit:ContextMenuService.ContextMenu>
+                                </Button>
+
+                                <TextBlock Text="Várakozási hajlandóság:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
+                                <Button Name="btnSelectMaxWaitingTime" Content="30 perc" Grid.Column="1" Grid.Row="2" Click="btnSelectMaxWaitingTime_Click">
+                                    <toolkit:ContextMenuService.ContextMenu>
+                                        <toolkit:ContextMenu>
+                                            <toolkit:MenuItem Name="optWaitMaxTenMinutes" Header="10 perc"/>
+                                            <toolkit:MenuItem Name="optWaitMaxHalfHour" Header="30 perc"/>
+                                            <toolkit:MenuItem Name="optWaitMaxOneHour" Header="1 óra"/>
+                                            <toolkit:MenuItem Name="optWaitMaxInfinite" Header="Bármennyi"/>
+                                        </toolkit:ContextMenu>
+                                    </toolkit:ContextMenuService.ContextMenu>
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </ScrollViewer>
 
                     <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="2*" MinWidth="160"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <toolkit:DatePicker Name="datePicker" Height="76"  Margin="0" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                        <toolkit:TimePicker Name="timePicker" Height="76" Margin="0" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
-                        <Button Name="btnNow" Content="most" Height="76" Margin="0" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center"/>
-                    </Grid>
-
-                    <CheckBox Name="cbWheelchair" Content="Csak akadálymentes útvonal" Grid.Row="2" />
-
-                    <Grid Grid.Row="3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto" MinWidth="200"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Text="Letiltott járművek:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
-                        <Button Content="2 típus" Grid.Column="1" Grid.Row="0"/>
-
-                        <TextBlock Text="Gyaloglási sebesség:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
-                        <Button Content="Átlagos" Grid.Column="1" Grid.Row="1"/>
-
-                        <TextBlock Text="Várakozási hajlandóság:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
-                        <Button Content="30 perc" Grid.Column="1" Grid.Row="2"/>
-                    </Grid>
-
-                    <Grid Grid.Row="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Content="Törlés" Grid.Column="0" VerticalAlignment="Bottom"/>
-                        <Button Content="Keresés" Grid.Column="1" VerticalAlignment="Bottom"/>
+                        <Button Name="btnClearPlanning" Content="Törlés" Grid.Column="0" VerticalAlignment="Bottom" Click="btnClearPlanning_Click"/>
+                        <Button Name="btnMakePlan" Content="Keresés" Grid.Column="1" VerticalAlignment="Bottom" Click="btnMakePlan_Click"/>
                     </Grid>
                 </Grid>
             </controls:PivotItem>
@@ -107,16 +133,23 @@
             <!--Pivot item two-->
             <controls:PivotItem Header="Böngészés">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                    <ScrollViewer>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                    <Button Content="Közeli megállók" Grid.Row="0" Height="100" Margin="15"/>
-                    <Button Content="Összes megálló" Grid.Row="1" Height="100" Margin="15"/>
-                    <Button Content="Összes járat" Grid.Row="2" Height="100" Margin="15"/>
+                            <Button Name="btnGetStopsByDistance" Content="Megállók távolság szerint" Grid.Row="0" Height="100" Margin="5" Click="btnGetStopsByDistance_Click"/>
+                            <Button Name="btnGetRoutesByType" Content="Járatok típus szerint" Grid.Row="1" Height="100" Margin="5" Click="btnGetRoutesByType_Click"/>
+                            <Button Name="btnGetStopsByName" Content="Megállók név szerint" Grid.Row="2" Height="100" Margin="5" Click="btnGetStopsByName_Click"/>
+                            <Button Name="btnGetRoutesByName" Content="Járatok név szerint" Grid.Row="3" Height="100" Margin="5" Click="btnGetRoutesByName_Click"/>
+                        </Grid>
+                    </ScrollViewer>
                 </Grid>
+                
             </controls:PivotItem>
 
             <controls:PivotItem Header="Bejelentés">
@@ -146,10 +179,20 @@
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Bejelentés típusa:" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                <Button Content="Bűncselekmény" Grid.Row="0" Grid.Column="1"/>
+                                <Button Name="btnSelectReportType" Content="Bűncselekmény" Grid.Row="0" Grid.Column="1" Click="btnSelectReportType_Click">
+                                    <toolkit:ContextMenuService.ContextMenu>
+                                        <toolkit:ContextMenu>
+                                            <toolkit:MenuItem Name="optCrime" Header="Bűncselekmény"/>
+                                            <toolkit:MenuItem Name="optAccident" Header="Baleset"/>
+                                            <toolkit:MenuItem Name="optDelay" Header="Késés"/>
+                                            <toolkit:MenuItem Name="optTechFailure" Header="Műszaki hiba"/>
+                                            <toolkit:MenuItem Name="optBug" Header="Alkalmazáshiba"/>
+                                        </toolkit:ContextMenu>
+                                    </toolkit:ContextMenuService.ContextMenu>
+                                </Button>
 
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Pozíció csatolása:" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                <Primitives:ToggleSwitchButton IsChecked="true" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Primitives:ToggleSwitchButton Name="swIncludePosition" IsChecked="true" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
 
                             <TextBlock Grid.Row="1" Text="Szöveg:" Margin="10,0,0,0" HorizontalAlignment="Left"/>
@@ -163,12 +206,26 @@
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Content="Törlés" Grid.Column="0" VerticalAlignment="Bottom"/>
-                        <Button Content="Küldés" Grid.Column="1" VerticalAlignment="Bottom"/>
+                        <Button Name="btnClearReport" Content="Törlés" Grid.Column="0" VerticalAlignment="Bottom" Click="btnClearReport_Click"/>
+                        <Button Name="btnSubmitReport" Content="Küldés" Grid.Column="1" VerticalAlignment="Bottom" Click="btnSubmitReport_Click"/>
                     </Grid>
                 </Grid>
             </controls:PivotItem>
         </controls:Pivot>
+        
+        <C4F:ProgressOverlay Name="progressOverlay" Visibility="Collapsed">
+            <C4F:ProgressOverlay.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Name="lblProgressMessage" Text="Kommunikáció a szerverrel..." Grid.Row="0" HorizontalAlignment="Center"/>
+                    <ProgressBar IsIndeterminate="True" Grid.Row="1" />
+                </Grid>
+            </C4F:ProgressOverlay.Content>
+        </C4F:ProgressOverlay>
     </Grid>
 
 </phone:PhoneApplicationPage>
