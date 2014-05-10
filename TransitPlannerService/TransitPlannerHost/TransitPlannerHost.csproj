@@ -48,9 +48,29 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TransitPlannerLibrary\TransitPlannerLibrary.csproj">
-      <Project>{2aa37bb9-1336-4521-b915-91703a71bb4f}</Project>
-      <Name>TransitPlannerLibrary</Name>
+    <ProjectReference Include="..\FlowerDataModel\FlowerDataModel.csproj">
+      <Project>{008c0ec5-0413-4c56-a08c-dff51b6f10a8}</Project>
+      <Name>FlowerDataModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlowerGraphModel\FlowerGraphModel.csproj">
+      <Project>{3db1bf36-8ea2-4ebb-b89d-023f19153778}</Project>
+      <Name>FlowerGraphModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HeapDict\HeapDict.csproj">
+      <Project>{f0eb6532-41f4-40c3-8fd7-41d2040cf55a}</Project>
+      <Name>HeapDict</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PathfinderCore\PathfinderCore.csproj">
+      <Project>{2998ee64-d1d2-449d-8dcf-8045d87f2a02}</Project>
+      <Name>PathfinderCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PortableCollections\PortableCollections.csproj">
+      <Project>{01203748-fb6e-475a-95b5-88487315a576}</Project>
+      <Name>PortableCollections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PriorityQueues\PriorityQueues.csproj">
+      <Project>{33dc105d-675c-4701-a3fe-e3f18cd99b31}</Project>
+      <Name>PriorityQueues</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

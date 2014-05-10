@@ -22,8 +22,8 @@ namespace TransitPlannerHost
 
             var graph = new FlowerGraph(repo, new HashSet<int>(), new Dictionary<int, TimeSpan>(), new TimeSpan(0, 1, 0), new TimeSpan(0, 30, 0), 5.3, false);
             
-            var source = new WalkingNode(graph, 1000);
-            var destination = new WalkingNode(graph, 2000);
+            var source = new WalkingNode(graph, 817);
+            var destination = new WalkingNode(graph, 1740);
 
             var state = new AStarPathfinderState(graph, source, destination, new DateTime(2014, 2, 20, 14, 0, 0));
 
