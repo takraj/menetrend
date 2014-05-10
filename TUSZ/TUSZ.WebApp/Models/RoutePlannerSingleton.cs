@@ -87,8 +87,8 @@ namespace TUSZ.WebApp.Models
             var stop1 = StorageManager.GetStop(stopIndex1);
             var stop2 = StorageManager.GetStop(stopIndex2);
 
-            var beginDate = DateTime.Now;
-            var instructions = Plan(stop1, stop2, when, algorythm);
+            var beginDate = new DateTime(2013, 11, 25, 14, 0, 0);
+            var instructions = Plan(stop1, stop2, beginDate, algorythm);
 
             var travelGroups = new List<VM_TravelGroup>();
             foreach (var instruction in instructions)
