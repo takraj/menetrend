@@ -187,6 +187,7 @@
                                             <toolkit:MenuItem Name="optDelay" Header="Késés"/>
                                             <toolkit:MenuItem Name="optTechFailure" Header="Műszaki hiba"/>
                                             <toolkit:MenuItem Name="optBug" Header="Alkalmazáshiba"/>
+                                            <toolkit:MenuItem Name="optOther" Header="Egyéb"/>
                                         </toolkit:ContextMenu>
                                     </toolkit:ContextMenuService.ContextMenu>
                                 </Button>
