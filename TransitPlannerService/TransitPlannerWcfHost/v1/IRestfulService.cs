@@ -15,15 +15,39 @@ namespace TransitPlannerWcfHost
 
         [OperationContract]
         [WebGet]
-        List<TransitStop> GetAllStops();
+        IList<TransitStop> GetAllStops();
 
         [OperationContract]
         [WebGet]
-        List<TransitStop> GetStops(string filter);
+        IList<TransitStop> GetStops(string filter);
 
         [OperationContract]
         [WebGet]
-        TransitStop GetStop(int id);
+        TransitStopInfo GetStop(int id);
+
+        [OperationContract]
+        [WebGet]
+        IList<TransitRoute> GeRoutes(string filter);
+
+        [OperationContract]
+        [WebGet]
+        TransitRoute GetRoute(int id);
+
+        [OperationContract]
+        [WebGet]
+        TransitMetadata GetMetadata();
+
+        [OperationContract]
+        [WebGet]
+        TransitSequenceGroup GetSchedule(int route_id, TransitDate when);
+
+        [OperationContract]
+        [WebGet]
+        IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when);
+
+        [OperationContract]
+        [WebGet]
+        IList<TransitSequenceElement> GetSequence(int id);
 
         [OperationContract]
         [WebInvoke]

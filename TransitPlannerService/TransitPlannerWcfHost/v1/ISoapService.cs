@@ -8,18 +8,35 @@ using TransitPlannerContracts;
 
 namespace TransitPlannerWcfHost.v1
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "ISoapService" in both code and config file together.
     [ServiceContract]
     public interface ISoapService
     {
         [OperationContract]
-        List<TransitStop> GetAllStops();
+        IList<TransitStop> GetAllStops();
 
         [OperationContract]
-        List<TransitStop> GetStops(string filter);
+        IList<TransitStop> GetStops(string filter);
 
         [OperationContract]
-        TransitStop GetStop(int id);
+        TransitStopInfo GetStop(int id);
+
+        [OperationContract]
+        IList<TransitRoute> GeRoutes(string filter);
+
+        [OperationContract]
+        TransitRoute GetRoute(int id);
+
+        [OperationContract]
+        TransitMetadata GetMetadata();
+
+        [OperationContract]
+        TransitSequenceGroup GetSchedule(int route_id, TransitDate when);
+
+        [OperationContract]
+        IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when);
+
+        [OperationContract]
+        IList<TransitSequenceElement> GetSequence(int id);
 
         [OperationContract]
         TransitPlan GetPlan(TransitPlanRequestParameters parameters);

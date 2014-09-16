@@ -16,12 +16,12 @@ namespace TransitPlannerWcfHost
 {
     public class RestfulService : IRestfulService
     {
-        public List<TransitStop> GetAllStops()
+        public IList<TransitStop> GetAllStops()
         {
             return GetStops(string.Empty);
         }
 
-        public List<TransitStop> GetStops(string filter)
+        public IList<TransitStop> GetStops(string filter)
         {
             var lst = Common.FilterStops(filter);
 
@@ -38,18 +38,6 @@ namespace TransitPlannerWcfHost
             }
 
             return lst;
-        }
-
-        public TransitStop GetStop(int id)
-        {
-            try
-            {
-                return Common.CreateTransitStop(id);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                throw new WebFaultException(HttpStatusCode.NotFound);
-            }
         }
 
         public TransitPlan GetPlan(TransitPlanRequestParameters parameters)
@@ -134,6 +122,49 @@ namespace TransitPlannerWcfHost
             };
 
             return GetPlan(parameters);
+        }
+
+        TransitStopInfo GetStop(int id)
+        {
+            try
+            {
+                var transitStop = Common.CreateTransitStop(id);
+                return Common.CreateTransitStopInfo(transitStop);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new WebFaultException(HttpStatusCode.NotFound);
+            }
+        }
+
+        public IList<TransitRoute> GeRoutes(string filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitRoute GetRoute(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitMetadata GetMetadata()
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitSequenceGroup GetSchedule(int route_id, TransitDate when)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TransitSequenceElement> GetSequence(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

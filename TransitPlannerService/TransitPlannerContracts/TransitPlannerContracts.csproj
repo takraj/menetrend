@@ -38,13 +38,19 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="IntegerPair.cs" />
+    <Compile Include="TransitDate.cs" />
     <Compile Include="TransitDateTime.cs" />
+    <Compile Include="TransitMetadata.cs" />
     <Compile Include="TransitPlanInstruction.cs" />
     <Compile Include="TransitPlanRequestParameters.cs" />
     <Compile Include="TransitRoute.cs" />
+    <Compile Include="TransitSequenceElement.cs" />
+    <Compile Include="TransitSequenceGroup.cs" />
+    <Compile Include="TransitSequenceInfo.cs" />
     <Compile Include="TransitStop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransitPlan.cs" />
+    <Compile Include="TransitStopInfo.cs" />
     <Compile Include="TransitTrip.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

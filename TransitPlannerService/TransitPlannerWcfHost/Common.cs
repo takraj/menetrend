@@ -36,6 +36,38 @@ namespace TransitPlannerWcfHost
             };
         }
 
+        public static TransitRoute CreateTransitRoute(int id)
+        {
+            var current = repository.GetRouteById(id);
+
+            return new TransitRoute
+            {
+                Description = current.Description,
+                id = id,
+                LongName = current.LongName,
+                RouteColor = current.RouteColor,
+                RouteTextColor = current.RouteTextColor,
+                RouteType = current.RouteType,
+                ShortName = current.ShortName
+            };
+        }
+
+        public static TransitStopInfo CreateTransitStopInfo(TransitStop transitStop)
+        {
+            var availableTripIds = (from sequenceId in repository.GetSequencesByStop(transitStop.id)
+                                    select repository.GetTripsBySequence(sequenceId)).SelectMany(x => x).Distinct();
+
+            var availableRouteIds = (from tripId in availableTripIds
+                                     select repository.GetTripById(tripId).RouteIdx).Distinct();
+
+            return new TransitStopInfo
+            {
+                stop = transitStop,
+                available_routes = (from routeId in availableRouteIds
+                                    select CreateTransitRoute(routeId)).ToList()
+            };
+        }
+
         public static TransitPlan CreateTransitPlan(DijkstraPathfinderState state, FlowerGraph graph)
         {
             const int INVALID_INDEX = -1;

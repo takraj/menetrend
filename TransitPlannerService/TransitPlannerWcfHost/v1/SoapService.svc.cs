@@ -11,16 +11,14 @@ using TransitPlannerLibrary.PathfinderCore;
 
 namespace TransitPlannerWcfHost.v1
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "SoapService" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select SoapService.svc or SoapService.svc.cs at the Solution Explorer and start debugging.
     public class SoapService : ISoapService
     {
-        public List<TransitPlannerContracts.TransitStop> GetAllStops()
+        public IList<TransitPlannerContracts.TransitStop> GetAllStops()
         {
             return GetStops(string.Empty);
         }
 
-        public List<TransitPlannerContracts.TransitStop> GetStops(string filter)
+        public IList<TransitPlannerContracts.TransitStop> GetStops(string filter)
         {
             var lst = Common.FilterStops(filter);
 
@@ -30,20 +28,6 @@ namespace TransitPlannerWcfHost.v1
             }
 
             return lst;
-        }
-
-        
-
-        public TransitPlannerContracts.TransitStop GetStop(int id)
-        {
-            try
-            {
-                return Common.CreateTransitStop(id);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                throw new ArgumentException();
-            }
         }
 
         public TransitPlannerContracts.TransitPlan GetPlan(TransitPlannerContracts.TransitPlanRequestParameters parameters)
@@ -121,6 +105,49 @@ namespace TransitPlannerWcfHost.v1
             };
 
             return GetPlan(parameters);
+        }
+
+        TransitStopInfo GetStop(int id)
+        {
+            try
+            {
+                var transitStop = Common.CreateTransitStop(id);
+                return Common.CreateTransitStopInfo(transitStop);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        public IList<TransitRoute> GeRoutes(string filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitRoute GetRoute(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitMetadata GetMetadata()
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitSequenceGroup GetSchedule(int route_id, TransitDate when)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TransitSequenceElement> GetSequence(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
