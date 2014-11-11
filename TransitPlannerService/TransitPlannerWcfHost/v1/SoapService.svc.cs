@@ -122,32 +122,67 @@ namespace TransitPlannerWcfHost.v1
 
         public IList<TransitRoute> GeRoutes(string filter)
         {
-            throw new NotImplementedException();
+            var lst = Common.FilterRoutes(filter);
+
+            if (lst.Count < 1)
+            {
+                throw new ArgumentException();
+            }
+
+            return lst;
         }
 
         public TransitRoute GetRoute(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Common.CreateTransitRoute(id);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new ArgumentException();
+            }
         }
 
         public TransitMetadata GetMetadata()
         {
-            throw new NotImplementedException();
+            return Common.CreateMetaData();
         }
 
-        public TransitSequenceGroup GetSchedule(int route_id, TransitDate when)
+        public IList<TransitSequenceGroup> GetSchedule(int route_id, TransitDate when)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Common.CreateSchedule(route_id, when);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new ArgumentException();
+            }
         }
 
         public IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Common.CreateTransitSequenceInfoForRoute(route_id, when);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new ArgumentException();
+            }
         }
 
         public IList<TransitSequenceElement> GetSequence(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Common.CreateTransitSequence(id);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new ArgumentException();
+            }
         }
     }
 }

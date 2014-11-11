@@ -30,7 +30,7 @@ namespace TransitPlannerWcfHost.v1
         TransitMetadata GetMetadata();
 
         [OperationContract]
-        TransitSequenceGroup GetSchedule(int route_id, TransitDate when);
+        IList<TransitSequenceGroup> GetSchedule(int route_id, TransitDate when);
 
         [OperationContract]
         IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when);

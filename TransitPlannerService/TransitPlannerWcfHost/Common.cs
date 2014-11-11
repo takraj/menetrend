@@ -68,6 +68,60 @@ namespace TransitPlannerWcfHost
             };
         }
 
+        public static List<TransitSequenceElement> CreateTransitSequence(int sequenceId)
+        {
+            var result = new List<TransitSequenceElement>();
+
+            var sequence = Common.repository.GetSequenceById(sequenceId).ToList();
+            for (int i = 0; i < sequence.Count(); i++)
+            {
+                var sequence_element = new TransitSequenceElement()
+                {
+                    order = i,
+                    stop = Common.CreateTransitStop(sequence[i].StopIdx),
+                    arrival = sequence[i].ArrivalTime,
+                    departure = sequence[i].DepartureTime
+                };
+                result.Add(sequence_element);
+            }
+
+            return result;
+        }
+
+        public static List<TransitSequenceInfo> CreateTransitSequenceInfoForRoute(int routeId, TransitDate when)
+        {
+            var result = new List<TransitSequenceInfo>();
+
+            var route = Common.repository.GetRouteById(routeId);
+
+            foreach (var sequenceId in route.TripsBySequence.Keys)
+            {
+                int count_of_trips_available_on_this_day = route.TripsBySequence[sequenceId]
+                    .Select(tripid => Common.repository.GetTripById(tripid))
+                    .Count(trip => Common.repository.IsServiceAvailableOnDay(trip.ServiceIdx, Common.GetServiceDay(when)));
+
+                if (count_of_trips_available_on_this_day < 1)
+                {
+                    continue;
+                }
+
+                var sequence = Common.repository.GetSequenceById(sequenceId).ToList();
+                var trip_sample = route.TripsBySequence[sequenceId].First();
+
+                var sequence_info = new TransitSequenceInfo()
+                {
+                    id = sequenceId,
+                    headsign = Common.repository.GetTripById(trip_sample).Headsign,
+                    count_of_stops = sequence.Count(),
+                    first_stop = Common.CreateTransitStop(sequence.First().StopIdx),
+                    last_stop = Common.CreateTransitStop(sequence.Last().StopIdx)
+                };
+                result.Add(sequence_info);
+            }
+
+            return result;
+        }
+
         public static TransitPlan CreateTransitPlan(DijkstraPathfinderState state, FlowerGraph graph)
         {
             const int INVALID_INDEX = -1;
@@ -227,6 +281,128 @@ namespace TransitPlannerWcfHost
                 }
             }
             return lst;
+        }
+
+        public static List<TransitRoute> FilterRoutes(string filter)
+        {
+            var lst = new List<TransitRoute>();
+            var filterLower = filter.ToLower();
+
+            for (int i = 0; i < Common.repository.Routes.Count(); i++)
+            {
+                var current = Common.repository.GetRouteById(i);
+
+                string currentShortNameLower = current.ShortName.ToLower();
+                string currentLongNameLower = current.LongName.ToLower();
+                string currentDescriptionLower = current.Description.ToLower();
+
+                bool shortNameMatches = (currentShortNameLower.Contains(filterLower));
+                bool longNameMatches = (currentLongNameLower.Contains(filterLower));
+                bool descriptionMatches = (currentDescriptionLower.Contains(filterLower));
+
+                if (shortNameMatches || longNameMatches || descriptionMatches)
+                {
+                    var route = Common.CreateTransitRoute(i);
+                    lst.Add(route);
+                }
+            }
+            return lst;
+        }
+
+        public static TransitMetadata CreateMetaData()
+        {
+            return new TransitMetadata()
+            {
+                valid_from = new TransitDate()
+                {
+                    year = Common.repository.MetaInfo.MinDate.Year,
+                    month = Common.repository.MetaInfo.MinDate.Month,
+                    day = Common.repository.MetaInfo.MinDate.Day
+                },
+                valid_to = new TransitDate()
+                {
+                    year = Common.repository.MetaInfo.MaxDate.Year,
+                    month = Common.repository.MetaInfo.MaxDate.Month,
+                    day = Common.repository.MetaInfo.MaxDate.Day
+                },
+                valid_duration = Common.repository.MetaInfo.CountOfServiceDays
+            };
+        }
+
+        public static List<TransitSequenceGroup> CreateSchedule(int routeId, TransitDate when)
+        {
+            var route = Common.repository.GetRouteById(routeId);
+            var result = new List<TransitSequenceGroup>();
+
+            foreach (var sequenceId in route.TripsBySequence.Keys)
+            {
+                int count_of_trips_available_on_this_day = route.TripsBySequence[sequenceId]
+                    .Select(tripid => Common.repository.GetTripById(tripid))
+                    .Count(trip => Common.repository.IsServiceAvailableOnDay(trip.ServiceIdx, Common.GetServiceDay(when)));
+
+                if (count_of_trips_available_on_this_day < 1)
+                {
+                    continue;
+                }
+
+                var sequence = Common.repository.GetSequenceById(sequenceId).ToList();
+                var trip_sample = route.TripsBySequence[sequenceId].First();
+
+                var schedule = new TransitSequenceGroup()
+                {
+                    sequence_base_times = new List<TransitDateTime>(),
+                    sequence_elements = new List<TransitSequenceElement>(),
+                    sequence_info = new TransitSequenceInfo()
+                    {
+                        id = sequenceId,
+                        headsign = Common.repository.GetTripById(trip_sample).Headsign,
+                        count_of_stops = sequence.Count(),
+                        first_stop = Common.CreateTransitStop(sequence.First().StopIdx),
+                        last_stop = Common.CreateTransitStop(sequence.Last().StopIdx)
+                    }
+                };
+
+                for (int i = 0; i < sequence.Count(); i++)
+                {
+                    var sequence_element = new TransitSequenceElement()
+                    {
+                        order = i,
+                        stop = Common.CreateTransitStop(sequence[i].StopIdx),
+                        arrival = sequence[i].ArrivalTime,
+                        departure = sequence[i].DepartureTime
+                    };
+                    schedule.sequence_elements.Add(sequence_element);
+                }
+
+                foreach (var trip in route.TripsBySequence[sequenceId].Select(i => Common.repository.GetTripById(i)))
+                {
+                    if (!Common.repository.IsServiceAvailableOnDay(trip.ServiceIdx, Common.GetServiceDay(when)))
+                    {
+                        continue;
+                    }
+
+                    DateTime trip_start = new DateTime(when.year, when.month, when.day).AddMinutes(trip.IntervalFrom);
+
+                    var base_time = new TransitDateTime()
+                    {
+                        year = trip_start.Year,
+                        month = trip_start.Month,
+                        day = trip_start.Day,
+                        hour = trip_start.Hour,
+                        minute = trip_start.Minute
+                    };
+                    schedule.sequence_base_times.Add(base_time);
+                }
+
+                result.Add(schedule);
+            }
+
+            return result;
+        }
+
+        private static int GetServiceDay(TransitDate when)
+        {
+            throw new NotImplementedException();
         }
     }
 }

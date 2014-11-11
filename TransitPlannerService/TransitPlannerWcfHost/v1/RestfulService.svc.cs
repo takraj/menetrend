@@ -139,32 +139,74 @@ namespace TransitPlannerWcfHost
 
         public IList<TransitRoute> GeRoutes(string filter)
         {
-            throw new NotImplementedException();
+            var lst = Common.FilterRoutes(filter);
+
+            if (lst.Count < 1)
+            {
+                if (filter != string.Empty)
+                {
+                    throw new WebFaultException(HttpStatusCode.NotFound);
+                }
+                else
+                {
+                    throw new WebFaultException(HttpStatusCode.NoContent);
+                }
+            }
+
+            return lst;
         }
 
         public TransitRoute GetRoute(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Common.CreateTransitRoute(id);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new WebFaultException(HttpStatusCode.NotFound);
+            }
         }
 
         public TransitMetadata GetMetadata()
         {
-            throw new NotImplementedException();
+            return Common.CreateMetaData();
         }
 
-        public TransitSequenceGroup GetSchedule(int route_id, TransitDate when)
+        public IList<TransitSequenceGroup> GetSchedule(int route_id, TransitDate when)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Common.CreateSchedule(route_id, when);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new WebFaultException(HttpStatusCode.NotFound);
+            }
         }
 
         public IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Common.CreateTransitSequenceInfoForRoute(route_id, when);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new WebFaultException(HttpStatusCode.NotFound);
+            }
         }
 
         public IList<TransitSequenceElement> GetSequence(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Common.CreateTransitSequence(id);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new WebFaultException(HttpStatusCode.NotFound);
+            }
         }
     }
 }
