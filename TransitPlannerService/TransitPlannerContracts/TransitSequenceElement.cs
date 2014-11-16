@@ -9,15 +9,15 @@ namespace TransitPlannerContracts
     public class TransitSequenceElement
     {
         [DataMember]
-        public TransitStop stop;
+        public TransitStop stop { get; set; }
 
         [DataMember]
-        public int order;
+        public int order { get; set; }
 
         [DataMember]
-        public int arrival; // minutes relative to basetime
+        public int arrival { get; set; } // minutes relative to basetime
 
         [DataMember]
-        public int departure; // minutes relative to basetime
+        public int departure { get; set; } // minutes relative to basetime
     }
 }

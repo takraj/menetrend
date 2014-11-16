@@ -21,7 +21,7 @@ namespace TransitPlannerWcfHost.v1
         TransitStopInfo GetStop(int id);
 
         [OperationContract]
-        IList<TransitRoute> GeRoutes(string filter);
+        IList<TransitRoute> GetRoutes(string filter);
 
         [OperationContract]
         TransitRoute GetRoute(int id);

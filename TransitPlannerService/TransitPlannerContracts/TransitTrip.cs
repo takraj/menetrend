@@ -10,15 +10,15 @@ namespace TransitPlannerContracts
     public class TransitTrip
     {
         [DataMember]
-        public int id;
+        public int id { get; set; }
 
         [DataMember]
-        public string headsign;
+        public string headsign { get; set; }
 
         [DataMember]
-        public int route_id;
+        public int route_id { get; set; }
 
         [DataMember]
-        public int sequence_id;
+        public int sequence_id { get; set; }
     }
 }

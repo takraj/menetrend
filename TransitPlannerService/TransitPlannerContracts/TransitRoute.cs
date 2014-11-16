@@ -10,15 +10,24 @@ namespace TransitPlannerContracts
     public class TransitRoute
     {
         [DataMember]
-        public int id;
+        public int id { get; set; }
 
         [DataMember]
-        public string ShortName, LongName, Description;
+        public string ShortName { get; set; }
 
         [DataMember]
-        public string RouteColor, RouteTextColor;
+        public string LongName { get; set; }
 
         [DataMember]
-        public int RouteType;
+        public string Description { get; set; }
+
+        [DataMember]
+        public string RouteColor { get; set; }
+        
+        [DataMember]
+        public string RouteTextColor { get; set; }
+
+        [DataMember]
+        public int RouteType { get; set; }
     }
 }

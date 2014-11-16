@@ -10,27 +10,27 @@ namespace TransitPlannerContracts
     public class TransitStop
     {
         [DataMember]
-        public int id;
+        public int id { get; set; }
 
         [DataMember]
-        public string name;
+        public string name { get; set; }
 
         [DataMember]
-        public double latitude;
+        public double latitude { get; set; }
 
         [DataMember]
-        public double longitude;
+        public double longitude { get; set; }
 
         [DataMember]
-        public bool has_wheelchair_support;
+        public bool has_wheelchair_support { get; set; }
 
         [DataMember]
-        public string postal_code;
+        public string postal_code { get; set; }
 
         [DataMember]
-        public string city;
+        public string city { get; set; }
 
         [DataMember]
-        public string street;
+        public string street { get; set; }
     }
 }

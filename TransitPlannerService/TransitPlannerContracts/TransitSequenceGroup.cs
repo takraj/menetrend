@@ -10,12 +10,12 @@ namespace TransitPlannerContracts
     public class TransitSequenceGroup
     {
         [DataMember]
-        public IList<TransitDateTime> sequence_base_times;
+        public IList<TransitDateTime> sequence_base_times { get; set; }
 
         [DataMember]
-        public IList<TransitSequenceElement> sequence_elements;
+        public IList<TransitSequenceElement> sequence_elements { get; set; }
 
         [DataMember]
-        public TransitSequenceInfo sequence_info;
+        public TransitSequenceInfo sequence_info { get; set; }
     }
 }

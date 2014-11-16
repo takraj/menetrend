@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using TransitPlannerContracts;
 
-namespace TransitPlannerContracts
+namespace TransitPlannerWebContracts
 {
     [DataContract]
-    public class TransitPlanRequestParameters
+    public class WebTransitPlanRequestParameters
     {
         [DataMember]
         public int from { get; set; }
@@ -19,24 +20,15 @@ namespace TransitPlannerContracts
         public TransitDateTime when { get; set; }
 
         [DataMember]
-        public int get_on_off_time { get; set; } // minutes
-
-        [DataMember]
         public int max_waiting_time { get; set; } // minutes
 
         [DataMember]
-        public double walking_speed { get; set; } // kmph
+        public int walking_speed_category { get; set; }
 
         [DataMember]
         public bool needs_wheelchair_support { get; set; }
 
         [DataMember]
-        public string use_algorithm { get; set; }
-
-        [DataMember]
-        public List<int> disabled_route_ids { get; set; }
-
-        [DataMember]
-        public List<IntegerPair> trip_delays { get; set; }
+        public List<int> disabled_route_types { get; set; }
     }
 }

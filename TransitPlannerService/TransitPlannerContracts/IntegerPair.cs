@@ -10,9 +10,9 @@ namespace TransitPlannerContracts
     public class IntegerPair
     {
         [DataMember]
-        public int key;
+        public int key { get; set; }
 
         [DataMember]
-        public int value;
+        public int value { get; set; }
     }
 }

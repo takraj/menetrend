@@ -10,18 +10,18 @@ namespace TransitPlannerContracts
     public class TransitPlanInstruction
     {
         [DataMember]
-        public TransitStop stop;
+        public TransitStop stop { get; set; }
 
         [DataMember]
-        public int plan_minute;
+        public int plan_minute { get; set; }
 
         [DataMember]
-        public bool is_walking;
+        public bool is_walking { get; set; }
 
         [DataMember]
-        public int route_id;
+        public int route_id { get; set; }
 
         [DataMember]
-        public int trip_id;
+        public int trip_id { get; set; }
     }
 }

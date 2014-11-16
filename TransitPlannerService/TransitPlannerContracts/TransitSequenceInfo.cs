@@ -10,15 +10,18 @@ namespace TransitPlannerContracts
     public class TransitSequenceInfo
     {
         [DataMember]
-        public int id; // sequence id
+        public int id { get; set; } // sequence id
 
         [DataMember]
-        public int count_of_stops;
+        public int count_of_stops { get; set; }
 
         [DataMember]
-        public string headsign;
+        public string headsign { get; set; }
 
         [DataMember]
-        public TransitStop first_stop, last_stop;
+        public TransitStop first_stop { get; set; }
+
+        [DataMember]
+        public TransitStop last_stop { get; set; }
     }
 }

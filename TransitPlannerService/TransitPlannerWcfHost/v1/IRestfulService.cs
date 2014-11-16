@@ -27,7 +27,7 @@ namespace TransitPlannerWcfHost
 
         [OperationContract]
         [WebGet]
-        IList<TransitRoute> GeRoutes(string filter);
+        IList<TransitRoute> GetRoutes(string filter);
 
         [OperationContract]
         [WebGet]

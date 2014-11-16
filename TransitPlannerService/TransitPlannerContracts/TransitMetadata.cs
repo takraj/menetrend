@@ -10,12 +10,12 @@ namespace TransitPlannerContracts
     public class TransitMetadata
     {
         [DataMember]
-        public TransitDate valid_from;
+        public TransitDate valid_from { get; set; }
 
         [DataMember]
-        public TransitDate valid_to;
+        public TransitDate valid_to { get; set; }
 
         [DataMember]
-        public int valid_duration; // days
+        public int valid_duration { get; set; } // days
     }
 }

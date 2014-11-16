@@ -107,7 +107,7 @@ namespace TransitPlannerWcfHost.v1
             return GetPlan(parameters);
         }
 
-        TransitStopInfo GetStop(int id)
+        public TransitStopInfo GetStop(int id)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace TransitPlannerWcfHost.v1
             }
         }
 
-        public IList<TransitRoute> GeRoutes(string filter)
+        public IList<TransitRoute> GetRoutes(string filter)
         {
             var lst = Common.FilterRoutes(filter);
 

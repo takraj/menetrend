@@ -4,6 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using TransitPlannerContracts;
+using TransitPlannerWebContracts;
 
 namespace TransitPlannerWeb.Services.v1
 {
@@ -11,8 +13,59 @@ namespace TransitPlannerWeb.Services.v1
     // NOTE: In order to launch WCF Test Client for testing this service, please select SoapService.svc or SoapService.svc.cs at the Solution Explorer and start debugging.
     public class SoapService : ISoapService
     {
-        public void DoWork()
+        public IList<TransitStop> GetAllStops()
         {
+            throw new NotImplementedException();
+        }
+
+        public IList<TransitStop> GetStops(string filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitStopInfo GetStop(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TransitRoute> GetRoutes(string filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitRoute GetRoute(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitMetadata GetMetadata()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TransitSequenceGroup> GetSchedule(int route_id, TransitDate when)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<TransitSequenceElement> GetSequence(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitPlan GetPlan(WebTransitPlanRequestParameters parameters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransitPlan GetSimplePlan(int from, int to, int year, int month, int day, int hour, int minute)
+        {
+            throw new NotImplementedException();
         }
     }
 }

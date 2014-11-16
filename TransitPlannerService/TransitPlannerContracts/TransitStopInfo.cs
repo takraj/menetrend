@@ -10,9 +10,9 @@ namespace TransitPlannerContracts
     public class TransitStopInfo
     {
         [DataMember]
-        public TransitStop stop;
+        public TransitStop stop { get; set; }
 
         [DataMember]
-        public IList<TransitRoute> available_routes;
+        public IList<TransitRoute> available_routes { get; set; }
     }
 }

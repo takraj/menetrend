@@ -10,6 +10,18 @@ namespace TransitPlannerContracts
     public class TransitDateTime
     {
         [DataMember]
-        public int year, month, day, hour, minute;
+        public int year { get; set; }
+
+        [DataMember]
+        public int month { get; set; }
+
+        [DataMember]
+        public int day { get; set; }
+
+        [DataMember]
+        public int hour { get; set; }
+
+        [DataMember]
+        public int minute { get; set; }
     }
 }
