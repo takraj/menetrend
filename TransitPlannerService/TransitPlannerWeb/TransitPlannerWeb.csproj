@@ -329,6 +329,10 @@
       <Project>{ccefb389-bafc-452c-a623-02836c2e31fa}</Project>
       <Name>TransitPlannerContracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TransitPlannerUtilityLibrary\TransitPlannerUtilityLibrary.csproj">
+      <Project>{d02c645d-5860-47b0-8f6d-336ebdc6bc0b}</Project>
+      <Name>TransitPlannerUtilityLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TransitPlannerWebContracts\TransitPlannerWebContracts.csproj">
       <Project>{8ad82f02-ed5b-4e98-bd29-476d2c2cf836}</Project>
       <Name>TransitPlannerWebContracts</Name>

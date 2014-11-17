@@ -45,5 +45,8 @@ namespace TransitPlannerWeb.Services.v1
 
         [OperationContract]
         TransitPlan GetSimplePlan(int from, int to, int year, int month, int day, int hour, int minute);
+
+        [OperationContract(IsOneWay = true)]
+        void SendTroubleReport(SendTroubleReportRequest trouble_report_parameters);
     }
 }

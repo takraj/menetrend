@@ -40,7 +40,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SendTroubleReport.cs" />
+    <Compile Include="SendTroubleReportRequest.cs" />
     <Compile Include="WebTransitPlanRequestParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

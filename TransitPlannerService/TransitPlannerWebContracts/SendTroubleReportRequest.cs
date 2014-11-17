@@ -8,7 +8,7 @@ using TransitPlannerContracts;
 namespace TransitPlannerWebContracts
 {
     [DataContract]
-    public class SendTroubleReport
+    public class SendTroubleReportRequest
     {
         [DataMember]
         public int category { get; set; }
