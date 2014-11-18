@@ -194,6 +194,7 @@
     </Compile>
     <Compile Include="Logic\Common.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\AdminModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\v1\IRestfulService.cs" />
     <Compile Include="Services\v1\ISoapService.cs" />
