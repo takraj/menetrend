@@ -8,12 +8,40 @@ using System.Web;
 
 namespace TransitPlannerWeb.Models
 {
+    public class AdminContextInitializer : DropCreateDatabaseIfModelChanges<AdminContext>
+    {
+        protected override void Seed(AdminContext db)
+        {
+            base.Seed(db);
+
+            db.Settings.Add(new Setting { Key = "ALGORITHM", Value = "AStar" });
+            db.Settings.Add(new Setting { Key = "GET_ON_OFF_TIME", Value = "1" });
+            db.Settings.Add(new Setting { Key = "WALKING_SPEED", Value = "5" });
+
+            db.CoreServices.Add(new CoreService
+            {
+                BaseAddress = "http://localhost",
+                Weight = 5,
+                Name = "Localhost Service",
+                Description = "This is a service for localhost."
+            });
+
+            db.CoreServices.Add(new CoreService
+            {
+                BaseAddress = "http://localhost",
+                Weight = 2,
+                Name = "Localhost 2 Service",
+                Description = "This is a second service for localhost."
+            });
+        }
+    }
+
     public class AdminContext : DbContext
     {
         public AdminContext()
             : base("DefaultConnection")
         {
-            Database.SetInitializer<AdminContext>(new CreateDatabaseIfNotExists<AdminContext>());
+            Database.SetInitializer<AdminContext>(new AdminContextInitializer());
         }
 
         public DbSet<Setting> Settings { get; set; }
@@ -44,6 +72,7 @@ namespace TransitPlannerWeb.Models
         public int Id { get; set; }
         public int TripId { get; set; }
         public int DelayInMinutes { get; set; }
+        public DateTime When { get; set; }
     }
 
     public class DisabledRoute

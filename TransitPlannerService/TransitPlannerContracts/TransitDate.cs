@@ -17,5 +17,13 @@ namespace TransitPlannerContracts
 
         [DataMember]
         public int day { get; set; }
+
+        public DateTime AsDate
+        {
+            get
+            {
+                return new DateTime(year, month, day);
+            }
+        }
     }
 }

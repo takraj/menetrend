@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using TransitPlannerContracts;
+using PortableUtilityLibrary;
 
 namespace TransitPlannerUtilityLibrary
 {
@@ -187,6 +188,19 @@ namespace TransitPlannerUtilityLibrary
                 var result = await response.Content.ReadAsAsync<TransitPlan>();
                 return result;
             }
+        }
+
+        public TransitStop GetNearestStop(double latitude, double longitude)
+        {
+            var all_stops = this.GetAllStops().Result;
+            var heap = new HeapDict<TransitStop, double>();
+            foreach (var stop in all_stops)
+            {
+                var distance = Haversine.GetDistanceBetween(latitude, longitude, stop.latitude, stop.longitude);
+                heap.SetItem(stop, distance);
+            }
+            var result = heap.PeekItem();
+            return result.Key;
         }
     }
 }

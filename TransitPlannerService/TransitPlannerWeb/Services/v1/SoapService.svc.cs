@@ -6,18 +6,34 @@ using System.ServiceModel;
 using System.Text;
 using TransitPlannerContracts;
 using TransitPlannerUtilityLibrary;
+using TransitPlannerWeb.Models;
 using TransitPlannerWebContracts;
 
 namespace TransitPlannerWeb.Services.v1
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "SoapService" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select SoapService.svc or SoapService.svc.cs at the Solution Explorer and start debugging.
     public class SoapService : ISoapService
     {
         private RestfulCoreService CreateClient()
         {
-            // -- TODO: Adatbázisból lekérni a címeket és terheléselosztást csinálni --
-            return new RestfulCoreService("http://localhost");
+            var services = new List<CoreService>();
+
+            using (var db = new AdminContext())
+            {
+                var list_of_service_records = db.CoreServices.ToList();
+                foreach (var service_record in list_of_service_records)
+                {
+                    for (int i = 0; i < service_record.Weight; i++)
+                    {
+                        services.Add(service_record);
+                    }
+                }
+            }
+
+            var rnd = new Random(DateTime.Now.Millisecond);
+            int selected_service_index = rnd.Next(services.Count);
+            var selected_service = services[selected_service_index];
+
+            return new RestfulCoreService(selected_service.BaseAddress);
         }
 
         public IList<TransitStop> GetAllStops()
@@ -78,6 +94,19 @@ namespace TransitPlannerWeb.Services.v1
         {
             var coreSvc = CreateClient();
 
+            var settings = new Dictionary<string, string>();
+            var disabled_route_ids = new List<int>();
+            var trip_delays = new List<IntegerPair>();
+
+            using (var db = new AdminContext())
+            {
+                settings = db.Settings.ToDictionary(s => s.Key, s => s.Value);
+                disabled_route_ids = db.DisabledRoutes.Select(id => id.RouteId).ToList();
+                trip_delays = db.TripDelays
+                    .Where(d => d.When.Date.Equals(parameters.when.AsDateTime))
+                    .Select(d => new IntegerPair { key = d.TripId, value = d.DelayInMinutes }).ToList();
+            }
+
             var coreParameters = new TransitPlanRequestParameters
             {
                 from = parameters.from,
@@ -86,12 +115,11 @@ namespace TransitPlannerWeb.Services.v1
                 max_waiting_time = parameters.max_waiting_time,
                 needs_wheelchair_support = parameters.needs_wheelchair_support,
 
-                // -- TODO: Adatbázisból lekérdezni a paramétereket --
-                disabled_route_ids = new List<int>(), // TODO
-                get_on_off_time = 1, // TODO
-                trip_delays = new List<IntegerPair>(), // TODO
-                use_algorithm = "AStar", // TODO
-                walking_speed = 1 // TODO
+                trip_delays = trip_delays,
+                disabled_route_ids = disabled_route_ids,
+                use_algorithm = settings["ALGORITHM"],
+                get_on_off_time = Int32.Parse(settings["GET_ON_OFF_TIME"]),
+                walking_speed = Int32.Parse(settings["WALKING_SPEED"])
             };
 
             return coreSvc.GetPlan(coreParameters).Result;
@@ -105,7 +133,34 @@ namespace TransitPlannerWeb.Services.v1
 
         public void SendTroubleReport(SendTroubleReportRequest trouble_report_parameters)
         {
-            throw new NotImplementedException(); // TODO: adatbázisba beszúrni
+            var coreSvc = CreateClient();
+
+            var report_entity = new TroubleReport
+            {
+                Category = trouble_report_parameters.category,
+                Created = trouble_report_parameters.timestamp.AsDateTime,
+                Message = trouble_report_parameters.description,
+                Received = DateTime.Now,
+                FirstRead = null,
+                Latitude = null,
+                Longitude = null,
+                StopId = null
+            };
+
+            if (trouble_report_parameters.has_location_data)
+            {
+                report_entity.Latitude = trouble_report_parameters.latitude;
+                report_entity.Longitude = trouble_report_parameters.longitude;
+
+                var nearest_stop = coreSvc.GetNearestStop(report_entity.Latitude ?? 0, report_entity.Longitude ?? 0);
+                report_entity.StopId = nearest_stop.id;
+            }
+
+            using (var db = new AdminContext())
+            {
+                db.TroubleReports.Add(report_entity);
+                db.SaveChanges();
+            }
         }
     }
 }

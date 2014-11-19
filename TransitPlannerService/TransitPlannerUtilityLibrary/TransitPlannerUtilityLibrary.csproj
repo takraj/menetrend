@@ -34,6 +34,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\PortableUtilityLibrary\PortableUtilityLibrary.csproj">
+      <Project>{7643c8ee-a46f-4442-805a-e2961891a476}</Project>
+      <Name>PortableUtilityLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TransitPlannerContracts\TransitPlannerContracts.csproj">
       <Project>{ccefb389-bafc-452c-a623-02836c2e31fa}</Project>
       <Name>TransitPlannerContracts</Name>
