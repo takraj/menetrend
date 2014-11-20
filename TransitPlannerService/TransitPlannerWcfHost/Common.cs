@@ -258,7 +258,7 @@ namespace TransitPlannerWcfHost
         public static List<TransitStop> FilterStops(string filter)
         {
             var lst = new List<TransitStop>();
-            var filterLower = filter.ToLower();
+            var filterLower = (filter ?? "").ToLower();
 
             for (int i = 0; i < Common.repository.Stops.Count(); i++)
             {
@@ -286,7 +286,7 @@ namespace TransitPlannerWcfHost
         public static List<TransitRoute> FilterRoutes(string filter)
         {
             var lst = new List<TransitRoute>();
-            var filterLower = filter.ToLower();
+            var filterLower = (filter ?? "").ToLower();
 
             for (int i = 0; i < Common.repository.Routes.Count(); i++)
             {
@@ -402,7 +402,8 @@ namespace TransitPlannerWcfHost
 
         private static int GetServiceDay(TransitDate when)
         {
-            throw new NotImplementedException();
+            var meta = Common.repository.MetaInfo;
+            return (int)(when.AsDate - meta.MinDate).TotalDays;
         }
     }
 }

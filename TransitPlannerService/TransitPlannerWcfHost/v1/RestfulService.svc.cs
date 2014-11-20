@@ -173,8 +173,14 @@ namespace TransitPlannerWcfHost
             return Common.CreateMetaData();
         }
 
-        public IList<TransitSequenceGroup> GetSchedule(int route_id, TransitDate when)
+        public IList<TransitSequenceGroup> GetSchedule(int route_id, int year, int month, int day)
         {
+            var when = new TransitDate
+            {
+                year = year,
+                month = month,
+                day = day
+            };
             try
             {
                 return Common.CreateSchedule(route_id, when);
@@ -185,8 +191,14 @@ namespace TransitPlannerWcfHost
             }
         }
 
-        public IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when)
+        public IList<TransitSequenceInfo> GetSequences(int route_id, int year, int month, int day)
         {
+            var when = new TransitDate
+            {
+                year = year,
+                month = month,
+                day = day
+            };
             try
             {
                 return Common.CreateTransitSequenceInfoForRoute(route_id, when);

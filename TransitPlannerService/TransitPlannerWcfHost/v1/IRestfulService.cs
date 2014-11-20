@@ -39,11 +39,11 @@ namespace TransitPlannerWcfHost
 
         [OperationContract]
         [WebGet]
-        IList<TransitSequenceGroup> GetSchedule(int route_id, TransitDate when);
+        IList<TransitSequenceGroup> GetSchedule(int route_id, int year, int month, int day);
 
         [OperationContract]
         [WebGet]
-        IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when);
+        IList<TransitSequenceInfo> GetSequences(int route_id, int year, int month, int day);
 
         [OperationContract]
         [WebGet]

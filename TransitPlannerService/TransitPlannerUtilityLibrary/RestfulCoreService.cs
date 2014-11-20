@@ -31,15 +31,6 @@ namespace TransitPlannerUtilityLibrary
             return client;
         }
 
-        private string _CreateQueryString(object obj)
-        {
-            var properties = from p in obj.GetType().GetTypeInfo().DeclaredProperties
-                             where p.GetValue(obj, null) != null
-                             select p.Name + "=" + WebUtility.UrlEncode(p.GetValue(obj, null).ToString());
-
-            return String.Join("&", properties.ToArray());
-        }
-
         public async Task<List<TransitStop>> GetAllStops()
         {
             using (var client = _CreateHttpClient())
@@ -122,7 +113,9 @@ namespace TransitPlannerUtilityLibrary
 
         public async Task<List<TransitSequenceGroup>> GetSchedule(int route_id, TransitDate when)
         {
-            var url = String.Format("{0}?route_id={1}&{2}", "GetSchedule", route_id, _CreateQueryString(when));
+            var url = String.Format(
+                "{0}?route_id={1}&year={2}&month={3}&day={4}", "GetSequences",
+                route_id, when.year, when.month, when.day);
 
             using (var client = _CreateHttpClient())
             {
@@ -136,7 +129,9 @@ namespace TransitPlannerUtilityLibrary
 
         public async Task<List<TransitSequenceInfo>> GetSequences(int route_id, TransitDate when)
         {
-            var url = String.Format("{0}?route_id={1}&{2}", "GetSequences", route_id, _CreateQueryString(when));
+            var url = String.Format(
+                "{0}?route_id={1}&year={2}&month={3}&day={4}", "GetSequences",
+                route_id, when.year, when.month, when.day);
 
             using (var client = _CreateHttpClient())
             {
