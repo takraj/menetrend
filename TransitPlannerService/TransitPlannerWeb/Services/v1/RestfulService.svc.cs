@@ -72,15 +72,27 @@ namespace TransitPlannerWeb.Services.v1
             return coreSvc.GetMetadata().Result;
         }
 
-        public IList<TransitSequenceGroup> GetSchedule(int route_id, TransitDate when)
+        public IList<TransitSequenceGroup> GetSchedule(int route_id, int year, int month, int day)
         {
             var coreSvc = CreateClient();
+            var when = new TransitDate
+            {
+                year = year,
+                month = month,
+                day = day
+            };
             return coreSvc.GetSchedule(route_id, when).Result;
         }
 
-        public IList<TransitSequenceInfo> GetSequences(int route_id, TransitDate when)
+        public IList<TransitSequenceInfo> GetSequences(int route_id, int year, int month, int day)
         {
             var coreSvc = CreateClient();
+            var when = new TransitDate
+            {
+                year = year,
+                month = month,
+                day = day
+            };
             return coreSvc.GetSequences(route_id, when).Result;
         }
 

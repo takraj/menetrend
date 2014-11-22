@@ -114,7 +114,7 @@ namespace TransitPlannerUtilityLibrary
         public async Task<List<TransitSequenceGroup>> GetSchedule(int route_id, TransitDate when)
         {
             var url = String.Format(
-                "{0}?route_id={1}&year={2}&month={3}&day={4}", "GetSequences",
+                "{0}?route_id={1}&year={2}&month={3}&day={4}", "GetSchedule",
                 route_id, when.year, when.month, when.day);
 
             using (var client = _CreateHttpClient())
@@ -177,7 +177,7 @@ namespace TransitPlannerUtilityLibrary
 
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync("GetSimplePlan");
+                HttpResponseMessage response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
 
                 var result = await response.Content.ReadAsAsync<TransitPlan>();
