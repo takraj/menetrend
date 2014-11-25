@@ -3,6 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <title>Térképes Útvonaltervezés</title>
+        
+        <link href="tps-web.css" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     </head>
 
     <body>
@@ -23,68 +27,90 @@
             </nav>
         </header>
         
-        <aside>
-            <form>
-                <fieldset id="planner-inputs">
-                    <legend>Útvonaltervezés</legend>
-                    
-                    <input id="planner-inputs-from" name="from" type="text" placeholder="Honnan" />
-                    <input id="planner-inputs-to" name="to" type="text" placeholder="Hova" />
-                    
-                    <div id="planner-inputs-buttons">
-                        <button id="planner-inputs-settings" name="settings">Beállítások</button>
-                        <button id="planner-inputs-submit" name="submit" type="submit">Mehet</button>
-                    </div>
-                </fieldset>
-            </form>
+        <div id="content">            
+            <main>
+                <div id="map_canvas" />
+            </main>
             
-            <form>
-                <fieldset id="plan-summary">
-                    <legend>Útiterv</legend>
-                    
-                    <div class="time-with-label">
-                        <span>Indulás:</span>
-                        <time>17:20</time>
-                    </div>
-                    
-                    <div class="plan-summary-step">
-                        <span class="plan-summary-step-route">M4</span>
-                        <div class="plan-summary-step-section">
-                            <span class="plan-summary-step-section-start">Kelenföld vasútállomás</span>
-                            <span class="plan-summary-step-section-end">Móricz Zsigmond körtér</span>
+            <aside>
+                <form>
+                    <fieldset id="planner-inputs">
+                        <legend>Útvonaltervezés</legend>
+                        
+                        <input id="planner-inputs-from" name="from" type="text" placeholder="Honnan" />
+                        <input id="planner-inputs-to" name="to" type="text" placeholder="Hova" />
+                        
+                        <div id="planner-inputs-buttons">
+                            <button id="planner-inputs-settings" name="settings">Beállítások</button>
+                            <button id="planner-inputs-submit" name="submit" type="submit">Mehet</button>
                         </div>
-                    </div>
-                    
-                    <div class="plan-summary-step">
-                        <span class="plan-summary-step-route">6</span>
-                        <div class="plan-summary-step-section">
-                            <span class="plan-summary-step-section-start">Móricz Zsigmond körtér</span>
-                            <span class="plan-summary-step-section-end">Corvin Negyed</span>
+                    </fieldset>
+                </form>
+                
+                <form>
+                    <fieldset id="plan-summary">
+                        <legend>Útiterv</legend>
+                        
+                        <div class="time-with-label">
+                            <span>Indulás:</span>
+                            <time>17:20</time>
                         </div>
-                    </div>
-                    
-                    <div class="plan-summary-step">
-                        <span class="plan-summary-step-route">M3</span>
-                        <div class="plan-summary-step-section">
-                            <span class="plan-summary-step-section-start">Corvin Negyed</span>
-                            <span class="plan-summary-step-section-end">Határ út</span>
+                        
+                        <div class="plan-summary-step">
+                            <span class="plan-summary-step-route">M4</span>
+                            <div class="plan-summary-step-section">
+                                <span class="plan-summary-step-section-start">Kelenföld vasútállomás</span>
+                                <span class="plan-summary-step-section-end">Móricz Zsigmond körtér</span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="time-with-label">
-                        <span>Érkezés:</span>
-                        <time>17:45</time>
-                    </div>
-                    
-                    <div id="plan-summary-buttons">
-                        <button id="plan-summary-submit">Részletes terv</button>
-                    </div>
-                </fieldset>
-            </form>
-        </aside>
+                        
+                        <div class="plan-summary-step">
+                            <span class="plan-summary-step-route">6</span>
+                            <div class="plan-summary-step-section">
+                                <span class="plan-summary-step-section-start">Móricz Zsigmond körtér</span>
+                                <span class="plan-summary-step-section-end">Corvin Negyed</span>
+                            </div>
+                        </div>
+                        
+                        <div class="plan-summary-step">
+                            <span class="plan-summary-step-route">M3</span>
+                            <div class="plan-summary-step-section">
+                                <span class="plan-summary-step-section-start">Corvin Negyed</span>
+                                <span class="plan-summary-step-section-end">Határ út</span>
+                            </div>
+                        </div>
+                        
+                        <div class="time-with-label">
+                            <span>Érkezés:</span>
+                            <time>17:45</time>
+                        </div>
+                        
+                        <div id="plan-summary-buttons">
+                            <button id="plan-summary-submit">Részletes terv</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </aside>
+        </div>
         
-        <main>
-            <!-- main content, google map -->
-        </main>
+        <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
+        </script>
+        
+        <script type="text/javascript">
+            window.onload = function () {
+                var mapOptions = {
+                    center: new google.maps.LatLng(47.5, 19.08),
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+            
+                var map = new google.maps.Map(
+                    document.getElementById("map_canvas"),
+                    mapOptions);
+            }
+        </script>
+        
+        
     </body>
 </html>
