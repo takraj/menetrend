@@ -11,6 +11,7 @@
 
     <body>
         <header>
+            <img id="header-logo" src="img/routes-icon.png" />
             <h1>Menetrendkereső Szolgáltatás</h1>
             <nav>
                 <ul>
@@ -56,27 +57,31 @@
                             <time>17:20</time>
                         </div>
                         
-                        <div class="plan-summary-step">
-                            <span class="plan-summary-step-route">M4</span>
-                            <div class="plan-summary-step-section">
-                                <span class="plan-summary-step-section-start">Kelenföld vasútállomás</span>
-                                <span class="plan-summary-step-section-end">Móricz Zsigmond körtér</span>
+                        <div class="plan-summary-steps">
+                            <div class="plan-summary-step">
+                                <span class="plan-summary-step-route">
+                                    <img src="#" alt="M4" />
+                                </span>
+                                <span class="plan-summary-step-section">
+                                    <div class="plan-summary-step-section-start">Kelenföld vasútállomás</div>
+                                    <div class="plan-summary-step-section-end">Móricz Zsigmond körtér</div>
+                                </span>
                             </div>
-                        </div>
-                        
-                        <div class="plan-summary-step">
-                            <span class="plan-summary-step-route">6</span>
-                            <div class="plan-summary-step-section">
-                                <span class="plan-summary-step-section-start">Móricz Zsigmond körtér</span>
-                                <span class="plan-summary-step-section-end">Corvin Negyed</span>
+                            
+                            <div class="plan-summary-step">
+                                <span class="plan-summary-step-route">6</span>
+                                <span class="plan-summary-step-section">
+                                    <div class="plan-summary-step-section-start">Móricz Zsigmond körtér</div>
+                                    <div class="plan-summary-step-section-end">Corvin Negyed</div>
+                                </span>
                             </div>
-                        </div>
-                        
-                        <div class="plan-summary-step">
-                            <span class="plan-summary-step-route">M3</span>
-                            <div class="plan-summary-step-section">
-                                <span class="plan-summary-step-section-start">Corvin Negyed</span>
-                                <span class="plan-summary-step-section-end">Határ út</span>
+                            
+                            <div class="plan-summary-step">
+                                <span class="plan-summary-step-route">M3</span>
+                                <span class="plan-summary-step-section">
+                                    <div class="plan-summary-step-section-start">Corvin Negyed</div>
+                                    <div class="plan-summary-step-section-end">Határ út</div>
+                                </span>
                             </div>
                         </div>
                         
@@ -86,7 +91,7 @@
                         </div>
                         
                         <div id="plan-summary-buttons">
-                            <button id="plan-summary-submit">Részletes terv</button>
+                            <button id="plan-summary-details">Részletes terv</button>
                         </div>
                     </fieldset>
                 </form>

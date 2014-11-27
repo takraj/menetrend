@@ -11,7 +11,13 @@ body {
 header {
     display: block;
     padding: 15px 15px 40px 15px;
-    background: linear-gradient(to bottom, black, white);
+    background: linear-gradient(to bottom, #555555, white);
+}
+
+header > #header-logo {
+    float: right;
+    height: 200px;
+    margin-right: 30px;
 }
 
 header > h1 {
@@ -103,10 +109,17 @@ input[type=text] {
     border-color: black;
     border-radius: 5px 5px 5px 5px;
     width: 95%;
+    font-size: 16px;
 }
 
 input[type=text]:hover {
     background: white;
+    border-color: orange;
+}
+
+input[type=text]:focus {
+    background: white;
+    border-color: blue;
 }
 
 fieldset > legend {
@@ -114,81 +127,64 @@ fieldset > legend {
 }
 
 #planner-inputs-buttons {
-    padding: 15px;
+    padding: 5px;
     text-align: center;
     font-size: 0px;
 }
 
-#planner-inputs-settings {
-    font-size: 16px;
+button {
+    font-size: 18px;
     display: inline-block;
-    margin-right: 15px;
+    margin: 10px;
     text-align: center;
     text-decoration: bold;
     border: 1px solid;
     border-radius: 5px 5px 5px 5px;
-    background: linear-gradient(to bottom, red, grey);
-    transition: background 2s;
+}
+
+#planner-inputs-settings {
+    background: gray;
+    padding: 5px 2px 5px 2px;
 }
 
 #planner-inputs-settings:hover {
-    font-size: 16px;
-    display: inline-block;
-    margin-right: 15px;
-    text-align: center;
-    text-decoration: bold;
-    border: 1px solid;
-    border-radius: 5px 5px 5px 5px;
     background: linear-gradient(to bottom, red, white);
-    transition: background 2s;
 }
 
 #planner-inputs-settings:active {
-    font-size: 16px;
-    display: inline-block;
-    margin-right: 15px;
-    text-align: center;
-    text-decoration: bold;
-    border: 1px solid;
-    border-radius: 5px 5px 5px 5px;
     background: linear-gradient(to bottom, red, yellow);
-    transition: background 2s;
 }
 
 #planner-inputs-submit {
-    font-size: 16px;
-    display: inline-block;
-    margin-right: 15px;
-    text-align: center;
-    text-decoration: bold;
-    border: 1px solid;
-    border-radius: 5px 5px 5px 5px;
-    background: linear-gradient(to bottom, green, grey);
-    transition: background 2s;
+    background: #00D900;
+    padding: 5px 30px 5px 30px;
 }
 
 #planner-inputs-submit:hover {
-    font-size: 16px;
-    display: inline-block;
-    margin-right: 15px;
-    text-align: center;
-    text-decoration: bold;
-    border: 1px solid;
-    border-radius: 5px 5px 5px 5px;
-    background: linear-gradient(to bottom, green, white);
-    transition: background 2s;
+    background: linear-gradient(to bottom, #00D900, white);
 }
 
 #planner-inputs-submit:active {
-    font-size: 16px;
-    display: inline-block;
-    margin-right: 15px;
+    background: linear-gradient(to bottom, #00D900, yellow);
+}
+
+#plan-summary-buttons {
+    padding: 5px;
     text-align: center;
-    text-decoration: bold;
-    border: 1px solid;
-    border-radius: 5px 5px 5px 5px;
-    background: linear-gradient(to bottom, green, yellow);
-    transition: background 2s;
+    font-size: 0px;
+}
+
+#plan-summary-details {
+    background: gray;
+    padding: 5px 30px 5px 30px;
+}
+
+#plan-summary-details:hover {
+    background: linear-gradient(to bottom, red, white);
+}
+
+#plan-summary-details:active {
+    background: linear-gradient(to bottom, red, yellow);
 }
 
 #content {
@@ -210,4 +206,53 @@ fieldset > legend {
 #content > aside > form {
     width: 300px;
     margin: 10px;
+}
+
+.time-with-label {
+    display: table;
+    width: 100%;
+}
+
+.time-with-label > * {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.time-with-label > span {
+    text-align: left;
+    padding-left: 30px;
+    font-size: 16px;
+}
+
+.time-with-label > time {
+    text-align: right;
+    padding-right: 30px;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.plan-summary-steps {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.plan-summary-step {
+    display: table;
+    width: 100%;
+}
+
+.plan-summary-step > * {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.plan-summary-step > .plan-summary-step-route {
+    width: 48px;
+    height: 48px;
+    padding: 5px;
+}
+
+.plan-summary-step > .plan-summary-step-section {
+    height: 48px;
+    padding: 5px;
 }
