@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Adminisztráció</title>
+        
+        <link href="js/jquery-ui-1.11.2.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="js/fancytree/skin-win7/ui.fancytree.css" rel="stylesheet" type="text/css">
+        <link href="tps-web.css" rel="stylesheet" type="text/css" />
+        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+    </head>
+
+    <body>
+        <header>
+            <img id="header-logo" src="img/routes-icon.png" />
+            <h1>Menetrendkereső Szolgáltatás</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#">Útvonaltervezés</a>
+                    </li>
+                    <li>
+                        <a href="#">Menetrend Böngészése</a>
+                    </li>
+                    <li class="selected">
+                        <a href="#">Adminisztráció</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div id="content">            
+            <main>
+                <h2>Szerver paraméterek</h2>
+                <form id="load-balancer" class="table-style contains-tables">
+                    <fieldset class="existing-load-balancers">
+                        <legend>Beállított háttérszolgáltatások</legend>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="lb-name">Név</th>
+                                    <th class="lb-url">URL</th>
+                                    <th class="lb-weight">Súly</th>
+                                    <th class="lb-action"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Név</td>
+                                    <td>URL</td>
+                                    <td>Súly</td>
+                                    <td>
+                                        <button class="delete-button" type="submit" name="delete" value="id">Törlés</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Név</td>
+                                    <td>URL</td>
+                                    <td>Súly</td>
+                                    <td>
+                                        <button class="delete-button" type="submit" name="delete" value="id">Törlés</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Név</td>
+                                    <td>URL</td>
+                                    <td>Súly</td>
+                                    <td>
+                                        <button class="delete-button" type="submit" name="delete" value="id">Törlés</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Név</td>
+                                    <td>URL</td>
+                                    <td>Súly</td>
+                                    <td>
+                                        <button class="delete-button" type="submit" name="delete" value="id">Törlés</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                    
+                    <fieldset class="new-load-balancer">
+                        <legend>Új háttérszolgáltatás felvétele</legend>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="lb-name">Név</th>
+                                    <th class="lb-url">URL</th>
+                                    <th class="lb-weight">Súly</th>
+                                    <th class="lb-action"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="contains-textfield">
+                                        <input type="text" name="load-balancer-name" />
+                                    </td>
+                                    <td class="contains-textfield">
+                                        <input type="text" name="load-balancer-url" />
+                                    </td>
+                                    <td class="contains-textfield">
+                                        <input type="text" name="load-balancer-weight" />
+                                    </td>
+                                    <td>
+                                        <button class="submit-button" type="submit" name="submit-new-load-balancer">OK</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                    
+                    <fieldset class="other-settings">
+                        <legend>Egyéb beállítások</legend>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="other-settings-key">Kulcs</th>
+                                    <th class="other-settings-value">Érték</th>
+                                    <th class="other-settings-unit"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Ez egy kulcs
+                                    </td>
+                                    <td class="contains-textfield">
+                                        <input type="text" name="other-setting-key-value" />
+                                    </td>
+                                    <td>
+                                        unit
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            <button class="submit-button" type="submit" name="submit-other-settings">Mentés</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </main>
+            
+            <aside>
+                <form>
+                    <fieldset id="user-info">
+                        <legend>Bejelentkezve</legend>
+                        
+                        <p>Bejelentkezve, mint <strong>operator</strong>.</p>
+                        <div>
+                            <button type="submit" id="logout-button" name="logout-action" value="logout">Kijelentkezés</button>
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset id="admin-menu">
+                        <legend>Menü</legend>
+                        
+                        <ul>
+                            <li><a href="#">Szerver paraméterek</a></li>
+                            <li><a href="#">Bejelentések</a></li>
+                            <li><a href="#">Járatok</a></li>
+                            <li><a href="#">Késések</a></li>
+                        </ul>
+                    </fieldset>
+                </form>
+            </aside>
+        </div>
+
+    </body>
+</html>

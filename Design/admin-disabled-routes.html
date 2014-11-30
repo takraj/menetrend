@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Adminisztráció</title>
+        
+        <link href="js/jquery-ui-1.11.2.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="js/fancytree/skin-win7/ui.fancytree.css" rel="stylesheet" type="text/css">
+        <link href="tps-web.css" rel="stylesheet" type="text/css" />
+        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+    </head>
+
+    <body>
+        <header>
+            <img id="header-logo" src="img/routes-icon.png" />
+            <h1>Menetrendkereső Szolgáltatás</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#">Útvonaltervezés</a>
+                    </li>
+                    <li>
+                        <a href="#">Menetrend Böngészése</a>
+                    </li>
+                    <li class="selected">
+                        <a href="#">Adminisztráció</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div id="content">            
+            <main>
+                <h2>Letiltott járatok kezelése</h2>
+                <div id="routes-list" class="contains-tables">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="route-id report-column">ID</th>
+                                <th class="route-short-name report-column">Rövid név</th>
+                                <th class="route-long-name report-column">Hosszú név</th>
+                                <th class="route-category report-column">Járműtípus</th>
+                                <th class="route-action report-column"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="route-id report-column">ID</td>
+                                <td class="route-short-name report-column">Rövid név</td>
+                                <td class="route-long-name report-column">Hosszú név</td>
+                                <td class="route-category report-column">Járműtípus</td>
+                                <td class="route-action report-column">
+                                    <a href="#">Letiltás</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="route-id report-column">ID</td>
+                                <td class="route-short-name report-column">Rövid név</td>
+                                <td class="route-long-name report-column">Hosszú név</td>
+                                <td class="route-category report-column">Járműtípus</td>
+                                <td class="route-action report-column">
+                                    <a href="#">Letiltás</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="route-id report-column">ID</td>
+                                <td class="route-short-name report-column">Rövid név</td>
+                                <td class="route-long-name report-column">Hosszú név</td>
+                                <td class="route-category report-column">Járműtípus</td>
+                                <td class="route-action report-column">
+                                    <a href="#">Letiltás</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="route-id report-column">ID</td>
+                                <td class="route-short-name report-column">Rövid név</td>
+                                <td class="route-long-name report-column">Hosszú név</td>
+                                <td class="route-category report-column">Járműtípus</td>
+                                <td class="route-action report-column">
+                                    <a href="#">Letiltás</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="route-id report-column">ID</td>
+                                <td class="route-short-name report-column">Rövid név</td>
+                                <td class="route-long-name report-column">Hosszú név</td>
+                                <td class="route-category report-column">Járműtípus</td>
+                                <td class="route-action report-column">
+                                    <a href="#">Letiltás</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+            
+            <aside>
+                <form>
+                    <fieldset id="user-info">
+                        <legend>Bejelentkezve</legend>
+                        
+                        <p>Bejelentkezve, mint <strong>operator</strong>.</p>
+                        <div>
+                            <button type="submit" id="logout-button" name="logout-action" value="logout">Kijelentkezés</button>
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset id="admin-menu">
+                        <legend>Menü</legend>
+                        
+                        <ul>
+                            <li><a href="#">Szerver paraméterek</a></li>
+                            <li><a href="#">Bejelentések</a></li>
+                            <li><a href="#">Járatok</a></li>
+                            <li><a href="#">Késések</a></li>
+                        </ul>
+                    </fieldset>
+                </form>
+            </aside>
+        </div>
+
+    </body>
+</html>

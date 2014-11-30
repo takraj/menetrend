@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Adminisztráció</title>
+        
+        <link href="js/jquery-ui-1.11.2.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="js/fancytree/skin-win7/ui.fancytree.css" rel="stylesheet" type="text/css">
+        <link href="tps-web.css" rel="stylesheet" type="text/css" />
+        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+    </head>
+
+    <body>
+        <header>
+            <img id="header-logo" src="img/routes-icon.png" />
+            <h1>Menetrendkereső Szolgáltatás</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#">Útvonaltervezés</a>
+                    </li>
+                    <li>
+                        <a href="#">Menetrend Böngészése</a>
+                    </li>
+                    <li class="selected">
+                        <a href="#">Adminisztráció</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div id="content">            
+            <main>
+                <h2 class="whattodo">Kérlek jelentkezz be!</h2>
+                <form id="login" class="table-style">
+                    <div class="table-style">
+                        <div class="table-row-style">
+                            <label class="table-cell-style" for="username">Felhasználónév:</label>
+                            <input class="table-cell-style" type="text" name="username" />
+                        </div>
+                        <div class="table-row-style">
+                            <label class="table-cell-style" for="username">Jelszó:</label>
+                            <input class="table-cell-style" type="password" name="password" />
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" id="login-button" name="ok">Bejelentkezés</button>
+                    </div>
+                </form>
+            </main>
+            
+            <aside>
+                <form>
+                    <fieldset id="user-info">
+                        <legend>Bejelentkezve</legend>
+                        
+                        <p>Bejelentkezve, mint <strong>operator</strong>.</p>
+                        <div>
+                            <button type="submit" id="logout-button" name="logout-action" value="logout">Kijelentkezés</button>
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset id="admin-menu">
+                        <legend>Menü</legend>
+                        
+                        <ul>
+                            <li><a href="#">Szerver paraméterek</a></li>
+                            <li><a href="#">Bejelentések</a></li>
+                            <li><a href="#">Járatok</a></li>
+                            <li><a href="#">Késések</a></li>
+                        </ul>
+                    </fieldset>
+                </form>
+            </aside>
+        </div>
+        
+        <script src="js/jquery-ui-1.11.2.custom/external/jquery/jquery.js"></script>
+        <script src="js/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
+        
+        <script src="js/fancytree/src/jquery.fancytree.js" type="text/javascript"></script>
+        <script src="js/fancytree/src/jquery.fancytree.filter.js" type="text/javascript"></script>
+        
+        <script>
+            jQuery( "#browser-calendar-date-placeholder" ).datepicker(
+                {
+                    altField: "#browser-calendar-date",
+                    alwaysSetTime: true,
+                    altFormat: "yy.mm.dd",
+                    defaultDate: new Date(2013, 4, 3),
+                    closeText: 'Bezár',
+                    prevText: 'Előző',
+                    nextText: 'Következő',
+                    currentText: 'Ma',
+                    monthNames: ['Január','Február','Március','Április','Május','Június',
+                    'Július','Augusztus','Szeptember','Október','November','December'],
+                    monthNamesShort: ['Jan','Feb','Már','Ápr','Máj','Jún',
+                    'Júl','Aug','Szept','Okt','Nov','Dec'],
+                    dayNames: ['Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat','Vasárnap'],
+                    dayNamesShort: ['Hé','Ke','Sze','Csü','Pén','Szo','Vas'],
+                    dayNamesMin: ['H','K','Sze','Cs','P','Szo','V'],
+                    weekHeader: 'Hét',
+                    dateFormat: 'dd.mm.yy',
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: true,
+                    yearSuffix: '',
+                    showButtonPanel: true
+                });
+                
+                $("#browser-routes-and-stops").tabs();
+                
+                var routes_tree = $("#browser-routes-tree").fancytree({
+                    extensions: ["filter"],
+                    quicksearch: true,
+                    filter: {
+                        mode: "hide",
+                        autoApply: true
+                    },
+                });
+                var routes_tree = $("#browser-routes-tree").fancytree("getTree");
+                
+                $("#browser-filter-routes").keyup(function(e){
+                    match = $(this).val();
+                    
+                    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === ""){
+                        routes_tree.clearFilter();
+                    } else {
+                        routes_tree.filterNodes(match, true);
+                    }
+                    
+                    routes_tree.filterNodes(match, true);
+                }).focus();
+                
+                $("#browser-stops-list").fancytree({
+                    extensions: ["filter"],
+                    quicksearch: true,
+                    filter: {
+                        mode: "hide",
+                        autoApply: true
+                    },
+                });
+                var stops_tree = $("#browser-stops-list").fancytree("getTree");
+                
+                $("#browser-filter-stops").keyup(function(e){
+                    match = $(this).val();
+                    
+                    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === ""){
+                        stops_tree.clearFilter();
+                    } else {
+                        stops_tree.filterNodes(match, true);
+                    }
+                }).focus();
+        </script>
+
+    </body>
+</html>

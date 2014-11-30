@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Adminisztráció</title>
+        
+        <link href="js/jquery-ui-1.11.2.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="js/fancytree/skin-win7/ui.fancytree.css" rel="stylesheet" type="text/css">
+        <link href="tps-web.css" rel="stylesheet" type="text/css" />
+        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+    </head>
+
+    <body>
+        <header>
+            <img id="header-logo" src="img/routes-icon.png" />
+            <h1>Menetrendkereső Szolgáltatás</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#">Útvonaltervezés</a>
+                    </li>
+                    <li>
+                        <a href="#">Menetrend Böngészése</a>
+                    </li>
+                    <li class="selected">
+                        <a href="#">Adminisztráció</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div id="content">            
+            <main>
+                <h2 class="report-details-title">Bejelentés részletei</h2>
+                <table class="report-details-table">
+                    <tr>
+                        <td class="report-property">Azonosító:</td>
+                        <td>99</td>
+                    </tr>
+                    <tr>
+                        <td class="report-property">Készült:</td>
+                        <td>2014-03-14 15:16</td>
+                    </tr>
+                    <tr>
+                        <td class="report-property">Érkezett:</td>
+                        <td>2014-03-14 15:17</td>
+                    </tr>
+                    <tr>
+                        <td class="report-property">Kategória:</td>
+                        <td>Baleset</td>
+                    </tr>
+                    <tr>
+                        <td class="report-property">Megálló:</td>
+                        <td>Blaha Lujza tér M</td>
+                    </tr>
+                    <tr>
+                        <td class="report-property">Üzenet:</td>
+                        <td>
+                            lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                            culpa qui officia deserunt mollit anim id est laborum. lorem ipsum
+                            dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                            incididunt ut labore et dolore magna aliqua.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="report-property">Térkép:</td>
+                        <td>
+                            <div id="map_embedded_canvas" class="map_embedded" />
+                        </td>
+                    </tr>
+                </table>
+            </main>
+            
+            <aside>
+                <form>
+                    <fieldset id="user-info">
+                        <legend>Bejelentkezve</legend>
+                        
+                        <p>Bejelentkezve, mint <strong>operator</strong>.</p>
+                        <div>
+                            <button type="submit" id="logout-button" name="logout-action" value="logout">Kijelentkezés</button>
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset id="admin-menu">
+                        <legend>Menü</legend>
+                        
+                        <ul>
+                            <li><a href="#">Szerver paraméterek</a></li>
+                            <li><a href="#">Bejelentések</a></li>
+                            <li><a href="#">Járatok</a></li>
+                            <li><a href="#">Késések</a></li>
+                        </ul>
+                    </fieldset>
+                </form>
+            </aside>
+        </div>
+        
+        <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
+        </script>
+        
+        <script type="text/javascript">
+            window.onload = function () {
+                var mapOptions = {
+                    center: new google.maps.LatLng(47.5, 19.08),
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+            
+                var map = new google.maps.Map(
+                    document.getElementById("map_embedded_canvas"),
+                    mapOptions);
+            }
+        </script>
+    </body>
+</html>

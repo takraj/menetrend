@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Adminisztráció</title>
+        
+        <link href="js/jquery-ui-1.11.2.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="js/fancytree/skin-win7/ui.fancytree.css" rel="stylesheet" type="text/css">
+        <link href="tps-web.css" rel="stylesheet" type="text/css" />
+        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+    </head>
+
+    <body>
+        <header>
+            <img id="header-logo" src="img/routes-icon.png" />
+            <h1>Menetrendkereső Szolgáltatás</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#">Útvonaltervezés</a>
+                    </li>
+                    <li>
+                        <a href="#">Menetrend Böngészése</a>
+                    </li>
+                    <li class="selected">
+                        <a href="#">Adminisztráció</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div id="content">            
+            <main>
+                <h2>Bejelentések</h2>
+                <div id="reports-list" class="contains-tables">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="report-id report-column">ID</th>
+                                <th class="report-created report-column">Készült</th>
+                                <th class="report-received report-column">Érkezett</th>
+                                <th class="report-category report-column">Kategória</th>
+                                <th class="report-stop report-column">Megálló</th>
+                                <th class="report-status report-column">Állapot</th>
+                                <th class="report-action report-column">Lehetőségek</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Elolvasva<br /><em>(2014-03-10&nbsp;14:11)</em></td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Olvasatlan</td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Elolvasva<br /><em>(2014-03-10&nbsp;14:11)</em></td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Olvasatlan</td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Elolvasva<br /><em>(2014-03-10&nbsp;14:11)</em></td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Olvasatlan</td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Elolvasva<br /><em>(2014-03-10&nbsp;14:11)</em></td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Olvasatlan</td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Elolvasva<br /><em>(2014-03-10&nbsp;14:11)</em></td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="report-id report-column">9999</td>
+                                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
+                                <td class="report-category report-column">Baleset</td>
+                                <td class="report-stop report-column">Corvin Negyed M</td>
+                                <td class="report-status report-column">Olvasatlan</td>
+                                <td class="report-action report-column">
+                                    <a href="#">Olvasás</a>
+                                    <a href="#">Törlés</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+            
+            <aside>
+                <form>
+                    <fieldset id="user-info">
+                        <legend>Bejelentkezve</legend>
+                        
+                        <p>Bejelentkezve, mint <strong>operator</strong>.</p>
+                        <div>
+                            <button type="submit" id="logout-button" name="logout-action" value="logout">Kijelentkezés</button>
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset id="admin-menu">
+                        <legend>Menü</legend>
+                        
+                        <ul>
+                            <li><a href="#">Szerver paraméterek</a></li>
+                            <li><a href="#">Bejelentések</a></li>
+                            <li><a href="#">Járatok</a></li>
+                            <li><a href="#">Késések</a></li>
+                        </ul>
+                    </fieldset>
+                </form>
+            </aside>
+        </div>
+
+    </body>
+</html>

@@ -8,6 +8,10 @@ table {
     height: 100%;
 }
 
+#map_embedded_canvas {
+    height: 400px;
+}
+
 body {
     width: 100%;
     margin: 0px;
@@ -104,7 +108,7 @@ header > nav > ul > li:first-child {
     border-radius: 15px 0px 0px 15px;
 }
 
-input[type=text] {
+input[type=text], input[type=password] {
     background: #EEEEEE;
     transition: background 1s;
     font-weight: bold;
@@ -117,12 +121,12 @@ input[type=text] {
     font-size: 16px;
 }
 
-input[type=text]:hover {
+input[type=text]:hover, input[type=password]:hover {
     background: white;
     border-color: orange;
 }
 
-input[type=text]:focus {
+input[type=text]:focus, input[type=password]:focus {
     background: white;
     border-color: blue;
 }
@@ -145,6 +149,16 @@ button {
     text-decoration: bold;
     border: 1px solid;
     border-radius: 5px 5px 5px 5px;
+}
+
+.report-details-table td {
+    vertical-align: top;
+    padding: 5px;
+}
+
+.report-property {
+    text-align: right;
+    font-weight: bold;
 }
 
 #planner-inputs-settings {
@@ -380,6 +394,11 @@ button {
     margin-top: 20px;
 }
 
+#browser-routes-fs {
+    padding-right: 10px;
+    margin-top: 20px;
+}
+
 #browser-routes-tree {
     overflow: auto;
     max-height: 300px;
@@ -388,6 +407,55 @@ button {
 #browser-stops-list {
     overflow: auto;
     max-height: 300px;
+}
+
+#login {
+    margin-left: 200px;
+}
+
+#login .table-cell-style {
+    margin: 15px;
+}
+
+.form-buttons {
+    margin: 30px;
+    text-align: center;
+}
+
+#login-button {
+    padding: 10px;
+}
+
+#login-button:hover {
+    background: linear-gradient(to bottom, green, white);
+}
+
+#login-button:active {
+    background: linear-gradient(to bottom, green, yellow);
+}
+
+#logout-button:hover {
+    background: linear-gradient(to bottom, red, white);
+}
+
+#logout-button:active {
+    background: linear-gradient(to bottom, red, yellow);
+}
+
+.delete-button:hover {
+    background: linear-gradient(to bottom, red, white);
+}
+
+.delete-button:active {
+    background: linear-gradient(to bottom, red, yellow);
+}
+
+.submit-button:hover {
+    background: linear-gradient(to bottom, green, white);
+}
+
+.submit-button:active {
+    background: linear-gradient(to bottom, green, yellow);
 }
 
 .plan-detail-step + .plan-detail-step {
@@ -568,6 +636,78 @@ button {
 .enumeration-of-routes {
     margin-left: 100px;
     margin-top: 40px;
+}
+
+.contains-tables {
+    margin: 30px;
+    width: 80%;
+    text-align: center;
+}
+
+.contains-tables table {
+    width: 100%;
+}
+
+.contains-tables table thead {
+    border-bottom: 2px solid black;
+}
+
+.contains-tables table tr {
+    text-align: left;
+}
+
+.contains-tables table tbody tr:nth-child(odd) {
+    background: #CCCCCC;
+}
+
+#reports-list td, #reports-list th {
+    padding: 3px;
+}
+
+.trip-action {
+    width: 50px;
+}
+
+#delays-list {
+    width: 95%;
+}
+
+#admin-delays-left-content {
+    border-right: 2px solid black;
+    margin-right: 5px;
+    padding-right: 5px;
+    vertical-align: top;
+}
+
+.clear { clear: both;}
+
+#admin-delays-right-content {
+    width: 100%;
+    vertical-align: top;
+}
+
+.report-column + .report-column {
+    border-left: 1px solid black;
+}
+
+.lb-action {
+    width: auto;
+}
+
+.lb-weight {
+    width: 50px;
+}
+
+.lb-url {
+    width: 100%;
+}
+
+.lb-name {
+    min-width: 200px;
+}
+
+.contains-textfield {
+    padding-right: 20px;
 }
 
 /* DropDown menu */
