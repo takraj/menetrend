@@ -4,9 +4,11 @@
         <meta charset="UTF-8">
         <title>Térképes Útvonaltervezés</title>
         
-        <link href="tps-web.css" rel="stylesheet" type="text/css">
-        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link href="js/jquery-ui-1.11.2.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="js/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />
+        <link href="tps-web.css" rel="stylesheet" type="text/css" />
+        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
     </head>
 
     <body>
@@ -57,30 +59,34 @@
                             <time>17:20</time>
                         </div>
                         
-                        <div class="plan-summary-steps">
-                            <div class="plan-summary-step">
-                                <span class="plan-summary-step-route">
-                                    <img src="#" alt="M4" />
+                        <div class="route-section-infos">
+                            <div class="route-section-info">
+                                <span class="route-section-info-route">
+                                    <img src="img/badge_template_48.png" alt="M4" />
                                 </span>
-                                <span class="plan-summary-step-section">
-                                    <div class="plan-summary-step-section-start">Kelenföld vasútállomás</div>
-                                    <div class="plan-summary-step-section-end">Móricz Zsigmond körtér</div>
-                                </span>
-                            </div>
-                            
-                            <div class="plan-summary-step">
-                                <span class="plan-summary-step-route">6</span>
-                                <span class="plan-summary-step-section">
-                                    <div class="plan-summary-step-section-start">Móricz Zsigmond körtér</div>
-                                    <div class="plan-summary-step-section-end">Corvin Negyed</div>
+                                <span class="route-section-info-section">
+                                    <div class="route-section-info-section-start">Kelenföld vasútállomás</div>
+                                    <div class="route-section-info-section-end">Móricz Zsigmond körtér</div>
                                 </span>
                             </div>
                             
-                            <div class="plan-summary-step">
-                                <span class="plan-summary-step-route">M3</span>
-                                <span class="plan-summary-step-section">
-                                    <div class="plan-summary-step-section-start">Corvin Negyed</div>
-                                    <div class="plan-summary-step-section-end">Határ út</div>
+                            <div class="route-section-info">
+                                <span class="route-section-info-route">
+                                    <img src="img/badge_template_48.png" alt="6" />
+                                </span>
+                                <span class="route-section-info-section">
+                                    <div class="route-section-info-section-start">Móricz Zsigmond körtér</div>
+                                    <div class="route-section-info-section-end">Corvin Negyed</div>
+                                </span>
+                            </div>
+                            
+                            <div class="route-section-info">
+                                <span class="route-section-info-route">
+                                    <img src="img/badge_template_48.png" alt="M3" />
+                                </span>
+                                <span class="route-section-info-section">
+                                    <div class="route-section-info-section-start">Corvin Negyed</div>
+                                    <div class="route-section-info-section-end">Határ út</div>
                                 </span>
                             </div>
                         </div>
@@ -116,6 +122,9 @@
             }
         </script>
         
+        <script src="js/jquery-ui-1.11.2.custom/external/jquery/jquery.js"></script>
+        <script src="js/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
+        <script src="js/jquery-ui-timepicker-addon.js"></script>
         
     </body>
 </html>

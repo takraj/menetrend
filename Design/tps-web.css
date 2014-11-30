@@ -208,6 +208,10 @@ button {
     margin: 10px;
 }
 
+#planner-settings-other input[type=text] {
+    width: auto;
+}
+
 .time-with-label {
     display: table;
     width: 100%;
@@ -231,28 +235,220 @@ button {
     font-size: 24px;
 }
 
-.plan-summary-steps {
+.route-section-infos {
     margin-top: 15px;
     margin-bottom: 15px;
 }
 
-.plan-summary-step {
+.route-section-infos > .route-section-info:hover {
+    background: #CCCCCC;
+    transition: background 1s;
+}
+
+.route-section-info {
     display: table;
     width: 100%;
 }
 
-.plan-summary-step > * {
+.route-section-info > * {
     display: table-cell;
     vertical-align: middle;
 }
 
-.plan-summary-step > .plan-summary-step-route {
+.route-section-info > .route-section-info-route {
     width: 48px;
     height: 48px;
     padding: 5px;
 }
 
-.plan-summary-step > .plan-summary-step-section {
+.route-section-info > .route-section-info-section {
     height: 48px;
     padding: 5px;
+}
+
+.table-style {
+    display: table;
+}
+
+.table-cell-style {
+    display: table-cell;
+}
+
+.table-row-style {
+    display: table-row;
+}
+
+#planner-settings-start-time-container .ui-datepicker {
+    width: 100%;
+}
+
+#planner-settings-form {
+    width: 100%;
+}
+
+#planner-settings-other, #planner-settings-usable-routes {
+    display: inline-block;
+}
+
+#planner-settings-start-time-fs, #planner-settings-buttons {
+    display: block;
+}
+
+#planner-settings-buttons {
+    text-align: right;
+}
+
+#planner-settings-start-time-fs {
+    padding-right: 15px;
+    padding-left: 5px;
+}
+
+#planner-settings-cancel:hover {
+    background: linear-gradient(to bottom, red, white);
+}
+
+#planner-settings-cancel:active {
+    background: linear-gradient(to bottom, red, yellow);
+}
+
+#planner-settings-ok:hover {
+    background: linear-gradient(to bottom, green, white);
+}
+
+#planner-settings-ok:active {
+    background: linear-gradient(to bottom, green, yellow);
+}
+
+#mutasd {
+    padding: 5px 30px 5px 30px;
+}
+
+#mutasd:hover {
+    background: linear-gradient(to bottom, green, white);
+}
+
+#mutasd:active {
+    background: linear-gradient(to bottom, green, yellow);
+}
+
+#browser-buttons {
+    text-align: center;
+}
+
+#plan-details-calc-time {
+    float: right;
+}
+
+#plan-details-table {
+    border-collapse: collapse;
+    border: 0px;
+    width: 100%;
+}
+
+#plan-details-table .route-table-cell {
+    border-right: 2px solid black;
+    width: auto;
+    vertical-align: top;
+    text-align: center;
+    padding: 10px;
+}
+
+#plan-details-table .trip-table-cell {
+    width: 100%;
+    vertical-align: top;
+    text-align: left;
+    padding: 10px;
+}
+
+#browser-calendar-date-placeholder {
+    font-size: 12px;
+    padding-right: 10px;
+}
+
+#browser-calendar-date-placeholder .ui-datepicker {
+    width: 100%;
+}
+
+#browser-routes-and-stops {
+    font-size: 12px;
+    padding-right: 10px;
+    margin-top: 20px;
+}
+
+#browser-routes-tree {
+    overflow: auto;
+    max-height: 300px;
+}
+
+#browser-stops-list {
+    overflow: auto;
+    max-height: 300px;
+}
+
+.plan-detail-step + .plan-detail-step {
+    border-top: 2px solid black;
+}
+
+.trip-details {
+    vertical-align: top;
+    padding: 5px;
+}
+
+.trip-details time {
+    text-align: center;
+    margin-right: 25px;
+    font-weight: bold;
+}
+
+.trip-details p {
+    text-align: left;
+}
+
+.trip-details tr:hover {
+    background: #CCCCCC;
+    transition: background 1s;
+}
+
+.whattodo {
+    text-align: center;
+}
+
+/* Style rules for tooltips */
+/* Original code: http://www.thewebmadeeasy.com/styling/create-html5-tooltip/ */
+/* Visited: 2014.11.29 19:49 */
+.tooltip{
+    position: relative;
+}
+.tooltip::before {
+    content: attr(data-tooltip) ;
+    font-size: 12px;
+    position:absolute;
+    z-index: 999;
+    white-space:nowrap;
+    bottom:9999px;
+    left: 0;
+    background:#000;
+    color:#e0e0e0;
+    padding:0px 7px;
+    line-height: 24px;
+    height: 24px;
+    opacity: 0;
+}
+.tooltip:hover::before {
+    opacity: 1;
+    top:22px;
+}
+.tooltip:hover::after {
+    content: "";
+    opacity: 1;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+    z-index: 999;
+    position: absolute;
+    white-space: nowrap;
+    top:17px;
+    left: 0px;
 }

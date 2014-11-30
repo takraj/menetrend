@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Beállítások</title>
+        
+        <link href="js/jquery-ui-1.11.2.custom/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="js/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />
+        <link href="tps-web.css" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    </head>
+
+    <body>
+        <span style="display: inline-block; width: 600px; min-width: 600px; max-width: 600px; min-height: 400px; border: 1px solid black; padding: 30px 30px 30px 30px">
+            <form id="planner-settings-form">
+                <fieldset id="planner-settings-usable-routes">
+                    <legend>Használni kívánt járat típusok</legend>
+                    
+                    <div>
+                        <input class="planner-settings-chbx" name="route_type_1" type="checkbox">Metró</input>
+                    </div>
+                    <div>
+                        <input class="planner-settings-chbx" name="route_type_2" type="checkbox">Villamos</input>
+                    </div>
+                    <div>
+                        <input class="planner-settings-chbx" name="route_type_3" type="checkbox">Busz</input>
+                    </div>
+                    <div>
+                        <input class="planner-settings-chbx" name="route_type_4" type="checkbox">Hajó</input>
+                    </div>
+                    <div>
+                        <input class="planner-settings-chbx" name="route_type_5" type="checkbox">Troli</input>
+                    </div>
+                    <div>
+                        <input class="planner-settings-chbx" name="route_type_6" type="checkbox">Fogaskerekű</input>
+                    </div>
+                </fieldset>
+                
+                <fieldset id="planner-settings-other">
+                    <legend>Egyéb beállítások</legend>
+                    
+                    <div class="table-style">
+                        <div class="table-row-style">
+                            <input class="planner-settings-chbx" name="wheelchair" type="checkbox">Csak akadálymentes járművek</input>
+                        </div>
+                        
+                        <div class="table-row-style">
+                            <label class="table-cell-style" for="walking-speed">Gyaloglási sebesség:</label>
+                            <select class="planner-settings-ddm table-cell-style" name="walking-speed">
+                                  <option value="normal">Átlagos</option>
+                                  <option value="slow" selected="true">Lassú</option>
+                                  <option value="fast">Gyors</option>
+                            </select>
+                        </div>
+                        
+                        <div class="table-row-style">
+                            <label class="table-cell-style" for="max-waiting-time">Várakozási hajlandóság:</label>
+                            <select class="planner-settings-ddm table-cell-style" name="max-waiting-time">
+                                  <option value="10">Tíz perc</option>
+                                  <option value="30" selected="true">Fél óra</option>
+                                  <option value="60">Egy óra</option>
+                                  <option value="10000">Bármennyi</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                
+                <fieldset id="planner-settings-start-time-fs">
+                    <legend>Indulási idő</legend>
+                    
+                    <div id="planner-settings-start-time-container">
+                        <input id="planner-settings-start-time" name="start-time" type="hidden" />
+                        <div id="planner-settings-start-time-placeholder" />
+                    </div>
+                </fieldset>
+                
+                <div id="planner-settings-buttons">
+                    <button id="planner-settings-cancel" name="cancel">Mégsem</button>
+                    <button id="planner-settings-ok" name="ok">OK</button>
+                </div>
+            </form>
+        </span>
+        
+        <script src="js/jquery-ui-1.11.2.custom/external/jquery/jquery.js"></script>
+        <script src="js/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
+        <script src="js/jquery-ui-timepicker-addon.js"></script>
+        
+        <script>            
+            $("#planner-settings-start-time-placeholder").datetimepicker(
+                {
+                    altField: "#planner-settings-start-time",
+                    alwaysSetTime: true,
+                    altFormat: "yy.mm.dd",
+                    defaultDate: new Date(2013, 4, 3),
+                    hour: 13,
+                    minute: 15,
+                    altFieldTimeOnly: false,
+                    closeText: 'Bezár',
+                    prevText: 'Előző',
+                    nextText: 'Következő',
+                    currentText: 'Most',
+                    monthNames: ['Január','Február','Március','Április','Május','Június',
+                    'Július','Augusztus','Szeptember','Október','November','December'],
+                    monthNamesShort: ['Jan','Feb','Már','Ápr','Máj','Jún',
+                    'Júl','Aug','Szept','Okt','Nov','Dec'],
+                    dayNames: ['Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat','Vasárnap'],
+                    dayNamesShort: ['Hé','Ke','Sze','Csü','Pén','Szo','Vas'],
+                    dayNamesMin: ['H','K','Sze','Cs','P','Szo','V'],
+                    weekHeader: 'Hét',
+                    dateFormat: 'dd.mm.yy',
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: true,
+                    yearSuffix: '',
+                    timeFormat: 'HH:mm',
+                    timeSuffix: '',
+                    timeOnlyTitle: 'Mikor',
+                    timeText: 'Idő',
+                    hourText: 'Óra',
+                    minuteText: 'Perc'
+                });
+        </script>
+        
+    </body>
+</html>
