@@ -130,28 +130,6 @@
                 </Grid>
             </controls:PivotItem>
 
-            <!--Pivot item two-->
-            <controls:PivotItem Header="Böngészés">
-                <Grid>
-                    <ScrollViewer>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <Button Name="btnGetStopsByDistance" Content="Megállók távolság szerint" Grid.Row="0" Height="100" Margin="5" Click="btnGetStopsByDistance_Click"/>
-                            <Button Name="btnGetRoutesByType" Content="Járatok típus szerint" Grid.Row="1" Height="100" Margin="5" Click="btnGetRoutesByType_Click"/>
-                            <Button Name="btnGetStopsByName" Content="Megállók név szerint" Grid.Row="2" Height="100" Margin="5" Click="btnGetStopsByName_Click"/>
-                            <Button Name="btnGetRoutesByName" Content="Járatok név szerint" Grid.Row="3" Height="100" Margin="5" Click="btnGetRoutesByName_Click"/>
-                        </Grid>
-                    </ScrollViewer>
-                </Grid>
-                
-            </controls:PivotItem>
-
             <controls:PivotItem Header="Bejelentés">
                 <Grid>
                     <Grid.RowDefinitions>
