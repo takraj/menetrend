@@ -33,7 +33,7 @@
         <div id="content">            
             <main>
                 <h2>Szerver paraméterek</h2>
-                <form id="load-balancer" class="table-style contains-tables">
+                <div class="table-style contains-tables">
                     <fieldset class="existing-load-balancers">
                         <legend>Beállított háttérszolgáltatások</legend>
                         <table>
@@ -47,100 +47,141 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Név</td>
-                                    <td>URL</td>
-                                    <td>Súly</td>
-                                    <td>
-                                        <button class="delete-button" type="submit" name="delete" value="id">Törlés</button>
+                                    <td class="lb-name">Név</td>
+                                    <td class="lb-url">URL</td>
+                                    <td class="lb-weight">Súly</td>
+                                    <td class="lb-action">
+                                        <a href="#">Törlés</a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Név</td>
-                                    <td>URL</td>
-                                    <td>Súly</td>
-                                    <td>
-                                        <button class="delete-button" type="submit" name="delete" value="id">Törlés</button>
+                                    <td class="lb-name">Név</td>
+                                    <td class="lb-url">URL</td>
+                                    <td class="lb-weight">Súly</td>
+                                    <td class="lb-action">
+                                        <a href="#">Törlés</a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Név</td>
-                                    <td>URL</td>
-                                    <td>Súly</td>
-                                    <td>
-                                        <button class="delete-button" type="submit" name="delete" value="id">Törlés</button>
+                                    <td class="lb-name">Név</td>
+                                    <td class="lb-url">URL</td>
+                                    <td class="lb-weight">Súly</td>
+                                    <td class="lb-action">
+                                        <a href="#">Törlés</a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Név</td>
-                                    <td>URL</td>
-                                    <td>Súly</td>
-                                    <td>
-                                        <button class="delete-button" type="submit" name="delete" value="id">Törlés</button>
+                                    <td class="lb-name">Név</td>
+                                    <td class="lb-url">URL</td>
+                                    <td class="lb-weight">Súly</td>
+                                    <td class="lb-action">
+                                        <a href="#">Törlés</a>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </fieldset>
+                
+                    <form id="load-balancer" onsubmit="return validate_new_load_balancer()">
+                        <fieldset class="new-load-balancer">
+                            <legend>Új háttérszolgáltatás felvétele</legend>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="lb-name">Név</th>
+                                        <th class="lb-url">URL</th>
+                                        <th class="lb-weight">Súly</th>
+                                        <th class="lb-action"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="contains-textfield">
+                                            <input type="text" name="load-balancer-name" id="load-balancer-name" />
+                                        </td>
+                                        <td class="contains-textfield">
+                                            <input type="text" name="load-balancer-url" id="load-balancer-url" />
+                                        </td>
+                                        <td class="contains-textfield">
+                                            <input type="text" name="load-balancer-weight" id="load-balancer-weight" />
+                                        </td>
+                                        <td>
+                                            <button class="submit-button" type="submit" name="submit-new-load-balancer">OK</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </fieldset>
+                    </form>
                     
-                    <fieldset class="new-load-balancer">
-                        <legend>Új háttérszolgáltatás felvétele</legend>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="lb-name">Név</th>
-                                    <th class="lb-url">URL</th>
-                                    <th class="lb-weight">Súly</th>
-                                    <th class="lb-action"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="contains-textfield">
-                                        <input type="text" name="load-balancer-name" />
-                                    </td>
-                                    <td class="contains-textfield">
-                                        <input type="text" name="load-balancer-url" />
-                                    </td>
-                                    <td class="contains-textfield">
-                                        <input type="text" name="load-balancer-weight" />
-                                    </td>
-                                    <td>
-                                        <button class="submit-button" type="submit" name="submit-new-load-balancer">OK</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </fieldset>
-                    
-                    <fieldset class="other-settings">
-                        <legend>Egyéb beállítások</legend>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th class="other-settings-key">Kulcs</th>
-                                    <th class="other-settings-value">Érték</th>
-                                    <th class="other-settings-unit"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        Ez egy kulcs
-                                    </td>
-                                    <td class="contains-textfield">
-                                        <input type="text" name="other-setting-key-value" />
-                                    </td>
-                                    <td>
-                                        unit
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div>
-                            <button class="submit-button" type="submit" name="submit-other-settings">Mentés</button>
-                        </div>
-                    </fieldset>
-                </form>
+                    <form id="other-settings-form" onsubmit="return validate_other_settings()">
+                        <fieldset class="other-settings">
+                            <legend>Egyéb beállítások</legend>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="other-settings-key">Kulcs</th>
+                                        <th class="other-settings-value">Érték</th>
+                                        <th class="other-settings-unit"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Algoritmus
+                                        </td>
+                                        <td class="contains-textfield">
+                                            <select name="algorithm">
+                                                <option value="AStar" selected="true">A*</option>
+                                                <option value="Dijkstra">Dijkstra</option>
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Normál gyaloglási sebesség
+                                        </td>
+                                        <td class="contains-textfield">
+                                            <input type="text" name="normal-walkspeed" id="other-setting-normal-walkspeed" />
+                                        </td>
+                                        <td>km/h</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Lassú gyaloglási sebesség
+                                        </td>
+                                        <td class="contains-textfield">
+                                            <input type="text" name="slow-walkspeed" id="other-setting-slow-walkspeed" />
+                                        </td>
+                                        <td>km/h</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Gyors gyaloglási sebesség
+                                        </td>
+                                        <td class="contains-textfield">
+                                            <input type="text" name="fast-walkspeed" id="other-setting-fast-walkspeed" />
+                                        </td>
+                                        <td>km/h</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Fel és leszállási idő
+                                        </td>
+                                        <td class="contains-textfield">
+                                            <input type="text" name="getonoff-time" id="other-setting-getonoff-time" />
+                                        </td>
+                                        <td>perc</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div>
+                                <button class="submit-button" type="submit" name="submit-other-settings">Mentés</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             </main>
             
             <aside>
@@ -167,6 +208,61 @@
                 </form>
             </aside>
         </div>
+        
+        <script src="js/jquery-ui-1.11.2.custom/external/jquery/jquery.js"></script>
+        <script src="js/menetrend.js" type="text/javascript"></script>
+        
+        <script>
+            function validate_new_load_balancer() {
+                var load_balancer_weight = $("#load-balancer-weight").val();
+                if (load_balancer_weight.match("^[0-9]+$") == null) {
+                    alert("Kérlek súlynak írj be egy pozitív egész számot. Amit megadtál nem jó: " + load_balancer_weight);
+                    return false;
+                }
+                
+                var load_balancer_url = $("#load-balancer-url").val();
+                if (load_balancer_url.match("^https?://[a-z0-9A-Z/\\._-]+$") == null) {
+                    alert("Kérlek írj be egy URL-t. Query stringet nem használhatsz. Amit megadtál nem jó: " + load_balancer_url);
+                    return false;
+                }
+                
+                var load_balancer_name = $("#load-balancer-name").val();
+                if (load_balancer_name == "") {
+                    alert("Kérlek írj be egy nevet.");
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            function validate_other_settings() {
+                var getonoff_time = $("#other-setting-getonoff-time").val();
+                if (getonoff_time.match("^[0-9]+$") == null) {
+                    alert("Kérlek írj be egy pozitív egész számot. Amit megadtál nem jó: " + getonoff_time);
+                    return false;
+                }
+                
+                var slow_walkspeed = $("#other-setting-slow-walkspeed").val();
+                if (slow_walkspeed.match("^[0-9]+(\\.[0-9]+)?$") == null) {
+                    alert("Kérlek írj be egy pozitív valós számot. Használd a '.' karaktert tizedesvesszőnek. Amit megadtál nem jó: " + slow_walkspeed);
+                    return false;
+                }
+                
+                var fast_walkspeed = $("#other-setting-fast-walkspeed").val();
+                if (fast_walkspeed.match("^[0-9]+(\\.[0-9]+)?$") == null) {
+                    alert("Kérlek írj be egy pozitív valós számot. Használd a '.' karaktert tizedesvesszőnek. Amit megadtál nem jó: " + fast_walkspeed);
+                    return false;
+                }
+                
+                var normal_walkspeed = $("#other-setting-normal-walkspeed").val();
+                if (normal_walkspeed.match("^[0-9]+(\\.[0-9]+)?$") == null) {
+                    alert("Kérlek írj be egy pozitív valós számot. Használd a '.' karaktert tizedesvesszőnek. Amit megadtál nem jó: " + normal_walkspeed);
+                    return false;
+                }
+                
+                return true;
+            }
+        </script>
 
     </body>
 </html>

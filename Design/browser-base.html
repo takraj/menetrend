@@ -36,104 +36,37 @@
             </main>
             
             <aside>
-                <form>
+                <form onsubmit="return validate()">
+                    <input id="tree-id" name="mode" type="hidden" />
                     <fieldset id="browser-calendar">
                         <legend>Menetrend Naptár</legend>
                         
-                        <input id="browser-calendar-date" name="date" type="hidden" />
+                        <input id="calendar-year" name="year" type="hidden" />
+                        <input id="calendar-month" name="month" type="hidden" />
+                        <input id="calendar-day" name="day" type="hidden" />
                         <div id="browser-calendar-date-placeholder" />
                     </fieldset>
                     
                     <div id="browser-routes-and-stops">
-                         <ul>
+                        <ul>
                             <li><a href="#browser-routes-tab">Járatok</a></li>
                             <li><a href="#browser-stops-tab">Megállók</a></li>
                         </ul>
                         
                         <div id="browser-routes-tab">
                             <input type="text" placeholder="Szűrés" id="browser-filter-routes" />
-                            <div id="browser-routes-tree">
-                                <ul id="browser-routes-treeData" style="display: none;">
-                                    <li>Villamosok
-                                        <ul>
-                                            <li>1</li>
-                                            <li>2</li>
-                                            <li>3</li>
-                                            <li>4</li>
-                                            <li>5</li>
-                                            <li>6</li>
-                                        </ul>
-                                    </li>
-                                    <li>Metrók
-                                        <ul>
-                                            <li>1</li>
-                                            <li>2</li>
-                                            <li>3</li>
-                                            <li>4</li>
-                                            <li>5</li>
-                                            <li>6</li>
-                                        </ul>
-                                    </li>
-                                    <li>Trolik
-                                        <ul>
-                                            <li>1</li>
-                                            <li>2</li>
-                                            <li>3</li>
-                                            <li>4</li>
-                                            <li>5</li>
-                                            <li>6</li>
-                                        </ul>
-                                    </li>
-                                    <li>Buszok
-                                        <ul>
-                                            <li>1</li>
-                                            <li>2</li>
-                                            <li>3</li>
-                                            <li>4</li>
-                                            <li>5</li>
-                                            <li>6</li>
-                                        </ul>
-                                    </li>
-                                    <li>Hajók
-                                        <ul>
-                                            <li>1</li>
-                                            <li>2</li>
-                                            <li>3</li>
-                                            <li>4</li>
-                                            <li>5</li>
-                                            <li>6</li>
-                                        </ul>
-                                    </li>
-                                    <li>Fogaskerekűk
-                                        <ul>
-                                            <li>1</li>
-                                            <li>2</li>
-                                            <li>3</li>
-                                            <li>4</li>
-                                            <li>5</li>
-                                            <li>6</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
+                            <input id="tree-route-id" name="route" type="hidden" />
+                            <div id="browser-routes-tree"></div>
                         </div>
                         
                         <div id="browser-stops-tab">
                             <input type="text" placeholder="Szűrés" id="browser-filter-stops" />
-                            <div id="browser-stops-list">
-                                <ul>
-                                    <li>Puskás Ferenc Stadion</li>
-                                    <li>Blaha Lujza tér</li>
-                                    <li>Petőfi híd, budai hídfő</li>
-                                    <li>Oktogon</li>
-                                    <li>Budafoki út, szerémi sor</li>
-                                    <li>Móricz Zsigmond körtér</li>
-                                </ul>
-                            </div>
+                            <input id="tree-stop-id" name="stop" type="hidden" />
+                            <div id="browser-stops-list"></div>
                         </div>
                     </div>
                     <div id="browser-buttons">
-                        <button id="mutasd">Mutasd</button>
+                        <button id="mutasd" onclick="fillform()">Mutasd</button>
                     </div>
                 </form>
             </aside>
@@ -145,76 +78,67 @@
         <script src="js/fancytree/src/jquery.fancytree.js" type="text/javascript"></script>
         <script src="js/fancytree/src/jquery.fancytree.filter.js" type="text/javascript"></script>
         
+        <script src="js/menetrend.js" type="text/javascript"></script>
+        
         <script>
-            jQuery( "#browser-calendar-date-placeholder" ).datepicker(
-                {
-                    altField: "#browser-calendar-date",
-                    alwaysSetTime: true,
-                    altFormat: "yy.mm.dd",
-                    defaultDate: new Date(2013, 4, 3),
-                    closeText: 'Bezár',
-                    prevText: 'Előző',
-                    nextText: 'Következő',
-                    currentText: 'Ma',
-                    monthNames: ['Január','Február','Március','Április','Május','Június',
-                    'Július','Augusztus','Szeptember','Október','November','December'],
-                    monthNamesShort: ['Jan','Feb','Már','Ápr','Máj','Jún',
-                    'Júl','Aug','Szept','Okt','Nov','Dec'],
-                    dayNames: ['Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat','Vasárnap'],
-                    dayNamesShort: ['Hé','Ke','Sze','Csü','Pén','Szo','Vas'],
-                    dayNamesMin: ['H','K','Sze','Cs','P','Szo','V'],
-                    weekHeader: 'Hét',
-                    dateFormat: 'dd.mm.yy',
-                    firstDay: 1,
-                    isRTL: false,
-                    showMonthAfterYear: true,
-                    yearSuffix: '',
-                    showButtonPanel: true
-                });
+            $("#browser-routes-and-stops").tabs();
+            
+            TUSZ.create_datepicker("#browser-calendar-date-placeholder", new Date(2013, 4, 3), new Date(2013, 3, 3), new Date(2015, 4, 12));
+            
+            // routes
+            
+            var tree_folders = [];
+            
+            var tree_children = [];
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T0", "id100");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T1", "id101");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T2", "id102");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T3", "id103");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T4", "id104");
+            
+            tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "F1", "idf1", tree_children);
+            
+            var tree_children = [];
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C0", "id200");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C1", "id201");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C2", "id202");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C3", "id203");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C4", "id204");
+            
+            tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "Z1", "idf1", tree_children);
+            
+            TUSZ.create_filterable_tree("#browser-routes-tree", "#browser-filter-routes", tree_folders);
+            
+            // stops
+            
+            var tree_children = [];
+            var tree_children = TUSZ.add_item_to_children(tree_children, "S0", "id10");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "S1", "id11");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "S2", "id12");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "S3", "id13");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "S4", "id14");
+            
+            TUSZ.create_filterable_tree("#browser-stops-list", "#browser-filter-stops", tree_children);
+            
+            function fillform() {
+                var selected_date = TUSZ.get_date_from_datepicker("#browser-calendar-date-placeholder");
+                $("#calendar-year").val(selected_date.getFullYear());
+                $("#calendar-month").val(selected_date.getMonth() + 1);
+                $("#calendar-day").val(selected_date.getDate());
                 
-                $("#browser-routes-and-stops").tabs();
+                var selected_route = TUSZ.get_selection_from_tree("#browser-routes-tree");
+                $("#tree-route-id").val(selected_route);
                 
-                var routes_tree = $("#browser-routes-tree").fancytree({
-                    extensions: ["filter"],
-                    quicksearch: true,
-                    filter: {
-                        mode: "hide",
-                        autoApply: true
-                    },
-                });
-                var routes_tree = $("#browser-routes-tree").fancytree("getTree");
+                var selected_stop = TUSZ.get_selection_from_tree("#browser-stops-list");
+                $("#tree-stop-id").val(selected_stop);
                 
-                $("#browser-filter-routes").keyup(function(e){
-                    match = $(this).val();
-                    
-                    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === ""){
-                        routes_tree.clearFilter();
-                    } else {
-                        routes_tree.filterNodes(match, true);
-                    }
-                    
-                    routes_tree.filterNodes(match, true);
-                }).focus();
-                
-                $("#browser-stops-list").fancytree({
-                    extensions: ["filter"],
-                    quicksearch: true,
-                    filter: {
-                        mode: "hide",
-                        autoApply: true
-                    },
-                });
-                var stops_tree = $("#browser-stops-list").fancytree("getTree");
-                
-                $("#browser-filter-stops").keyup(function(e){
-                    match = $(this).val();
-                    
-                    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === ""){
-                        stops_tree.clearFilter();
-                    } else {
-                        stops_tree.filterNodes(match, true);
-                    }
-                }).focus();
+                var active_tab = $("#browser-routes-and-stops").tabs('option', 'active');
+                $("#tree-id").val(active_tab);
+            }
+            
+            function validate() {
+                return true; // TODO
+            }
         </script>
 
     </body>

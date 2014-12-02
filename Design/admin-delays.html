@@ -36,84 +36,24 @@
                 <table>
                     <tr>
                         <td id="admin-delays-left-content">
-                            <form>
+                            <form onsubmit="return validate()">
                                 <fieldset id="browser-calendar">
                                     <legend>Menetrend Naptár</legend>
                                     
-                                    <input id="browser-calendar-date" name="date" type="hidden" />
+                                    <input id="calendar-year" name="year" type="hidden" />
+                                    <input id="calendar-month" name="month" type="hidden" />
+                                    <input id="calendar-day" name="day" type="hidden" />
                                     <div id="browser-calendar-date-placeholder" />
                                 </fieldset>
                                 
                                 <fieldset id="browser-routes-fs">
                                     <legend>Járat</legend>
                                     <input type="text" placeholder="Szűrés" id="browser-filter-routes" />
-                                    <div id="browser-routes-tree">
-                                        <ul id="browser-routes-treeData" style="display: none;">
-                                            <li>Villamosok
-                                                <ul>
-                                                    <li>1</li>
-                                                    <li>2</li>
-                                                    <li>3</li>
-                                                    <li>4</li>
-                                                    <li>5</li>
-                                                    <li>6</li>
-                                                </ul>
-                                            </li>
-                                            <li>Metrók
-                                                <ul>
-                                                    <li>1</li>
-                                                    <li>2</li>
-                                                    <li>3</li>
-                                                    <li>4</li>
-                                                    <li>5</li>
-                                                    <li>6</li>
-                                                </ul>
-                                            </li>
-                                            <li>Trolik
-                                                <ul>
-                                                    <li>1</li>
-                                                    <li>2</li>
-                                                    <li>3</li>
-                                                    <li>4</li>
-                                                    <li>5</li>
-                                                    <li>6</li>
-                                                </ul>
-                                            </li>
-                                            <li>Buszok
-                                                <ul>
-                                                    <li>1</li>
-                                                    <li>2</li>
-                                                    <li>3</li>
-                                                    <li>4</li>
-                                                    <li>5</li>
-                                                    <li>6</li>
-                                                </ul>
-                                            </li>
-                                            <li>Hajók
-                                                <ul>
-                                                    <li>1</li>
-                                                    <li>2</li>
-                                                    <li>3</li>
-                                                    <li>4</li>
-                                                    <li>5</li>
-                                                    <li>6</li>
-                                                </ul>
-                                            </li>
-                                            <li>Fogaskerekűk
-                                                <ul>
-                                                    <li>1</li>
-                                                    <li>2</li>
-                                                    <li>3</li>
-                                                    <li>4</li>
-                                                    <li>5</li>
-                                                    <li>6</li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <div id="browser-routes-tree"></div>
+                                    <input id="tree-route-id" name="route" type="hidden" />
                                 </fieldset>
                                 <div id="browser-buttons">
-                                    <button id="mutasd">Mutasd</button>
+                                    <button id="mutasd" onclick="fillform()">Mutasd</button>
                                 </div>
                             </form>
                         </td>
@@ -136,9 +76,12 @@
                                             <td class="trip-count-of-stops report-column">32</td>
                                             <td class="trip-start-time report-column">14:53</td>
                                             <td class="trip-action report-column contains-textfield">
-                                                <form>
+                                                <form id="trip-1-delay-form" onsubmit="return validate_delay('#trip-1-delay-form')">
                                                     <input type="hidden" name="trip_id" />
-                                                    <input type="text" name="trip_delay_amount" />
+                                                    <input type="hidden" name="year" />
+                                                    <input type="hidden" name="month" />
+                                                    <input type="hidden" name="day" />
+                                                    <input type="text" name="trip_delay_amount" id="trip-1-delay-form-amount" />
                                                     <button type="submit" class="submit-button">ok</button>
                                                 </form>
                                             </td>
@@ -149,9 +92,12 @@
                                             <td class="trip-count-of-stops report-column">32</td>
                                             <td class="trip-start-time report-column">14:53</td>
                                             <td class="trip-action report-column contains-textfield">
-                                                <form>
+                                                <form id="trip-2-delay-form" onsubmit="return validate_delay('#trip-2-delay-form')">
                                                     <input type="hidden" name="trip_id" />
-                                                    <input type="text" name="trip_delay_amount" />
+                                                    <input type="hidden" name="year" />
+                                                    <input type="hidden" name="month" />
+                                                    <input type="hidden" name="day" />
+                                                    <input type="text" name="trip_delay_amount" id="trip-2-delay-form-amount" />
                                                     <button type="submit" class="submit-button">ok</button>
                                                 </form>
                                             </td>
@@ -162,9 +108,12 @@
                                             <td class="trip-count-of-stops report-column">32</td>
                                             <td class="trip-start-time report-column">14:53</td>
                                             <td class="trip-action report-column contains-textfield">
-                                                <form>
+                                                <form id="trip-3-delay-form" onsubmit="return validate_delay('#trip-3-delay-form')">
                                                     <input type="hidden" name="trip_id" />
-                                                    <input type="text" name="trip_delay_amount" />
+                                                    <input type="hidden" name="year" />
+                                                    <input type="hidden" name="month" />
+                                                    <input type="hidden" name="day" />
+                                                    <input type="text" name="trip_delay_amount" id="trip-3-delay-form-amount" />
                                                     <button type="submit" class="submit-button">ok</button>
                                                 </form>
                                             </td>
@@ -175,9 +124,12 @@
                                             <td class="trip-count-of-stops report-column">32</td>
                                             <td class="trip-start-time report-column">14:53</td>
                                             <td class="trip-action report-column contains-textfield">
-                                                <form>
+                                                <form id="trip-11-delay-form" onsubmit="return validate_delay('#trip-11-delay-form')">
                                                     <input type="hidden" name="trip_id" />
-                                                    <input type="text" name="trip_delay_amount" />
+                                                    <input type="hidden" name="year" />
+                                                    <input type="hidden" name="month" />
+                                                    <input type="hidden" name="day" />
+                                                    <input type="text" name="trip_delay_amount" id="trip-11-delay-form-amount" />
                                                     <button type="submit" class="submit-button">ok</button>
                                                 </form>
                                             </td>
@@ -221,54 +173,60 @@
         <script src="js/fancytree/src/jquery.fancytree.js" type="text/javascript"></script>
         <script src="js/fancytree/src/jquery.fancytree.filter.js" type="text/javascript"></script>
         
+        <script src="js/menetrend.js" type="text/javascript"></script>
+        
         <script>
-            jQuery( "#browser-calendar-date-placeholder" ).datepicker(
-                {
-                    altField: "#browser-calendar-date",
-                    alwaysSetTime: true,
-                    altFormat: "yy.mm.dd",
-                    defaultDate: new Date(2013, 4, 3),
-                    closeText: 'Bezár',
-                    prevText: 'Előző',
-                    nextText: 'Következő',
-                    currentText: 'Ma',
-                    monthNames: ['Január','Február','Március','Április','Május','Június',
-                    'Július','Augusztus','Szeptember','Október','November','December'],
-                    monthNamesShort: ['Jan','Feb','Már','Ápr','Máj','Jún',
-                    'Júl','Aug','Szept','Okt','Nov','Dec'],
-                    dayNames: ['Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat','Vasárnap'],
-                    dayNamesShort: ['Hé','Ke','Sze','Csü','Pén','Szo','Vas'],
-                    dayNamesMin: ['H','K','Sze','Cs','P','Szo','V'],
-                    weekHeader: 'Hét',
-                    dateFormat: 'dd.mm.yy',
-                    firstDay: 1,
-                    isRTL: false,
-                    showMonthAfterYear: true,
-                    yearSuffix: '',
-                    showButtonPanel: true
-                });
+            TUSZ.create_datepicker("#browser-calendar-date-placeholder", new Date(2013, 4, 3), new Date(2013, 3, 3), new Date(2015, 4, 12));
                 
-                var routes_tree = $("#browser-routes-tree").fancytree({
-                    extensions: ["filter"],
-                    quicksearch: true,
-                    filter: {
-                        mode: "hide",
-                        autoApply: true
-                    },
-                });
-                var routes_tree = $("#browser-routes-tree").fancytree("getTree");
+            var tree_folders = [];
+            
+            var tree_children = [];
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T0", "id100");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T1", "id101");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T2", "id102");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T3", "id103");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "T4", "id104");
+            
+            tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "F1", "idf1", tree_children);
+            
+            var tree_children = [];
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C0", "id200");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C1", "id201");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C2", "id202");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C3", "id203");
+            var tree_children = TUSZ.add_item_to_children(tree_children, "C4", "id204");
+            
+            tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "Z1", "idf1", tree_children);
+            
+            TUSZ.create_filterable_tree("#browser-routes-tree", "#browser-filter-routes", tree_folders);
+            
+            function fillform() {
+                var selected_date = TUSZ.get_date_from_datepicker("#browser-calendar-date-placeholder");
+                $("#calendar-year").val(selected_date.getFullYear());
+                $("#calendar-month").val(selected_date.getMonth() + 1);
+                $("#calendar-day").val(selected_date.getDate());
                 
-                $("#browser-filter-routes").keyup(function(e){
-                    match = $(this).val();
-                    
-                    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === ""){
-                        routes_tree.clearFilter();
-                    } else {
-                        routes_tree.filterNodes(match, true);
-                    }
-                    
-                    routes_tree.filterNodes(match, true);
-                }).focus();
+                var selected_route = TUSZ.get_selection_from_tree("#browser-routes-tree");
+                $("#tree-route-id").val(selected_route);
+            }
+            
+            function validate() {
+                if ($("#tree-route-id").val() == "") {
+                    alert("Kérlek válassz egy járatot.");
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            function validate_delay(form_html_id) {
+                var delay_amount = $(form_html_id + "-amount").val();
+                if (delay_amount.match("^[0-9]+$") == null) {
+                    alert("Kérlek írj be egy pozitív egész számot. Amit megadtál nem jó: " + delay_amount);
+                    return false;
+                }
+                return true;
+            }
         </script>
 
     </body>

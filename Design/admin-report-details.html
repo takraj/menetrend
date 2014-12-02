@@ -129,6 +129,13 @@
                 var map = new google.maps.Map(
                     document.getElementById("map_embedded_canvas"),
                     mapOptions);
+                    
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: new google.maps.LatLng(47.5, 19.08) 
+                });
+                
+                map.setCenter(marker.position);
             }
         </script>
     </body>
