@@ -227,6 +227,11 @@ button {
     margin: 10px;
 }
 
+#content > aside > div {
+    width: 300px;
+    margin: 10px;
+}
+
 #planner-settings-other input[type=text] {
     width: auto;
 }
@@ -301,8 +306,9 @@ button {
     width: 100%;
 }
 
-#planner-settings-form {
+#planner-settings-form , #planner-details-window-content {
     width: 100%;
+    font-size: 12px;
 }
 
 #planner-settings-other, #planner-settings-usable-routes {

@@ -33,82 +33,403 @@
         <div id="content">            
             <main>
                 <div id="map_canvas" />
+                
+                <div id="planner-settings-dialog" title="Beállítások">
+                    <div id="planner-settings-form">
+                        <fieldset id="planner-settings-usable-routes">
+                            <legend>Használni kívánt járat típusok</legend>
+                            
+                            <div>
+                                <input class="planner-settings-chbx" name="route_type_1" type="checkbox">Metró</input>
+                            </div>
+                            <div>
+                                <input class="planner-settings-chbx" name="route_type_2" type="checkbox">Villamos</input>
+                            </div>
+                            <div>
+                                <input class="planner-settings-chbx" name="route_type_3" type="checkbox">Busz</input>
+                            </div>
+                            <div>
+                                <input class="planner-settings-chbx" name="route_type_4" type="checkbox">Hajó</input>
+                            </div>
+                            <div>
+                                <input class="planner-settings-chbx" name="route_type_5" type="checkbox">Troli</input>
+                            </div>
+                            <div>
+                                <input class="planner-settings-chbx" name="route_type_6" type="checkbox">Fogaskerekű</input>
+                            </div>
+                        </fieldset>
+                        
+                        <fieldset id="planner-settings-other">
+                            <legend>Egyéb beállítások</legend>
+                            
+                            <div class="table-style">
+                                <div class="table-row-style">
+                                    <input class="planner-settings-chbx" name="wheelchair" type="checkbox">Csak akadálymentes járművek</input>
+                                </div>
+                                
+                                <div class="table-row-style">
+                                    <label class="table-cell-style" for="walking-speed">Gyaloglási sebesség:</label>
+                                    <select class="planner-settings-ddm table-cell-style" name="walking-speed">
+                                          <option value="normal">Átlagos</option>
+                                          <option value="slow" selected="true">Lassú</option>
+                                          <option value="fast">Gyors</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="table-row-style">
+                                    <label class="table-cell-style" for="max-waiting-time">Várakozási hajlandóság:</label>
+                                    <select class="planner-settings-ddm table-cell-style" name="max-waiting-time">
+                                          <option value="10">Tíz perc</option>
+                                          <option value="30" selected="true">Fél óra</option>
+                                          <option value="60">Egy óra</option>
+                                          <option value="10000">Bármennyi</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        
+                        <fieldset id="planner-settings-start-time-fs">
+                            <legend>Indulási idő</legend>
+                            
+                            <div id="planner-settings-start-time-container">
+                                <input id="planner-settings-start-time" name="start-time" type="hidden" />
+                                <div id="planner-settings-start-time-placeholder" />
+                            </div>
+                        </fieldset>
+                        
+                        <div id="planner-settings-buttons">
+                            <button id="planner-settings-cancel" name="cancel">Mégsem</button>
+                            <button id="planner-settings-ok" name="ok">OK</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="planner-details-dialog" title="Terv részletei">
+                    <div id="planner-details-window-content">
+                        <div id="plan-details-misc">
+                            <p id="plan-details-used-alg">Használt algoritmus:&nbsp;<strong>Dijkstra</strong></p>
+                            <p id="plan-details-calc-time">Számítási idő:&nbsp;<strong>1</strong>&nbsp;s</p>
+                            <p id="plan-details-start-time">Tervezett indulási időpont:&nbsp;<time>2014-05-02 17:12</time></p>
+                            <p id="plan-details-route-length">Ajánlott útvonal hossza:&nbsp;<strong>25</strong>&nbsp;perc <em>(12 megálló, kb. 4,7 km)</em></p>
+                        </div>
+                        
+                        <fieldset id="plan-details-fs">
+                            <legend>Részletes Útiterv</legend>
+                            <table id="plan-details-table">
+                                <tr class="plan-detail-step">
+                                    <td class="route-table-cell">
+                                        <p>Gyalog</p>
+                                    </td>
+                                    <td class="trip-table-cell">
+                                        <table class="trip-details">
+                                            <tr>
+                                                <td>
+                                                    <time>17:12</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="plan-detail-step">
+                                    <td class="route-table-cell">
+                                        <img src="img/badge_template_48.png" alt="M4" />
+                                        <p>Metró</p>
+                                    </td>
+                                    <td class="trip-table-cell">
+                                        <table class="trip-details">
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="plan-detail-step">
+                                    <td class="route-table-cell">
+                                        <img src="img/badge_template_48.png" alt="M4" />
+                                        <p>Metró</p>
+                                    </td>
+                                    <td class="trip-table-cell">
+                                        <table class="trip-details">
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="plan-detail-step">
+                                    <td class="route-table-cell">
+                                        <img src="img/badge_template_48.png" alt="M4" />
+                                        <p>Metró</p>
+                                    </td>
+                                    <td class="trip-table-cell">
+                                        <table class="trip-details">
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>
+                                                    <time>17:20</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="plan-detail-step">
+                                    <td class="route-table-cell">
+                                        <p>Gyalog</p>
+                                    </td>
+                                    <td class="trip-table-cell">
+                                        <table class="trip-details">
+                                            <tr>
+                                                <td>
+                                                    <time>17:12</time>
+                                                </td>
+                                                <td>
+                                                    <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+                </div>
             </main>
             
             <aside>
-                <form>
-                    <fieldset id="planner-inputs">
-                        <legend>Útvonaltervezés</legend>
-                        
-                        <input id="planner-inputs-from" name="from" type="text" placeholder="Honnan" />
-                        <input id="planner-inputs-to" name="to" type="text" placeholder="Hova" />
-                        
-                        <div id="planner-inputs-buttons">
-                            <button id="planner-inputs-settings" name="settings">Beállítások</button>
-                            <button id="planner-inputs-submit" name="submit" type="submit">Mehet</button>
-                        </div>
-                    </fieldset>
-                </form>
-                
-                <form>
-                    <fieldset id="plan-summary">
-                        <legend>Útiterv</legend>
-                        
-                        <div class="time-with-label">
-                            <span>Indulás:</span>
-                            <time>17:20</time>
-                        </div>
-                        
-                        <div class="route-section-infos">
-                            <div class="route-section-info">
-                                <span class="route-section-info-route">
-                                    <img src="img/badge_template_48.png" alt="M4" />
-                                </span>
-                                <span class="route-section-info-section">
-                                    <div class="route-section-info-section-start">Kelenföld vasútállomás</div>
-                                    <div class="route-section-info-section-end">Móricz Zsigmond körtér</div>
-                                </span>
+                <div>
+                    <form>
+                        <fieldset id="planner-inputs">
+                            <legend>Útvonaltervezés</legend>
+                            
+                            <input id="planner-inputs-from" name="from-as-text" type="text" placeholder="Honnan" />
+                            <input id="planner-inputs-to" name="to-as-text" type="text" placeholder="Hova" />
+                            
+                            <input type="hidden" id="planner-hidden-from-id" name="from_stop_id" />
+                            <input type="hidden" id="planner-hidden-to-id" name="to_stop_id" />
+                            
+                            <input type="hidden" id="planner-hidden-when-year" name="year" value="2013" />
+                            <input type="hidden" id="planner-hidden-when-month" name="month" value="3" />
+                            <input type="hidden" id="planner-hidden-when-day" name="day" value="1" />
+                            <input type="hidden" id="planner-hidden-when-hour" name="hour" value="11" />
+                            <input type="hidden" id="planner-hidden-when-minute" name="minute" value="0" />
+                            
+                            <input type="hidden" id="planner-hidden-enable-tram" name="tram_enabled" value="1" />
+                            <input type="hidden" id="planner-hidden-enable-subway" name="subway_enabled" value="1" />
+                            <input type="hidden" id="planner-hidden-enable-rail" name="rail_enabled" value="1" />
+                            <input type="hidden" id="planner-hidden-enable-bus" name="bus_enabled" value="1" />
+                            <input type="hidden" id="planner-hidden-enable-ferry" name="ferry_enabled" value="1" />
+                            <input type="hidden" id="planner-hidden-enable-cable-car" name="cable_car_enabled" value="1" />
+                            <input type="hidden" id="planner-hidden-enable-gondola" name="gondola_enabled" value="1" />
+                            <input type="hidden" id="planner-hidden-enable-funicular" name="funicular_enabled" value="1" />
+                            
+                            <input type="hidden" id="planner-hidden-wheelchair-support" name="wheelchair" value="1" />
+                            <input type="hidden" id="planner-hidden-walking-speed-category" name="walking_category" value="1" />
+                            <input type="hidden" id="planner-hidden-waiting-time-category" name="waiting_category" value="1" />
+                            
+                            <div id="planner-inputs-buttons">
+                                <button id="planner-inputs-settings" type="button">Beállítások</button>
+                                <button id="planner-inputs-submit" name="submit" type="submit">Mehet</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                    
+                    <div>
+                        <fieldset id="plan-summary">
+                            <legend>Útiterv</legend>
+                            
+                            <div class="time-with-label">
+                                <span>Indulás:</span>
+                                <time>17:20</time>
                             </div>
                             
-                            <div class="route-section-info">
-                                <span class="route-section-info-route">
-                                    <img src="img/badge_template_48.png" alt="6" />
-                                </span>
-                                <span class="route-section-info-section">
-                                    <div class="route-section-info-section-start">Móricz Zsigmond körtér</div>
-                                    <div class="route-section-info-section-end">Corvin Negyed</div>
-                                </span>
+                            <div class="route-section-infos">
+                                <div class="route-section-info">
+                                    <span class="route-section-info-route">
+                                        <img src="img/badge_template_48.png" alt="M4" />
+                                    </span>
+                                    <span class="route-section-info-section">
+                                        <div class="route-section-info-section-start">Kelenföld vasútállomás</div>
+                                        <div class="route-section-info-section-end">Móricz Zsigmond körtér</div>
+                                    </span>
+                                </div>
+                                
+                                <div class="route-section-info">
+                                    <span class="route-section-info-route">
+                                        <img src="img/badge_template_48.png" alt="6" />
+                                    </span>
+                                    <span class="route-section-info-section">
+                                        <div class="route-section-info-section-start">Móricz Zsigmond körtér</div>
+                                        <div class="route-section-info-section-end">Corvin Negyed</div>
+                                    </span>
+                                </div>
+                                
+                                <div class="route-section-info">
+                                    <span class="route-section-info-route">
+                                        <img src="img/badge_template_48.png" alt="M3" />
+                                    </span>
+                                    <span class="route-section-info-section">
+                                        <div class="route-section-info-section-start">Corvin Negyed</div>
+                                        <div class="route-section-info-section-end">Határ út</div>
+                                    </span>
+                                </div>
                             </div>
                             
-                            <div class="route-section-info">
-                                <span class="route-section-info-route">
-                                    <img src="img/badge_template_48.png" alt="M3" />
-                                </span>
-                                <span class="route-section-info-section">
-                                    <div class="route-section-info-section-start">Corvin Negyed</div>
-                                    <div class="route-section-info-section-end">Határ út</div>
-                                </span>
+                            <div class="time-with-label">
+                                <span>Érkezés:</span>
+                                <time>17:45</time>
                             </div>
-                        </div>
-                        
-                        <div class="time-with-label">
-                            <span>Érkezés:</span>
-                            <time>17:45</time>
-                        </div>
-                        
-                        <div id="plan-summary-buttons">
-                            <button id="plan-summary-details">Részletes terv</button>
-                        </div>
-                    </fieldset>
-                </form>
+                            
+                            <div id="plan-summary-buttons">
+                                <button type="button" id="plan-summary-details">Részletes terv</button>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
             </aside>
         </div>
         
-        <script type="text/javascript"
+        <table style="display: none;" id="template-infowindow-table">
+            <tr>
+                <td>
+                    <time>##TIME##</time>
+                </td>
+                <td>
+                    <p class="tooltip" data-tooltip="##ADDRESS##">##STOP_NAME##</p>
+                </td>
+            </tr>
+        </table>
+        
+        <span style="display: none;" id="template-infowindow">
+            <div id="planner-map-bubble-trip-info">
+                <div class="route-section-info">
+                    <span class="route-section-info-route">
+                        <img src="img/badge_template_48.png" alt="##ROUTE_SHORT_NAME##" data-basecolor="##ROUTE_BASE_COLOR##" data-textcolor="##ROUTE_TEXT_COLOR" />
+                    </span>
+                    <span class="route-section-info-section">
+                        <div class="route-section-info-section-start">##ROUTE_TYPE</div>
+                        <div class="route-section-info-section-end">##ROUTE_DIRECTION## felé</div>
+                    </span>
+                </div>
+            </div>
+            <hr />
+            <div id="planner-map-bubble-trip-details">
+                <table class="trip-details">
+                    ##ROUTE_TABLE_ROWS##
+                </table>
+            </div>
+        </span>
+        
+        <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
         </script>
         
-        <script type="text/javascript">
+        <script src="js/jquery-ui-1.11.2.custom/external/jquery/jquery.js"></script>
+        <script src="js/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
+        <script src="js/jquery-ui-timepicker-addon.js"></script>
+        
+        <script src="js/menetrend.js"></script>
+        
+        <script>
             window.onload = function () {
                 var mapOptions = {
                     center: new google.maps.LatLng(47.5, 19.08),
@@ -120,11 +441,41 @@
                     document.getElementById("map_canvas"),
                     mapOptions);
             }
+            
+            var settings_dialog = $("#planner-settings-dialog").dialog({
+                autoOpen: false,
+                width: 600,
+                height: 600,
+                modal: true
+            });
+            
+            $("#planner-inputs-settings").click(function() {
+                settings_dialog.dialog("open");
+            });
+            
+            var details_dialog = $("#planner-details-dialog").dialog({
+                autoOpen: false,
+                width: 600,
+                height: 600,
+                modal: true
+            });
+            
+            $("#plan-summary-details").click(function() {
+                details_dialog.dialog("open");
+            });
+            
+            TUSZ.create_timepicker("#planner-settings-start-time-placeholder", new Date(2013, 4, 3, 14, 32), new Date(2013, 3, 3), new Date(2015, 4, 12));
+            
+            var stops = []
+            stops = TUSZ.add_stop_to_autocomplete_list(stops, "1", "Blaha Lujza tér", "1234", "Budapest", "Blaha tere 5.");
+            stops = TUSZ.add_stop_to_autocomplete_list(stops, "10", "Corvin negyed", "1294", "Budapest", "Örs tere 5.");
+            stops = TUSZ.add_stop_to_autocomplete_list(stops, "100", "Sajt sétány", "1233", "Budapest", "Zuza tere 5.");
+            stops = TUSZ.add_stop_to_autocomplete_list(stops, "1000", "Örs vezér tere M", "2234", "Karcag", "Széchenyi tere 5.");
+            stops = TUSZ.add_stop_to_autocomplete_list(stops, "2", "Blaha Lujza tér M", "8234", "Budapest", "Blaha tere 9.");
+            
+            TUSZ.create_autocomplete_for_stops("#planner-inputs-from", stops);
+            TUSZ.create_autocomplete_for_stops("#planner-inputs-to", stops);
         </script>
-        
-        <script src="js/jquery-ui-1.11.2.custom/external/jquery/jquery.js"></script>
-        <script src="js/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
-        <script src="js/jquery-ui-timepicker-addon.js"></script>
         
     </body>
 </html>
