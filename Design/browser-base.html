@@ -126,18 +126,30 @@
                 $("#calendar-month").val(selected_date.getMonth() + 1);
                 $("#calendar-day").val(selected_date.getDate());
                 
-                var selected_route = TUSZ.get_selection_from_tree("#browser-routes-tree");
-                $("#tree-route-id").val(selected_route);
-                
-                var selected_stop = TUSZ.get_selection_from_tree("#browser-stops-list");
-                $("#tree-stop-id").val(selected_stop);
-                
                 var active_tab = $("#browser-routes-and-stops").tabs('option', 'active');
                 $("#tree-id").val(active_tab);
+                
+                if (active_tab == 0) {
+                    var selected_route = TUSZ.get_selection_from_tree("#browser-routes-tree");
+                    $("#tree-route-id").val(selected_route);
+                    $("#tree-stop-id").val("");
+                } else if (active_tab == 1) {
+                    var selected_stop = TUSZ.get_selection_from_tree("#browser-stops-list");
+                    $("#tree-stop-id").val(selected_stop);
+                    $("#tree-route-id").val("");
+                } else {
+                    $("#tree-stop-id").val("");
+                    $("#tree-route-id").val("");
+                }
             }
             
             function validate() {
-                return true; // TODO
+                if (($("#tree-stop-id").val() == "") && ($("#tree-route-id").val() == "")) {
+                    alert("Kérlek válassz járatot vagy megállót a listából!");
+                    return false;
+                }
+                
+                return true;
             }
         </script>
 

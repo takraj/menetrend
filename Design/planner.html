@@ -40,22 +40,28 @@
                             <legend>Használni kívánt járat típusok</legend>
                             
                             <div>
-                                <input class="planner-settings-chbx" name="route_type_1" type="checkbox">Metró</input>
+                                <input class="planner-settings-chbx" id="route-type-tram" type="checkbox">Villamos</input>
                             </div>
                             <div>
-                                <input class="planner-settings-chbx" name="route_type_2" type="checkbox">Villamos</input>
+                                <input class="planner-settings-chbx" id="route-type-subway" type="checkbox">Metró</input>
                             </div>
                             <div>
-                                <input class="planner-settings-chbx" name="route_type_3" type="checkbox">Busz</input>
+                                <input class="planner-settings-chbx" id="route-type-rail" type="checkbox">Vasút</input>
                             </div>
                             <div>
-                                <input class="planner-settings-chbx" name="route_type_4" type="checkbox">Hajó</input>
+                                <input class="planner-settings-chbx" id="route-type-bus" type="checkbox">Busz</input>
                             </div>
                             <div>
-                                <input class="planner-settings-chbx" name="route_type_5" type="checkbox">Troli</input>
+                                <input class="planner-settings-chbx" id="route-type-ferry" type="checkbox">Hajó</input>
                             </div>
                             <div>
-                                <input class="planner-settings-chbx" name="route_type_6" type="checkbox">Fogaskerekű</input>
+                                <input class="planner-settings-chbx" id="route-type-cable-car" type="checkbox">Függővasút</input>
+                            </div>
+                            <div>
+                                <input class="planner-settings-chbx" id="route-type-gondola" type="checkbox">Gondola</input>
+                            </div>
+                            <div>
+                                <input class="planner-settings-chbx" id="route-type-funicular" type="checkbox">Fogaskerekű</input>
                             </div>
                         </fieldset>
                         
@@ -64,25 +70,25 @@
                             
                             <div class="table-style">
                                 <div class="table-row-style">
-                                    <input class="planner-settings-chbx" name="wheelchair" type="checkbox">Csak akadálymentes járművek</input>
+                                    <input class="planner-settings-chbx" id="wheelchair" type="checkbox">Csak akadálymentes járművek</input>
                                 </div>
                                 
                                 <div class="table-row-style">
                                     <label class="table-cell-style" for="walking-speed">Gyaloglási sebesség:</label>
-                                    <select class="planner-settings-ddm table-cell-style" name="walking-speed">
-                                          <option value="normal">Átlagos</option>
-                                          <option value="slow" selected="true">Lassú</option>
-                                          <option value="fast">Gyors</option>
+                                    <select class="planner-settings-ddm table-cell-style" id="walking-speed">
+                                          <option id="wso-normal" value="normal">Átlagos</option>
+                                          <option id="wso-slow" value="slow">Lassú</option>
+                                          <option id="wso-fast" value="fast">Gyors</option>
                                     </select>
                                 </div>
                                 
                                 <div class="table-row-style">
                                     <label class="table-cell-style" for="max-waiting-time">Várakozási hajlandóság:</label>
-                                    <select class="planner-settings-ddm table-cell-style" name="max-waiting-time">
-                                          <option value="10">Tíz perc</option>
-                                          <option value="30" selected="true">Fél óra</option>
-                                          <option value="60">Egy óra</option>
-                                          <option value="10000">Bármennyi</option>
+                                    <select class="planner-settings-ddm table-cell-style" id="max-waiting-time">
+                                          <option id="mwt-10" value="10">Tíz perc</option>
+                                          <option id="mwt-30" value="30">Fél óra</option>
+                                          <option id="mwt-60" value="60">Egy óra</option>
+                                          <option id="mwt-dontcare" value="dontcare">Bármennyi</option>
                                     </select>
                                 </div>
                             </div>
@@ -98,8 +104,8 @@
                         </fieldset>
                         
                         <div id="planner-settings-buttons">
-                            <button id="planner-settings-cancel" name="cancel">Mégsem</button>
-                            <button id="planner-settings-ok" name="ok">OK</button>
+                            <button id="planner-settings-cancel" name="cancel" type="button">Mégsem</button>
+                            <button id="planner-settings-ok" name="ok" type="button">OK</button>
                         </div>
                     </div>
                 </div>
@@ -136,7 +142,15 @@
                                 
                                 <tr class="plan-detail-step">
                                     <td class="route-table-cell">
-                                        <img src="img/badge_template_48.png" alt="M4" />
+                                        <span class="route-logo" style="background: #00D900; color: #FFFFFF; font-size: 16px; width: 42px;">
+                                            <div>
+                                                <div class="route-logo-content">
+                                                    <div>
+                                                        M4
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span>
                                         <p>Metró</p>
                                     </td>
                                     <td class="trip-table-cell">
@@ -182,7 +196,15 @@
                                 
                                 <tr class="plan-detail-step">
                                     <td class="route-table-cell">
-                                        <img src="img/badge_template_48.png" alt="M4" />
+                                        <span class="route-logo" style="background: #00D900; color: #FFFFFF; font-size: 16px; width: 42px;">
+                                            <div>
+                                                <div class="route-logo-content">
+                                                    <div>
+                                                        M4
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span>
                                         <p>Metró</p>
                                     </td>
                                     <td class="trip-table-cell">
@@ -228,7 +250,15 @@
                                 
                                 <tr class="plan-detail-step">
                                     <td class="route-table-cell">
-                                        <img src="img/badge_template_48.png" alt="M4" />
+                                        <span class="route-logo" style="background: #00D900; color: #FFFFFF; font-size: 16px; width: 42px;">
+                                            <div>
+                                                <div class="route-logo-content">
+                                                    <div>
+                                                        M4
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span>
                                         <p>Metró</p>
                                     </td>
                                     <td class="trip-table-cell">
@@ -297,41 +327,43 @@
             
             <aside>
                 <div>
-                    <form>
+                    <div>
                         <fieldset id="planner-inputs">
                             <legend>Útvonaltervezés</legend>
                             
                             <input id="planner-inputs-from" name="from-as-text" type="text" placeholder="Honnan" />
                             <input id="planner-inputs-to" name="to-as-text" type="text" placeholder="Hova" />
                             
-                            <input type="hidden" id="planner-hidden-from-id" name="from_stop_id" />
-                            <input type="hidden" id="planner-hidden-to-id" name="to_stop_id" />
-                            
-                            <input type="hidden" id="planner-hidden-when-year" name="year" value="2013" />
-                            <input type="hidden" id="planner-hidden-when-month" name="month" value="3" />
-                            <input type="hidden" id="planner-hidden-when-day" name="day" value="1" />
-                            <input type="hidden" id="planner-hidden-when-hour" name="hour" value="11" />
-                            <input type="hidden" id="planner-hidden-when-minute" name="minute" value="0" />
-                            
-                            <input type="hidden" id="planner-hidden-enable-tram" name="tram_enabled" value="1" />
-                            <input type="hidden" id="planner-hidden-enable-subway" name="subway_enabled" value="1" />
-                            <input type="hidden" id="planner-hidden-enable-rail" name="rail_enabled" value="1" />
-                            <input type="hidden" id="planner-hidden-enable-bus" name="bus_enabled" value="1" />
-                            <input type="hidden" id="planner-hidden-enable-ferry" name="ferry_enabled" value="1" />
-                            <input type="hidden" id="planner-hidden-enable-cable-car" name="cable_car_enabled" value="1" />
-                            <input type="hidden" id="planner-hidden-enable-gondola" name="gondola_enabled" value="1" />
-                            <input type="hidden" id="planner-hidden-enable-funicular" name="funicular_enabled" value="1" />
-                            
-                            <input type="hidden" id="planner-hidden-wheelchair-support" name="wheelchair" value="1" />
-                            <input type="hidden" id="planner-hidden-walking-speed-category" name="walking_category" value="1" />
-                            <input type="hidden" id="planner-hidden-waiting-time-category" name="waiting_category" value="1" />
-                            
-                            <div id="planner-inputs-buttons">
-                                <button id="planner-inputs-settings" type="button">Beállítások</button>
-                                <button id="planner-inputs-submit" name="submit" type="submit">Mehet</button>
-                            </div>
+                            <form>
+                                <input type="hidden" id="planner-hidden-from-id" name="from_stop_id" />
+                                <input type="hidden" id="planner-hidden-to-id" name="to_stop_id" />
+                                
+                                <input type="hidden" id="planner-hidden-when-year" name="year" value="2013" />
+                                <input type="hidden" id="planner-hidden-when-month" name="month" value="3" />
+                                <input type="hidden" id="planner-hidden-when-day" name="day" value="1" />
+                                <input type="hidden" id="planner-hidden-when-hour" name="hour" value="11" />
+                                <input type="hidden" id="planner-hidden-when-minute" name="minute" value="0" />
+                                
+                                <input type="hidden" id="planner-hidden-enable-tram" name="tram_enabled" value="1" />
+                                <input type="hidden" id="planner-hidden-enable-subway" name="subway_enabled" value="1" />
+                                <input type="hidden" id="planner-hidden-enable-rail" name="rail_enabled" value="1" />
+                                <input type="hidden" id="planner-hidden-enable-bus" name="bus_enabled" value="1" />
+                                <input type="hidden" id="planner-hidden-enable-ferry" name="ferry_enabled" value="1" />
+                                <input type="hidden" id="planner-hidden-enable-cable-car" name="cable_car_enabled" value="1" />
+                                <input type="hidden" id="planner-hidden-enable-gondola" name="gondola_enabled" value="1" />
+                                <input type="hidden" id="planner-hidden-enable-funicular" name="funicular_enabled" value="1" />
+                                
+                                <input type="hidden" id="planner-hidden-wheelchair-support" name="wheelchair" value="1" />
+                                <input type="hidden" id="planner-hidden-walking-speed-category" name="walking_category" value="normal" />
+                                <input type="hidden" id="planner-hidden-waiting-time-category" name="waiting_category" value="dontcare" />
+                                
+                                <div id="planner-inputs-buttons">
+                                    <button id="planner-inputs-settings" type="button">Beállítások</button>
+                                    <button id="planner-inputs-submit" name="submit" type="submit">Mehet</button>
+                                </div>
+                            </form>
                         </fieldset>
-                    </form>
+                    </div>
                     
                     <div>
                         <fieldset id="plan-summary">
@@ -345,7 +377,15 @@
                             <div class="route-section-infos">
                                 <div class="route-section-info">
                                     <span class="route-section-info-route">
-                                        <img src="img/badge_template_48.png" alt="M4" />
+                                        <span class="route-logo" style="background: #00D900; color: #FFFFFF; font-size: 16px; width: 42px;">
+                                            <div>
+                                                <div class="route-logo-content">
+                                                    <div>
+                                                        M4
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span>
                                     </span>
                                     <span class="route-section-info-section">
                                         <div class="route-section-info-section-start">Kelenföld vasútállomás</div>
@@ -355,7 +395,15 @@
                                 
                                 <div class="route-section-info">
                                     <span class="route-section-info-route">
-                                        <img src="img/badge_template_48.png" alt="6" />
+                                        <span class="route-logo" style="background: #FFFF26; color: #000000; font-size: 16px; width: 42px;">
+                                            <div>
+                                                <div class="route-logo-content">
+                                                    <div>
+                                                        6
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span>
                                     </span>
                                     <span class="route-section-info-section">
                                         <div class="route-section-info-section-start">Móricz Zsigmond körtér</div>
@@ -365,7 +413,15 @@
                                 
                                 <div class="route-section-info">
                                     <span class="route-section-info-route">
-                                        <img src="img/badge_template_48.png" alt="M3" />
+                                        <span class="route-logo" style="background: #0000FF; color: #FFFFFF; font-size: 16px; width: 42px;">
+                                            <div>
+                                                <div class="route-logo-content">
+                                                    <div>
+                                                        M3
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </span>
                                     </span>
                                     <span class="route-section-info-section">
                                         <div class="route-section-info-section-start">Corvin Negyed</div>
@@ -394,28 +450,36 @@
                     <time>##TIME##</time>
                 </td>
                 <td>
-                    <p class="tooltip" data-tooltip="##ADDRESS##">##STOP_NAME##</p>
+                    ##STOP_NAME##
                 </td>
             </tr>
         </table>
         
         <span style="display: none;" id="template-infowindow">
-            <div id="planner-map-bubble-trip-info">
-                <div class="route-section-info">
-                    <span class="route-section-info-route">
-                        <img src="img/badge_template_48.png" alt="##ROUTE_SHORT_NAME##" data-basecolor="##ROUTE_BASE_COLOR##" data-textcolor="##ROUTE_TEXT_COLOR" />
-                    </span>
-                    <span class="route-section-info-section">
-                        <div class="route-section-info-section-start">##ROUTE_TYPE</div>
-                        <div class="route-section-info-section-end">##ROUTE_DIRECTION## felé</div>
-                    </span>
+            <div class="planner-map-bubble-contents">
+                <div class="planner-map-bubble-trip-info">
+                    <div class="route-section-info">
+                        <span class="route-section-info-route">
+                            <span class="route-logo" style="background: ##ROUTE_BASE_COLOR##; color: ##ROUTE_TEXT_COLOR##; font-size: 16px; width: 42px;">
+                                <div>
+                                    <div class="route-logo-content">
+                                        <div>
+                                            ##ROUTE_SHORT_NAME##
+                                        </div>
+                                    </div>
+                                </div>
+                            </span>
+                        </span>
+                        <span class="route-section-info-section">
+                            <div class="route-section-info-section-start"><strong>##ROUTE_TYPE##</strong></div>
+                            <div class="route-section-info-section-end">##ROUTE_DIRECTION## felé</div>
+                        </span>
+                    </div>
                 </div>
-            </div>
-            <hr />
-            <div id="planner-map-bubble-trip-details">
-                <table class="trip-details">
-                    ##ROUTE_TABLE_ROWS##
-                </table>
+                <hr />
+                <div class="planner-map-bubble-trip-details">
+                    <p>##ROUTE_TABLE_ROWS##</p>
+                </div>
             </div>
         </span>
         
@@ -427,19 +491,49 @@
         <script src="js/jquery-ui-1.11.2.custom/jquery-ui.js"></script>
         <script src="js/jquery-ui-timepicker-addon.js"></script>
         
+        <script src="js/markerwithlabel.js"></script>
         <script src="js/menetrend.js"></script>
         
         <script>
             window.onload = function () {
-                var mapOptions = {
-                    center: new google.maps.LatLng(47.5, 19.08),
-                    zoom: 12,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-            
-                var map = new google.maps.Map(
-                    document.getElementById("map_canvas"),
-                    mapOptions);
+                var map = TUSZ.create_map("map_canvas", 47.5, 19.08);
+                
+                TUSZ.create_travel_line(map, 47.5, 19.08, 47.48, 19.18, "#0000FF");
+                TUSZ.create_travel_line(map, 47.48, 19.18, 47.4, 19.28, "#00FF00");
+                
+                TUSZ.create_walking_line(map, 47.4, 19.28, 47.55, 19.20);
+                TUSZ.create_walking_line(map, 47.55, 19.20, 47.5, 19.28);
+                
+                TUSZ.create_walking_marker(map, 47.5, 19.08, "Kezdőállomás H+MMM");
+                TUSZ.create_finish_marker(map, 47.5, 19.28, "Végállomás M");
+                
+                var route_data = TUSZ.create_route_data("M4", "#00FF00", "#FFFFFF", "metró", "Kelenföld vasútállomás");
+                route_data.add_stop("14:01", "Keleti pályaudvar");
+                route_data.add_stop("14:02", "Keleti pályaudvar 2");
+                route_data.add_stop("14:03", "Keleti pályaudvar 3");
+                route_data.add_stop("14:04", "Keleti pályaudvar 4");
+                route_data.add_stop("14:01", "Keleti pályaudvar");
+                route_data.add_stop("14:01", "Keleti pályaudvar");
+                route_data.add_stop("14:01", "Keleti pályaudvar");
+                route_data.add_stop("14:01", "Keleti pályaudvar");
+                route_data.add_stop("14:02", "Keleti pályaudvar 2");
+                route_data.add_stop("14:03", "Keleti pályaudvar 3");
+                route_data.add_stop("14:04", "Keleti pályaudvar 4 Keleti pályaudvar 3");
+                route_data.add_stop("14:02", "Keleti pályaudvar 2");
+                route_data.add_stop("14:03", "Keleti pályaudvar 3");
+                route_data.add_stop("14:04", "Keleti pályaudvar 4");
+                route_data.add_stop("14:02", "Keleti pályaudvar 2");
+                route_data.add_stop("14:03", "Keleti pályaudvar 3");
+                route_data.add_stop("14:04", "Keleti pályaudvar 4");
+                route_data.add_stop("14:02", "Keleti pályaudvar 2");
+                route_data.add_stop("14:03", "Keleti pályaudvar 3");
+                route_data.add_stop("14:04", "Keleti pályaudvar 4");
+                route_data.add_stop("14:02", "Keleti pályaudvar 2");
+                route_data.add_stop("14:03", "Keleti pályaudvar 3");
+                route_data.add_stop("14:04", "Keleti pályaudvar 4");
+                TUSZ.create_travel_marker(map, 47.4, 19.28, route_data);
+                
+                TUSZ.set_map_center(map, 47.5, 19.28);
             }
             
             var settings_dialog = $("#planner-settings-dialog").dialog({
@@ -450,7 +544,113 @@
             });
             
             $("#planner-inputs-settings").click(function() {
+                var data = {
+                    year: $("#planner-hidden-when-year").val(),
+                    month: $("#planner-hidden-when-month").val(),
+                    day: $("#planner-hidden-when-day").val(),
+                    
+                    hour: $("#planner-hidden-when-hour").val(),
+                    minute: $("#planner-hidden-when-minute").val(),
+                    
+                    enable_tram: $("#planner-hidden-enable-tram").val() == "1",
+                    enable_subway: $("#planner-hidden-enable-subway").val() == "1",
+                    enable_rail: $("#planner-hidden-enable-rail").val() == "1",
+                    enable_bus: $("#planner-hidden-enable-bus").val() == "1",
+                    enable_ferry: $("#planner-hidden-enable-ferry").val() == "1",
+                    enable_cable_car: $("#planner-hidden-enable-cable-car").val() == "1",
+                    enable_gondola: $("#planner-hidden-enable-gondola").val() == "1",
+                    enable_funicular: $("#planner-hidden-enable-funicular").val() == "1",
+                    
+                    weelchair: $("#planner-hidden-wheelchair-support").val() == "1",
+                    
+                    walking_speed_category: $("#planner-hidden-walking-speed-category").val(),
+                    waiting_time_category: $("#planner-hidden-waiting-time-category").val()
+                };
+                
+                TUSZ.set_datetime_of_datetimepicker("#planner-settings-start-time-placeholder", data.year, data.month, data.day, data.hour, data.minute);
+                
+                $("#route-type-tram").prop('checked', data.enable_tram);
+                $("#route-type-subway").prop('checked', data.enable_subway);
+                $("#route-type-rail").prop('checked', data.enable_rail);
+                $("#route-type-bus").prop('checked', data.enable_bus);
+                $("#route-type-ferry").prop('checked', data.enable_ferry);
+                $("#route-type-cable-car").prop('checked', data.enable_cable_car);
+                $("#route-type-gondola").prop('checked', data.enable_gondola);
+                $("#route-type-funicular").prop('checked', data.enable_funicular);
+                
+                $("#wheelchair").prop('checked', data.weelchair);
+                
+                $("#walking-speed").val(data.walking_speed_category);
+                $("#max-waiting-time").val(data.waiting_time_category);
+                
                 settings_dialog.dialog("open");
+            });
+            
+            $("#planner-settings-ok").click(function() {
+                var datetime = TUSZ.get_datetime_from_datetimepicker("#planner-settings-start-time-placeholder");
+                var data = {
+                    year: datetime.getFullYear(),
+                    month: datetime.getMonth(),
+                    day: datetime.getDate(),
+                    
+                    hour: datetime.getHours(),
+                    minute: datetime.getMinutes(),
+                    
+                    enable_tram: $("#route-type-tram").prop('checked'),
+                    enable_subway: $("#route-type-subway").prop('checked'),
+                    enable_rail: $("#route-type-rail").prop('checked'),
+                    enable_bus: $("#route-type-bus").prop('checked'),
+                    enable_ferry: $("#route-type-ferry").prop('checked'),
+                    enable_cable_car: $("#route-type-cable-car").prop('checked'),
+                    enable_gondola: $("#route-type-gondola").prop('checked'),
+                    enable_funicular: $("#route-type-funicular").prop('checked'),
+                    
+                    weelchair: $("#wheelchair").prop('checked'),
+                    
+                    walking_speed_category: $("#walking-speed").val(),
+                    waiting_time_category: $("#max-waiting-time").val()
+                };
+                
+                if (!(
+                    data.enable_tram ||
+                    data.enable_subway ||
+                    data.enable_rail ||
+                    data.enable_bus ||
+                    data.enable_ferry ||
+                    data.enable_cable_car ||
+                    data.enable_gondola ||
+                    data.enable_funicular
+                )) {
+                    alert("Legalább egy járat típust engedélyezned kell!");
+                    return false;
+                }
+                
+                $("#planner-hidden-when-year").val(data.year);
+                $("#planner-hidden-when-month").val(data.month);
+                $("#planner-hidden-when-day").val(data.day);
+                
+                $("#planner-hidden-when-hour").val(data.hour);
+                $("#planner-hidden-when-minute").val(data.minute);
+                
+                $("#planner-hidden-enable-tram").val(data.enable_tram ? 1 : 0);
+                $("#planner-hidden-enable-subway").val(data.enable_subway ? 1 : 0);
+                $("#planner-hidden-enable-rail").val(data.enable_rail ? 1 : 0);
+                $("#planner-hidden-enable-bus").val(data.enable_bus ? 1 : 0);
+                $("#planner-hidden-enable-ferry").val(data.enable_ferry ? 1 : 0);
+                $("#planner-hidden-enable-cable-car").val(data.enable_cable_car ? 1 : 0);
+                $("#planner-hidden-enable-gondola").val(data.enable_gondola ? 1 : 0);
+                $("#planner-hidden-enable-funicular").val(data.enable_funicular ? 1 : 0);
+                
+                $("#planner-hidden-wheelchair-support").val(data.weelchair ? 1 : 0);
+                
+                $("#planner-hidden-walking-speed-category").val(data.walking_speed_category);
+                $("#planner-hidden-waiting-time-category").val(data.waiting_time_category);
+                
+                settings_dialog.dialog("close");
+            });
+            
+            $("#planner-settings-cancel").click(function() {
+                settings_dialog.dialog("close");
             });
             
             var details_dialog = $("#planner-details-dialog").dialog({
@@ -464,10 +664,11 @@
                 details_dialog.dialog("open");
             });
             
-            TUSZ.create_timepicker("#planner-settings-start-time-placeholder", new Date(2013, 4, 3, 14, 32), new Date(2013, 3, 3), new Date(2015, 4, 12));
+            TUSZ.create_timepicker("#planner-settings-start-time-placeholder", new Date(2013, 4, 3, 14, 32), new Date(2013, 1, 3), new Date(2015, 4, 12));
             
             var stops = []
             stops = TUSZ.add_stop_to_autocomplete_list(stops, "1", "Blaha Lujza tér", "1234", "Budapest", "Blaha tere 5.");
+            stops = TUSZ.add_stop_to_autocomplete_list(stops, "2", "Blaha Lujza tér", "1235", "Budapest", "Blaha tere 5b.");
             stops = TUSZ.add_stop_to_autocomplete_list(stops, "10", "Corvin negyed", "1294", "Budapest", "Örs tere 5.");
             stops = TUSZ.add_stop_to_autocomplete_list(stops, "100", "Sajt sétány", "1233", "Budapest", "Zuza tere 5.");
             stops = TUSZ.add_stop_to_autocomplete_list(stops, "1000", "Örs vezér tere M", "2234", "Karcag", "Széchenyi tere 5.");
@@ -475,6 +676,41 @@
             
             TUSZ.create_autocomplete_for_stops("#planner-inputs-from", stops);
             TUSZ.create_autocomplete_for_stops("#planner-inputs-to", stops);
+            
+            $("#planner-inputs-submit").click(function() {
+                var stop_label_from = $("#planner-inputs-from").val();
+                var stop_label_to = $("#planner-inputs-to").val();
+                
+                var stop_id_from = TUSZ.get_stop_id_by_label(stops, stop_label_from);
+                var stop_id_to = TUSZ.get_stop_id_by_label(stops, stop_label_to);
+                
+                if (stop_label_from == "") {
+                    alert("A 'honnan' mező üres.");
+                    return false;
+                }
+                
+                if (stop_label_to == "") {
+                    alert("A 'hova' mező üres.");
+                    return false;
+                }
+                
+                if (stop_id_from == -1)
+                {
+                    alert("Nincs ilyen megálló: \"" + stop_label_from + "\"");
+                    return false;
+                }
+                
+                if (stop_id_to == -1)
+                {
+                    alert("Nincs ilyen megálló: \"" + stop_label_to + "\"");
+                    return false;
+                }
+                
+                $("#planner-hidden-from-id").val(stop_id_from);
+                $("#planner-hidden-to-id").val(stop_id_to);
+                
+                return true;
+            });
         </script>
         
     </body>

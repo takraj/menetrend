@@ -73,6 +73,14 @@ TUSZ.get_datetime_from_datetimepicker = function(html_id) {
     return jQuery(html_id).datetimepicker('getDate');
 };
 
+TUSZ.set_date_of_datepicker = function(html_id, year, month, day) {
+    return jQuery(html_id).datepicker('setDate', new Date(year, month, day));
+};
+
+TUSZ.set_datetime_of_datetimepicker = function(html_id, year, month, day, hour, minute) {
+    return jQuery(html_id).datetimepicker('setDate', new Date(year, month, day, hour, minute));
+};
+
 TUSZ.create_filterable_tree = function(tree_html_id, filter_html_id, data_source) {
     var routes_tree = $(tree_html_id).fancytree({
         extensions: ["filter"],
@@ -137,13 +145,13 @@ TUSZ.add_stop_to_autocomplete_list = function(autocomplete_list, stop_id, stop_n
     return autocomplete_list.concat(additional_data);
 };
 
-TUSZ.is_stop_label_in_stopslist = function(stops, stop_label) {
+TUSZ.get_stop_id_by_label = function(stops, stop_label) {
     for (var i = 0; i < stops.length; i++) {
         if (stops[i].label == stop_label) {
-            return true;
+            return stops[i].identifier;
         }
     }
-    return false;
+    return -1;
 }
 
 TUSZ.create_autocomplete_for_stops = function(txt_html_id, data_source) {
@@ -208,7 +216,7 @@ TUSZ.create_info_window_content = function(route_short_name, route_base_color, r
     content = TUSZ.replace_text(content, "##ROUTE_TEXT_COLOR##", route_text_color);
     content = TUSZ.replace_text(content, "##ROUTE_TYPE##", route_type);
     content = TUSZ.replace_text(content, "##ROUTE_DIRECTION##", route_direction);
-    content = TUSZ.replace_text(content, "##ROUTE_TABLE_ROWS##", rows);
+    content = TUSZ.replace_text(content, "##ROUTE_TABLE_ROWS##", "<table class='trip-details'>" + rows + "</table>");
     
     return content;
 }
@@ -224,7 +232,7 @@ TUSZ.create_travel_marker = function(map, lat, lon, route_data) {
     var marker = new MarkerWithLabel({
         position: myLatlng,
         map: map,
-        title: route_data.route_name + ": " + route_data.stop_name,
+        title: route_data.short_name + ": " + route_data.direction,
         labelContent: labelContent,
         labelAnchor: new google.maps.Point(15, 0)
     });
@@ -252,7 +260,9 @@ TUSZ.create_finish_marker = function(map, lat, lon, stop_name) {
     var marker = new google.maps.Marker({
         position: myLatlng,
         map: map,
-        title: stop_name
+        title: stop_name,
+        icon: "https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=flag|ADDE63",
+        shadow: "https://maps.gstatic.com/mapfiles/ms2/micons/msmarker.shadow.png"
     });
     
     var infoWindowContent = "<p><strong>Cél: </strong><br />" + stop_name + "</p>";
@@ -284,16 +294,16 @@ TUSZ.create_walking_marker = function(map, lat, lon, stop_name) {
     return marker;
 }
 
-TUSZ.create_travel_line = function(map, lat_from, lon_from, lat_to, lon_to) {
+TUSZ.create_travel_line = function(map, lat_from, lon_from, lat_to, lon_to, color) {
     var from = new google.maps.LatLng(lat_from, lon_from);
     var to = new google.maps.LatLng(lat_to, lon_to);
     
     var line = new google.maps.Polyline({
         path: [from, to],
-        strokeColor: "#0000FF",
+        strokeColor: color,
         strokeOpacity: 1.0,
-        strokeWeight: 2,
-        map: MTR.MapTools.map,
+        strokeWeight: 4,
+        map: map,
         icons: [{
             icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
             offset: '50%'
@@ -309,16 +319,16 @@ TUSZ.create_walking_line = function(map, lat_from, lon_from, lat_to, lon_to) {
     
     var lineSymbol = {
         path: 'M 0,-1 0,1',
-        strokeOpacity: 1,
+        strokeOpacity: 1.0,
         scale: 4
     };
     
     var line = new google.maps.Polyline({
         path: [from, to],
-        strokeColor: "#FF0000",
+        strokeColor: "#B3002D",
         strokeOpacity: 1.0,
         strokeWeight: 2,
-        map: MTR.MapTools.map,
+        map: map,
         icons: [{
             icon: { path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW },
             offset: '50%'
@@ -341,19 +351,13 @@ TUSZ.set_map_center = function(map, lat, lon) {
 TUSZ.create_route_data = function(short_name, base_color, text_color, type, direction) {
     return {
         short_name: short_name,
+        direction: direction,
         base_color: base_color,
         text_color: text_color,
         type: type,
-        direction: direction,
-        stops: []
+        stops: [],
+        add_stop: function(time, stop_name) {
+            this.stops.push({time: time, stop_name: stop_name});
+        }
     }
-}
-
-TUSZ.add_stop_to_route_data = function(route_data, time, stop_name) {
-    var additional_data = [{
-        time: time,
-        stop_name: stop_name
-    }];
-    
-    return route_data.concat(additional_data);
 }
