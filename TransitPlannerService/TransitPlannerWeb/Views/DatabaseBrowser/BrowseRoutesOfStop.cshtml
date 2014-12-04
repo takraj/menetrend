@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Induló járatok";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section sidebar {
+    @Html.Partial("_BrowserInputs")
+}
+
+@section before_scripts {
+    @Scripts.Render("fancytree.js")
+}
+
+@section scripts {
+    @Html.Partial("_ScriptOfBrowserInputs")
+}

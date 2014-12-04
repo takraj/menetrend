@@ -1,0 +1,79 @@
+﻿<fieldset class="existing-load-balancers">
+    <legend>Beállított háttérszolgáltatások</legend>
+    <table>
+        <thead>
+            <tr>
+                <th class="lb-name">Név</th>
+                <th class="lb-url">URL</th>
+                <th class="lb-weight">Súly</th>
+                <th class="lb-action"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="lb-name">Név</td>
+                <td class="lb-url">URL</td>
+                <td class="lb-weight">Súly</td>
+                <td class="lb-action">
+                    <a href="#">Törlés</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="lb-name">Név</td>
+                <td class="lb-url">URL</td>
+                <td class="lb-weight">Súly</td>
+                <td class="lb-action">
+                    <a href="#">Törlés</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="lb-name">Név</td>
+                <td class="lb-url">URL</td>
+                <td class="lb-weight">Súly</td>
+                <td class="lb-action">
+                    <a href="#">Törlés</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="lb-name">Név</td>
+                <td class="lb-url">URL</td>
+                <td class="lb-weight">Súly</td>
+                <td class="lb-action">
+                    <a href="#">Törlés</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</fieldset>
+
+<form id="load-balancer" onsubmit="return validate_new_load_balancer()">
+    <fieldset class="new-load-balancer">
+        <legend>Új háttérszolgáltatás felvétele</legend>
+        <table>
+            <thead>
+                <tr>
+                    <th class="lb-name">Név</th>
+                    <th class="lb-url">URL</th>
+                    <th class="lb-weight">Súly</th>
+                    <th class="lb-action"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="contains-textfield">
+                        <input type="text" name="load-balancer-name" id="load-balancer-name" />
+                    </td>
+                    <td class="contains-textfield">
+                        <input type="text" name="load-balancer-url" id="load-balancer-url" />
+                    </td>
+                    <td class="contains-textfield">
+                        <input type="text" name="load-balancer-weight" id="load-balancer-weight" />
+                    </td>
+                    <td>
+                        <button class="submit-button" type="submit" name="submit-new-load-balancer">OK</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</form>

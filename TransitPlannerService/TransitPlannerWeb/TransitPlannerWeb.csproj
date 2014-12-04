@@ -221,57 +221,98 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\themes\base\accordion.css" />
-    <Content Include="Content\themes\base\all.css" />
-    <Content Include="Content\themes\base\autocomplete.css" />
-    <Content Include="Content\themes\base\base.css" />
-    <Content Include="Content\themes\base\button.css" />
-    <Content Include="Content\themes\base\core.css" />
-    <Content Include="Content\themes\base\datepicker.css" />
-    <Content Include="Content\themes\base\dialog.css" />
-    <Content Include="Content\themes\base\draggable.css" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\menu.css" />
-    <Content Include="Content\themes\base\progressbar.css" />
-    <Content Include="Content\themes\base\resizable.css" />
-    <Content Include="Content\themes\base\selectable.css" />
-    <Content Include="Content\themes\base\selectmenu.css" />
-    <Content Include="Content\themes\base\slider.css" />
-    <Content Include="Content\themes\base\sortable.css" />
-    <Content Include="Content\themes\base\spinner.css" />
-    <Content Include="Content\themes\base\tabs.css" />
-    <Content Include="Content\themes\base\theme.css" />
-    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\img\alternate-route.jpg" />
+    <Content Include="Content\img\badge_template_48.png" />
+    <Content Include="Content\img\badge_template_96.png" />
+    <Content Include="Content\img\info.png" />
+    <Content Include="Content\img\info_badge_96.png" />
+    <Content Include="Content\img\routes-icon.png" />
+    <Content Include="Content\js\fancytree\jquery.fancytree-all.js" />
+    <Content Include="Content\js\fancytree\jquery.fancytree-all.min.js" />
+    <Content Include="Content\js\fancytree\jquery.fancytree.js" />
+    <Content Include="Content\js\fancytree\jquery.fancytree.min.js" />
+    <Content Include="Content\js\fancytree\MIT-LICENSE.txt" />
+    <Content Include="Content\js\fancytree\skin-awesome\ui.fancytree.css" />
+    <Content Include="Content\js\fancytree\skin-awesome\ui.fancytree.min.css" />
+    <Content Include="Content\js\fancytree\skin-bootstrap\ui.fancytree.css" />
+    <Content Include="Content\js\fancytree\skin-bootstrap\ui.fancytree.min.css" />
+    <Content Include="Content\js\fancytree\skin-lion\icons.gif" />
+    <Content Include="Content\js\fancytree\skin-lion\loading.gif" />
+    <Content Include="Content\js\fancytree\skin-lion\ui.fancytree.css" />
+    <Content Include="Content\js\fancytree\skin-lion\ui.fancytree.min.css" />
+    <Content Include="Content\js\fancytree\skin-themeroller\icons.gif" />
+    <Content Include="Content\js\fancytree\skin-themeroller\loading.gif" />
+    <Content Include="Content\js\fancytree\skin-themeroller\ui.fancytree.css" />
+    <Content Include="Content\js\fancytree\skin-themeroller\ui.fancytree.min.css" />
+    <Content Include="Content\js\fancytree\skin-vista\icons.gif" />
+    <Content Include="Content\js\fancytree\skin-vista\loading.gif" />
+    <Content Include="Content\js\fancytree\skin-vista\ui.fancytree.css" />
+    <Content Include="Content\js\fancytree\skin-vista\ui.fancytree.min.css" />
+    <Content Include="Content\js\fancytree\skin-win7\icons.gif" />
+    <Content Include="Content\js\fancytree\skin-win7\loading.gif" />
+    <Content Include="Content\js\fancytree\skin-win7\ui.fancytree.css" />
+    <Content Include="Content\js\fancytree\skin-win7\ui.fancytree.min.css" />
+    <Content Include="Content\js\fancytree\skin-win8-xxl\icons.gif" />
+    <Content Include="Content\js\fancytree\skin-win8-xxl\loading.gif" />
+    <Content Include="Content\js\fancytree\skin-win8-xxl\ui.fancytree.css" />
+    <Content Include="Content\js\fancytree\skin-win8-xxl\ui.fancytree.min.css" />
+    <Content Include="Content\js\fancytree\skin-win8\icons.gif" />
+    <Content Include="Content\js\fancytree\skin-win8\loading.gif" />
+    <Content Include="Content\js\fancytree\skin-win8\ui.fancytree.css" />
+    <Content Include="Content\js\fancytree\skin-win8\ui.fancytree.min.css" />
+    <Content Include="Content\js\fancytree\skin-xp\icons-rtl.gif" />
+    <Content Include="Content\js\fancytree\skin-xp\icons.gif" />
+    <Content Include="Content\js\fancytree\skin-xp\loading.gif" />
+    <Content Include="Content\js\fancytree\skin-xp\ui.fancytree.css" />
+    <Content Include="Content\js\fancytree\skin-xp\ui.fancytree.min.css" />
+    <Content Include="Content\js\fancytree\skin-xp\vline-rtl.gif" />
+    <Content Include="Content\js\fancytree\skin-xp\vline.gif" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.childcounter.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.clones.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.columnview.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.debug.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.dnd.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.edit.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.filter.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.glyph.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.gridnav.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.menu.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.persist.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.table.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.themeroller.js" />
+    <Content Include="Content\js\fancytree\src\jquery.fancytree.wide.js" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\external\jquery\jquery.js" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\index.html" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\jquery-ui.css" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\jquery-ui.js" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\jquery-ui.min.css" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\jquery-ui.min.js" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\jquery-ui.structure.css" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\jquery-ui.structure.min.css" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\jquery-ui.theme.css" />
+    <Content Include="Content\js\jquery-ui-1.11.2.custom\jquery-ui.theme.min.css" />
+    <Content Include="Content\js\jquery-ui-timepicker-addon.css" />
+    <Content Include="Content\js\jquery-ui-timepicker-addon.js" />
+    <Content Include="Content\js\markerwithlabel.js" />
+    <Content Include="Content\js\menetrend.js" />
+    <Content Include="Content\tps-web.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <None Include="Scripts\jquery-2.1.1.intellisense.js" />
-    <Content Include="Scripts\jquery-2.1.1.js" />
-    <Content Include="Scripts\jquery-2.1.1.min.js" />
-    <Content Include="Scripts\jquery-2.1.1.min.map" />
-    <Content Include="Scripts\jquery-ui-1.11.2.js" />
-    <Content Include="Scripts\jquery-ui-1.11.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\knockout-3.2.0.debug.js" />
-    <Content Include="Scripts\knockout-3.2.0.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Services\v1\RestfulService.svc" />
     <Content Include="Services\v1\SoapService.svc" />
     <Content Include="Web.config" />
@@ -281,37 +322,20 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
-    <Content Include="Scripts\_references.js" />
-    <Content Include="Images\accent.png" />
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\heroAccent.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\_RemoveExternalLoginsPartial.cshtml" />
-    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\_Old_Stuff\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\_Old_Stuff\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\_Old_Stuff\Account\_RemoveExternalLoginsPartial.cshtml" />
+    <Content Include="Views\_Old_Stuff\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="Views\_Old_Stuff\Account\Login.cshtml" />
+    <Content Include="Views\_Old_Stuff\Account\Manage.cshtml" />
+    <Content Include="Views\_Old_Stuff\Account\Register.cshtml" />
+    <Content Include="Views\_Old_Stuff\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\_Old_Stuff\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\_Old_Stuff\Home\About.cshtml" />
+    <Content Include="Views\_Old_Stuff\Home\Contact.cshtml" />
+    <Content Include="Views\_Old_Stuff\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -333,6 +357,93 @@
       <Project>{8ad82f02-ed5b-4e98-bd29-476d2c2cf836}</Project>
       <Name>TransitPlannerWebContracts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_Old_Stuff\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_Old_Stuff\Shared\_LoginPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_Old_Stuff\Shared\Error.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RoutePlanner\_PlanDetails.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RoutePlanner\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RoutePlanner\_PlanOverview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RoutePlanner\_PlannerSettings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RoutePlanner\_PlannerInputs.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\_BrowserInputs.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\BrowseStopsOfRoute.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\BrowseRoutesOfStop.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\BrowseTimetable.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\_DirectionSelector.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\_EnumerationOfRoutes.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\_EnumerationOfStopTimes.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\_Timetable.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DatabaseBrowser\_ScriptOfBrowserInputs.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\Login.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\_AdminSidebar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\ServerSettings.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\_SetupLoadBalancer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\_SetupOtherParameters.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\Reports.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\ReportDetails.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\DisabledRoutes.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Admin\TripDelays.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

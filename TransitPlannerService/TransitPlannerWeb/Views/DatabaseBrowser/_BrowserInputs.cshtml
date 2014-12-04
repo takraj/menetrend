@@ -1,0 +1,33 @@
+﻿<form onsubmit="return validate()">
+    <input id="tree-id" name="mode" type="hidden" />
+    <fieldset id="browser-calendar">
+        <legend>Menetrend Naptár</legend>
+
+        <input id="calendar-year" name="year" type="hidden" />
+        <input id="calendar-month" name="month" type="hidden" />
+        <input id="calendar-day" name="day" type="hidden" />
+        <div id="browser-calendar-date-placeholder" />
+    </fieldset>
+
+    <div id="browser-routes-and-stops">
+        <ul>
+            <li><a href="#browser-routes-tab">Járatok</a></li>
+            <li><a href="#browser-stops-tab">Megállók</a></li>
+        </ul>
+
+        <div id="browser-routes-tab">
+            <input type="text" placeholder="Szűrés" id="browser-filter-routes" />
+            <input id="tree-route-id" name="route" type="hidden" />
+            <div id="browser-routes-tree"></div>
+        </div>
+
+        <div id="browser-stops-tab">
+            <input type="text" placeholder="Szűrés" id="browser-filter-stops" />
+            <input id="tree-stop-id" name="stop" type="hidden" />
+            <div id="browser-stops-list"></div>
+        </div>
+    </div>
+    <div id="browser-buttons">
+        <button id="mutasd" onclick="fillform()">Mutasd</button>
+    </div>
+</form>

@@ -1,0 +1,72 @@
+﻿<script>
+    $("#browser-routes-and-stops").tabs();
+
+    TUSZ.create_datepicker("#browser-calendar-date-placeholder", new Date(2013, 4, 3), new Date(2013, 3, 3), new Date(2015, 4, 12));
+
+    // routes
+
+    var tree_folders = [];
+
+    var tree_children = [];
+    var tree_children = TUSZ.add_item_to_children(tree_children, "T0", "id100");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "T1", "id101");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "T2", "id102");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "T3", "id103");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "T4", "id104");
+
+    tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "F1", "idf1", tree_children);
+
+    var tree_children = [];
+    var tree_children = TUSZ.add_item_to_children(tree_children, "C0", "id200");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "C1", "id201");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "C2", "id202");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "C3", "id203");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "C4", "id204");
+
+    tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "Z1", "idf1", tree_children);
+
+    TUSZ.create_filterable_tree("#browser-routes-tree", "#browser-filter-routes", tree_folders);
+
+    // stops
+
+    var tree_children = [];
+    var tree_children = TUSZ.add_item_to_children(tree_children, "S0", "id10");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "S1", "id11");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "S2", "id12");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "S3", "id13");
+    var tree_children = TUSZ.add_item_to_children(tree_children, "S4", "id14");
+
+    TUSZ.create_filterable_tree("#browser-stops-list", "#browser-filter-stops", tree_children);
+
+    function fillform() {
+        var selected_date = TUSZ.get_date_from_datepicker("#browser-calendar-date-placeholder");
+        $("#calendar-year").val(selected_date.getFullYear());
+        $("#calendar-month").val(selected_date.getMonth() + 1);
+        $("#calendar-day").val(selected_date.getDate());
+
+        var active_tab = $("#browser-routes-and-stops").tabs('option', 'active');
+        $("#tree-id").val(active_tab);
+
+        if (active_tab == 0) {
+            var selected_route = TUSZ.get_selection_from_tree("#browser-routes-tree");
+            $("#tree-route-id").val(selected_route);
+            $("#tree-stop-id").val("");
+        } else if (active_tab == 1) {
+            var selected_stop = TUSZ.get_selection_from_tree("#browser-stops-list");
+            $("#tree-stop-id").val(selected_stop);
+            $("#tree-route-id").val("");
+        } else {
+            $("#tree-stop-id").val("");
+            $("#tree-route-id").val("");
+        }
+    }
+
+    function validate() {
+        if (($("#tree-stop-id").val() == "") && ($("#tree-route-id").val() == "")) {
+            alert("Kérlek válassz járatot vagy megállót a listából!");
+            return false;
+        }
+
+        return true;
+    }
+</script>

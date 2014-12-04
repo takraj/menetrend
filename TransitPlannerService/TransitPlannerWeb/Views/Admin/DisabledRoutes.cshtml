@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Letiltott járatok";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Letiltott járatok kezelése</h2>
+<div id="routes-list" class="contains-tables">
+    <table>
+        <thead>
+            <tr>
+                <th class="route-id report-column">ID</th>
+                <th class="route-short-name report-column">Rövid név</th>
+                <th class="route-long-name report-column">Hosszú név</th>
+                <th class="route-category report-column">Járműtípus</th>
+                <th class="route-action report-column"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="route-id report-column">ID</td>
+                <td class="route-short-name report-column">Rövid név</td>
+                <td class="route-long-name report-column">Hosszú név</td>
+                <td class="route-category report-column">Járműtípus</td>
+                <td class="route-action report-column">
+                    <a href="#">Letiltás</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="route-id report-column">ID</td>
+                <td class="route-short-name report-column">Rövid név</td>
+                <td class="route-long-name report-column">Hosszú név</td>
+                <td class="route-category report-column">Járműtípus</td>
+                <td class="route-action report-column">
+                    <a href="#">Letiltás</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="route-id report-column">ID</td>
+                <td class="route-short-name report-column">Rövid név</td>
+                <td class="route-long-name report-column">Hosszú név</td>
+                <td class="route-category report-column">Járműtípus</td>
+                <td class="route-action report-column">
+                    <a href="#">Letiltás</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="route-id report-column">ID</td>
+                <td class="route-short-name report-column">Rövid név</td>
+                <td class="route-long-name report-column">Hosszú név</td>
+                <td class="route-category report-column">Járműtípus</td>
+                <td class="route-action report-column">
+                    <a href="#">Letiltás</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="route-id report-column">ID</td>
+                <td class="route-short-name report-column">Rövid név</td>
+                <td class="route-long-name report-column">Hosszú név</td>
+                <td class="route-category report-column">Járműtípus</td>
+                <td class="route-action report-column">
+                    <a href="#">Letiltás</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@section sidebar {
+    @Html.Partial("_AdminSidebar")
+}

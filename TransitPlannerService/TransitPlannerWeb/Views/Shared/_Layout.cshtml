@@ -1,48 +1,54 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
-        <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <meta charset="UTF-8">
+        <title>@ViewBag.Title - TUSZ</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
+
+        <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
+
+        @Styles.Render("jquery.css")
+        @Styles.Render("fancytree.css")
+        @Styles.Render("menetrend.css")
     </head>
+
     <body>
         <header>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
-                </div>
-                <div class="float-right">
-                    <section id="login">
-                        @Html.Partial("_LoginPartial")
-                    </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+            <img id="header-logo" src="img/routes-icon.png" />
+            <h1>Menetrendkereső Szolgáltatás</h1>
+            <nav>
+                <ul>
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "RoutePlanner" ? "selected" : "")">
+                        @Html.ActionLink("Útvonaltervezés", "RoutePlanner", "Index")
+                    </li>
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "DatabaseBrowser" ? "selected" : "")">
+                        @Html.ActionLink("Menetrend Böngészése", "DatabaseBrowser", "Index")
+                    </li>
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Admin" ? "selected" : "")">
+                        @Html.ActionLink("Adminisztráció", "Admin", "Index")
+                    </li>
+                </ul>
+            </nav>
         </header>
-        <div id="body">
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
+        
+        <div id="content">
+            <div id="main">
                 @RenderBody()
-            </section>
-        </div>
-        <footer>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
-                </div>
             </div>
-        </footer>
+            
+            <aside>
+                @RenderSection("sidebar", required: false)
+            </aside>
+        </div>
 
-        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("jquery.js")
+
+        @RenderSection("before_scripts", required: false)
+
+        @Scripts.Render("menetrend.js")
+
         @RenderSection("scripts", required: false)
     </body>
 </html>

@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="whattodo">Kérlek jelentkezz be!</h2>
+<form id="login" class="table-style">
+    <div class="table-style">
+        <div class="table-row-style">
+            <label class="table-cell-style" for="username">Felhasználónév:</label>
+            <input class="table-cell-style" type="text" name="username" />
+        </div>
+        <div class="table-row-style">
+            <label class="table-cell-style" for="username">Jelszó:</label>
+            <input class="table-cell-style" type="password" name="password" />
+        </div>
+    </div>
+    <div class="form-buttons">
+        <button type="submit" id="login-button" name="ok">Bejelentkezés</button>
+    </div>
+</form>
+
+@section sidebar {
+    @Html.Partial("_AdminSidebar")
+}

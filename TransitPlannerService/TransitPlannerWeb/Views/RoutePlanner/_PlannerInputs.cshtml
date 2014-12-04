@@ -1,0 +1,35 @@
+﻿<fieldset id="planner-inputs">
+    <legend>Útvonaltervezés</legend>
+
+    <input id="planner-inputs-from" name="from-as-text" type="text" placeholder="Honnan" />
+    <input id="planner-inputs-to" name="to-as-text" type="text" placeholder="Hova" />
+
+    <form>
+        <input type="hidden" id="planner-hidden-from-id" name="from_stop_id" />
+        <input type="hidden" id="planner-hidden-to-id" name="to_stop_id" />
+
+        <input type="hidden" id="planner-hidden-when-year" name="year" value="2013" />
+        <input type="hidden" id="planner-hidden-when-month" name="month" value="3" />
+        <input type="hidden" id="planner-hidden-when-day" name="day" value="1" />
+        <input type="hidden" id="planner-hidden-when-hour" name="hour" value="11" />
+        <input type="hidden" id="planner-hidden-when-minute" name="minute" value="0" />
+
+        <input type="hidden" id="planner-hidden-enable-tram" name="tram_enabled" value="1" />
+        <input type="hidden" id="planner-hidden-enable-subway" name="subway_enabled" value="1" />
+        <input type="hidden" id="planner-hidden-enable-rail" name="rail_enabled" value="1" />
+        <input type="hidden" id="planner-hidden-enable-bus" name="bus_enabled" value="1" />
+        <input type="hidden" id="planner-hidden-enable-ferry" name="ferry_enabled" value="1" />
+        <input type="hidden" id="planner-hidden-enable-cable-car" name="cable_car_enabled" value="1" />
+        <input type="hidden" id="planner-hidden-enable-gondola" name="gondola_enabled" value="1" />
+        <input type="hidden" id="planner-hidden-enable-funicular" name="funicular_enabled" value="1" />
+
+        <input type="hidden" id="planner-hidden-wheelchair-support" name="wheelchair" value="1" />
+        <input type="hidden" id="planner-hidden-walking-speed-category" name="walking_category" value="normal" />
+        <input type="hidden" id="planner-hidden-waiting-time-category" name="waiting_category" value="dontcare" />
+
+        <div id="planner-inputs-buttons">
+            <button id="planner-inputs-settings" type="button">Beállítások</button>
+            <button id="planner-inputs-submit" name="submit" type="submit">Mehet</button>
+        </div>
+    </form>
+</fieldset>

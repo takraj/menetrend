@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Szerver paraméterek";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Szerver paraméterek</h2>
+<div class="table-style contains-tables">
+    @Html.Partial("_SetupLoadBalancer")
+    @Html.Partial("_SetupOtherParameters")
+</div>
+
+@section sidebar {
+    @Html.Partial("_AdminSidebar")
+}
+
+@section scripts {
+    <script>
+        function validate_new_load_balancer() {
+            var load_balancer_weight = $("#load-balancer-weight").val();
+            if (load_balancer_weight.match("^[0-9]+$") == null) {
+                alert("Kérlek súlynak írj be egy pozitív egész számot. Amit megadtál nem jó: " + load_balancer_weight);
+                return false;
+            }
+
+            var load_balancer_url = $("#load-balancer-url").val();
+            if (load_balancer_url.match("^https?://[a-z0-9A-Z/\\._-]+$") == null) {
+                alert("Kérlek írj be egy URL-t. Query stringet nem használhatsz. Amit megadtál nem jó: " + load_balancer_url);
+                return false;
+            }
+
+            var load_balancer_name = $("#load-balancer-name").val();
+            if (load_balancer_name == "") {
+                alert("Kérlek írj be egy nevet.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function validate_other_settings() {
+            var getonoff_time = $("#other-setting-getonoff-time").val();
+            if (getonoff_time.match("^[0-9]+$") == null) {
+                alert("Kérlek írj be egy pozitív egész számot. Amit megadtál nem jó: " + getonoff_time);
+                return false;
+            }
+
+            var slow_walkspeed = $("#other-setting-slow-walkspeed").val();
+            if (slow_walkspeed.match("^[0-9]+(\\.[0-9]+)?$") == null) {
+                alert("Kérlek írj be egy pozitív valós számot. Használd a '.' karaktert tizedesvesszőnek. Amit megadtál nem jó: " + slow_walkspeed);
+                return false;
+            }
+
+            var fast_walkspeed = $("#other-setting-fast-walkspeed").val();
+            if (fast_walkspeed.match("^[0-9]+(\\.[0-9]+)?$") == null) {
+                alert("Kérlek írj be egy pozitív valós számot. Használd a '.' karaktert tizedesvesszőnek. Amit megadtál nem jó: " + fast_walkspeed);
+                return false;
+            }
+
+            var normal_walkspeed = $("#other-setting-normal-walkspeed").val();
+            if (normal_walkspeed.match("^[0-9]+(\\.[0-9]+)?$") == null) {
+                alert("Kérlek írj be egy pozitív valós számot. Használd a '.' karaktert tizedesvesszőnek. Amit megadtál nem jó: " + normal_walkspeed);
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+}

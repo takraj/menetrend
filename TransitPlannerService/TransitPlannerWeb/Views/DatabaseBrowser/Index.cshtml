@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Menetrend Böngészése";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="whattodo">Kérlek válassz járatot vagy megállót!</h2>
+
+@section sidebar {
+    @Html.Partial("_BrowserInputs")
+}
+
+@section before_scripts {
+    @Scripts.Render("fancytree.js")
+}
+
+@section scripts {
+    @Html.Partial("_ScriptOfBrowserInputs")
+}

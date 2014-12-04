@@ -1,0 +1,62 @@
+﻿<form id="other-settings-form" onsubmit="return validate_other_settings()">
+    <fieldset class="other-settings">
+        <legend>Egyéb beállítások</legend>
+        <table>
+            <thead>
+                <tr>
+                    <th class="other-settings-key">Kulcs</th>
+                    <th class="other-settings-value">Érték</th>
+                    <th class="other-settings-unit"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Algoritmus
+                    </td>
+                    <td class="contains-textfield">
+                        <select name="algorithm">
+                            <option value="AStar" selected="true">A*</option>
+                            <option value="Dijkstra">Dijkstra</option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Normál gyaloglási sebesség
+                    </td>
+                    <td class="contains-textfield">
+                        <input type="text" name="normal-walkspeed" id="other-setting-normal-walkspeed" />
+                    </td>
+                    <td>km/h</td>
+                </tr>
+                <tr>
+                    <td>Lassú gyaloglási sebesség
+                    </td>
+                    <td class="contains-textfield">
+                        <input type="text" name="slow-walkspeed" id="other-setting-slow-walkspeed" />
+                    </td>
+                    <td>km/h</td>
+                </tr>
+                <tr>
+                    <td>Gyors gyaloglási sebesség
+                    </td>
+                    <td class="contains-textfield">
+                        <input type="text" name="fast-walkspeed" id="other-setting-fast-walkspeed" />
+                    </td>
+                    <td>km/h</td>
+                </tr>
+                <tr>
+                    <td>Fel és leszállási idő
+                    </td>
+                    <td class="contains-textfield">
+                        <input type="text" name="getonoff-time" id="other-setting-getonoff-time" />
+                    </td>
+                    <td>perc</td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <button class="submit-button" type="submit" name="submit-other-settings">Mentés</button>
+        </div>
+    </fieldset>
+</form>

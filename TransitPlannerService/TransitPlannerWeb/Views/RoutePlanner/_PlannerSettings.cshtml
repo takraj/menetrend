@@ -1,0 +1,73 @@
+﻿<div id="planner-settings-form">
+    <fieldset id="planner-settings-usable-routes">
+        <legend>Használni kívánt járat típusok</legend>
+
+        <div>
+            <input class="planner-settings-chbx" id="route-type-tram" type="checkbox">Villamos</input>
+        </div>
+        <div>
+            <input class="planner-settings-chbx" id="route-type-subway" type="checkbox">Metró</input>
+        </div>
+        <div>
+            <input class="planner-settings-chbx" id="route-type-rail" type="checkbox">Vasút</input>
+        </div>
+        <div>
+            <input class="planner-settings-chbx" id="route-type-bus" type="checkbox">Busz</input>
+        </div>
+        <div>
+            <input class="planner-settings-chbx" id="route-type-ferry" type="checkbox">Hajó</input>
+        </div>
+        <div>
+            <input class="planner-settings-chbx" id="route-type-cable-car" type="checkbox">Függővasút</input>
+        </div>
+        <div>
+            <input class="planner-settings-chbx" id="route-type-gondola" type="checkbox">Gondola</input>
+        </div>
+        <div>
+            <input class="planner-settings-chbx" id="route-type-funicular" type="checkbox">Fogaskerekű</input>
+        </div>
+    </fieldset>
+
+    <fieldset id="planner-settings-other">
+        <legend>Egyéb beállítások</legend>
+
+        <div class="table-style">
+            <div class="table-row-style">
+                <input class="planner-settings-chbx" id="wheelchair" type="checkbox">Csak akadálymentes járművek</input>
+            </div>
+
+            <div class="table-row-style">
+                <label class="table-cell-style" for="walking-speed">Gyaloglási sebesség:</label>
+                <select class="planner-settings-ddm table-cell-style" id="walking-speed">
+                    <option id="wso-normal" value="normal">Átlagos</option>
+                    <option id="wso-slow" value="slow">Lassú</option>
+                    <option id="wso-fast" value="fast">Gyors</option>
+                </select>
+            </div>
+
+            <div class="table-row-style">
+                <label class="table-cell-style" for="max-waiting-time">Várakozási hajlandóság:</label>
+                <select class="planner-settings-ddm table-cell-style" id="max-waiting-time">
+                    <option id="mwt-10" value="10">Tíz perc</option>
+                    <option id="mwt-30" value="30">Fél óra</option>
+                    <option id="mwt-60" value="60">Egy óra</option>
+                    <option id="mwt-dontcare" value="dontcare">Bármennyi</option>
+                </select>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset id="planner-settings-start-time-fs">
+        <legend>Indulási idő</legend>
+
+        <div id="planner-settings-start-time-container">
+            <input id="planner-settings-start-time" name="start-time" type="hidden" />
+            <div id="planner-settings-start-time-placeholder" />
+        </div>
+    </fieldset>
+
+    <div id="planner-settings-buttons">
+        <button id="planner-settings-cancel" name="cancel" type="button">Mégsem</button>
+        <button id="planner-settings-ok" name="ok" type="button">OK</button>
+    </div>
+</div>
