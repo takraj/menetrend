@@ -24,7 +24,7 @@
             }
 
             var load_balancer_url = $("#load-balancer-url").val();
-            if (load_balancer_url.match("^https?://[a-z0-9A-Z/\\._-]+$") == null) {
+            if (load_balancer_url.match("^https?://[a-z0-9A-Z/\\._-:]+$") == null) {
                 alert("Kérlek írj be egy URL-t. Query stringet nem használhatsz. Amit megadtál nem jó: " + load_balancer_url);
                 return false;
             }

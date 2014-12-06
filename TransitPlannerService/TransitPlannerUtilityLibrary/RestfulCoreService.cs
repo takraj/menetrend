@@ -24,6 +24,7 @@ namespace TransitPlannerUtilityLibrary
         private HttpClient _CreateHttpClient()
         {
             var client = new HttpClient();
+            client.Timeout = new TimeSpan(0, 0, 30);
             client.BaseAddress = new Uri(_baseUrl);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

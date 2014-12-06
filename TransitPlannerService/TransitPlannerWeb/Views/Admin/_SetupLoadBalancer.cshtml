@@ -14,9 +14,9 @@
             @foreach (var lb in Model.LoadBalancers)
             {
                 <tr>
-                    <td class="lb-name">@Html.Label(lb.Name)</td>
-                    <td class="lb-url">@Html.Label(lb.Url)</td>
-                    <td class="lb-weight">@Html.Label(lb.Weight.ToString())</td>
+                    <td class="lb-name">@Html.Encode(lb.Name)</td>
+                    <td class="lb-url">@Html.Encode(lb.Url)</td>
+                    <td class="lb-weight">@Html.Encode(lb.Weight.ToString())</td>
                     <td class="lb-action">
                         @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = lb.Id })
                     </td>

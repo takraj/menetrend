@@ -65,7 +65,17 @@ namespace TransitPlannerWeb.Controllers
 
             using (var context = new AdminContext())
             {
-                var coreSvc = CreateClient();
+                RestfulCoreService coreSvc;
+                try
+                {
+                    coreSvc = CreateClient();
+                }
+                catch
+                {
+                    vm.ErrorCode = TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE;
+                    vm.ErrorMessage = "Az alapszolgáltatás nem elérhető.";
+                    return View("FatalError", vm);
+                }
 
                 foreach (var report in context.TroubleReports)
                 {
@@ -103,7 +113,18 @@ namespace TransitPlannerWeb.Controllers
 
             using (var context = new AdminContext())
             {
-                var coreSvc = CreateClient();
+                RestfulCoreService coreSvc;
+                try
+                {
+                    coreSvc = CreateClient();
+                }
+                catch
+                {
+                    vm.ErrorCode = TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE;
+                    vm.ErrorMessage = "Az alapszolgáltatás nem elérhető.";
+                    return View("FatalError", vm);
+                }
+
                 var report = context.TroubleReports.Single(r => r.Id == id);
 
                 vm.Id = report.Id;
@@ -172,7 +193,7 @@ namespace TransitPlannerWeb.Controllers
                 {
                     if (setting.Key == "ALGORITHM")
                     {
-                        vm.OtherParametersModel.Algorithms.Single(v => v.Name == setting.Key).IsSelected = true;
+                        vm.OtherParametersModel.Algorithms.Single(v => v.Name == setting.Value).IsSelected = true;
                     }
 
                     if (setting.Key == "GET_ON_OFF_TIME")
@@ -224,7 +245,18 @@ namespace TransitPlannerWeb.Controllers
 
             using (var context = new AdminContext())
             {
-                var coreSvc = CreateClient();
+                RestfulCoreService coreSvc;
+                try
+                {
+                    coreSvc = CreateClient();
+                }
+                catch
+                {
+                    vm.ErrorCode = TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE;
+                    vm.ErrorMessage = "Az alapszolgáltatás nem elérhető.";
+                    return View("FatalError", vm);
+                }
+
                 var allRoutes = coreSvc.GetRoutes("").Result;
                 var disabledRouteIds = new HashSet<int>(context.DisabledRoutes.Select(dr => dr.RouteId));
 
@@ -260,7 +292,17 @@ namespace TransitPlannerWeb.Controllers
                 }
             };
 
-            var coreSvc = CreateClient();
+            RestfulCoreService coreSvc;
+            try
+            {
+                coreSvc = CreateClient();
+            }
+            catch
+            {
+                vm.ErrorCode = TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE;
+                vm.ErrorMessage = "Az alapszolgáltatás nem elérhető.";
+                return View("FatalError", vm);
+            }
             var allRoutes = coreSvc.GetRoutes("").Result;
 
             foreach (var route in allRoutes)
@@ -318,7 +360,17 @@ namespace TransitPlannerWeb.Controllers
                 SelectedRoute = route_id
             };
 
-            var coreSvc = CreateClient();
+            RestfulCoreService coreSvc;
+            try
+            {
+                coreSvc = CreateClient();
+            }
+            catch
+            {
+                vm.ErrorCode = TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE;
+                vm.ErrorMessage = "Az alapszolgáltatás nem elérhető.";
+                return View("FatalError", vm);
+            }
             var allRoutes = coreSvc.GetRoutes("").Result;
 
             foreach (var route in allRoutes)
@@ -409,6 +461,7 @@ namespace TransitPlannerWeb.Controllers
             {
                 var lb_to_delete = context.CoreServices.Single(c => c.Id == id);
                 context.CoreServices.Remove(lb_to_delete);
+                context.SaveChanges();
             }
 
             return RedirectToAction("ServerSettings");

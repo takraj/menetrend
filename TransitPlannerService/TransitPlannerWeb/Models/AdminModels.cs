@@ -22,7 +22,7 @@ namespace TransitPlannerWeb.Models
 
             db.CoreServices.Add(new CoreService
             {
-                BaseAddress = "http://localhost:18401/v1/RestfulService.svc",
+                BaseAddress = @"http://localhost:18401/v1/RestfulService.svc",
                 Weight = 5,
                 Name = "Localhost Service",
                 Description = "This is a service for localhost."
@@ -30,7 +30,7 @@ namespace TransitPlannerWeb.Models
 
             db.CoreServices.Add(new CoreService
             {
-                BaseAddress = "http://localhost:18401/v1/RestfulService.svc",
+                BaseAddress = @"http://localhost:18401/v1/RestfulService.svc",
                 Weight = 2,
                 Name = "Localhost 2 Service",
                 Description = "This is a second service for localhost."
