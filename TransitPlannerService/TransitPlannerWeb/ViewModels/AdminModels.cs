@@ -93,7 +93,7 @@ namespace TransitPlannerWeb.ViewModels
 
     public class TripDelaysAdminModel : AdminBaseModel
     {
-        public Dictionary<string, List<string>> RouteTree { get; set; }
+        public Dictionary<string, List<RouteTreeItem>> RouteTree { get; set; }
         public List<TripDelay> Delays { get; set; }
 
         public int? SelectedRoute { get; set; }

@@ -13,6 +13,9 @@ namespace TransitPlannerContracts
         public IList<TransitDateTime> sequence_base_times { get; set; }
 
         [DataMember]
+        public IList<int> sequence_trip_ids { get; set; }
+
+        [DataMember]
         public IList<TransitSequenceElement> sequence_elements { get; set; }
 
         [DataMember]

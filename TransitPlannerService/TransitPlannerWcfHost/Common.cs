@@ -351,6 +351,7 @@ namespace TransitPlannerWcfHost
                 var schedule = new TransitSequenceGroup()
                 {
                     sequence_base_times = new List<TransitDateTime>(),
+                    sequence_trip_ids = new List<int>(),
                     sequence_elements = new List<TransitSequenceElement>(),
                     sequence_info = new TransitSequenceInfo()
                     {
@@ -374,8 +375,10 @@ namespace TransitPlannerWcfHost
                     schedule.sequence_elements.Add(sequence_element);
                 }
 
-                foreach (var trip in route.TripsBySequence[sequenceId].Select(i => Common.repository.GetTripById(i)))
+                foreach (var tripId in route.TripsBySequence[sequenceId])
                 {
+                    var trip = Common.repository.GetTripById(tripId);
+
                     if (!Common.repository.IsServiceAvailableOnDay(trip.ServiceIdx, Common.GetServiceDay(when)))
                     {
                         continue;
@@ -392,6 +395,7 @@ namespace TransitPlannerWcfHost
                         minute = trip_start.Minute
                     };
                     schedule.sequence_base_times.Add(base_time);
+                    schedule.sequence_trip_ids.Add(tripId);
                 }
 
                 result.Add(schedule);
