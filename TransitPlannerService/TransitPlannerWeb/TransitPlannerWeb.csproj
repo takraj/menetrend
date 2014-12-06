@@ -224,6 +224,7 @@
     </Compile>
     <Compile Include="ViewModels\AdminModels.cs" />
     <Compile Include="ViewModels\BaseModels.cs" />
+    <Compile Include="ViewModels\RoutePlannerModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\alternate-route.jpg" />

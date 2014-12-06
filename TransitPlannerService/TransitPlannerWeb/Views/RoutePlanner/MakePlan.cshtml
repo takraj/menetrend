@@ -1,4 +1,5 @@
-﻿@{
+﻿@model TransitPlannerWeb.ViewModels.MakePlanModel
+@{
     ViewBag.Title = "Útvonalterv";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -54,10 +55,10 @@
 @section sidebar {
     <div>
         <div>
-            @Html.Partial("_PlannerInputs")
+            @Html.Partial("_PlannerInputs", Model.Inputs)
         </div>
         <div>
-            @Html.Partial("_PlanOverview")
+            @Html.Partial("_PlanOverview", Model.Plan)
         </div>
     </div>
 }
@@ -113,7 +114,7 @@
         }
     </script>
 
-    @Html.Partial("_ScriptOfPlannerInputs")
+    @Html.Partial("_ScriptOfPlannerInputs", Model.Inputs)
 
     <script>
         $("#plan-summary-details").click(function () {

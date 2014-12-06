@@ -13,6 +13,7 @@ namespace TransitPlannerWeb.ViewModels
         NO_SUCH_REPORT,
         NO_REPORTS,
         NO_SUCH_ROUTE,
+        NO_PLAN_CREATED,
         NO_ROUTES,
         NO_ROUTE_SELECTED,
         CORE_SERVICE_IS_UNREACHABLE,

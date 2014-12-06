@@ -1,24 +1,38 @@
-﻿@{
+﻿@model TransitPlannerWeb.ViewModels.PlannerInputsModel
+@{
     ViewBag.Title = "Útvonaltervezés";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_ERROR)
+{
+    <h2 class="whattodo">Kérlek add meg a kezdő és a célállomást!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE)
+{
+    <h2 class="whattodo">Az alapszolgáltatás nem érhető el!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_PLAN_CREATED)
+{
+    <h2 class="whattodo">Nincs útvonal!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.ERROR_IN_MESSAGE)
+{ 
+    <h2 class="whattodo">@Html.Raw(Model.ErrorMessage)</h2>
 }
 
 <div id="planner-settings-dialog" title="Beállítások">
     @Html.Partial("_PlannerSettings")
 </div>
 
-<div id="planner-details-dialog" title="Terv részletei">
-    @Html.Partial("_PlanDetails")
-</div>
-
 @section sidebar {
     <div>
         <div>
-            @Html.Partial("_PlannerInputs")
+            @Html.Partial("_PlannerInputs", Model)
         </div>
     </div>
 }
 
 @section scripts {
-    @Html.Partial("_ScriptOfPlannerInputs")
+    @Html.Partial("_ScriptOfPlannerInputs", Model)
 }
