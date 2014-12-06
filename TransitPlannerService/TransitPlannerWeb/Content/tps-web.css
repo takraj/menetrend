@@ -151,6 +151,10 @@ button {
 	border-radius: 5px 5px 5px 5px;
 }
 
+.report-details-table {
+	width: 100%;
+}
+
 .report-details-table td {
 	vertical-align: top;
 	padding: 5px;

@@ -39,37 +39,37 @@ namespace TransitPlannerWeb.Services.v1
         public IList<TransitStop> GetAllStops()
         {
             var coreSvc = CreateClient();
-            return coreSvc.GetAllStops().Result;
+            return coreSvc.GetAllStops();
         }
 
         public IList<TransitStop> GetStops(string filter)
         {
             var coreSvc = CreateClient();
-            return coreSvc.GetStops(filter).Result;
+            return coreSvc.GetStops(filter);
         }
 
         public TransitStopInfo GetStop(int id)
         {
             var coreSvc = CreateClient();
-            return coreSvc.GetStop(id).Result;
+            return coreSvc.GetStop(id);
         }
 
         public IList<TransitRoute> GetRoutes(string filter)
         {
             var coreSvc = CreateClient();
-            return coreSvc.GetRoutes(filter).Result;
+            return coreSvc.GetRoutes(filter);
         }
 
         public TransitRoute GetRoute(int id)
         {
             var coreSvc = CreateClient();
-            return coreSvc.GetRoute(id).Result;
+            return coreSvc.GetRoute(id);
         }
 
         public TransitMetadata GetMetadata()
         {
             var coreSvc = CreateClient();
-            return coreSvc.GetMetadata().Result;
+            return coreSvc.GetMetadata();
         }
 
         public IList<TransitSequenceGroup> GetSchedule(int route_id, int year, int month, int day)
@@ -81,7 +81,7 @@ namespace TransitPlannerWeb.Services.v1
                 month = month,
                 day = day
             };
-            return coreSvc.GetSchedule(route_id, when).Result;
+            return coreSvc.GetSchedule(route_id, when);
         }
 
         public IList<TransitSequenceInfo> GetSequences(int route_id, int year, int month, int day)
@@ -93,13 +93,13 @@ namespace TransitPlannerWeb.Services.v1
                 month = month,
                 day = day
             };
-            return coreSvc.GetSequences(route_id, when).Result;
+            return coreSvc.GetSequences(route_id, when);
         }
 
         public IList<TransitSequenceElement> GetSequence(int id)
         {
             var coreSvc = CreateClient();
-            return coreSvc.GetSequence(id).Result;
+            return coreSvc.GetSequence(id);
         }
 
         public TransitPlan GetPlan(WebTransitPlanRequestParameters parameters)
@@ -134,13 +134,13 @@ namespace TransitPlannerWeb.Services.v1
                 walking_speed = Int32.Parse(settings["WALKING_SPEED"])
             };
 
-            return coreSvc.GetPlan(coreParameters).Result;
+            return coreSvc.GetPlan(coreParameters);
         }
 
         public TransitPlan GetSimplePlan(int from, int to, int year, int month, int day, int hour, int minute)
         {
             var coreSvc = CreateClient();
-            return coreSvc.GetSimplePlan(from, to, year, month, day, hour, minute).Result;
+            return coreSvc.GetSimplePlan(from, to, year, month, day, hour, minute);
         }
 
         public void SendTroubleReport(SendTroubleReportRequest trouble_report_parameters)

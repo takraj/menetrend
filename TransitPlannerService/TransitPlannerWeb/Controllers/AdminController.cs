@@ -83,7 +83,7 @@ namespace TransitPlannerWeb.Controllers
 
                     if (report.StopId != null)
                     {
-                        var stop = coreSvc.GetStop((int)report.StopId).Result;
+                        var stop = coreSvc.GetStop((int)report.StopId);
                         stopName = String.Format("{0} #{1}", stop.stop.name, stop.stop.id);
                     }
 
@@ -135,7 +135,7 @@ namespace TransitPlannerWeb.Controllers
 
                 if (report.StopId != null)
                 {
-                    var stop = coreSvc.GetStop((int)report.StopId).Result;
+                    var stop = coreSvc.GetStop((int)report.StopId);
                     var stopName = String.Format("{0} #{1}", stop.stop.name, stop.stop.id);
 
                     vm.Location = new ReportDetailsAdminModel.LocationData
@@ -257,7 +257,7 @@ namespace TransitPlannerWeb.Controllers
                     return View("FatalError", vm);
                 }
 
-                var allRoutes = coreSvc.GetRoutes("").Result;
+                var allRoutes = coreSvc.GetRoutes("");
                 var disabledRouteIds = new HashSet<int>(context.DisabledRoutes.Select(dr => dr.RouteId));
 
                 foreach (var route in allRoutes)
@@ -303,7 +303,7 @@ namespace TransitPlannerWeb.Controllers
                 vm.ErrorMessage = "Az alapszolgáltatás nem elérhető.";
                 return View("FatalError", vm);
             }
-            var allRoutes = coreSvc.GetRoutes("").Result;
+            var allRoutes = coreSvc.GetRoutes("");
 
             foreach (var route in allRoutes)
             {
@@ -321,7 +321,7 @@ namespace TransitPlannerWeb.Controllers
                 });
             }
 
-            var metadata = coreSvc.GetMetadata().Result;
+            var metadata = coreSvc.GetMetadata();
 
             vm.DatabaseMinDate = new JsDateTime
             {
@@ -354,7 +354,7 @@ namespace TransitPlannerWeb.Controllers
                 SelectedDate = new JsDateTime
                 {
                     Year = year,
-                    Month = month,
+                    Month = month - 1,
                     Day = day
                 },
                 SelectedRoute = route_id
@@ -371,7 +371,7 @@ namespace TransitPlannerWeb.Controllers
                 vm.ErrorMessage = "Az alapszolgáltatás nem elérhető.";
                 return View("FatalError", vm);
             }
-            var allRoutes = coreSvc.GetRoutes("").Result;
+            var allRoutes = coreSvc.GetRoutes("");
 
             foreach (var route in allRoutes)
             {
@@ -389,7 +389,7 @@ namespace TransitPlannerWeb.Controllers
                 });
             }
 
-            var metadata = coreSvc.GetMetadata().Result;
+            var metadata = coreSvc.GetMetadata();
 
             vm.DatabaseMinDate = new JsDateTime
             {
@@ -413,10 +413,10 @@ namespace TransitPlannerWeb.Controllers
                     new TransitDate
                     {
                         year = year,
-                        month = month + 1,
+                        month = month,
                         day = day
                     }
-                    ).Result;
+                    );
 
                 foreach (var sequence_group in schedule)
                 {
@@ -427,7 +427,14 @@ namespace TransitPlannerWeb.Controllers
                         var base_time = sequence_group.sequence_base_times[i];
                         int trip_id = sequence_group.sequence_trip_ids[i];
 
-                        int delay_amount = delays.Count(d => d.TripId == trip_id) == 0 ? 0 : delays.Single(d => d.TripId == trip_id).DelayInMinutes;
+                        int delay_amount = 0;
+
+                        if (delays.Count(d => d.TripId == trip_id && d.When.Equals(new DateTime(year, month, day))) != 0)
+                        {
+                            delay_amount = delays.Single(
+                                d => d.TripId == trip_id && d.When.Equals(new DateTime(year, month, day))
+                                ).DelayInMinutes;
+                        }
 
                         vm.Delays.Add(new TripDelaysAdminModel.TripDelay
                         {
@@ -546,7 +553,7 @@ namespace TransitPlannerWeb.Controllers
         [HttpPost]
         public ActionResult SetTripDelay(int year, int month, int day, int trip_id, int trip_delay_amount)
         {
-            var when = new DateTime(year, month + 1, day);
+            var when = new DateTime(year, month, day);
 
             using (var db = new AdminContext())
             {
@@ -558,6 +565,12 @@ namespace TransitPlannerWeb.Controllers
                         When = when,
                         DelayInMinutes = trip_delay_amount
                     });
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var trip_to_update = db.TripDelays.Single(td => (td.TripId == trip_id && td.When == when));
+                    trip_to_update.DelayInMinutes = trip_delay_amount;
                     db.SaveChanges();
                 }
             }

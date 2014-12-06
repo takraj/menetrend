@@ -79,7 +79,7 @@ else
 
         <script type="text/javascript">
             window.onload = function () {
-                var Model = JSON.parse("@Html.Raw(Json.Encode(Model))");
+                var Model = @Html.Raw(Json.Encode(Model));
 
                 var map = TUSZ.create_map("map_embedded_canvas", 47.5, 19.08);
 

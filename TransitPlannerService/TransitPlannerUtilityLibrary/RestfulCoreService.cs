@@ -32,87 +32,87 @@ namespace TransitPlannerUtilityLibrary
             return client;
         }
 
-        public async Task<List<TransitStop>> GetAllStops()
+        public List<TransitStop> GetAllStops()
         {
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync("GetAllStops");
+                HttpResponseMessage response = client.GetAsync("GetAllStops").Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<List<TransitStop>>();
+                var result = response.Content.ReadAsAsync<List<TransitStop>>().Result;
                 return result;
             }
         }
 
-        public async Task<List<TransitStop>> GetStops(string filter)
+        public List<TransitStop> GetStops(string filter)
         {
             var url = String.Format("{0}?filter={1}", "GetStops", filter);
 
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = client.GetAsync(url).Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<List<TransitStop>>();
+                var result = response.Content.ReadAsAsync<List<TransitStop>>().Result;
                 return result;
             }
         }
 
-        public async Task<TransitStopInfo> GetStop(int id)
+        public TransitStopInfo GetStop(int id)
         {
             var url = String.Format("{0}?id={1}", "GetStop", id);
 
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = client.GetAsync(url).Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<TransitStopInfo>();
+                var result = response.Content.ReadAsAsync<TransitStopInfo>().Result;
                 return result;
             }
         }
 
-        public async Task<List<TransitRoute>> GetRoutes(string filter)
+        public List<TransitRoute> GetRoutes(string filter)
         {
             var url = String.Format("{0}?filter={1}", "GetRoutes", filter);
 
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = client.GetAsync(url).Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<List<TransitRoute>>();
+                var result = response.Content.ReadAsAsync<List<TransitRoute>>().Result;
                 return result;
             }
         }
 
-        public async Task<TransitRoute> GetRoute(int id)
+        public TransitRoute GetRoute(int id)
         {
             var url = String.Format("{0}?id={1}", "GetRoute", id);
 
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = client.GetAsync(url).Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<TransitRoute>();
+                var result = response.Content.ReadAsAsync<TransitRoute>().Result;
                 return result;
             }
         }
 
-        public async Task<TransitMetadata> GetMetadata()
+        public TransitMetadata GetMetadata()
         {
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync("GetMetadata");
+                HttpResponseMessage response = client.GetAsync("GetMetadata").Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<TransitMetadata>();
+                var result = response.Content.ReadAsAsync<TransitMetadata>().Result;
                 return result;
             }
         }
 
-        public async Task<List<TransitSequenceGroup>> GetSchedule(int route_id, TransitDate when)
+        public List<TransitSequenceGroup> GetSchedule(int route_id, TransitDate when)
         {
             var url = String.Format(
                 "{0}?route_id={1}&year={2}&month={3}&day={4}", "GetSchedule",
@@ -120,15 +120,15 @@ namespace TransitPlannerUtilityLibrary
 
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = client.GetAsync(url).Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<List<TransitSequenceGroup>>();
+                var result = response.Content.ReadAsAsync<List<TransitSequenceGroup>>().Result;
                 return result;
             }
         }
 
-        public async Task<List<TransitSequenceInfo>> GetSequences(int route_id, TransitDate when)
+        public List<TransitSequenceInfo> GetSequences(int route_id, TransitDate when)
         {
             var url = String.Format(
                 "{0}?route_id={1}&year={2}&month={3}&day={4}", "GetSequences",
@@ -136,41 +136,41 @@ namespace TransitPlannerUtilityLibrary
 
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = client.GetAsync(url).Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<List<TransitSequenceInfo>>();
+                var result = response.Content.ReadAsAsync<List<TransitSequenceInfo>>().Result;
                 return result;
             }
         }
 
-        public async Task<List<TransitSequenceElement>> GetSequence(int id)
+        public List<TransitSequenceElement> GetSequence(int id)
         {
             var url = String.Format("{0}?id={1}", "GetSequence", id);
 
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = client.GetAsync(url).Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<List<TransitSequenceElement>>();
+                var result = response.Content.ReadAsAsync<List<TransitSequenceElement>>().Result;
                 return result;
             }
         }
 
-        public async Task<TransitPlan> GetPlan(TransitPlanRequestParameters parameters)
+        public TransitPlan GetPlan(TransitPlanRequestParameters parameters)
         {
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.PostAsJsonAsync("GetPlan", parameters);
+                HttpResponseMessage response = client.PostAsJsonAsync("GetPlan", parameters).Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<TransitPlan>();
+                var result = response.Content.ReadAsAsync<TransitPlan>().Result;
                 return result;
             }
         }
 
-        public async Task<TransitPlan> GetSimplePlan(int from, int to, int year, int month, int day, int hour, int minute)
+        public TransitPlan GetSimplePlan(int from, int to, int year, int month, int day, int hour, int minute)
         {
             var url = String.Format(
                 "{0}?from={1}&to={2}&year={3}&month={4}&day={5}&hour={6}&minute={7}", "GetSimplePlan",
@@ -178,17 +178,17 @@ namespace TransitPlannerUtilityLibrary
 
             using (var client = _CreateHttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = client.GetAsync(url).Result;
                 response.EnsureSuccessStatusCode();
 
-                var result = await response.Content.ReadAsAsync<TransitPlan>();
+                var result = response.Content.ReadAsAsync<TransitPlan>().Result;
                 return result;
             }
         }
 
         public TransitStop GetNearestStop(double latitude, double longitude)
         {
-            var all_stops = this.GetAllStops().Result;
+            var all_stops = this.GetAllStops();
             var heap = new HeapDict<TransitStop, double>();
             foreach (var stop in all_stops)
             {

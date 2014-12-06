@@ -27,11 +27,11 @@
                 @foreach (var report in Model.Reports)
                 {
                     <tr>
-                        <td class="report-id report-column">@Html.Label(report.Id.ToString())</td>
-                        <td class="report-created report-column">@Html.Label(report.Created.ToString(dateTimeFormat))</td>
-                        <td class="report-received report-column">@Html.Label(report.Received.ToString(dateTimeFormat))</td>
-                        <td class="report-category report-column">@Html.Label(report.Category)</td>
-                        <td class="report-stop report-column">@Html.Label(report.StopName)</td>
+                        <td class="report-id report-column">@Html.Raw(report.Id.ToString())</td>
+                        <td class="report-created report-column">@Html.Raw(report.Created.ToString(dateTimeFormat))</td>
+                        <td class="report-received report-column">@Html.Raw(report.Received.ToString(dateTimeFormat))</td>
+                        <td class="report-category report-column">@Html.Raw(report.Category)</td>
+                        <td class="report-stop report-column">@Html.Raw(report.StopName)</td>
                         @if (report.WasRead)
                         {
                             <td class="report-status report-column">@Html.Raw(String.Format(readFormat, report.Read))</td>

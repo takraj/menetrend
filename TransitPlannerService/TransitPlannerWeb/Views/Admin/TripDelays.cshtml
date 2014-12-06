@@ -52,16 +52,16 @@
                                     <tr>
                                         <td class="trip-id report-column">@Html.Label(delay.TripId.ToString())</td>
                                         <td class="trip-direction report-column">@Html.Label(delay.TripDirection)</td>
-                                        <td class="trip-count-of-stops report-column">@Html.Label(delay.TripId.ToString())</td>
+                                        <td class="trip-count-of-stops report-column">@Html.Label(delay.CountOfStops.ToString())</td>
                                         <td class="trip-start-time report-column">@Html.Label(delay.StartTime)</td>
                                         <td class="trip-action report-column contains-textfield">
                                             @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new { id = String.Format("trip-{0}-delay-form", delay.TripId), onsubmit = String.Format("return validate_delay('#trip-{0}-delay-form')", delay.TripId) }))
                                             {
                                                 <input type="hidden" name="trip_id" value="@Html.Raw(delay.TripId.ToString())" />
                                                 <input type="hidden" name="year" value="@Html.Raw(Model.SelectedDate.Year.ToString())" />
-                                                <input type="hidden" name="month" value="@Html.Raw(Model.SelectedDate.Month.ToString())" />
+                                                <input type="hidden" name="month" value="@Html.Raw((Model.SelectedDate.Month+1).ToString())" />
                                                 <input type="hidden" name="day" value="@Html.Raw(Model.SelectedDate.Day.ToString())" />
-                                                <input type="text" name="trip_delay_amount" id="trip-@Html.Raw(delay.TripId.ToString())-delay-form-amount" />
+                                                <input type="text" name="trip_delay_amount" id="trip-@Html.Raw(delay.TripId.ToString())-delay-form-amount" value="@Html.Raw(delay.Amount.ToString())" />
                                                 <button type="submit" class="submit-button">ok</button>
                                             }
                                         </td>
@@ -102,7 +102,7 @@ else
 
 @section scripts {
     <script>
-        var Model = JSON.parse("@Html.Raw(Json.Encode(Model))");
+        var Model = @Html.Raw(Json.Encode(Model));
 
         TUSZ.create_datepicker("#browser-calendar-date-placeholder",
             new Date(Model.SelectedDate.Year, Model.SelectedDate.Month, Model.SelectedDate.Day),
@@ -117,11 +117,12 @@ else
         for (var key in Model.RouteTree) {
             tree_children = [];
 
-            for (var route in Model.RouteTree[key]) {
+            for (var i in Model.RouteTree[key]) {
+                var route = Model.RouteTree[key][i];
                 tree_children = TUSZ.add_item_to_children(tree_children, route.RouteName, route.RouteId);
             }
 
-            tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "F1", "idf1", tree_children);
+            tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, key, key, tree_children);
         }
     </script>
 
