@@ -202,7 +202,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\DatabaseBrowserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RoutePlannerController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -219,6 +222,8 @@
     <Compile Include="Services\v1\SoapService.svc.cs">
       <DependentUpon>SoapService.svc</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AdminModels.cs" />
+    <Compile Include="ViewModels\BaseModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\img\alternate-route.jpg" />
@@ -270,7 +275,6 @@
     <Content Include="Content\js\fancytree\src\jquery.fancytree.childcounter.js" />
     <Content Include="Content\js\fancytree\src\jquery.fancytree.clones.js" />
     <Content Include="Content\js\fancytree\src\jquery.fancytree.columnview.js" />
-    <Content Include="Content\js\fancytree\src\jquery.fancytree.debug.js" />
     <Content Include="Content\js\fancytree\src\jquery.fancytree.dnd.js" />
     <Content Include="Content\js\fancytree\src\jquery.fancytree.edit.js" />
     <Content Include="Content\js\fancytree\src\jquery.fancytree.filter.js" />
@@ -445,6 +449,15 @@
   <ItemGroup>
     <Content Include="Views\Admin\TripDelays.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RoutePlanner\MakePlan.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\RoutePlanner\_ScriptOfPlannerInputs.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_RouteLogo.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -460,11 +473,11 @@
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>55870</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:55870/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
+          <NTLMAuthentication>True</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
           </CustomServerUrl>

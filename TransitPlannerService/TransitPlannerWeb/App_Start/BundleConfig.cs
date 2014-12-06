@@ -10,29 +10,31 @@ namespace TransitPlannerWeb
         {
             // ====== SCRIPTS ====== //
 
-            bundles.Add(new ScriptBundle("jquery.js").Include(
+            bundles.Add(new ScriptBundle("~/js/jquery.js").Include(
                         "~/Content/js/jquery-ui-1.11.2.custom/external/jquery/jquery.js",
                         "~/Content/js/jquery-ui-1.11.2.custom/jquery-ui.js",
                         "~/Content/js/jquery-ui-timepicker-addon.js"));
 
-            bundles.Add(new ScriptBundle("fancytree.js").Include(
+            bundles.Add(new ScriptBundle("~/js/fancytree.js").Include(
                         "~/Content/js/fancytree/src/jquery.fancytree.js",
                         "~/Content/js/fancytree/src/jquery.fancytree.filter.js"));
 
-            bundles.Add(new ScriptBundle("menetrend.js").Include(
-                        "~/Content/js/markerwithlabel.js",
+            bundles.Add(new ScriptBundle("~/js/markerwithlabel.js").Include(
+                        "~/Content/js/markerwithlabel.js"));
+
+            bundles.Add(new ScriptBundle("~/js/menetrend.js").Include(
                         "~/Content/js/menetrend.js"));
 
             // ====== STYLES ====== //
 
-            bundles.Add(new StyleBundle("jquery.css").Include(
+            bundles.Add(new StyleBundle("~/css/jquery.css").Include(
                 "~/Content/js/jquery-ui-1.11.2.custom/jquery-ui.css",
                 "~/Content/js/jquery-ui-timepicker-addon.css"));
 
-            bundles.Add(new StyleBundle("fancytree.css").Include(
+            bundles.Add(new StyleBundle("~/css/fancytree.css").Include(
                 "~/Content/js/fancytree/skin-win7/ui.fancytree.css"));
 
-            bundles.Add(new StyleBundle("menetrend.css").Include(
+            bundles.Add(new StyleBundle("~/css/menetrend.css").Include(
                 "~/Content/tps-web.css"));
         }
     }

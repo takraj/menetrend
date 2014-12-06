@@ -9,7 +9,8 @@
 <table>
     <tr>
         <td id="admin-delays-left-content">
-            <form onsubmit="return validate()">
+            @using (Html.BeginForm("TripDelays", "Admin", FormMethod.Post, new {onsubmit="return validate()"}))
+            {
                 <fieldset id="browser-calendar">
                     <legend>Menetrend Naptár</legend>
 
@@ -23,12 +24,12 @@
                     <legend>Járat</legend>
                     <input type="text" placeholder="Szűrés" id="browser-filter-routes" />
                     <div id="browser-routes-tree"></div>
-                    <input id="tree-route-id" name="route" type="hidden" />
+                    <input id="tree-route-id" name="route_id" type="hidden" />
                 </fieldset>
                 <div id="browser-buttons">
-                    <button id="mutasd" onclick="fillform()">Mutasd</button>
+                    <button id="mutasd" onclick="fillform()" type="submit">Mutasd</button>
                 </div>
-            </form>
+            }
         </td>
         <td id="admin-delays-right-content">
             <div id="delays-list" class="contains-tables">
@@ -49,14 +50,15 @@
                             <td class="trip-count-of-stops report-column">32</td>
                             <td class="trip-start-time report-column">14:53</td>
                             <td class="trip-action report-column contains-textfield">
-                                <form id="trip-1-delay-form" onsubmit="return validate_delay('#trip-1-delay-form')">
+                                @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new {id="trip-1-delay-form", onsubmit="return validate_delay('#trip-1-delay-form')"}))
+                                {
                                     <input type="hidden" name="trip_id" />
                                     <input type="hidden" name="year" />
                                     <input type="hidden" name="month" />
                                     <input type="hidden" name="day" />
                                     <input type="text" name="trip_delay_amount" id="trip-1-delay-form-amount" />
                                     <button type="submit" class="submit-button">ok</button>
-                                </form>
+                                }
                             </td>
                         </tr>
                         <tr>
@@ -65,14 +67,15 @@
                             <td class="trip-count-of-stops report-column">32</td>
                             <td class="trip-start-time report-column">14:53</td>
                             <td class="trip-action report-column contains-textfield">
-                                <form id="trip-2-delay-form" onsubmit="return validate_delay('#trip-2-delay-form')">
+                                @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new {id="trip-2-delay-form", onsubmit="return validate_delay('#trip-3-delay-form')"}))
+                                {
                                     <input type="hidden" name="trip_id" />
                                     <input type="hidden" name="year" />
                                     <input type="hidden" name="month" />
                                     <input type="hidden" name="day" />
                                     <input type="text" name="trip_delay_amount" id="trip-2-delay-form-amount" />
                                     <button type="submit" class="submit-button">ok</button>
-                                </form>
+                                }
                             </td>
                         </tr>
                         <tr>
@@ -81,14 +84,15 @@
                             <td class="trip-count-of-stops report-column">32</td>
                             <td class="trip-start-time report-column">14:53</td>
                             <td class="trip-action report-column contains-textfield">
-                                <form id="trip-3-delay-form" onsubmit="return validate_delay('#trip-3-delay-form')">
+                                @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new {id="trip-3-delay-form", onsubmit="return validate_delay('#trip-3-delay-form')"}))
+                                {
                                     <input type="hidden" name="trip_id" />
                                     <input type="hidden" name="year" />
                                     <input type="hidden" name="month" />
                                     <input type="hidden" name="day" />
                                     <input type="text" name="trip_delay_amount" id="trip-3-delay-form-amount" />
                                     <button type="submit" class="submit-button">ok</button>
-                                </form>
+                                }
                             </td>
                         </tr>
                         <tr>
@@ -97,14 +101,15 @@
                             <td class="trip-count-of-stops report-column">32</td>
                             <td class="trip-start-time report-column">14:53</td>
                             <td class="trip-action report-column contains-textfield">
-                                <form id="trip-11-delay-form" onsubmit="return validate_delay('#trip-11-delay-form')">
+                                @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new {id="trip-11-delay-form", onsubmit="return validate_delay('#trip-11-delay-form')"}))
+                                {
                                     <input type="hidden" name="trip_id" />
                                     <input type="hidden" name="year" />
                                     <input type="hidden" name="month" />
                                     <input type="hidden" name="day" />
                                     <input type="text" name="trip_delay_amount" id="trip-11-delay-form-amount" />
                                     <button type="submit" class="submit-button">ok</button>
-                                </form>
+                                }
                             </td>
                         </tr>
                     </tbody>
@@ -119,7 +124,7 @@
 }
 
 @section before_scripts {
-    @Scripts.Render("fancytree.js")
+    @Scripts.Render("~/js/fancytree.js")
 }
 
 @section scripts {

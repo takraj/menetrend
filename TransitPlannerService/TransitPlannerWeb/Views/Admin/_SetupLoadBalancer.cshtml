@@ -15,7 +15,7 @@
                 <td class="lb-url">URL</td>
                 <td class="lb-weight">Súly</td>
                 <td class="lb-action">
-                    <a href="#">Törlés</a>
+                    @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = 0 })
                 </td>
             </tr>
             <tr>
@@ -23,7 +23,7 @@
                 <td class="lb-url">URL</td>
                 <td class="lb-weight">Súly</td>
                 <td class="lb-action">
-                    <a href="#">Törlés</a>
+                    @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = 0 })
                 </td>
             </tr>
             <tr>
@@ -31,7 +31,7 @@
                 <td class="lb-url">URL</td>
                 <td class="lb-weight">Súly</td>
                 <td class="lb-action">
-                    <a href="#">Törlés</a>
+                    @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = 0 })
                 </td>
             </tr>
             <tr>
@@ -39,14 +39,15 @@
                 <td class="lb-url">URL</td>
                 <td class="lb-weight">Súly</td>
                 <td class="lb-action">
-                    <a href="#">Törlés</a>
+                    @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = 0 })
                 </td>
             </tr>
         </tbody>
     </table>
 </fieldset>
 
-<form id="load-balancer" onsubmit="return validate_new_load_balancer()">
+@using (Html.BeginForm("AddLoadBalancer", "Admin", FormMethod.Post, new { id = "load-balancer", onsubmit = "return validate_new_load_balancer()" }))
+{
     <fieldset class="new-load-balancer">
         <legend>Új háttérszolgáltatás felvétele</legend>
         <table>
@@ -61,19 +62,19 @@
             <tbody>
                 <tr>
                     <td class="contains-textfield">
-                        <input type="text" name="load-balancer-name" id="load-balancer-name" />
+                        <input type="text" name="name" id="load-balancer-name" />
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="load-balancer-url" id="load-balancer-url" />
+                        <input type="text" name="url" id="load-balancer-url" />
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="load-balancer-weight" id="load-balancer-weight" />
+                        <input type="text" name="weight" id="load-balancer-weight" />
                     </td>
                     <td>
-                        <button class="submit-button" type="submit" name="submit-new-load-balancer">OK</button>
+                        <button class="submit-button" type="submit">OK</button>
                     </td>
                 </tr>
             </tbody>
         </table>
     </fieldset>
-</form>
+}

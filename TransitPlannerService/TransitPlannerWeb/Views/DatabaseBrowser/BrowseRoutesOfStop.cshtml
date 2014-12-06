@@ -3,12 +3,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div id="browser-header">
+    <span class="browser-header-badge">
+        <img src="~/Content/img/info_badge_96.png" />
+    </span>
+    <span class="browser-header-content">
+        <div class="browser-header-content-line1">Móricz Zsigmond körtér</div>
+        <div class="browser-header-content-line2">induló járatok</div>
+    </span>
+</div>
+
+@Html.Partial("_EnumerationOfRoutes")
+
 @section sidebar {
     @Html.Partial("_BrowserInputs")
 }
 
 @section before_scripts {
-    @Scripts.Render("fancytree.js")
+    @Scripts.Render("~/js/fancytree.js")
 }
 
 @section scripts {

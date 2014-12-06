@@ -1,4 +1,5 @@
-﻿<form id="other-settings-form" onsubmit="return validate_other_settings()">
+﻿@using (Html.BeginForm("SetOtherSettings", "Admin", FormMethod.Post, new { id = "other-settings-form", onsubmit = "return validate_other_settings()" }))
+{
     <fieldset class="other-settings">
         <legend>Egyéb beállítások</legend>
         <table>
@@ -25,7 +26,7 @@
                     <td>Normál gyaloglási sebesség
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="normal-walkspeed" id="other-setting-normal-walkspeed" />
+                        <input type="text" name="normal_walkspeed" id="other-setting-normal-walkspeed" />
                     </td>
                     <td>km/h</td>
                 </tr>
@@ -33,7 +34,7 @@
                     <td>Lassú gyaloglási sebesség
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="slow-walkspeed" id="other-setting-slow-walkspeed" />
+                        <input type="text" name="slow_walkspeed" id="other-setting-slow-walkspeed" />
                     </td>
                     <td>km/h</td>
                 </tr>
@@ -41,7 +42,7 @@
                     <td>Gyors gyaloglási sebesség
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="fast-walkspeed" id="other-setting-fast-walkspeed" />
+                        <input type="text" name="fast_walkspeed" id="other-setting-fast-walkspeed" />
                     </td>
                     <td>km/h</td>
                 </tr>
@@ -49,14 +50,14 @@
                     <td>Fel és leszállási idő
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="getonoff-time" id="other-setting-getonoff-time" />
+                        <input type="text" name="getonoff_time" id="other-setting-getonoff-time" />
                     </td>
                     <td>perc</td>
                 </tr>
             </tbody>
         </table>
         <div>
-            <button class="submit-button" type="submit" name="submit-other-settings">Mentés</button>
+            <button class="submit-button" type="submit">Mentés</button>
         </div>
     </fieldset>
-</form>
+}

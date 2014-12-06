@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "Útvonalterv";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="map_canvas"></div>
+
+<div id="planner-settings-dialog" title="Beállítások">
+    @Html.Partial("_PlannerSettings")
+</div>
+
+<div id="planner-details-dialog" title="Terv részletei">
+    @Html.Partial("_PlanDetails")
+</div>
+
+<table style="display: none;" id="template-infowindow-table">
+    <tr>
+        <td>
+            <time>##TIME##</time>
+        </td>
+        <td>##STOP_NAME##
+        </td>
+    </tr>
+</table>
+
+<span style="display: none;" id="template-infowindow">
+    <div class="planner-map-bubble-contents">
+        <div class="planner-map-bubble-trip-info">
+            <div class="route-section-info">
+                <span class="route-section-info-route">
+                    <span class="route-logo" style="background: ##ROUTE_BASE_COLOR##; color: ##ROUTE_TEXT_COLOR##; font-size: 16px; width: 42px;">
+                        <div>
+                            <div class="route-logo-content">
+                                <div>
+                                    ##ROUTE_SHORT_NAME##
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </span>
+                <span class="route-section-info-section">
+                    <div class="route-section-info-section-start"><strong>##ROUTE_TYPE##</strong></div>
+                    <div class="route-section-info-section-end">##ROUTE_DIRECTION## felé</div>
+                </span>
+            </div>
+        </div>
+        <hr />
+        <div class="planner-map-bubble-trip-details">
+            <p>##ROUTE_TABLE_ROWS##</p>
+        </div>
+    </div>
+</span>
+
+@section sidebar {
+    <div>
+        <div>
+            @Html.Partial("_PlannerInputs")
+        </div>
+        <div>
+            @Html.Partial("_PlanOverview")
+        </div>
+    </div>
+}
+
+@section before_scripts {
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
+    </script>
+    @Scripts.Render("~/js/markerwithlabel.js")
+}
+
+@section scripts {
+    <script>
+        window.onload = function () {
+            var map = TUSZ.create_map("map_canvas", 47.5, 19.08);
+
+            TUSZ.create_travel_line(map, 47.5, 19.08, 47.48, 19.18, "#0000FF");
+            TUSZ.create_travel_line(map, 47.48, 19.18, 47.4, 19.28, "#00FF00");
+
+            TUSZ.create_walking_line(map, 47.4, 19.28, 47.55, 19.20);
+            TUSZ.create_walking_line(map, 47.55, 19.20, 47.5, 19.28);
+
+            TUSZ.create_walking_marker(map, 47.5, 19.08, "Kezdőállomás H+MMM");
+            TUSZ.create_finish_marker(map, 47.5, 19.28, "Végállomás M");
+
+            var route_data = TUSZ.create_route_data("M4", "#00FF00", "#FFFFFF", "metró", "Kelenföld vasútállomás");
+            route_data.add_stop("14:01", "Keleti pályaudvar");
+            route_data.add_stop("14:02", "Keleti pályaudvar 2");
+            route_data.add_stop("14:03", "Keleti pályaudvar 3");
+            route_data.add_stop("14:04", "Keleti pályaudvar 4");
+            route_data.add_stop("14:01", "Keleti pályaudvar");
+            route_data.add_stop("14:01", "Keleti pályaudvar");
+            route_data.add_stop("14:01", "Keleti pályaudvar");
+            route_data.add_stop("14:01", "Keleti pályaudvar");
+            route_data.add_stop("14:02", "Keleti pályaudvar 2");
+            route_data.add_stop("14:03", "Keleti pályaudvar 3");
+            route_data.add_stop("14:04", "Keleti pályaudvar 4 Keleti pályaudvar 3");
+            route_data.add_stop("14:02", "Keleti pályaudvar 2");
+            route_data.add_stop("14:03", "Keleti pályaudvar 3");
+            route_data.add_stop("14:04", "Keleti pályaudvar 4");
+            route_data.add_stop("14:02", "Keleti pályaudvar 2");
+            route_data.add_stop("14:03", "Keleti pályaudvar 3");
+            route_data.add_stop("14:04", "Keleti pályaudvar 4");
+            route_data.add_stop("14:02", "Keleti pályaudvar 2");
+            route_data.add_stop("14:03", "Keleti pályaudvar 3");
+            route_data.add_stop("14:04", "Keleti pályaudvar 4");
+            route_data.add_stop("14:02", "Keleti pályaudvar 2");
+            route_data.add_stop("14:03", "Keleti pályaudvar 3");
+            route_data.add_stop("14:04", "Keleti pályaudvar 4");
+            TUSZ.create_travel_marker(map, 47.4, 19.28, route_data);
+
+            TUSZ.set_map_center(map, 47.5, 19.28);
+        }
+    </script>
+
+    @Html.Partial("_ScriptOfPlannerInputs")
+
+    <script>
+        $("#plan-summary-details").click(function () {
+            details_dialog.dialog("open");
+        });
+    </script>
+}

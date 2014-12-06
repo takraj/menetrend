@@ -9,25 +9,25 @@
         <link href='http://fonts.googleapis.com/css?family=Play:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
         <link href='http://fonts.googleapis.com/css?family=Dosis:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css' />
 
-        @Styles.Render("jquery.css")
-        @Styles.Render("fancytree.css")
-        @Styles.Render("menetrend.css")
+        @Styles.Render("~/css/jquery.css")
+        @Styles.Render("~/css/fancytree.css")
+        @Styles.Render("~/css/menetrend.css")
     </head>
 
     <body>
         <header>
-            <img id="header-logo" src="img/routes-icon.png" />
+            <img id="header-logo" src="~/Content/img/routes-icon.png" />
             <h1>Menetrendkereső Szolgáltatás</h1>
             <nav>
                 <ul>
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "RoutePlanner" ? "selected" : "")">
-                        @Html.ActionLink("Útvonaltervezés", "RoutePlanner", "Index")
+                        @Html.ActionLink("Útvonaltervezés", "Index", "RoutePlanner")
                     </li>
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "DatabaseBrowser" ? "selected" : "")">
-                        @Html.ActionLink("Menetrend Böngészése", "DatabaseBrowser", "Index")
+                        @Html.ActionLink("Menetrend Böngészése", "Index", "DatabaseBrowser")
                     </li>
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Admin" ? "selected" : "")">
-                        @Html.ActionLink("Adminisztráció", "Admin", "Index")
+                        @Html.ActionLink("Adminisztráció", "Index", "Admin")
                     </li>
                 </ul>
             </nav>
@@ -43,11 +43,11 @@
             </aside>
         </div>
 
-        @Scripts.Render("jquery.js")
+        @Scripts.Render("~/js/jquery.js")
 
         @RenderSection("before_scripts", required: false)
 
-        @Scripts.Render("menetrend.js")
+        @Scripts.Render("~/js/menetrend.js")
 
         @RenderSection("scripts", required: false)
     </body>

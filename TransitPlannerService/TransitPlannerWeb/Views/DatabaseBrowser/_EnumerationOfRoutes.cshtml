@@ -1,11 +1,15 @@
-﻿<div class="enumeration-of-routes">
+﻿@{
+    String itemFormat = "{0} / {0}";
+}
+
+<div class="enumeration-of-routes">
     <div class="route-section-info">
         <span class="route-section-info-route">
-            <img src="img/badge_template_48.png" alt="M4" />
+            @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
         </span>
         <span class="route-section-info-section">
             <div class="route-section-info-section-start">
-                <a href="#">Keleti pályaudvar / Kelenföld vasútállomás</a>
+                @Html.ActionLink(String.Format(itemFormat, "Keleti pályaudvar", "Kelenföld vasútállomás"), "BrowseTimetable", new { id = 0 })
             </div>
             <div class="route-section-info-section-end">12-19 megálló</div>
         </span>
@@ -13,11 +17,11 @@
 
     <div class="route-section-info">
         <span class="route-section-info-route">
-            <img src="img/badge_template_48.png" alt="M4" />
+            @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
         </span>
         <span class="route-section-info-section">
             <div class="route-section-info-section-start">
-                <a href="#">Keleti pályaudvar / Kelenföld vasútállomás</a>
+                @Html.ActionLink(String.Format(itemFormat, "Keleti pályaudvar", "Kelenföld vasútállomás"), "BrowseTimetable", new { id = 0 })
             </div>
             <div class="route-section-info-section-end">12-19 megálló</div>
         </span>
@@ -25,11 +29,11 @@
 
     <div class="route-section-info">
         <span class="route-section-info-route">
-            <img src="img/badge_template_48.png" alt="M4" />
+            @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
         </span>
         <span class="route-section-info-section">
             <div class="route-section-info-section-start">
-                <a href="#">Keleti pályaudvar / Kelenföld vasútállomás</a>
+                @Html.ActionLink(String.Format(itemFormat, "Keleti pályaudvar", "Kelenföld vasútállomás"), "BrowseTimetable", new { id = 0 })
             </div>
             <div class="route-section-info-section-end">12-19 megálló</div>
         </span>
@@ -37,11 +41,11 @@
 
     <div class="route-section-info">
         <span class="route-section-info-route">
-            <img src="img/badge_template_48.png" alt="M4" />
+            @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
         </span>
         <span class="route-section-info-section">
             <div class="route-section-info-section-start">
-                <a href="#">Keleti pályaudvar / Kelenföld vasútállomás</a>
+                @Html.ActionLink(String.Format(itemFormat, "Keleti pályaudvar", "Kelenföld vasútállomás"), "BrowseTimetable", new { id = 0 })
             </div>
             <div class="route-section-info-section-end">12-19 megálló</div>
         </span>

@@ -3,12 +3,33 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div id="browser-header">
+    <span class="browser-header-badge">
+        <span class="route-logo" style="background: #00D900; color: #FFFFFF; font-size: 32px; width: 96px;">
+            <div>
+                <div class="route-logo-content">
+                    <div>
+                        M4
+                    </div>
+                </div>
+            </div>
+        </span>
+    </span>
+    <span class="browser-header-content">
+        <div class="browser-header-content-line1">metró</div>
+        <div class="browser-header-content-line2">Keleti pályaudvar / Kelenföld vasútállomás</div>
+    </span>
+</div>
+
+@Html.Partial("_DirectionSelector")
+@Html.Partial("_EnumerationOfStopTimes")
+
 @section sidebar {
     @Html.Partial("_BrowserInputs")
 }
 
 @section before_scripts {
-    @Scripts.Render("fancytree.js")
+    @Scripts.Render("~/js/fancytree.js")
 }
 
 @section scripts {

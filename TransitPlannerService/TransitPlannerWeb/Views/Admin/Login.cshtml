@@ -1,10 +1,23 @@
-﻿@{
-    ViewBag.Title = "Login";
+﻿@model TransitPlannerWeb.ViewModels.BaseModel
+@{
+    ViewBag.Title = "Bejelentkezés";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="whattodo">Kérlek jelentkezz be!</h2>
-<form id="login" class="table-style">
+@if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_ERROR)
+{
+    <h2 class="whattodo">Kérlek jelentkezz be!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.LOGIN_ERROR)
+{
+    <h2 class="whattodo">Sikertelen bejelentkezés.</h2>
+}
+else
+{
+    <h2 class="whattodo">Ismeretlen hiba. Próbáld később.</h2>
+}
+@using (Html.BeginForm("Login", "Admin", FormMethod.Post, new { id = "login", @class = "table-style" }))
+{
     <div class="table-style">
         <div class="table-row-style">
             <label class="table-cell-style" for="username">Felhasználónév:</label>
@@ -18,7 +31,7 @@
     <div class="form-buttons">
         <button type="submit" id="login-button" name="ok">Bejelentkezés</button>
     </div>
-</form>
+}
 
 @section sidebar {
     @Html.Partial("_AdminSidebar")

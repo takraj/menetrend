@@ -1,4 +1,5 @@
-﻿@{
+﻿@model TransitPlannerWeb.ViewModels.ReportDetailsAdminModel
+@{
     ViewBag.Title = "Bejelentés részletei";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -7,76 +8,68 @@
 <table class="report-details-table">
     <tr>
         <td class="report-property">Azonosító:</td>
-        <td>99</td>
+        <td>@Html.Label(Model.Id.ToString())</td>
     </tr>
     <tr>
         <td class="report-property">Készült:</td>
-        <td>2014-03-14 15:16</td>
+        <td>@Html.Label(Model.Created.ToString(@"yyyy-MM-dd HH:mm"))</td>
     </tr>
     <tr>
         <td class="report-property">Érkezett:</td>
-        <td>2014-03-14 15:17</td>
+        <td>@Html.Label(Model.Received.ToString(@"yyyy-MM-dd HH:mm"))</td>
     </tr>
     <tr>
         <td class="report-property">Kategória:</td>
-        <td>Baleset</td>
+        <td>@Html.Label(Model.Category)</td>
     </tr>
-    <tr>
-        <td class="report-property">Megálló:</td>
-        <td>Blaha Lujza tér M</td>
-    </tr>
+    @if (Model.Location != null)
+    {
+        <tr>
+            <td class="report-property">Megálló:</td>
+            <td>@Html.Label(Model.Location.StopName)</td>
+        </tr>
+    }
     <tr>
         <td class="report-property">Üzenet:</td>
-        <td>lorem ipsum dolor sit amet, consectetur adipisicing elit,
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum. lorem ipsum
-            dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua.
-        </td>
-    </tr>
-    <tr>
-        <td class="report-property">Térkép:</td>
         <td>
-            <div id="map_embedded_canvas" class="map_embedded" />
+            @Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Encode(Model.Message), @"\r\n?|\n", "<br />"))
         </td>
     </tr>
+    @if (Model.Location != null)
+    {
+        <tr>
+            <td class="report-property">Térkép:</td>
+            <td>
+                <div id="map_embedded_canvas" class="map_embedded" />
+            </td>
+        </tr>
+    }
 </table>
 
 @section sidebar {
     @Html.Partial("_AdminSidebar")
 }
 
-@section scripts {
-    <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
-    </script>
+@if (Model.Location != null)
+{
+    @section scripts {
+        <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx0BPr9sy2ndglbnwYrwrMzXmU0fDoSG8&sensor=true">
+        </script>
 
-    <script type="text/javascript">
-        window.onload = function () {
-            var map = TUSZ.create_map("map_embedded_canvas", 47.5, 19.08);
+        <script type="text/javascript">
+            window.onload = function () {
+                var Model = JSON.parse("@Html.Raw(Json.Encode(Model))");
 
-            var marker = new google.maps.Marker({
-                map: map,
-                position: new google.maps.LatLng(47.5, 19.08)
-            });
+                var map = TUSZ.create_map("map_embedded_canvas", 47.5, 19.08);
 
-            map.setCenter(marker.position);
-        }
-    </script>
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: new google.maps.LatLng(Model.Location.Latitude, Model.Location.Longitude)
+                });
+
+                map.setCenter(marker.position);
+            }
+        </script>
+    }
 }

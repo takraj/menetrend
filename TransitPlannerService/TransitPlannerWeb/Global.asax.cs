@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using TransitPlannerWeb.Models;
+using WebMatrix.WebData;
 
 namespace TransitPlannerWeb
 {
@@ -25,7 +26,7 @@ namespace TransitPlannerWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            AuthConfig.RegisterAuth();
+            //AuthConfig.RegisterAuth();
 
             using (var context = new AdminContext())
             {

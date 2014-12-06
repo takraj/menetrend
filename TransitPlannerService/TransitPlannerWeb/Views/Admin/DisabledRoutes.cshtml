@@ -1,4 +1,5 @@
-﻿@{
+﻿@model TransitPlannerWeb.ViewModels.DisabledRoutesAdminModel
+@{
     ViewBag.Title = "Letiltott járatok";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -16,55 +17,29 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="route-id report-column">ID</td>
-                <td class="route-short-name report-column">Rövid név</td>
-                <td class="route-long-name report-column">Hosszú név</td>
-                <td class="route-category report-column">Járműtípus</td>
-                <td class="route-action report-column">
-                    <a href="#">Letiltás</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="route-id report-column">ID</td>
-                <td class="route-short-name report-column">Rövid név</td>
-                <td class="route-long-name report-column">Hosszú név</td>
-                <td class="route-category report-column">Járműtípus</td>
-                <td class="route-action report-column">
-                    <a href="#">Letiltás</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="route-id report-column">ID</td>
-                <td class="route-short-name report-column">Rövid név</td>
-                <td class="route-long-name report-column">Hosszú név</td>
-                <td class="route-category report-column">Járműtípus</td>
-                <td class="route-action report-column">
-                    <a href="#">Letiltás</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="route-id report-column">ID</td>
-                <td class="route-short-name report-column">Rövid név</td>
-                <td class="route-long-name report-column">Hosszú név</td>
-                <td class="route-category report-column">Járműtípus</td>
-                <td class="route-action report-column">
-                    <a href="#">Letiltás</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="route-id report-column">ID</td>
-                <td class="route-short-name report-column">Rövid név</td>
-                <td class="route-long-name report-column">Hosszú név</td>
-                <td class="route-category report-column">Járműtípus</td>
-                <td class="route-action report-column">
-                    <a href="#">Letiltás</a>
-                </td>
-            </tr>
+            @foreach (var route in Model.Routes)
+            {
+                <tr>
+                    <td class="route-id report-column">@Html.Label(route.Id.ToString())</td>
+                    <td class="route-short-name report-column">@Html.Label(route.ShortName)</td>
+                    <td class="route-long-name report-column">@Html.Label(route.LongName)</td>
+                    <td class="route-category report-column">@Html.Label(route.RouteType)</td>
+                    <td class="route-action report-column">
+                        @if (route.IsDisabled)
+                        {
+                            @Html.ActionLink("Engedélyezés", "EnableRoute", new { id = route.Id })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Letiltás", "DisableRoute", new { id = route.Id })
+                        }
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
 
 @section sidebar {
-    @Html.Partial("_AdminSidebar")
+    @Html.Partial("_AdminSidebar", Model)
 }

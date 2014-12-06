@@ -1,8 +1,12 @@
-﻿<form>
+﻿@model TransitPlannerWeb.ViewModels.AdminBaseModel
+@if (ViewContext.RouteData.Values["Action"].ToString() != "Login")
+{
+    using (Html.BeginForm("Logout", "Admin"))
+    {
     <fieldset id="user-info">
         <legend>Bejelentkezve</legend>
 
-        <p>Bejelentkezve, mint <strong>operator</strong>.</p>
+        <p>Bejelentkezve, mint <strong>@Html.Raw(Model.Username)</strong>.</p>
         <div>
             <button type="submit" id="logout-button" name="logout-action" value="logout">Kijelentkezés</button>
         </div>
@@ -12,10 +16,11 @@
         <legend>Menü</legend>
 
         <ul>
-            <li><a href="#">Szerver paraméterek</a></li>
-            <li><a href="#">Bejelentések</a></li>
-            <li><a href="#">Járatok</a></li>
-            <li><a href="#">Késések</a></li>
+            <li>@Html.ActionLink("Szerver paraméterek", "ServerSettings")</li>
+            <li>@Html.ActionLink("Bejelentések", "Reports")</li>
+            <li>@Html.ActionLink("Letiltott járatok", "DisabledRoutes")</li>
+            <li>@Html.ActionLink("Késések", "TripDelays")</li>
         </ul>
     </fieldset>
-</form>
+    }
+}

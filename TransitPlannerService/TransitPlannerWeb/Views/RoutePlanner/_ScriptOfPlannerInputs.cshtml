@@ -1,0 +1,171 @@
+﻿<script>
+    var settings_dialog = $("#planner-settings-dialog").dialog({
+        autoOpen: false,
+        width: 600,
+        height: 600,
+        modal: true
+    });
+
+    $("#planner-inputs-settings").click(function () {
+        var data = {
+            year: $("#planner-hidden-when-year").val(),
+            month: $("#planner-hidden-when-month").val(),
+            day: $("#planner-hidden-when-day").val(),
+
+            hour: $("#planner-hidden-when-hour").val(),
+            minute: $("#planner-hidden-when-minute").val(),
+
+            enable_tram: $("#planner-hidden-enable-tram").val() == "1",
+            enable_subway: $("#planner-hidden-enable-subway").val() == "1",
+            enable_rail: $("#planner-hidden-enable-rail").val() == "1",
+            enable_bus: $("#planner-hidden-enable-bus").val() == "1",
+            enable_ferry: $("#planner-hidden-enable-ferry").val() == "1",
+            enable_cable_car: $("#planner-hidden-enable-cable-car").val() == "1",
+            enable_gondola: $("#planner-hidden-enable-gondola").val() == "1",
+            enable_funicular: $("#planner-hidden-enable-funicular").val() == "1",
+
+            weelchair: $("#planner-hidden-wheelchair-support").val() == "1",
+
+            walking_speed_category: $("#planner-hidden-walking-speed-category").val(),
+            waiting_time_category: $("#planner-hidden-waiting-time-category").val()
+        };
+
+        TUSZ.set_datetime_of_datetimepicker("#planner-settings-start-time-placeholder", data.year, data.month, data.day, data.hour, data.minute);
+
+        $("#route-type-tram").prop('checked', data.enable_tram);
+        $("#route-type-subway").prop('checked', data.enable_subway);
+        $("#route-type-rail").prop('checked', data.enable_rail);
+        $("#route-type-bus").prop('checked', data.enable_bus);
+        $("#route-type-ferry").prop('checked', data.enable_ferry);
+        $("#route-type-cable-car").prop('checked', data.enable_cable_car);
+        $("#route-type-gondola").prop('checked', data.enable_gondola);
+        $("#route-type-funicular").prop('checked', data.enable_funicular);
+
+        $("#wheelchair").prop('checked', data.weelchair);
+
+        $("#walking-speed").val(data.walking_speed_category);
+        $("#max-waiting-time").val(data.waiting_time_category);
+
+        settings_dialog.dialog("open");
+    });
+
+    $("#planner-settings-ok").click(function () {
+        var datetime = TUSZ.get_datetime_from_datetimepicker("#planner-settings-start-time-placeholder");
+        var data = {
+            year: datetime.getFullYear(),
+            month: datetime.getMonth(),
+            day: datetime.getDate(),
+
+            hour: datetime.getHours(),
+            minute: datetime.getMinutes(),
+
+            enable_tram: $("#route-type-tram").prop('checked'),
+            enable_subway: $("#route-type-subway").prop('checked'),
+            enable_rail: $("#route-type-rail").prop('checked'),
+            enable_bus: $("#route-type-bus").prop('checked'),
+            enable_ferry: $("#route-type-ferry").prop('checked'),
+            enable_cable_car: $("#route-type-cable-car").prop('checked'),
+            enable_gondola: $("#route-type-gondola").prop('checked'),
+            enable_funicular: $("#route-type-funicular").prop('checked'),
+
+            weelchair: $("#wheelchair").prop('checked'),
+
+            walking_speed_category: $("#walking-speed").val(),
+            waiting_time_category: $("#max-waiting-time").val()
+        };
+
+        if (!(
+            data.enable_tram ||
+            data.enable_subway ||
+            data.enable_rail ||
+            data.enable_bus ||
+            data.enable_ferry ||
+            data.enable_cable_car ||
+            data.enable_gondola ||
+            data.enable_funicular
+        )) {
+            alert("Legalább egy járat típust engedélyezned kell!");
+            return false;
+        }
+
+        $("#planner-hidden-when-year").val(data.year);
+        $("#planner-hidden-when-month").val(data.month);
+        $("#planner-hidden-when-day").val(data.day);
+
+        $("#planner-hidden-when-hour").val(data.hour);
+        $("#planner-hidden-when-minute").val(data.minute);
+
+        $("#planner-hidden-enable-tram").val(data.enable_tram ? 1 : 0);
+        $("#planner-hidden-enable-subway").val(data.enable_subway ? 1 : 0);
+        $("#planner-hidden-enable-rail").val(data.enable_rail ? 1 : 0);
+        $("#planner-hidden-enable-bus").val(data.enable_bus ? 1 : 0);
+        $("#planner-hidden-enable-ferry").val(data.enable_ferry ? 1 : 0);
+        $("#planner-hidden-enable-cable-car").val(data.enable_cable_car ? 1 : 0);
+        $("#planner-hidden-enable-gondola").val(data.enable_gondola ? 1 : 0);
+        $("#planner-hidden-enable-funicular").val(data.enable_funicular ? 1 : 0);
+
+        $("#planner-hidden-wheelchair-support").val(data.weelchair ? 1 : 0);
+
+        $("#planner-hidden-walking-speed-category").val(data.walking_speed_category);
+        $("#planner-hidden-waiting-time-category").val(data.waiting_time_category);
+
+        settings_dialog.dialog("close");
+    });
+
+    $("#planner-settings-cancel").click(function () {
+        settings_dialog.dialog("close");
+    });
+
+    var details_dialog = $("#planner-details-dialog").dialog({
+        autoOpen: false,
+        width: 600,
+        height: 600,
+        modal: true
+    });
+
+    TUSZ.create_timepicker("#planner-settings-start-time-placeholder", new Date(2013, 4, 3, 14, 32), new Date(2013, 1, 3), new Date(2015, 4, 12));
+
+    var stops = []
+    stops = TUSZ.add_stop_to_autocomplete_list(stops, "1", "Blaha Lujza tér", "1234", "Budapest", "Blaha tere 5.");
+    stops = TUSZ.add_stop_to_autocomplete_list(stops, "2", "Blaha Lujza tér", "1235", "Budapest", "Blaha tere 5b.");
+    stops = TUSZ.add_stop_to_autocomplete_list(stops, "10", "Corvin negyed", "1294", "Budapest", "Örs tere 5.");
+    stops = TUSZ.add_stop_to_autocomplete_list(stops, "100", "Sajt sétány", "1233", "Budapest", "Zuza tere 5.");
+    stops = TUSZ.add_stop_to_autocomplete_list(stops, "1000", "Örs vezér tere M", "2234", "Karcag", "Széchenyi tere 5.");
+    stops = TUSZ.add_stop_to_autocomplete_list(stops, "2", "Blaha Lujza tér M", "8234", "Budapest", "Blaha tere 9.");
+
+    TUSZ.create_autocomplete_for_stops("#planner-inputs-from", stops);
+    TUSZ.create_autocomplete_for_stops("#planner-inputs-to", stops);
+
+    $("#planner-inputs-submit").click(function () {
+        var stop_label_from = $("#planner-inputs-from").val();
+        var stop_label_to = $("#planner-inputs-to").val();
+
+        var stop_id_from = TUSZ.get_stop_id_by_label(stops, stop_label_from);
+        var stop_id_to = TUSZ.get_stop_id_by_label(stops, stop_label_to);
+
+        if (stop_label_from == "") {
+            alert("A 'honnan' mező üres.");
+            return false;
+        }
+
+        if (stop_label_to == "") {
+            alert("A 'hova' mező üres.");
+            return false;
+        }
+
+        if (stop_id_from == -1) {
+            alert("Nincs ilyen megálló: \"" + stop_label_from + "\"");
+            return false;
+        }
+
+        if (stop_id_to == -1) {
+            alert("Nincs ilyen megálló: \"" + stop_label_to + "\"");
+            return false;
+        }
+
+        $("#planner-hidden-from-id").val(stop_id_from);
+        $("#planner-hidden-to-id").val(stop_id_to);
+
+        return true;
+    });
+</script>

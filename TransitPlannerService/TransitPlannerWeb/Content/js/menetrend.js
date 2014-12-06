@@ -100,7 +100,7 @@ TUSZ.create_filterable_tree = function(tree_html_id, filter_html_id, data_source
     var routes_tree = $(tree_html_id).fancytree("getTree");
     
     $(filter_html_id).keyup(function(e){
-        match = $(this).val();
+        var match = $(this).val();
         
         if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === ""){
             routes_tree.clearFilter();

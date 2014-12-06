@@ -1,24 +1,27 @@
-﻿<div id="browser-dropdown">
+﻿@{
+    String itemFormatString = "{0}<br /><em>({1} megálló)</em>";
+    // itt majd oda kell figyelni, mert a SetDirection-nak vissza kell irányítani az eredeti oldalra
+}
+<div id="browser-dropdown">
     <ul>
         <li>
             <div>
-                Kelenföld vasútállomás felé<br />
-                <em>(10 megálló)</em>
+                @Html.Raw(String.Format(itemFormatString, "Kelenföld vasútállomás felé", 10))
             </div>
             <ul>
                 <li>
-                    <a href="#">Kelenföld vasútállomás felé<br />
-                        <em>(10 megálló)</em>
+                    <a href="@Url.Action("SetDirection", new { id = 0 })">
+                        @Html.Raw(String.Format(itemFormatString, "Kelenföld vasútállomás felé", 10))
                     </a>
                 </li>
                 <li>
-                    <a href="#">Kelenföld vasútállomás felé<br />
-                        <em>(10 megálló)</em>
+                    <a href="@Url.Action("SetDirection", new { id = 0 })">
+                        @Html.Raw(String.Format(itemFormatString, "Kelenföld vasútállomás felé", 10))
                     </a>
                 </li>
                 <li>
-                    <a href="#">Kelenföld vasútállomás felé<br />
-                        <em>(10 megálló)</em>
+                    <a href="@Url.Action("SetDirection", new { id = 0 })">
+                        @Html.Raw(String.Format(itemFormatString, "Kelenföld vasútállomás felé", 10))
                     </a>
                 </li>
             </ul>

@@ -29,16 +29,23 @@ namespace TransitPlannerWeb.Filters
 
                 try
                 {
+                    bool databaseExists = true;
                     using (var context = new UsersContext())
                     {
                         if (!context.Database.Exists())
                         {
+                            databaseExists = false;
                             // Create the SimpleMembership database without Entity Framework migration schema
                             ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();
                         }
                     }
 
                     WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
+
+                    if (!databaseExists)
+                    {
+                        WebSecurity.CreateUserAndAccount("operator", "Operator1");
+                    }
                 }
                 catch (Exception ex)
                 {
