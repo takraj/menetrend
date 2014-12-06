@@ -1,123 +1,96 @@
-﻿@{
+﻿@model TransitPlannerWeb.ViewModels.TripDelaysAdminModel
+@{
     ViewBag.Title = "Késések kezelése";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="whattodo">Kérlek válassz járatot és dátumot!</h2>
+@if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_ERROR)
+{
+    <h2>Késések beállítása</h2>
+    <table>
+        <tr>
+            <td id="admin-delays-left-content">
+                @using (Html.BeginForm("TripDelays", "Admin", FormMethod.Post, new { onsubmit = "return validate()" }))
+                {
+                    <fieldset id="browser-calendar">
+                        <legend>Menetrend Naptár</legend>
 
-<h2>Késések beállítása</h2>
-<table>
-    <tr>
-        <td id="admin-delays-left-content">
-            @using (Html.BeginForm("TripDelays", "Admin", FormMethod.Post, new {onsubmit="return validate()"}))
-            {
-                <fieldset id="browser-calendar">
-                    <legend>Menetrend Naptár</legend>
+                        <input id="calendar-year" name="year" type="hidden" />
+                        <input id="calendar-month" name="month" type="hidden" />
+                        <input id="calendar-day" name="day" type="hidden" />
+                        <div id="browser-calendar-date-placeholder" />
+                    </fieldset>
 
-                    <input id="calendar-year" name="year" type="hidden" />
-                    <input id="calendar-month" name="month" type="hidden" />
-                    <input id="calendar-day" name="day" type="hidden" />
-                    <div id="browser-calendar-date-placeholder" />
-                </fieldset>
-
-                <fieldset id="browser-routes-fs">
-                    <legend>Járat</legend>
-                    <input type="text" placeholder="Szűrés" id="browser-filter-routes" />
-                    <div id="browser-routes-tree"></div>
-                    <input id="tree-route-id" name="route_id" type="hidden" />
-                </fieldset>
-                <div id="browser-buttons">
-                    <button id="mutasd" onclick="fillform()" type="submit">Mutasd</button>
-                </div>
-            }
-        </td>
-        <td id="admin-delays-right-content">
-            <div id="delays-list" class="contains-tables">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="trip-id report-column">Utazás</th>
-                            <th class="trip-direction report-column">Irány</th>
-                            <th class="trip-count-of-stops report-column">Megállók száma</th>
-                            <th class="trip-start-time report-column">Utazás kezdete</th>
-                            <th class="trip-action report-column">Késés mértéke (perc)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="trip-id report-column">45</td>
-                            <td class="trip-direction report-column">Örs vezér tere</td>
-                            <td class="trip-count-of-stops report-column">32</td>
-                            <td class="trip-start-time report-column">14:53</td>
-                            <td class="trip-action report-column contains-textfield">
-                                @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new {id="trip-1-delay-form", onsubmit="return validate_delay('#trip-1-delay-form')"}))
+                    <fieldset id="browser-routes-fs">
+                        <legend>Járat</legend>
+                        <input type="text" placeholder="Szűrés" id="browser-filter-routes" />
+                        <div id="browser-routes-tree"></div>
+                        <input id="tree-route-id" name="route_id" type="hidden" />
+                    </fieldset>
+                    <div id="browser-buttons">
+                        <button id="mutasd" onclick="fillform()" type="submit">Mutasd</button>
+                    </div>
+                }
+            </td>
+            <td id="admin-delays-right-content">
+                @if (Model.SelectedRoute != null)
+                {
+                    <div id="delays-list" class="contains-tables">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="trip-id report-column">Utazás</th>
+                                    <th class="trip-direction report-column">Irány</th>
+                                    <th class="trip-count-of-stops report-column">Megállók száma</th>
+                                    <th class="trip-start-time report-column">Utazás kezdete</th>
+                                    <th class="trip-action report-column">Késés mértéke (perc)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var delay in Model.Delays)
                                 {
-                                    <input type="hidden" name="trip_id" />
-                                    <input type="hidden" name="year" />
-                                    <input type="hidden" name="month" />
-                                    <input type="hidden" name="day" />
-                                    <input type="text" name="trip_delay_amount" id="trip-1-delay-form-amount" />
-                                    <button type="submit" class="submit-button">ok</button>
+                                    <tr>
+                                        <td class="trip-id report-column">@Html.Label(delay.TripId.ToString())</td>
+                                        <td class="trip-direction report-column">@Html.Label(delay.TripDirection)</td>
+                                        <td class="trip-count-of-stops report-column">@Html.Label(delay.TripId.ToString())</td>
+                                        <td class="trip-start-time report-column">@Html.Label(delay.StartTime)</td>
+                                        <td class="trip-action report-column contains-textfield">
+                                            @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new { id = String.Format("trip-{0}-delay-form", delay.TripId), onsubmit = String.Format("return validate_delay('#trip-{0}-delay-form')", delay.TripId) }))
+                                            {
+                                                <input type="hidden" name="trip_id" value="@Html.Raw(delay.TripId.ToString())" />
+                                                <input type="hidden" name="year" value="@Html.Raw(Model.SelectedDate.Year.ToString())" />
+                                                <input type="hidden" name="month" value="@Html.Raw(Model.SelectedDate.Month.ToString())" />
+                                                <input type="hidden" name="day" value="@Html.Raw(Model.SelectedDate.Day.ToString())" />
+                                                <input type="text" name="trip_delay_amount" id="trip-@Html.Raw(delay.TripId.ToString())-delay-form-amount" />
+                                                <button type="submit" class="submit-button">ok</button>
+                                            }
+                                        </td>
+                                    </tr>
                                 }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="trip-id report-column">45</td>
-                            <td class="trip-direction report-column">Örs vezér tere</td>
-                            <td class="trip-count-of-stops report-column">32</td>
-                            <td class="trip-start-time report-column">14:53</td>
-                            <td class="trip-action report-column contains-textfield">
-                                @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new {id="trip-2-delay-form", onsubmit="return validate_delay('#trip-3-delay-form')"}))
-                                {
-                                    <input type="hidden" name="trip_id" />
-                                    <input type="hidden" name="year" />
-                                    <input type="hidden" name="month" />
-                                    <input type="hidden" name="day" />
-                                    <input type="text" name="trip_delay_amount" id="trip-2-delay-form-amount" />
-                                    <button type="submit" class="submit-button">ok</button>
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="trip-id report-column">45</td>
-                            <td class="trip-direction report-column">Örs vezér tere</td>
-                            <td class="trip-count-of-stops report-column">32</td>
-                            <td class="trip-start-time report-column">14:53</td>
-                            <td class="trip-action report-column contains-textfield">
-                                @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new {id="trip-3-delay-form", onsubmit="return validate_delay('#trip-3-delay-form')"}))
-                                {
-                                    <input type="hidden" name="trip_id" />
-                                    <input type="hidden" name="year" />
-                                    <input type="hidden" name="month" />
-                                    <input type="hidden" name="day" />
-                                    <input type="text" name="trip_delay_amount" id="trip-3-delay-form-amount" />
-                                    <button type="submit" class="submit-button">ok</button>
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="trip-id report-column">45</td>
-                            <td class="trip-direction report-column">Örs vezér tere</td>
-                            <td class="trip-count-of-stops report-column">32</td>
-                            <td class="trip-start-time report-column">14:53</td>
-                            <td class="trip-action report-column contains-textfield">
-                                @using (Html.BeginForm("SetTripDelay", "Admin", FormMethod.Post, new {id="trip-11-delay-form", onsubmit="return validate_delay('#trip-11-delay-form')"}))
-                                {
-                                    <input type="hidden" name="trip_id" />
-                                    <input type="hidden" name="year" />
-                                    <input type="hidden" name="month" />
-                                    <input type="hidden" name="day" />
-                                    <input type="text" name="trip_delay_amount" id="trip-11-delay-form-amount" />
-                                    <button type="submit" class="submit-button">ok</button>
-                                }
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </td>
-    </tr>
-</table>
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </td>
+        </tr>
+    </table>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_ROUTE_SELECTED)
+{
+    <h2 class="whattodo">Kérlek válassz járatot és dátumot!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE)
+{
+    <h2 class="whattodo">Nem érhető el az alapszolgáltatás!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.ERROR_IN_MESSAGE)
+{
+    <h2 class="whattodo">@Html.Raw(Model.ErrorMessage)</h2>
+}
+else
+{
+    <h2 class="whattodo">Ismeretlen hiba történt!</h2>
+}
 
 @section sidebar {
     @Html.Partial("_AdminSidebar")
@@ -129,27 +102,30 @@
 
 @section scripts {
     <script>
-        TUSZ.create_datepicker("#browser-calendar-date-placeholder", new Date(2013, 4, 3), new Date(2013, 3, 3), new Date(2015, 4, 12));
+        var Model = JSON.parse("@Html.Raw(Json.Encode(Model))");
+
+        TUSZ.create_datepicker("#browser-calendar-date-placeholder",
+            new Date(Model.SelectedDate.Year, Model.SelectedDate.Month, Model.SelectedDate.Day),
+            new Date(Model.DatabaseMinDate.Year, Model.DatabaseMinDate.Month, Model.DatabaseMinDate.Day),
+            new Date(Model.DatabaseMaxDate.Year, Model.DatabaseMaxDate.Month, Model.DatabaseMaxDate.Day));
 
         var tree_folders = [];
-
         var tree_children = [];
-        var tree_children = TUSZ.add_item_to_children(tree_children, "T0", "id100");
-        var tree_children = TUSZ.add_item_to_children(tree_children, "T1", "id101");
-        var tree_children = TUSZ.add_item_to_children(tree_children, "T2", "id102");
-        var tree_children = TUSZ.add_item_to_children(tree_children, "T3", "id103");
-        var tree_children = TUSZ.add_item_to_children(tree_children, "T4", "id104");
+    </script>
 
-        tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "F1", "idf1", tree_children);
+    <script>
+        for (var key in Model.RouteTree) {
+            tree_children = [];
 
-        var tree_children = [];
-        var tree_children = TUSZ.add_item_to_children(tree_children, "C0", "id200");
-        var tree_children = TUSZ.add_item_to_children(tree_children, "C1", "id201");
-        var tree_children = TUSZ.add_item_to_children(tree_children, "C2", "id202");
-        var tree_children = TUSZ.add_item_to_children(tree_children, "C3", "id203");
-        var tree_children = TUSZ.add_item_to_children(tree_children, "C4", "id204");
+            for (var route in Model.RouteTree[key]) {
+                tree_children = TUSZ.add_item_to_children(tree_children, route.RouteName, route.RouteId);
+            }
 
-        tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "Z1", "idf1", tree_children);
+            tree_folders = TUSZ.add_folder_to_tree_data(tree_folders, "F1", "idf1", tree_children);
+        }
+    </script>
+
+    <script>
 
         TUSZ.create_filterable_tree("#browser-routes-tree", "#browser-filter-routes", tree_folders);
 
@@ -171,14 +147,19 @@
 
             return true;
         }
-
-        function validate_delay(form_html_id) {
-            var delay_amount = $(form_html_id + "-amount").val();
-            if (delay_amount.match("^[0-9]+$") == null) {
-                alert("Kérlek írj be egy pozitív egész számot. Amit megadtál nem jó: " + delay_amount);
-                return false;
-            }
-            return true;
-        }
     </script>
+
+    @if (Model.SelectedRoute != null)
+    {
+        <script>
+            function validate_delay(form_html_id) {
+                var delay_amount = $(form_html_id + "-amount").val();
+                if (delay_amount.match("^[0-9]+$") == null) {
+                    alert("Kérlek írj be egy pozitív egész számot. Amit megadtál nem jó: " + delay_amount);
+                    return false;
+                }
+                return true;
+            }
+        </script>
+    }
 }

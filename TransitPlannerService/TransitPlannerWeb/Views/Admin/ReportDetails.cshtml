@@ -2,52 +2,72 @@
 @{
     ViewBag.Title = "Bejelentés részletei";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string dateTimeFormat = @"yyyy-MM-dd HH:mm";
 }
 
-<h2 class="report-details-title">Bejelentés részletei</h2>
-<table class="report-details-table">
-    <tr>
-        <td class="report-property">Azonosító:</td>
-        <td>@Html.Label(Model.Id.ToString())</td>
-    </tr>
-    <tr>
-        <td class="report-property">Készült:</td>
-        <td>@Html.Label(Model.Created.ToString(@"yyyy-MM-dd HH:mm"))</td>
-    </tr>
-    <tr>
-        <td class="report-property">Érkezett:</td>
-        <td>@Html.Label(Model.Received.ToString(@"yyyy-MM-dd HH:mm"))</td>
-    </tr>
-    <tr>
-        <td class="report-property">Kategória:</td>
-        <td>@Html.Label(Model.Category)</td>
-    </tr>
-    @if (Model.Location != null)
-    {
+@if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_ERROR)
+{
+    <h2 class="report-details-title">Bejelentés részletei</h2>
+    <table class="report-details-table">
         <tr>
-            <td class="report-property">Megálló:</td>
-            <td>@Html.Label(Model.Location.StopName)</td>
+            <td class="report-property">Azonosító:</td>
+            <td>@Html.Label(Model.Id.ToString())</td>
         </tr>
-    }
-    <tr>
-        <td class="report-property">Üzenet:</td>
-        <td>
-            @Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Encode(Model.Message), @"\r\n?|\n", "<br />"))
-        </td>
-    </tr>
-    @if (Model.Location != null)
-    {
         <tr>
-            <td class="report-property">Térkép:</td>
+            <td class="report-property">Készült:</td>
+            <td>@Html.Label(Model.Created.ToString(dateTimeFormat))</td>
+        </tr>
+        <tr>
+            <td class="report-property">Érkezett:</td>
+            <td>@Html.Label(Model.Received.ToString(dateTimeFormat))</td>
+        </tr>
+        <tr>
+            <td class="report-property">Kategória:</td>
+            <td>@Html.Label(Model.Category)</td>
+        </tr>
+        @if (Model.Location != null)
+        {
+            <tr>
+                <td class="report-property">Megálló:</td>
+                <td>@Html.Label(Model.Location.StopName)</td>
+            </tr>
+        }
+        <tr>
+            <td class="report-property">Üzenet:</td>
             <td>
-                <div id="map_embedded_canvas" class="map_embedded" />
+                @Html.Raw(System.Text.RegularExpressions.Regex.Replace(Html.Encode(Model.Message), @"\r\n?|\n", "<br />"))
             </td>
         </tr>
-    }
-</table>
+        @if (Model.Location != null)
+        {
+            <tr>
+                <td class="report-property">Térkép:</td>
+                <td>
+                    <div id="map_embedded_canvas" class="map_embedded" />
+                </td>
+            </tr>
+        }
+    </table>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_SUCH_REPORT)
+{
+    <h2 class="whattodo">Nincs ilyen bejelentés!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE)
+{
+    <h2 class="whattodo">Nem érhető el az alapszolgáltatás!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.ERROR_IN_MESSAGE)
+{
+    <h2 class="whattodo">@Html.Raw(Model.ErrorMessage)</h2>
+}
+else
+{
+    <h2 class="whattodo">Ismeretlen hiba történt!</h2>
+}
 
 @section sidebar {
-    @Html.Partial("_AdminSidebar")
+    @Html.Partial("_AdminSidebar", Model)
 }
 
 @if (Model.Location != null)

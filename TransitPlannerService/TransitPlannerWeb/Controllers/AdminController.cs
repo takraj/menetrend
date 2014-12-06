@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -63,7 +64,80 @@ namespace TransitPlannerWeb.Controllers
 
         public ActionResult ServerSettings()
         {
-            return View();
+            var vm = new ServerSettingsAdminModel
+            {
+                ErrorCode = TuszErrorCode.NO_ERROR,
+                Username = WebSecurity.CurrentUserName,
+                OtherParametersModel = new SetupOtherParametersAdminModel
+                {
+                    Algorithms = new List<SetupOtherParametersAdminModel.Algorithm>(),
+                    WalkingSpeeds = new SetupOtherParametersAdminModel.WakingSpeedSettings()
+                },
+                LoadBalancersModel = new LoadBalancersAdminModel
+                {
+                    LoadBalancers = new List<LoadBalancersAdminModel.LoadBalancer>()
+                }
+            };
+
+            vm.OtherParametersModel.Algorithms.Add(new SetupOtherParametersAdminModel.Algorithm
+                {
+                    Name = "AStar",
+                    IsSelected = false
+                });
+
+            vm.OtherParametersModel.Algorithms.Add(new SetupOtherParametersAdminModel.Algorithm
+            {
+                Name = "Dijkstra",
+                IsSelected = false
+            });
+
+            using (var context = new AdminContext())
+            {
+                var settings = context.Settings;
+
+                foreach (var setting in settings)
+                {
+                    if (setting.Key == "ALGORITHM")
+                    {
+                        vm.OtherParametersModel.Algorithms.Single(v => v.Name == setting.Key).IsSelected = true;
+                    }
+
+                    if (setting.Key == "GET_ON_OFF_TIME")
+                    {
+                        vm.OtherParametersModel.GetOnOffTime = int.Parse(setting.Value);
+                    }
+
+                    if (setting.Key == "NORMAL_WALKING_SPEED")
+                    {
+                        vm.OtherParametersModel.WalkingSpeeds.Normal = double.Parse(setting.Value, CultureInfo.InvariantCulture);
+                    }
+
+                    if (setting.Key == "FAST_WALKING_SPEED")
+                    {
+                        vm.OtherParametersModel.WalkingSpeeds.Fast = double.Parse(setting.Value, CultureInfo.InvariantCulture);
+                    }
+
+                    if (setting.Key == "SLOW_WALKING_SPEED")
+                    {
+                        vm.OtherParametersModel.WalkingSpeeds.Slow = double.Parse(setting.Value, CultureInfo.InvariantCulture);
+                    }
+                }
+
+                var loadBalancers = context.CoreServices;
+
+                foreach (var lb in loadBalancers)
+                {
+                    vm.LoadBalancersModel.LoadBalancers.Add(new LoadBalancersAdminModel.LoadBalancer
+                    {
+                        Id = lb.Id,
+                        Name = lb.Name,
+                        Url = lb.BaseAddress,
+                        Weight = lb.Weight
+                    });
+                }
+            }
+
+            return View(vm);
         }
 
         public ActionResult DisabledRoutes()
@@ -95,18 +169,47 @@ namespace TransitPlannerWeb.Controllers
 
         public ActionResult DeleteLoadBalancer(int id)
         {
+            using (var context = new AdminContext())
+            {
+                var lb_to_delete = context.CoreServices.Single(c => c.Id == id);
+                context.CoreServices.Remove(lb_to_delete);
+            }
+
             return RedirectToAction("ServerSettings");
         }
 
         [HttpPost]
         public ActionResult AddLoadBalancer(string name, string url, int weight)
         {
+            using (var context = new AdminContext())
+            {
+                var lb_to_add = new CoreService
+                {
+                    Name = name,
+                    Description = "",
+                    BaseAddress = url,
+                    Weight = weight
+                };
+                context.CoreServices.Add(lb_to_add);
+                context.SaveChanges();
+            }
+
             return RedirectToAction("ServerSettings");
         }
 
         [HttpPost]
         public ActionResult SetOtherSettings(string algorithm, string normal_walkspeed, string slow_walkspeed, string fast_walkspeed, int getonoff_time)
         {
+            using (var context = new AdminContext())
+            {
+                context.Settings.Single(s => s.Key == "ALGORITHM").Value = algorithm;
+                context.Settings.Single(s => s.Key == "GET_ON_OFF_TIME").Value = getonoff_time.ToString();
+                context.Settings.Single(s => s.Key == "NORMAL_WALKING_SPEED").Value = normal_walkspeed;
+                context.Settings.Single(s => s.Key == "FAST_WALKING_SPEED").Value = fast_walkspeed;
+                context.Settings.Single(s => s.Key == "SLOW_WALKING_SPEED").Value = slow_walkspeed;
+                context.SaveChanges();
+            }
+
             return RedirectToAction("ServerSettings");
         }
 

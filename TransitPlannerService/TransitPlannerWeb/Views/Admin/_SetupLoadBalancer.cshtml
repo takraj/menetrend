@@ -1,4 +1,5 @@
-﻿<fieldset class="existing-load-balancers">
+﻿@model TransitPlannerWeb.ViewModels.LoadBalancersAdminModel
+<fieldset class="existing-load-balancers">
     <legend>Beállított háttérszolgáltatások</legend>
     <table>
         <thead>
@@ -10,38 +11,17 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="lb-name">Név</td>
-                <td class="lb-url">URL</td>
-                <td class="lb-weight">Súly</td>
-                <td class="lb-action">
-                    @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="lb-name">Név</td>
-                <td class="lb-url">URL</td>
-                <td class="lb-weight">Súly</td>
-                <td class="lb-action">
-                    @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="lb-name">Név</td>
-                <td class="lb-url">URL</td>
-                <td class="lb-weight">Súly</td>
-                <td class="lb-action">
-                    @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="lb-name">Név</td>
-                <td class="lb-url">URL</td>
-                <td class="lb-weight">Súly</td>
-                <td class="lb-action">
-                    @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = 0 })
-                </td>
-            </tr>
+            @foreach (var lb in Model.LoadBalancers)
+            {
+                <tr>
+                    <td class="lb-name">@Html.Label(lb.Name)</td>
+                    <td class="lb-url">@Html.Label(lb.Url)</td>
+                    <td class="lb-weight">@Html.Label(lb.Weight.ToString())</td>
+                    <td class="lb-action">
+                        @Html.ActionLink("Törlés", "DeleteLoadBalancer", new { id = lb.Id })
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </fieldset>

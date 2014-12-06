@@ -1,152 +1,68 @@
-﻿@{
+﻿@model TransitPlannerWeb.ViewModels.ReportsAdminModel
+@{
     ViewBag.Title = "Bejelentések";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string dateTimeFormat = @"yyyy-MM-dd HH:mm";
+    string readFormat = @"Elolvasva<br />
+                        <em>({0})</em>";
 }
 
+@if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_ERROR)
+{
 <h2>Bejelentések</h2>
-<div id="reports-list" class="contains-tables">
-    <table>
-        <thead>
-            <tr>
-                <th class="report-id report-column">ID</th>
-                <th class="report-created report-column">Készült</th>
-                <th class="report-received report-column">Érkezett</th>
-                <th class="report-category report-column">Kategória</th>
-                <th class="report-stop report-column">Megálló</th>
-                <th class="report-status report-column">Állapot</th>
-                <th class="report-action report-column">Lehetőségek</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Elolvasva<br />
-                    <em>(2014-03-10&nbsp;14:11)</em></td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Olvasatlan</td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Elolvasva<br />
-                    <em>(2014-03-10&nbsp;14:11)</em></td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Olvasatlan</td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Elolvasva<br />
-                    <em>(2014-03-10&nbsp;14:11)</em></td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Olvasatlan</td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Elolvasva<br />
-                    <em>(2014-03-10&nbsp;14:11)</em></td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Olvasatlan</td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Elolvasva<br />
-                    <em>(2014-03-10&nbsp;14:11)</em></td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-            <tr>
-                <td class="report-id report-column">9999</td>
-                <td class="report-created report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-received report-column">2014-03-10&nbsp;14:00</td>
-                <td class="report-category report-column">Baleset</td>
-                <td class="report-stop report-column">Corvin Negyed M</td>
-                <td class="report-status report-column">Olvasatlan</td>
-                <td class="report-action report-column">
-                    @Html.ActionLink("Olvasás", "ReportDetails", new { id = 0 })
-                    @Html.ActionLink("Törlés", "DeleteReport", new { id = 0 })
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <div id="reports-list" class="contains-tables">
+        <table>
+            <thead>
+                <tr>
+                    <th class="report-id report-column">ID</th>
+                    <th class="report-created report-column">Készült</th>
+                    <th class="report-received report-column">Érkezett</th>
+                    <th class="report-category report-column">Kategória</th>
+                    <th class="report-stop report-column">Megálló</th>
+                    <th class="report-status report-column">Állapot</th>
+                    <th class="report-action report-column">Lehetőségek</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var report in Model.Reports)
+                {
+                    <tr>
+                        <td class="report-id report-column">@Html.Label(report.Id.ToString())</td>
+                        <td class="report-created report-column">@Html.Label(report.Created.ToString(dateTimeFormat))</td>
+                        <td class="report-received report-column">@Html.Label(report.Received.ToString(dateTimeFormat))</td>
+                        <td class="report-category report-column">@Html.Label(report.Category)</td>
+                        <td class="report-stop report-column">@Html.Label(report.StopName)</td>
+                        @if (report.WasRead)
+                        {
+                            <td class="report-status report-column">@Html.Raw(String.Format(readFormat, report.Read))</td>
+                        }
+                        else
+                        {
+                            <td class="report-status report-column">Olvasatlan</td>
+                        }
+                        <td class="report-action report-column">
+                            @Html.ActionLink("Olvasás", "ReportDetails", new { id = report.Id })
+                            @Html.ActionLink("Törlés", "DeleteReport", new { id = report.Id })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE)
+{
+    <h2 class="whattodo">Nem érhető el az alapszolgáltatás!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.ERROR_IN_MESSAGE)
+{
+    <h2 class="whattodo">@Html.Raw(Model.ErrorMessage)</h2>
+}
+else
+{
+    <h2 class="whattodo">Ismeretlen hiba történt!</h2>
+}
 
 @section sidebar {
-    @Html.Partial("_AdminSidebar")
+    @Html.Partial("_AdminSidebar", Model)
 }

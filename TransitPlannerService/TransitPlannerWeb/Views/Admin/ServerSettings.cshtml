@@ -1,16 +1,17 @@
-﻿@{
+﻿@model TransitPlannerWeb.ViewModels.ServerSettingsAdminModel
+@{
     ViewBag.Title = "Szerver paraméterek";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Szerver paraméterek</h2>
 <div class="table-style contains-tables">
-    @Html.Partial("_SetupLoadBalancer")
-    @Html.Partial("_SetupOtherParameters")
+    @Html.Partial("_SetupLoadBalancer", Model.LoadBalancersModel)
+    @Html.Partial("_SetupOtherParameters", Model.OtherParametersModel)
 </div>
 
 @section sidebar {
-    @Html.Partial("_AdminSidebar")
+    @Html.Partial("_AdminSidebar", Model)
 }
 
 @section scripts {

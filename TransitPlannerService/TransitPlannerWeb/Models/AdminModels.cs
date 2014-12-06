@@ -16,7 +16,9 @@ namespace TransitPlannerWeb.Models
 
             db.Settings.Add(new Setting { Key = "ALGORITHM", Value = "AStar" });
             db.Settings.Add(new Setting { Key = "GET_ON_OFF_TIME", Value = "1" });
-            db.Settings.Add(new Setting { Key = "WALKING_SPEED", Value = "5" });
+            db.Settings.Add(new Setting { Key = "NORMAL_WALKING_SPEED", Value = "5" });
+            db.Settings.Add(new Setting { Key = "FAST_WALKING_SPEED", Value = "8" });
+            db.Settings.Add(new Setting { Key = "SLOW_WALKING_SPEED", Value = "3" });
 
             db.CoreServices.Add(new CoreService
             {

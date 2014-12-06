@@ -4,41 +4,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Letiltott járatok kezelése</h2>
-<div id="routes-list" class="contains-tables">
-    <table>
-        <thead>
-            <tr>
-                <th class="route-id report-column">ID</th>
-                <th class="route-short-name report-column">Rövid név</th>
-                <th class="route-long-name report-column">Hosszú név</th>
-                <th class="route-category report-column">Járműtípus</th>
-                <th class="route-action report-column"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var route in Model.Routes)
-            {
+@if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_ERROR)
+{
+    <h2>Letiltott járatok kezelése</h2>
+    <div id="routes-list" class="contains-tables">
+        <table>
+            <thead>
                 <tr>
-                    <td class="route-id report-column">@Html.Label(route.Id.ToString())</td>
-                    <td class="route-short-name report-column">@Html.Label(route.ShortName)</td>
-                    <td class="route-long-name report-column">@Html.Label(route.LongName)</td>
-                    <td class="route-category report-column">@Html.Label(route.RouteType)</td>
-                    <td class="route-action report-column">
-                        @if (route.IsDisabled)
-                        {
-                            @Html.ActionLink("Engedélyezés", "EnableRoute", new { id = route.Id })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Letiltás", "DisableRoute", new { id = route.Id })
-                        }
-                    </td>
+                    <th class="route-id report-column">ID</th>
+                    <th class="route-short-name report-column">Rövid név</th>
+                    <th class="route-long-name report-column">Hosszú név</th>
+                    <th class="route-category report-column">Járműtípus</th>
+                    <th class="route-action report-column"></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var route in Model.Routes)
+                {
+                    <tr>
+                        <td class="route-id report-column">@Html.Label(route.Id.ToString())</td>
+                        <td class="route-short-name report-column">@Html.Label(route.ShortName)</td>
+                        <td class="route-long-name report-column">@Html.Label(route.LongName)</td>
+                        <td class="route-category report-column">@Html.Label(route.RouteType)</td>
+                        <td class="route-action report-column">
+                            @if (route.IsDisabled)
+                            {
+                                @Html.ActionLink("Engedélyezés", "EnableRoute", new { id = route.Id })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Letiltás", "DisableRoute", new { id = route.Id })
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_SUCH_ROUTE)
+{
+    <h2 class="whattodo">Nincs ilyen járat!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.NO_ROUTES)
+{
+    <h2 class="whattodo">Nincsenek járatok!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.CORE_SERVICE_IS_UNREACHABLE)
+{
+    <h2 class="whattodo">Nem érhető el az alapszolgáltatás!</h2>
+}
+else if (Model.ErrorCode == TransitPlannerWeb.ViewModels.TuszErrorCode.ERROR_IN_MESSAGE)
+{
+    <h2 class="whattodo">@Html.Raw(Model.ErrorMessage)</h2>
+}
+else
+{
+    <h2 class="whattodo">Ismeretlen hiba történt!</h2>
+}
 
 @section sidebar {
     @Html.Partial("_AdminSidebar", Model)

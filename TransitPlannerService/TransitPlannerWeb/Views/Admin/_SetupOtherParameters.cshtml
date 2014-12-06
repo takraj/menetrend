@@ -1,4 +1,5 @@
-﻿@using (Html.BeginForm("SetOtherSettings", "Admin", FormMethod.Post, new { id = "other-settings-form", onsubmit = "return validate_other_settings()" }))
+﻿@model TransitPlannerWeb.ViewModels.SetupOtherParametersAdminModel
+@using (Html.BeginForm("SetOtherSettings", "Admin", FormMethod.Post, new { id = "other-settings-form", onsubmit = "return validate_other_settings()" }))
 {
     <fieldset class="other-settings">
         <legend>Egyéb beállítások</legend>
@@ -16,8 +17,17 @@
                     </td>
                     <td class="contains-textfield">
                         <select name="algorithm">
-                            <option value="AStar" selected="true">A*</option>
-                            <option value="Dijkstra">Dijkstra</option>
+                            @foreach (var algorithm in Model.Algorithms)
+                            {
+                                if (algorithm.IsSelected)
+                                {
+                                    <option value="@Html.Raw(algorithm.Name)" selected="selected">@Html.Raw(algorithm.Name)</option>
+                                }
+                                else
+                                {
+                                    <option value="@Html.Raw(algorithm.Name)">@Html.Raw(algorithm.Name)</option>
+                                }
+                            }
                         </select>
                     </td>
                     <td></td>
@@ -26,7 +36,7 @@
                     <td>Normál gyaloglási sebesség
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="normal_walkspeed" id="other-setting-normal-walkspeed" />
+                        <input type="text" name="normal_walkspeed" id="other-setting-normal-walkspeed" value="@Html.Raw(Model.WalkingSpeeds.Normal.ToString(System.Globalization.CultureInfo.InvariantCulture))" />
                     </td>
                     <td>km/h</td>
                 </tr>
@@ -34,7 +44,7 @@
                     <td>Lassú gyaloglási sebesség
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="slow_walkspeed" id="other-setting-slow-walkspeed" />
+                        <input type="text" name="slow_walkspeed" id="other-setting-slow-walkspeed" value="@Html.Raw(Model.WalkingSpeeds.Slow.ToString(System.Globalization.CultureInfo.InvariantCulture))" />
                     </td>
                     <td>km/h</td>
                 </tr>
@@ -42,7 +52,7 @@
                     <td>Gyors gyaloglási sebesség
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="fast_walkspeed" id="other-setting-fast-walkspeed" />
+                        <input type="text" name="fast_walkspeed" id="other-setting-fast-walkspeed" value="@Html.Raw(Model.WalkingSpeeds.Fast.ToString(System.Globalization.CultureInfo.InvariantCulture))" />
                     </td>
                     <td>km/h</td>
                 </tr>
@@ -50,7 +60,7 @@
                     <td>Fel és leszállási idő
                     </td>
                     <td class="contains-textfield">
-                        <input type="text" name="getonoff_time" id="other-setting-getonoff-time" />
+                        <input type="text" name="getonoff_time" id="other-setting-getonoff-time" value="@Html.Raw(Model.GetOnOffTime.ToString())" />
                     </td>
                     <td>perc</td>
                 </tr>
