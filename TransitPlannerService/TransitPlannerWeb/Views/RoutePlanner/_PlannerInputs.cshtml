@@ -12,7 +12,7 @@
         <input type="hidden" id="planner-hidden-to-id" name="to_stop_id" value="@Html.Raw(Model.ToStop)" />
 
         <input type="hidden" id="planner-hidden-when-year" name="year" value="@Html.Raw(Model.SelectedDateTime.Year)" />
-        <input type="hidden" id="planner-hidden-when-month" name="month" value="@Html.Raw(Model.SelectedDateTime.Month + 1)" />
+        <input type="hidden" id="planner-hidden-when-month" name="month" value="@Html.Raw(Model.SelectedDateTime.Month)" />
         <input type="hidden" id="planner-hidden-when-day" name="day" value="@Html.Raw(Model.SelectedDateTime.Day)" />
         <input type="hidden" id="planner-hidden-when-hour" name="hour" value="@Html.Raw(Model.SelectedDateTime.Hour)" />
         <input type="hidden" id="planner-hidden-when-minute" name="minute" value="@Html.Raw(Model.SelectedDateTime.Minute)" />

@@ -48,7 +48,7 @@ namespace TransitPlannerWeb.ViewModels
         public string LastActionTime { get; set; }
 
         public string UsedAlgorithm { get; set; }
-        public int CalculationTime { get; set; }
+        public double CalculationTime { get; set; }
         
         public int RouteLengthTime { get; set; }
         public double RouteLengthKm { get; set; }
