@@ -19,6 +19,11 @@ namespace TransitPlannerWeb.Filters
         {
             // Ensure ASP.NET Simple Membership is initialized only once per app start
             LazyInitializer.EnsureInitialized(ref _initializer, ref _isInitialized, ref _initializerLock);
+
+            if (!WebSecurity.UserExists("operator"))
+            {
+                WebSecurity.CreateUserAndAccount("operator", "Operator1");
+            }
         }
 
         private class SimpleMembershipInitializer
@@ -41,11 +46,6 @@ namespace TransitPlannerWeb.Filters
                     }
 
                     WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-
-                    if (!databaseExists)
-                    {
-                        WebSecurity.CreateUserAndAccount("operator", "Operator1");
-                    }
                 }
                 catch (Exception ex)
                 {

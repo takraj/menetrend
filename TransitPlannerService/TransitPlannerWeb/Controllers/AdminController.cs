@@ -33,7 +33,7 @@ namespace TransitPlannerWeb.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View(new BaseModel
+            return View(new AdminBaseModel
             {
                 ErrorCode = TuszErrorCode.NO_ERROR
             });
@@ -48,7 +48,7 @@ namespace TransitPlannerWeb.Controllers
                 return RedirectToLocal(returnUrl);
             }
 
-            return View(new BaseModel
+            return View(new AdminBaseModel
             {
                 ErrorCode = TuszErrorCode.LOGIN_ERROR
             });
