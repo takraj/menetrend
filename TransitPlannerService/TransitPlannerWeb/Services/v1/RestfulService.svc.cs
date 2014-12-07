@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -114,9 +115,12 @@ namespace TransitPlannerWeb.Services.v1
             {
                 settings = db.Settings.ToDictionary(s => s.Key, s => s.Value);
                 disabled_route_ids = db.DisabledRoutes.Select(id => id.RouteId).ToList();
-                trip_delays = db.TripDelays
-                    .Where(d => d.When.Date.Equals(parameters.when.AsDateTime))
-                    .Select(d => new IntegerPair { key = d.TripId, value = d.DelayInMinutes }).ToList();
+                var delays_for_current_date = db.TripDelays.Where(d =>
+                    d.When.Year == parameters.when.year &&
+                    d.When.Month == parameters.when.month &&
+                    d.When.Day == parameters.when.day
+                );
+                trip_delays = delays_for_current_date.Select(d => new IntegerPair { key = d.TripId, value = d.DelayInMinutes }).ToList();
             }
 
             var coreParameters = new TransitPlanRequestParameters
@@ -131,8 +135,20 @@ namespace TransitPlannerWeb.Services.v1
                 disabled_route_ids = disabled_route_ids,
                 use_algorithm = settings["ALGORITHM"],
                 get_on_off_time = Int32.Parse(settings["GET_ON_OFF_TIME"]),
-                walking_speed = Int32.Parse(settings["WALKING_SPEED"])
+                walking_speed = double.Parse(settings["NORMAL_WALKING_SPEED"], CultureInfo.InvariantCulture)
             };
+
+            if (parameters.walking_speed_category == 1)
+            {
+                // slow
+                coreParameters.walking_speed = double.Parse(settings["SLOW_WALKING_SPEED"], CultureInfo.InvariantCulture);
+            }
+
+            if (parameters.walking_speed_category == 2)
+            {
+                // fast
+                coreParameters.walking_speed = double.Parse(settings["FAST_WALKING_SPEED"], CultureInfo.InvariantCulture);
+            }
 
             return coreSvc.GetPlan(coreParameters);
         }

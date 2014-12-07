@@ -19,22 +19,6 @@ namespace TransitPlannerWeb.Models
             db.Settings.Add(new Setting { Key = "NORMAL_WALKING_SPEED", Value = "5" });
             db.Settings.Add(new Setting { Key = "FAST_WALKING_SPEED", Value = "8" });
             db.Settings.Add(new Setting { Key = "SLOW_WALKING_SPEED", Value = "3" });
-
-            db.CoreServices.Add(new CoreService
-            {
-                BaseAddress = @"http://localhost:18401/v1/RestfulService.svc",
-                Weight = 5,
-                Name = "Localhost Service",
-                Description = "This is a service for localhost."
-            });
-
-            db.CoreServices.Add(new CoreService
-            {
-                BaseAddress = @"http://localhost:18401/v1/RestfulService.svc",
-                Weight = 2,
-                Name = "Localhost 2 Service",
-                Description = "This is a second service for localhost."
-            });
         }
     }
 
