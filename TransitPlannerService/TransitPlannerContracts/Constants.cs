@@ -7,7 +7,7 @@ namespace TransitPlannerContracts
 {
     public abstract class Constants
     {
-        public const string ASTAR_ALGORITHM = "astar";
-        public const string DIJKSTRA_ALGORITHM = "dijkstra";
+        public const string ASTAR_ALGORITHM = "AStar";
+        public const string DIJKSTRA_ALGORITHM = "Dijkstra";
     }
 }

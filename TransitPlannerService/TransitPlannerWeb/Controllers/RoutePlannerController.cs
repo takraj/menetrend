@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -202,21 +203,24 @@ namespace TransitPlannerWeb.Controllers
             {
                 settings = db.Settings.ToDictionary(s => s.Key, s => s.Value);
                 disabled_route_ids = db.DisabledRoutes.Select(id => id.RouteId).ToList();
-                trip_delays = db.TripDelays
-                    .Where(d => d.When.Date.Equals(when.AsDateTime))
-                    .Select(d => new IntegerPair { key = d.TripId, value = d.DelayInMinutes }).ToList();
+                var delays_for_current_date = db.TripDelays.Where(d => 
+                    d.When.Year == when.year &&
+                    d.When.Month == when.month &&
+                    d.When.Day == when.day
+                );
+                trip_delays = delays_for_current_date.Select(d => new IntegerPair { key = d.TripId, value = d.DelayInMinutes }).ToList();
             }
 
-            double walking_speed = int.Parse(settings["NORMAL_WALKING_SPEED"]);
+            double walking_speed = double.Parse(settings["NORMAL_WALKING_SPEED"], CultureInfo.InvariantCulture);
 
             if (walking_category == "slow")
             {
-                walking_speed = int.Parse(settings["SLOW_WALKING_SPEED"]);
+                walking_speed = double.Parse(settings["SLOW_WALKING_SPEED"], CultureInfo.InvariantCulture);
             }
 
             if (walking_category == "fast")
             {
-                walking_speed = int.Parse(settings["FAST_WALKING_SPEED"]);
+                walking_speed = double.Parse(settings["FAST_WALKING_SPEED"], CultureInfo.InvariantCulture);
             }
             
             int max_waiting_time = 99999;
@@ -240,7 +244,17 @@ namespace TransitPlannerWeb.Controllers
                 walking_speed = walking_speed
             };
 
-            var planResponse = coreSvc.GetPlan(coreParameters);
+            TransitPlan planResponse = null;
+            try
+            {
+                planResponse = coreSvc.GetPlan(coreParameters);
+            }
+            catch
+            {
+                vm.Inputs.ErrorCode = TuszErrorCode.NO_PLAN_CREATED;
+                vm.Inputs.ErrorMessage = "Nincs útvonal.";
+                return View("Index", vm.Inputs);
+            }
 
             vm.Plan.CalculationTime = planResponse.plan_computation_time;
             vm.Plan.FirstActionTime = planResponse.base_time.AsDateTime.ToString("HH:mm");
@@ -252,7 +266,7 @@ namespace TransitPlannerWeb.Controllers
             vm.Plan.RouteLengthStops = planResponse.instructions.Select(i => i.stop.id).Distinct().Count();
 
             var tripIdsInOrder = new List<int>();
-            var instructionDict = new Dictionary<int, List<TransitPlanInstruction>);
+            var instructionsMatrix = new List<List<TransitPlanInstruction>>();
             foreach (var instruction in planResponse.instructions)
             {
                 int tripId = instruction.trip_id;
@@ -260,19 +274,81 @@ namespace TransitPlannerWeb.Controllers
                 if (tripIdsInOrder.Count == 0)
                 {
                     tripIdsInOrder.Add(tripId);
-                    instructionDict[tripId] = new List<TransitPlanInstruction>();
+                    instructionsMatrix.Add(new List<TransitPlanInstruction>());
                 }
 
-                if (!instructionDict.ContainsKey(tripId))
+                if (tripIdsInOrder.Last() != tripId)
                 {
                     tripIdsInOrder.Add(tripId);
-                    instructionDict[tripId] = new List<TransitPlanInstruction>();
+                    instructionsMatrix.Add(new List<TransitPlanInstruction>());
                 }
 
-                instructionDict[tripId].Add(instruction);
+                var lastInstructionsVector = instructionsMatrix.Last();
+
+                lastInstructionsVector.Add(instruction);
             }
 
-            // TODO: -------- SECTION ÉPÍTÉS --------
+            // -------- SECTION ÉPÍTÉS --------
+
+            vm.Plan.Sections = new List<PlanModel.Section>();
+
+            foreach (var instructionsVector in instructionsMatrix)
+            {
+                var section = new PlanModel.Section
+                {
+                    IsWalking = instructionsVector.First().is_walking,
+                    Steps = new List<PlanModel.Step>()
+                };
+
+                if (!section.IsWalking)
+                {
+                    var routeId = instructionsVector.First().route_id;
+                    var tripId = instructionsVector.First().trip_id;
+
+                    var route = planResponse.used_routes.First(r => r.id == routeId);
+                    var trip = planResponse.used_trips.First(t => t.id == tripId);
+
+                    var sequence = coreSvc.GetSequence(trip.sequence_id);
+
+                    section.RouteInfo = new VM_Route
+                    {
+                        ShortName = route.ShortName,
+                        Type = GetRouteTypeName(route.RouteType),
+                        Direction = sequence.Last().stop.name
+                    };
+
+                    section.SectionBadge = new RouteBadgeModel
+                    {
+                        BadgeBackgroundColor = route.RouteColor,
+                        BadgeLabel = route.ShortName,
+                        BadgeLabelColor = route.RouteTextColor,
+                        BadgeSize = 40,
+                        FontSize = 16
+                    };
+                }
+
+                foreach (var instruction in instructionsVector)
+                {
+                    var instruction_when = planResponse.base_time.AsDateTime.AddMinutes(instruction.plan_minute);
+                    var step = new PlanModel.Step
+                    {
+                        When = instruction_when.ToString("HH:mm"),
+                        Stop = new VM_Stop
+                        {
+                            Address = instruction.stop.street,
+                            City = instruction.stop.city,
+                            Id = instruction.stop.id,
+                            Latitude = instruction.stop.latitude,
+                            Longitude = instruction.stop.longitude,
+                            Name = instruction.stop.name,
+                            PostalCode = instruction.stop.postal_code
+                        }
+                    };
+                    section.Steps.Add(step);
+                }
+
+                vm.Plan.Sections.Add(section);
+            }
 
             return View(vm);
         }

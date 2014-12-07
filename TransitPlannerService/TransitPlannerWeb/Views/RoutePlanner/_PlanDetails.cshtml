@@ -3,7 +3,7 @@
 <div id="planner-details-window-content">
     <div id="plan-details-misc">
         <p id="plan-details-used-alg">Használt algoritmus:&nbsp;<strong>@Html.Raw(Model.UsedAlgorithm)</strong></p>
-        <p id="plan-details-calc-time">Számítási idő:&nbsp;<strong>@Html.Raw(Model.CalculationTime.ToString())</strong>&nbsp;s</p>
+        <p id="plan-details-calc-time">Számítási idő:&nbsp;<strong>@Html.Raw(Model.CalculationTime.ToString("F3"))</strong>&nbsp;s</p>
         <p id="plan-details-start-time">Tervezett indulási időpont:&nbsp;
             <time>
                 @Html.Raw(Model.PlannedStartTime.ToString("yyyy-MM-dd HH:mm"))
@@ -12,7 +12,7 @@
         <p id="plan-details-route-length">Ajánlott útvonal hossza:&nbsp;
             <strong>
                 @Html.Raw(Model.RouteLengthTime.ToString())
-            </strong>&nbsp;perc <em>@Html.Raw(String.Format("({0} megálló, kb. {1} km)", Model.RouteLengthStops, Model.RouteLengthKm))</em>
+            </strong>&nbsp;perc <em>@Html.Raw(String.Format("({0} megálló, kb. {1} km)", Model.RouteLengthStops, Model.RouteLengthKm.ToString("F3")))</em>
         </p>
     </div>
 

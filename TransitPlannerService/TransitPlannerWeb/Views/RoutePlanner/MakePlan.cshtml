@@ -11,7 +11,7 @@
 </div>
 
 <div id="planner-details-dialog" title="Terv részletei">
-    @Html.Partial("_PlanDetails")
+    @Html.Partial("_PlanDetails", Model.Plan)
 </div>
 
 <table style="display: none;" id="template-infowindow-table">
@@ -72,9 +72,11 @@
 
 @section scripts {
     <script>
-        var Model = @Html.Raw(Json.Encode(Model));
+        var FullModel = @Html.Raw(Json.Encode(Model));
 
         window.onload = function () {
+            var Model = FullModel.Plan;
+
             var map = TUSZ.create_map("map_canvas", 47.5, 19.08);
 
             var countOfSections = Model.Sections.length;
@@ -82,6 +84,13 @@
             for (var i in Model.Sections) {
                 var section = Model.Sections[i];
                 var countOfSteps = Model.Sections[i].Steps.length;
+                
+                if ((countOfSteps == 1) && (i == (countOfSections - 1))) {
+                    var step = section.Steps[0];
+                    TUSZ.create_finish_marker(map, step.Stop.Latitude, step.Stop.Longitude, step.Stop.Name);
+                    TUSZ.set_map_center(map, step.Stop.Latitude, step.Stop.Longitude);
+                    continue;
+                }
 
                 for (var j = 0; j < countOfSteps - 1; j++) {
                     var step = section.Steps[j];
@@ -90,14 +99,14 @@
                     if (section.IsWalking) {
                         TUSZ.create_walking_line(map, step.Stop.Latitude, step.Stop.Longitude, nextStep.Stop.Latitude, nextStep.Stop.Longitude);
                     } else {
-                        TUSZ.create_travel_line(map, step.Stop.Latitude, step.Stop.Longitude, nextStep.Stop.Latitude, nextStep.Stop.Longitude, section.SectionBadge.BadgeBackgroundColor);
+                        TUSZ.create_travel_line(map, step.Stop.Latitude, step.Stop.Longitude, nextStep.Stop.Latitude, nextStep.Stop.Longitude, "#" + section.SectionBadge.BadgeBackgroundColor);
                     }
                         
                     if (j == 0) {
                         if (section.IsWalking) {
                             TUSZ.create_walking_marker(map, step.Stop.Latitude, step.Stop.Longitude, step.Stop.Name);
                         } else {
-                            var route_data = TUSZ.create_route_data(section.RouteInfo.ShortName, section.SectionBadge.BadgeBackgroundColor, section.SectionBadge.BadgeLabelColor, section.RouteInfo.Type, section.RouteInfo.Direction);
+                            var route_data = TUSZ.create_route_data(section.RouteInfo.ShortName, "#" + section.SectionBadge.BadgeBackgroundColor, "#" + section.SectionBadge.BadgeLabelColor, section.RouteInfo.Type, section.RouteInfo.Direction);
 
                             for (var k in section.Steps) {
                                 var s = section.Steps[k];
@@ -106,9 +115,9 @@
 
                             TUSZ.create_travel_marker(map, step.Stop.Latitude, step.Stop.Longitude, route_data);
                         }
-                    } else if (j == (countOfSteps - 1) && (i == (countOfSections - 1))) {
-                        TUSZ.create_finish_marker(map, step.Stop.Latitude, step.Stop.Longitude, step.Stop.Name);
-                        TUSZ.set_map_center(map, 47.5, 19.28);
+                    } else if (j == (countOfSteps - 2) && (i == (countOfSections - 1))) {
+                        TUSZ.create_finish_marker(map, nextStep.Stop.Latitude, nextStep.Stop.Longitude, nextStep.Stop.Name);
+                        TUSZ.set_map_center(map, nextStep.Stop.Latitude, nextStep.Stop.Longitude);
                     }
                 }
             }

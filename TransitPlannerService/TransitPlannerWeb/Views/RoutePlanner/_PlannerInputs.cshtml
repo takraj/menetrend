@@ -3,13 +3,13 @@
 <fieldset id="planner-inputs">
     <legend>Útvonaltervezés</legend>
 
-    <input id="planner-inputs-from" name="from-as-text" type="text" placeholder="Honnan" />
-    <input id="planner-inputs-to" name="to-as-text" type="text" placeholder="Hova" />
+    <input id="planner-inputs-from" name="from-as-text" type="text" placeholder="Honnan" value="@Html.Raw(Model.FromStop)" />
+    <input id="planner-inputs-to" name="to-as-text" type="text" placeholder="Hova" value="@Html.Raw(Model.ToStop)" />
 
     @using (Html.BeginForm("MakePlan", "RoutePlanner"))
     {
-        <input type="hidden" id="planner-hidden-from-id" name="from_stop_id" value="@Html.Raw(Model.FromStop)" />
-        <input type="hidden" id="planner-hidden-to-id" name="to_stop_id" value="@Html.Raw(Model.ToStop)" />
+        <input type="hidden" id="planner-hidden-from-id" name="from_stop_id" />
+        <input type="hidden" id="planner-hidden-to-id" name="to_stop_id" />
 
         <input type="hidden" id="planner-hidden-when-year" name="year" value="@Html.Raw(Model.SelectedDateTime.Year)" />
         <input type="hidden" id="planner-hidden-when-month" name="month" value="@Html.Raw(Model.SelectedDateTime.Month)" />

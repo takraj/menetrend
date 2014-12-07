@@ -22,10 +22,10 @@
                 @foreach (var route in Model.Routes)
                 {
                     <tr>
-                        <td class="route-id report-column">@Html.Encode(route.Id.ToString())</td>
-                        <td class="route-short-name report-column">@Html.Encode(route.ShortName)</td>
-                        <td class="route-long-name report-column">@Html.Encode(route.LongName)</td>
-                        <td class="route-category report-column">@Html.Encode(route.RouteType)</td>
+                        <td class="route-id report-column">@Html.Raw(route.Id.ToString())</td>
+                        <td class="route-short-name report-column">@Html.Raw(route.ShortName)</td>
+                        <td class="route-long-name report-column">@Html.Raw(route.LongName)</td>
+                        <td class="route-category report-column">@Html.Raw(route.RouteType)</td>
                         <td class="route-action report-column">
                             @if (route.IsDisabled)
                             {

@@ -266,7 +266,7 @@ namespace TransitPlannerWeb.Controllers
                     {
                         Id = route.id,
                         ShortName = route.ShortName,
-                        LongName = route.LongName,
+                        LongName = route.Description,
                         IsDisabled = disabledRouteIds.Contains(route.id),
                         RouteType = GetRouteTypeName(route.RouteType)
                     });
