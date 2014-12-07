@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using System.ComponentModel;
 using TransitPlannerMobile.Logic;
+using Windows.Devices.Geolocation;
 
 namespace TransitPlannerMobile
 {
@@ -29,6 +30,12 @@ namespace TransitPlannerMobile
         public MainPage()
         {
             InitializeComponent();
+
+            var rps = new RoutePlannerService.SoapServiceClient();
+            rps.GetAllStopsCompleted += rps_GetAllStopsCompleted;
+            rps.GetAllStopsAsync();
+
+            DataContext = God.mainPageViewModel;
 
             ShowProgressDialog("Kommunikáció a szerverrel...");
             Utility.DelayedCall(() => HideProgressDialog(), 5000);
@@ -120,26 +127,6 @@ namespace TransitPlannerMobile
             //TODO
         }
 
-        private void btnGetStopsByDistance_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO -- le lesz töltve előre, mert máshoz is kell
-        }
-
-        private void btnGetStopsByName_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO -- le lesz töltve előre, mert máshoz is kell
-        }
-
-        private void btnGetRoutesByName_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO -- le lesz töltve előre, mert máshoz is kell
-        }
-
-        private void btnGetRoutesByType_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO -- le lesz töltve előre, mert máshoz is kell
-        }
-
         private void btnUseLocationFrom_Click(object sender, RoutedEventArgs e)
         {
             ShowProgressDialog("Helymeghatározás...");
@@ -163,7 +150,7 @@ namespace TransitPlannerMobile
 
         private void btnSelectDisabledRoutes_Click(object sender, RoutedEventArgs e)
         {
-            //TODO -- új képernyőn
+            NavigationService.Navigate(new Uri("/SelectDisabledRoutes.xaml", UriKind.Relative));
         }
 
         private void btnSelectWalkingSpeed_Click(object sender, RoutedEventArgs e)
@@ -190,10 +177,24 @@ namespace TransitPlannerMobile
             });
         }
 
-        private void btnMakePlan_Click(object sender, RoutedEventArgs e)
+        private async void btnMakePlan_Click(object sender, RoutedEventArgs e)
         {
             ShowProgressDialog("Keresés...");
             Utility.DelayedCall(() => HideProgressDialog(), 5000);
+
+            Geolocator geolocator = new Geolocator();
+            Geoposition geoposition = await geolocator.GetGeopositionAsync(
+                maximumAge: TimeSpan.FromMinutes(5),
+                timeout: TimeSpan.FromSeconds(10)
+            );
+
+            Debug.WriteLine(String.Format("Lat: {0} Lon: {1}", geoposition.Coordinate.Latitude, geoposition.Coordinate.Longitude));
+        }
+
+        void rps_GetAllStopsCompleted(object sender, RoutePlannerService.GetAllStopsCompletedEventArgs e)
+        {
+            Debug.WriteLine("Count of stops: " + e.Result.Count);
+            God.mainPageViewModel.AvailableStops = e.Result;
         }
 
         private void PhoneApplicationPage_BackKeyPress(object sender, CancelEventArgs e)

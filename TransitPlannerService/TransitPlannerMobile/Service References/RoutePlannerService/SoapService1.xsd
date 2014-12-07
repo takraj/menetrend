@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/TransitPlannerWebContracts" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/TransitPlannerWebContracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://192.168.0.3:55870/Services/v1/SoapService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://192.168.0.3:55870/Services/v1/SoapService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TransitPlannerContracts" />
+  <xs:complexType name="WebTransitPlanRequestParameters">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="disabled_route_types" nillable="true" type="q1:ArrayOfint" />
+      <xs:element minOccurs="0" name="from" type="xs:int" />
+      <xs:element minOccurs="0" name="max_waiting_time" type="xs:int" />
+      <xs:element minOccurs="0" name="needs_wheelchair_support" type="xs:boolean" />
+      <xs:element minOccurs="0" name="to" type="xs:int" />
+      <xs:element minOccurs="0" name="walking_speed_category" type="xs:int" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/TransitPlannerContracts" minOccurs="0" name="when" nillable="true" type="q2:TransitDateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="WebTransitPlanRequestParameters" nillable="true" type="tns:WebTransitPlanRequestParameters" />
+  <xs:complexType name="SendTroubleReportRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="category" type="xs:int" />
+      <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="has_location_data" type="xs:boolean" />
+      <xs:element minOccurs="0" name="latitude" type="xs:double" />
+      <xs:element minOccurs="0" name="longitude" type="xs:double" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/TransitPlannerContracts" minOccurs="0" name="timestamp" nillable="true" type="q3:TransitDateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SendTroubleReportRequest" nillable="true" type="tns:SendTroubleReportRequest" />
+</xs:schema>

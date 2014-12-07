@@ -1,0 +1,17 @@
+﻿<configuration>
+  <system.serviceModel>
+    <bindings>
+      <basicHttpBinding>
+        <binding name="BasicHttpBinding_ISoapService" maxBufferSize="2147483647"
+          maxReceivedMessageSize="2147483647">
+          <security mode="None" />
+        </binding>
+      </basicHttpBinding>
+    </bindings>
+    <client>
+      <endpoint address="http://192.168.0.3:55870/Services/v1/SoapService.svc"
+        binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_ISoapService"
+        contract="RoutePlannerService.ISoapService" name="BasicHttpBinding_ISoapService" />
+    </client>
+  </system.serviceModel>
+</configuration>

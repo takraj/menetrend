@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/TransitPlannerContracts" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/TransitPlannerContracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://192.168.0.3:55870/Services/v1/SoapService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="ArrayOfTransitStop">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransitStop" nillable="true" type="tns:TransitStop" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransitStop" nillable="true" type="tns:ArrayOfTransitStop" />
+  <xs:complexType name="TransitStop">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="city" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="has_wheelchair_support" type="xs:boolean" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="latitude" type="xs:double" />
+      <xs:element minOccurs="0" name="longitude" type="xs:double" />
+      <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="postal_code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="street" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitStop" nillable="true" type="tns:TransitStop" />
+  <xs:complexType name="TransitStopInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="available_routes" nillable="true" type="tns:ArrayOfTransitRoute" />
+      <xs:element minOccurs="0" name="stop" nillable="true" type="tns:TransitStop" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitStopInfo" nillable="true" type="tns:TransitStopInfo" />
+  <xs:complexType name="ArrayOfTransitRoute">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransitRoute" nillable="true" type="tns:TransitRoute" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransitRoute" nillable="true" type="tns:ArrayOfTransitRoute" />
+  <xs:complexType name="TransitRoute">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LongName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RouteColor" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RouteTextColor" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RouteType" type="xs:int" />
+      <xs:element minOccurs="0" name="ShortName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitRoute" nillable="true" type="tns:TransitRoute" />
+  <xs:complexType name="TransitMetadata">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="valid_duration" type="xs:int" />
+      <xs:element minOccurs="0" name="valid_from" nillable="true" type="tns:TransitDate" />
+      <xs:element minOccurs="0" name="valid_to" nillable="true" type="tns:TransitDate" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitMetadata" nillable="true" type="tns:TransitMetadata" />
+  <xs:complexType name="TransitDate">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="day" type="xs:int" />
+      <xs:element minOccurs="0" name="month" type="xs:int" />
+      <xs:element minOccurs="0" name="year" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitDate" nillable="true" type="tns:TransitDate" />
+  <xs:complexType name="ArrayOfTransitSequenceGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransitSequenceGroup" nillable="true" type="tns:TransitSequenceGroup" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransitSequenceGroup" nillable="true" type="tns:ArrayOfTransitSequenceGroup" />
+  <xs:complexType name="TransitSequenceGroup">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="sequence_base_times" nillable="true" type="tns:ArrayOfTransitDateTime" />
+      <xs:element minOccurs="0" name="sequence_elements" nillable="true" type="tns:ArrayOfTransitSequenceElement" />
+      <xs:element minOccurs="0" name="sequence_info" nillable="true" type="tns:TransitSequenceInfo" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="sequence_trip_ids" nillable="true" type="q1:ArrayOfint" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitSequenceGroup" nillable="true" type="tns:TransitSequenceGroup" />
+  <xs:complexType name="ArrayOfTransitDateTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransitDateTime" nillable="true" type="tns:TransitDateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransitDateTime" nillable="true" type="tns:ArrayOfTransitDateTime" />
+  <xs:complexType name="TransitDateTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="day" type="xs:int" />
+      <xs:element minOccurs="0" name="hour" type="xs:int" />
+      <xs:element minOccurs="0" name="minute" type="xs:int" />
+      <xs:element minOccurs="0" name="month" type="xs:int" />
+      <xs:element minOccurs="0" name="year" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitDateTime" nillable="true" type="tns:TransitDateTime" />
+  <xs:complexType name="ArrayOfTransitSequenceElement">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransitSequenceElement" nillable="true" type="tns:TransitSequenceElement" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransitSequenceElement" nillable="true" type="tns:ArrayOfTransitSequenceElement" />
+  <xs:complexType name="TransitSequenceElement">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arrival" type="xs:int" />
+      <xs:element minOccurs="0" name="departure" type="xs:int" />
+      <xs:element minOccurs="0" name="order" type="xs:int" />
+      <xs:element minOccurs="0" name="stop" nillable="true" type="tns:TransitStop" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitSequenceElement" nillable="true" type="tns:TransitSequenceElement" />
+  <xs:complexType name="TransitSequenceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="count_of_stops" type="xs:int" />
+      <xs:element minOccurs="0" name="first_stop" nillable="true" type="tns:TransitStop" />
+      <xs:element minOccurs="0" name="headsign" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="last_stop" nillable="true" type="tns:TransitStop" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitSequenceInfo" nillable="true" type="tns:TransitSequenceInfo" />
+  <xs:complexType name="ArrayOfTransitSequenceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransitSequenceInfo" nillable="true" type="tns:TransitSequenceInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransitSequenceInfo" nillable="true" type="tns:ArrayOfTransitSequenceInfo" />
+  <xs:complexType name="TransitPlan">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="algorithm" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="base_time" nillable="true" type="tns:TransitDateTime" />
+      <xs:element minOccurs="0" name="end_time" nillable="true" type="tns:TransitDateTime" />
+      <xs:element minOccurs="0" name="instructions" nillable="true" type="tns:ArrayOfTransitPlanInstruction" />
+      <xs:element minOccurs="0" name="plan_computation_time" type="xs:double" />
+      <xs:element minOccurs="0" name="route_duration" type="xs:int" />
+      <xs:element minOccurs="0" name="route_length" type="xs:double" />
+      <xs:element minOccurs="0" name="used_routes" nillable="true" type="tns:ArrayOfTransitRoute" />
+      <xs:element minOccurs="0" name="used_trips" nillable="true" type="tns:ArrayOfTransitTrip" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitPlan" nillable="true" type="tns:TransitPlan" />
+  <xs:complexType name="ArrayOfTransitPlanInstruction">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransitPlanInstruction" nillable="true" type="tns:TransitPlanInstruction" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransitPlanInstruction" nillable="true" type="tns:ArrayOfTransitPlanInstruction" />
+  <xs:complexType name="TransitPlanInstruction">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="is_walking" type="xs:boolean" />
+      <xs:element minOccurs="0" name="plan_minute" type="xs:int" />
+      <xs:element minOccurs="0" name="route_id" type="xs:int" />
+      <xs:element minOccurs="0" name="stop" nillable="true" type="tns:TransitStop" />
+      <xs:element minOccurs="0" name="trip_id" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitPlanInstruction" nillable="true" type="tns:TransitPlanInstruction" />
+  <xs:complexType name="ArrayOfTransitTrip">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TransitTrip" nillable="true" type="tns:TransitTrip" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTransitTrip" nillable="true" type="tns:ArrayOfTransitTrip" />
+  <xs:complexType name="TransitTrip">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="headsign" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="route_id" type="xs:int" />
+      <xs:element minOccurs="0" name="sequence_id" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TransitTrip" nillable="true" type="tns:TransitTrip" />
+</xs:schema>

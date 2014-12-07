@@ -52,13 +52,29 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock HorizontalAlignment="Left" Width="80"  Margin="10,0,0,0" TextWrapping="NoWrap" Text="Honnan:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
-                                <toolkit:AutoCompleteBox Name="tbPlanFrom" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0"/>
+                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanFrom" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Text="{Binding FromStopName}" ValueMemberBinding="{Binding name}" MinimumPopulateDelay="200" MinimumPrefixLength="3">
+                                    <toolkit:AutoCompleteBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Text="{Binding name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </toolkit:AutoCompleteBox.ItemTemplate>
+                                </toolkit:AutoCompleteBox>
                                 <Button Name="btnUseLocationFrom" Width="76" Height="76" Margin="0" Grid.Column="2" Grid.Row="0" Padding="0" Click="btnUseLocationFrom_Click">
                                     <Image Source="/Icons/dark/appbar.radar.png" />
                                 </Button>
 
                                 <TextBlock HorizontalAlignment="Left" Width="80" Margin="10,0,0,0" TextWrapping="NoWrap" Text="Hova:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
-                                <toolkit:AutoCompleteBox Name="tbPlanTo" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1"/>
+                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanTo" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Text="{Binding ToStopName}" ValueMemberBinding="{Binding name}" MinimumPopulateDelay="1000" MinimumPrefixLength="3">
+                                    <toolkit:AutoCompleteBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Text="{Binding name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </toolkit:AutoCompleteBox.ItemTemplate>
+                                </toolkit:AutoCompleteBox>
                                 <Button Name="btnUseLocationTo" Width="76" Height="76" Margin="0" Grid.Column="2" Grid.Row="1" Padding="0" Click="btnUseLocationTo_Click">
                                     <Image Source="/Icons/dark/appbar.radar.png" />
                                 </Button>
@@ -70,12 +86,12 @@
                                     <ColumnDefinition Width="2*" MinWidth="160"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <toolkit:DatePicker Name="dpPlanDate" Height="76"  Margin="0" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                <toolkit:TimePicker Name="dpPlanTime" Height="76" Margin="0" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
+                                <toolkit:DatePicker Name="dpPlanDate" Height="76"  Margin="0" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Value="{Binding WhenDate}"/>
+                                <toolkit:TimePicker Name="dpPlanTime" Height="76" Margin="0" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Value="{Binding WhenTime}"/>
                                 <Button Name="btnNow" Content="most" Height="76" Margin="0" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Click="btnNow_Click"/>
                             </Grid>
 
-                            <CheckBox Name="cbWheelchair" Content="Csak akadálymentes útvonal" Grid.Row="2" />
+                            <CheckBox Name="cbWheelchair" Content="Csak akadálymentes útvonal" Grid.Row="2" IsChecked="{Binding WheelchairSupportNeeded}" />
 
                             <Grid Grid.Row="3">
                                 <Grid.ColumnDefinitions>
@@ -90,10 +106,10 @@
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Text="Letiltott járművek:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
-                                <Button Name="btnSelectDisabledRoutes" Content="2 típus" Grid.Column="1" Grid.Row="0" Click="btnSelectDisabledRoutes_Click"/>
+                                <Button Name="btnSelectDisabledRoutes" Content="{Binding CountOfDisabledRoutes}" Grid.Column="1" Grid.Row="0" Click="btnSelectDisabledRoutes_Click"/>
 
                                 <TextBlock Text="Gyaloglási sebesség:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
-                                <Button Name="btnSelectWalkingSpeed" Content="Átlagos" Grid.Column="1" Grid.Row="1" Click="btnSelectWalkingSpeed_Click">
+                                <Button Name="btnSelectWalkingSpeed" Content="{Binding WalkingSpeed}" Grid.Column="1" Grid.Row="1" Click="btnSelectWalkingSpeed_Click">
                                     <toolkit:ContextMenuService.ContextMenu>
                                         <toolkit:ContextMenu>
                                             <toolkit:MenuItem Name="optSlowWalk" Header="Lassú"/>
@@ -104,7 +120,7 @@
                                 </Button>
 
                                 <TextBlock Text="Várakozási hajlandóság:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
-                                <Button Name="btnSelectMaxWaitingTime" Content="30 perc" Grid.Column="1" Grid.Row="2" Click="btnSelectMaxWaitingTime_Click">
+                                <Button Name="btnSelectMaxWaitingTime" Content="{Binding MaxWaitingTime}" Grid.Column="1" Grid.Row="2" Click="btnSelectMaxWaitingTime_Click">
                                     <toolkit:ContextMenuService.ContextMenu>
                                         <toolkit:ContextMenu>
                                             <toolkit:MenuItem Name="optWaitMaxTenMinutes" Header="10 perc"/>
@@ -157,7 +173,7 @@
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Bejelentés típusa:" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                <Button Name="btnSelectReportType" Content="Bűncselekmény" Grid.Row="0" Grid.Column="1" Click="btnSelectReportType_Click">
+                                <Button Name="btnSelectReportType" Content="{Binding TypeOfReport}" Grid.Row="0" Grid.Column="1" Click="btnSelectReportType_Click">
                                     <toolkit:ContextMenuService.ContextMenu>
                                         <toolkit:ContextMenu>
                                             <toolkit:MenuItem Name="optCrime" Header="Bűncselekmény"/>
@@ -171,11 +187,11 @@
                                 </Button>
 
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Pozíció csatolása:" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                <Primitives:ToggleSwitchButton Name="swIncludePosition" IsChecked="true" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Primitives:ToggleSwitchButton Name="swIncludePosition" IsChecked="{Binding PositionIncluded}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
 
                             <TextBlock Grid.Row="1" Text="Szöveg:" Margin="10,0,0,0" HorizontalAlignment="Left"/>
-                            <TextBox Name="tbReportMessage"  Grid.Row="2" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="tbReportMessage_TextChanged" />
+                            <TextBox Name="tbReportMessage"  Grid.Row="2" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="tbReportMessage_TextChanged" Text="{Binding ReportText}" />
                         </Grid>
                     </ScrollViewer>
 

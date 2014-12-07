@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SoapService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://192.168.0.3:55870/Services/v1/SoapService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://192.168.0.3:55870/Services/v1/SoapService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://192.168.0.3:55870/Services/v1/SoapService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/TransitPlannerContracts" />
+      <xsd:import schemaLocation="http://192.168.0.3:55870/Services/v1/SoapService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://192.168.0.3:55870/Services/v1/SoapService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/TransitPlannerWebContracts" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ISoapService_GetAllStops_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllStops" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetAllStops_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllStopsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetStops_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStops" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetStops_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStopsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetStop_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStop" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetStop_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStopResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetRoutes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoutes" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetRoutes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoutesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetRoute_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoute" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetRoute_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRouteResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetMetadata_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMetadata" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetMetadata_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMetadataResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetSchedule_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSchedule" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetSchedule_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetScheduleResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetSequences_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSequences" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetSequences_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSequencesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetSequence_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSequence" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetSequence_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSequenceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetPlan_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlan" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetPlan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlanResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetSimplePlan_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSimplePlan" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_GetSimplePlan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSimplePlanResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISoapService_SendTroubleReport_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendTroubleReport" />
+  </wsdl:message>
+  <wsdl:portType name="ISoapService">
+    <wsdl:operation name="GetAllStops">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetAllStops" message="tns:ISoapService_GetAllStops_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetAllStopsResponse" message="tns:ISoapService_GetAllStops_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStops">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetStops" message="tns:ISoapService_GetStops_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetStopsResponse" message="tns:ISoapService_GetStops_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStop">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetStop" message="tns:ISoapService_GetStop_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetStopResponse" message="tns:ISoapService_GetStop_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRoutes">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetRoutes" message="tns:ISoapService_GetRoutes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetRoutesResponse" message="tns:ISoapService_GetRoutes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRoute">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetRoute" message="tns:ISoapService_GetRoute_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetRouteResponse" message="tns:ISoapService_GetRoute_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMetadata">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetMetadata" message="tns:ISoapService_GetMetadata_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetMetadataResponse" message="tns:ISoapService_GetMetadata_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSchedule">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetSchedule" message="tns:ISoapService_GetSchedule_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetScheduleResponse" message="tns:ISoapService_GetSchedule_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSequences">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetSequences" message="tns:ISoapService_GetSequences_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetSequencesResponse" message="tns:ISoapService_GetSequences_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSequence">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetSequence" message="tns:ISoapService_GetSequence_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetSequenceResponse" message="tns:ISoapService_GetSequence_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPlan">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetPlan" message="tns:ISoapService_GetPlan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetPlanResponse" message="tns:ISoapService_GetPlan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSimplePlan">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/GetSimplePlan" message="tns:ISoapService_GetSimplePlan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ISoapService/GetSimplePlanResponse" message="tns:ISoapService_GetSimplePlan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendTroubleReport">
+      <wsdl:input wsaw:Action="http://tempuri.org/ISoapService/SendTroubleReport" message="tns:ISoapService_SendTroubleReport_InputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ISoapService" type="tns:ISoapService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllStops">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetAllStops" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStops">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetStops" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStop">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetStop" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRoutes">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetRoutes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRoute">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetRoute" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMetadata">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetMetadata" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSchedule">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetSchedule" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSequences">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetSequences" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSequence">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetSequence" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPlan">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetPlan" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSimplePlan">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/GetSimplePlan" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendTroubleReport">
+      <soap:operation soapAction="http://tempuri.org/ISoapService/SendTroubleReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SoapService">
+    <wsdl:port name="BasicHttpBinding_ISoapService" binding="tns:BasicHttpBinding_ISoapService">
+      <soap:address location="http://192.168.0.3:55870/Services/v1/SoapService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
