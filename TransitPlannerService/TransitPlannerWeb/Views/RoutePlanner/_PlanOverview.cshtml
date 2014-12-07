@@ -5,44 +5,26 @@
 
     <div class="time-with-label">
         <span>Indulás:</span>
-        <time>17:20</time>
+        <time>@Html.Raw(Model.FirstActionTime)</time>
     </div>
 
     <div class="route-section-infos">
-        <div class="route-section-info">
-            <span class="route-section-info-route">
-                @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
-            </span>
-            <span class="route-section-info-section">
-                <div class="route-section-info-section-start">Kelenföld vasútállomás</div>
-                <div class="route-section-info-section-end">Móricz Zsigmond körtér</div>
-            </span>
-        </div>
-
-        <div class="route-section-info">
-            <span class="route-section-info-route">
-                @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
-            </span>
-            <span class="route-section-info-section">
-                <div class="route-section-info-section-start">Móricz Zsigmond körtér</div>
-                <div class="route-section-info-section-end">Corvin Negyed</div>
-            </span>
-        </div>
-
-        <div class="route-section-info">
-            <span class="route-section-info-route">
-                @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
-            </span>
-            <span class="route-section-info-section">
-                <div class="route-section-info-section-start">Corvin Negyed</div>
-                <div class="route-section-info-section-end">Határ út</div>
-            </span>
-        </div>
-    </div>
+        @foreach (var section in Model.Sections.Where(s => !s.IsWalking))
+        {
+            <div class="route-section-info">
+                <span class="route-section-info-route">
+                    @Html.Partial("~/Views/Shared/_RouteLogo.cshtml", section.SectionBadge)
+                </span>
+                <span class="route-section-info-section">
+                    <div class="route-section-info-section-start">@Html.Raw(section.Steps.First().Stop.Name)</div>
+                    <div class="route-section-info-section-end">@Html.Raw(section.Steps.Last().Stop.Name)</div>
+                </span>
+            </div>
+        }
 
     <div class="time-with-label">
         <span>Érkezés:</span>
-        <time>17:45</time>
+        <time>@Html.Raw(Model.LastActionTime)</time>
     </div>
 
     <div id="plan-summary-buttons">

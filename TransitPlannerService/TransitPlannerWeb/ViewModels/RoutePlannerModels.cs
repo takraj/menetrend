@@ -12,24 +12,29 @@ namespace TransitPlannerWeb.ViewModels
         public string PostalCode { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 
     public class VM_Route
     {
         public string ShortName { get; set; }
-        public string BackgroundColor { get; set; }
-        public string TextColor { get; set; }
+        public string Direction { get; set; }
+        public string Type { get; set; }
     }
 
     public class PlannerInputsModel : BaseModel
     {
         public List<VM_Stop> Stops { get; set; }
 
+        public string FromStop { get; set; }
+        public string ToStop { get; set; }
+
         public JsDateTime SelectedDateTime { get; set; }
         public JsDateTime MinDate { get; set; }
         public JsDateTime MaxDate { get; set; }
 
-        public HashSet<int> EnabledRouteTypes { get; set; }
+        public HashSet<string> EnabledRouteTypes { get; set; }
         public bool WheelchairSupport { get; set; }
         public string WalkingSpeedCategory { get; set; }
         public string MaxWaitingTimeCategory { get; set; }
@@ -39,8 +44,8 @@ namespace TransitPlannerWeb.ViewModels
     {
         public DateTime PlannedStartTime { get; set; }
 
-        public Step FirstAction { get; set; }
-        public Step LastAction { get; set; }
+        public string FirstActionTime { get; set; }
+        public string LastActionTime { get; set; }
 
         public string UsedAlgorithm { get; set; }
         public int CalculationTime { get; set; }
@@ -53,7 +58,7 @@ namespace TransitPlannerWeb.ViewModels
 
         public class Step
         {
-            public DateTime When { get; set; }
+            public string When { get; set; }
             public VM_Stop Stop { get; set; }
         }
 

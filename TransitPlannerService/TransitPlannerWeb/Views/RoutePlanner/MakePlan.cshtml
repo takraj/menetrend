@@ -72,45 +72,46 @@
 
 @section scripts {
     <script>
+        var Model = @Html.Raw(Json.Encode(Model));
+
         window.onload = function () {
             var map = TUSZ.create_map("map_canvas", 47.5, 19.08);
 
-            TUSZ.create_travel_line(map, 47.5, 19.08, 47.48, 19.18, "#0000FF");
-            TUSZ.create_travel_line(map, 47.48, 19.18, 47.4, 19.28, "#00FF00");
+            var countOfSections = Model.Sections.length;
 
-            TUSZ.create_walking_line(map, 47.4, 19.28, 47.55, 19.20);
-            TUSZ.create_walking_line(map, 47.55, 19.20, 47.5, 19.28);
+            for (var i in Model.Sections) {
+                var section = Model.Sections[i];
+                var countOfSteps = Model.Sections[i].Steps.length;
 
-            TUSZ.create_walking_marker(map, 47.5, 19.08, "Kezdőállomás H+MMM");
-            TUSZ.create_finish_marker(map, 47.5, 19.28, "Végállomás M");
+                for (var j = 0; j < countOfSteps - 1; j++) {
+                    var step = section.Steps[j];
+                    var nextStep = section.Steps[j+1];
+                    
+                    if (section.IsWalking) {
+                        TUSZ.create_walking_line(map, step.Stop.Latitude, step.Stop.Longitude, nextStep.Stop.Latitude, nextStep.Stop.Longitude);
+                    } else {
+                        TUSZ.create_travel_line(map, step.Stop.Latitude, step.Stop.Longitude, nextStep.Stop.Latitude, nextStep.Stop.Longitude, section.SectionBadge.BadgeBackgroundColor);
+                    }
+                        
+                    if (j == 0) {
+                        if (section.IsWalking) {
+                            TUSZ.create_walking_marker(map, step.Stop.Latitude, step.Stop.Longitude, step.Stop.Name);
+                        } else {
+                            var route_data = TUSZ.create_route_data(section.RouteInfo.ShortName, section.SectionBadge.BadgeBackgroundColor, section.SectionBadge.BadgeLabelColor, section.RouteInfo.Type, section.RouteInfo.Direction);
 
-            var route_data = TUSZ.create_route_data("M4", "#00FF00", "#FFFFFF", "metró", "Kelenföld vasútállomás");
-            route_data.add_stop("14:01", "Keleti pályaudvar");
-            route_data.add_stop("14:02", "Keleti pályaudvar 2");
-            route_data.add_stop("14:03", "Keleti pályaudvar 3");
-            route_data.add_stop("14:04", "Keleti pályaudvar 4");
-            route_data.add_stop("14:01", "Keleti pályaudvar");
-            route_data.add_stop("14:01", "Keleti pályaudvar");
-            route_data.add_stop("14:01", "Keleti pályaudvar");
-            route_data.add_stop("14:01", "Keleti pályaudvar");
-            route_data.add_stop("14:02", "Keleti pályaudvar 2");
-            route_data.add_stop("14:03", "Keleti pályaudvar 3");
-            route_data.add_stop("14:04", "Keleti pályaudvar 4 Keleti pályaudvar 3");
-            route_data.add_stop("14:02", "Keleti pályaudvar 2");
-            route_data.add_stop("14:03", "Keleti pályaudvar 3");
-            route_data.add_stop("14:04", "Keleti pályaudvar 4");
-            route_data.add_stop("14:02", "Keleti pályaudvar 2");
-            route_data.add_stop("14:03", "Keleti pályaudvar 3");
-            route_data.add_stop("14:04", "Keleti pályaudvar 4");
-            route_data.add_stop("14:02", "Keleti pályaudvar 2");
-            route_data.add_stop("14:03", "Keleti pályaudvar 3");
-            route_data.add_stop("14:04", "Keleti pályaudvar 4");
-            route_data.add_stop("14:02", "Keleti pályaudvar 2");
-            route_data.add_stop("14:03", "Keleti pályaudvar 3");
-            route_data.add_stop("14:04", "Keleti pályaudvar 4");
-            TUSZ.create_travel_marker(map, 47.4, 19.28, route_data);
+                            for (var k in section.Steps) {
+                                var s = section.Steps[k];
+                                route_data.add_stop(s.When, s.Stop.Name);
+                            }
 
-            TUSZ.set_map_center(map, 47.5, 19.28);
+                            TUSZ.create_travel_marker(map, step.Stop.Latitude, step.Stop.Longitude, route_data);
+                        }
+                    } else if (j == (countOfSteps - 1) && (i == (countOfSections - 1))) {
+                        TUSZ.create_finish_marker(map, step.Stop.Latitude, step.Stop.Longitude, step.Stop.Name);
+                        TUSZ.set_map_center(map, 47.5, 19.28);
+                    }
+                }
+            }
         }
     </script>
 

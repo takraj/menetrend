@@ -2,188 +2,57 @@
 
 <div id="planner-details-window-content">
     <div id="plan-details-misc">
-        <p id="plan-details-used-alg">Használt algoritmus:&nbsp;<strong>Dijkstra</strong></p>
-        <p id="plan-details-calc-time">Számítási idő:&nbsp;<strong>1</strong>&nbsp;s</p>
-        <p id="plan-details-start-time">Tervezett indulási időpont:&nbsp;<time>2014-05-02 17:12</time></p>
-        <p id="plan-details-route-length">Ajánlott útvonal hossza:&nbsp;<strong>25</strong>&nbsp;perc <em>(12 megálló, kb. 4,7 km)</em></p>
+        <p id="plan-details-used-alg">Használt algoritmus:&nbsp;<strong>@Html.Raw(Model.UsedAlgorithm)</strong></p>
+        <p id="plan-details-calc-time">Számítási idő:&nbsp;<strong>@Html.Raw(Model.CalculationTime.ToString())</strong>&nbsp;s</p>
+        <p id="plan-details-start-time">Tervezett indulási időpont:&nbsp;
+            <time>
+                @Html.Raw(Model.PlannedStartTime.ToString("yyyy-MM-dd HH:mm"))
+            </time>
+        </p>
+        <p id="plan-details-route-length">Ajánlott útvonal hossza:&nbsp;
+            <strong>
+                @Html.Raw(Model.RouteLengthTime.ToString())
+            </strong>&nbsp;perc <em>@Html.Raw(String.Format("({0} megálló, kb. {1} km)", Model.RouteLengthStops, Model.RouteLengthKm))</em>
+        </p>
     </div>
 
     <fieldset id="plan-details-fs">
         <legend>Részletes Útiterv</legend>
         <table id="plan-details-table">
-            <tr class="plan-detail-step">
-                <td class="route-table-cell">
-                    <p>Gyalog</p>
-                </td>
-                <td class="trip-table-cell">
-                    <table class="trip-details">
-                        <tr>
-                            <td>
-                                <time>17:12</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás</p>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="plan-detail-step">
-                <td class="route-table-cell">
-                    @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
-                    <p>Metró</p>
-                </td>
-                <td class="trip-table-cell">
-                    <table class="trip-details">
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="plan-detail-step">
-                <td class="route-table-cell">
-                    @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
-                    <p>Metró</p>
-                </td>
-                <td class="trip-table-cell">
-                    <table class="trip-details">
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="plan-detail-step">
-                <td class="route-table-cell">
-                    @Html.Partial("~/Views/Shared/_RouteLogo.cshtml")
-                    <p>Metró</p>
-                </td>
-                <td class="trip-table-cell">
-                    <table class="trip-details">
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <time>17:20</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás M</p>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="plan-detail-step">
-                <td class="route-table-cell">
-                    <p>Gyalog</p>
-                </td>
-                <td class="trip-table-cell">
-                    <table class="trip-details">
-                        <tr>
-                            <td>
-                                <time>17:12</time>
-                            </td>
-                            <td>
-                                <p class="tooltip" data-tooltip="Sajt">Kelenföld vasútállomás</p>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+            @foreach (var section in Model.Sections)
+            {
+                <tr class="plan-detail-step">
+                    <td class="route-table-cell">
+                        @if (section.IsWalking)
+                        {
+                            <p>Gyalog</p>
+                        }
+                        else
+                        {
+                            @Html.Partial("~/Views/Shared/_RouteLogo.cshtml", section.SectionBadge)
+                            <p>@Html.Raw(section.RouteInfo.Type)</p>
+                        }
+                    </td>
+                    <td class="trip-table-cell">
+                        <table class="trip-details">
+                            @foreach (var step in section.Steps)
+                            {
+                                <tr>
+                                    <td>
+                                        <time>@Html.Raw(step.When)</time>
+                                    </td>
+                                    <td>
+                                        <p class="tooltip"
+                                            data-tooltip="@Html.Raw(String.Format("{0} {1} {2}", step.Stop.PostalCode, step.Stop.City, step.Stop.Address))">
+                                            @Html.Raw(step.Stop.Name)
+                                        </p>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                </tr>
+            }
         </table>
     </fieldset>
 </div>
