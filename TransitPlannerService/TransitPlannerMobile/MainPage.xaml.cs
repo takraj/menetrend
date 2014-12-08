@@ -17,6 +17,8 @@ using System.Windows.Threading;
 using System.ComponentModel;
 using TransitPlannerMobile.Logic;
 using Windows.Devices.Geolocation;
+using TransitPlannerMobile.Logic.ViewModels;
+using System.Device.Location;
 
 namespace TransitPlannerMobile
 {
@@ -31,14 +33,16 @@ namespace TransitPlannerMobile
         {
             InitializeComponent();
 
-            var rps = new RoutePlannerService.SoapServiceClient();
-            rps.GetAllStopsCompleted += rps_GetAllStopsCompleted;
-            rps.GetAllStopsAsync();
+            if (God.mainPageViewModel.AvailableStops == null)
+            {
+                ShowProgressDialog("Megállók letöltése...");
+
+                var rps = new RoutePlannerService.SoapServiceClient();
+                rps.GetAllStopsCompleted += rps_GetAllStopsCompleted;
+                rps.GetAllStopsAsync();
+            }
 
             DataContext = God.mainPageViewModel;
-
-            ShowProgressDialog("Kommunikáció a szerverrel...");
-            Utility.DelayedCall(() => HideProgressDialog(), 5000);
         }
 
         private void ShowProgressDialog(string message, Action actionOnCancel = null)
@@ -116,27 +120,112 @@ namespace TransitPlannerMobile
             });
         }
 
-        private void btnSubmitReport_Click(object sender, RoutedEventArgs e)
+        private async void btnSubmitReport_Click(object sender, RoutedEventArgs e)
         {
             ShowProgressDialog("Küldés...");
-            Utility.DelayedCall(() => HideProgressDialog(), 5000);
+
+            var request = new RoutePlannerService.SendTroubleReportRequest
+            {
+                description = God.mainPageViewModel.ReportText,
+                has_location_data = false,
+                category = 5,
+                timestamp = new RoutePlannerService.TransitDateTime
+                {
+                    day = DateTime.Now.Day,
+                    hour = DateTime.Now.Hour,
+                    minute = DateTime.Now.Minute,
+                    month = DateTime.Now.Month,
+                    year = DateTime.Now.Year
+                }
+            };
+
+            switch (God.mainPageViewModel.TypeOfReport)
+            {
+                case "Bűncselekmény": request.category = 0; break;
+                case "Baleset": request.category = 1; break;
+                case "Késés": request.category = 2; break;
+                case "Műszaki hiba": request.category = 3; break;
+                case "Alkalmazáshiba": request.category = 4; break;
+                default: request.category = 5; break;
+            }
+
+            if (God.mainPageViewModel.PositionIncluded)
+            {
+                Geolocator geolocator = new Geolocator();
+                Geoposition geoposition = await geolocator.GetGeopositionAsync(
+                    maximumAge: TimeSpan.FromMinutes(5),
+                    timeout: TimeSpan.FromSeconds(10)
+                );
+
+                Debug.WriteLine(String.Format("Lat: {0} Lon: {1}", geoposition.Coordinate.Latitude, geoposition.Coordinate.Longitude));
+
+                request.has_location_data = true;
+                request.latitude = geoposition.Coordinate.Latitude;
+                request.longitude = geoposition.Coordinate.Longitude;
+            }
+
+            var svc = new RoutePlannerService.SoapServiceClient();
+            svc.SendTroubleReportCompleted += svc_SendTroubleReportCompleted;
+            svc.SendTroubleReportAsync(request);
+        }
+
+        void svc_SendTroubleReportCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            HideProgressDialog();
+            MessageBox.Show("Hibajelentés elküldve.");
         }
 
         private void btnSelectReportType_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
+            cmReportType.IsOpen = true;
         }
 
-        private void btnUseLocationFrom_Click(object sender, RoutedEventArgs e)
+        private async void btnUseLocationFrom_Click(object sender, RoutedEventArgs e)
         {
             ShowProgressDialog("Helymeghatározás...");
-            Utility.DelayedCall(() => HideProgressDialog(), 5000);
+
+            Geolocator geolocator = new Geolocator();
+            Geoposition geoposition = await geolocator.GetGeopositionAsync(
+                maximumAge: TimeSpan.FromMinutes(5),
+                timeout: TimeSpan.FromSeconds(10)
+            );
+
+            Debug.WriteLine(String.Format("Lat: {0} Lon: {1}", geoposition.Coordinate.Latitude, geoposition.Coordinate.Longitude));
+
+            try
+            {
+                tbPlanFrom.Text = God.mainPageViewModel.AvailableStops.OrderBy(s => new GeoCoordinate(s.latitude, s.longitude).GetDistanceTo(geoposition.Coordinate.ToGeoCoordinate())).First().UniqueName;
+            }
+            catch
+            {
+                Debug.WriteLine("Nincs legközelebbi megálló.");
+            }
+
+            HideProgressDialog();
         }
 
-        private void btnUseLocationTo_Click(object sender, RoutedEventArgs e)
+        private async void btnUseLocationTo_Click(object sender, RoutedEventArgs e)
         {
             ShowProgressDialog("Helymeghatározás...");
-            Utility.DelayedCall(() => HideProgressDialog(), 5000);
+
+            Geolocator geolocator = new Geolocator();
+            Geoposition geoposition = await geolocator.GetGeopositionAsync(
+                maximumAge: TimeSpan.FromMinutes(5),
+                timeout: TimeSpan.FromSeconds(10)
+            );
+
+            Debug.WriteLine(String.Format("Lat: {0} Lon: {1}", geoposition.Coordinate.Latitude, geoposition.Coordinate.Longitude));
+
+            try
+            {
+                tbPlanTo.Text = God.mainPageViewModel.AvailableStops.OrderBy(s => new GeoCoordinate(s.latitude, s.longitude).GetDistanceTo(geoposition.Coordinate.ToGeoCoordinate())).First().UniqueName;
+            }
+            catch
+            {
+                Debug.WriteLine("Nincs legközelebbi megálló.");
+            }
+
+            HideProgressDialog();
         }
 
         private void btnNow_Click(object sender, RoutedEventArgs e)
@@ -155,12 +244,12 @@ namespace TransitPlannerMobile
 
         private void btnSelectWalkingSpeed_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
+            cmWalkSpeed.IsOpen = true;
         }
 
         private void btnSelectMaxWaitingTime_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
+            cmWaitingTime.IsOpen = true;
         }
 
         private void btnClearPlanning_Click(object sender, RoutedEventArgs e)
@@ -177,24 +266,18 @@ namespace TransitPlannerMobile
             });
         }
 
-        private async void btnMakePlan_Click(object sender, RoutedEventArgs e)
+        private void btnMakePlan_Click(object sender, RoutedEventArgs e)
         {
             ShowProgressDialog("Keresés...");
             Utility.DelayedCall(() => HideProgressDialog(), 5000);
-
-            Geolocator geolocator = new Geolocator();
-            Geoposition geoposition = await geolocator.GetGeopositionAsync(
-                maximumAge: TimeSpan.FromMinutes(5),
-                timeout: TimeSpan.FromSeconds(10)
-            );
-
-            Debug.WriteLine(String.Format("Lat: {0} Lon: {1}", geoposition.Coordinate.Latitude, geoposition.Coordinate.Longitude));
         }
 
         void rps_GetAllStopsCompleted(object sender, RoutePlannerService.GetAllStopsCompletedEventArgs e)
         {
             Debug.WriteLine("Count of stops: " + e.Result.Count);
-            God.mainPageViewModel.AvailableStops = e.Result;
+            God.mainPageViewModel.AvailableStops = e.Result.Select(s => new UniqueTransitStop(s)).ToList();
+
+            HideProgressDialog();
         }
 
         private void PhoneApplicationPage_BackKeyPress(object sender, CancelEventArgs e)
@@ -206,6 +289,11 @@ namespace TransitPlannerMobile
                     e.Cancel = true;
                 }
             }
+        }
+
+        private void optAnyOfReportTypes_Click(object sender, RoutedEventArgs e)
+        {
+            God.mainPageViewModel.TypeOfReport = (sender as MenuItem).Header.ToString();
         }
     }
 }

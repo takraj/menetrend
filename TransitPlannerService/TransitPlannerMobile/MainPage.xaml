@@ -52,7 +52,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock HorizontalAlignment="Left" Width="80"  Margin="10,0,0,0" TextWrapping="NoWrap" Text="Honnan:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
-                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanFrom" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Text="{Binding FromStopName}" ValueMemberBinding="{Binding name}" MinimumPopulateDelay="200" MinimumPrefixLength="3">
+                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanFrom" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Text="{Binding FromStopName, Mode=TwoWay}" ValueMemberBinding="{Binding name}" MinimumPopulateDelay="1500" MinimumPrefixLength="3">
                                     <toolkit:AutoCompleteBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Vertical">
@@ -66,7 +66,7 @@
                                 </Button>
 
                                 <TextBlock HorizontalAlignment="Left" Width="80" Margin="10,0,0,0" TextWrapping="NoWrap" Text="Hova:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
-                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanTo" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Text="{Binding ToStopName}" ValueMemberBinding="{Binding name}" MinimumPopulateDelay="1000" MinimumPrefixLength="3">
+                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanTo" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Text="{Binding ToStopName, Mode=TwoWay}" ValueMemberBinding="{Binding name}" MinimumPopulateDelay="1500" MinimumPrefixLength="3">
                                     <toolkit:AutoCompleteBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Vertical">
@@ -86,12 +86,12 @@
                                     <ColumnDefinition Width="2*" MinWidth="160"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <toolkit:DatePicker Name="dpPlanDate" Height="76"  Margin="0" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Value="{Binding WhenDate}"/>
-                                <toolkit:TimePicker Name="dpPlanTime" Height="76" Margin="0" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Value="{Binding WhenTime}"/>
+                                <toolkit:DatePicker Name="dpPlanDate" Height="76"  Margin="0" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Value="{Binding WhenDate, Mode=TwoWay}"/>
+                                <toolkit:TimePicker Name="dpPlanTime" Height="76" Margin="0" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Value="{Binding WhenTime, Mode=TwoWay}"/>
                                 <Button Name="btnNow" Content="most" Height="76" Margin="0" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Click="btnNow_Click"/>
                             </Grid>
 
-                            <CheckBox Name="cbWheelchair" Content="Csak akadálymentes útvonal" Grid.Row="2" IsChecked="{Binding WheelchairSupportNeeded}" />
+                            <CheckBox Name="cbWheelchair" Content="Csak akadálymentes útvonal" Grid.Row="2" IsChecked="{Binding WheelchairSupportNeeded, Mode=TwoWay}" />
 
                             <Grid Grid.Row="3">
                                 <Grid.ColumnDefinitions>
@@ -111,7 +111,7 @@
                                 <TextBlock Text="Gyaloglási sebesség:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
                                 <Button Name="btnSelectWalkingSpeed" Content="{Binding WalkingSpeed}" Grid.Column="1" Grid.Row="1" Click="btnSelectWalkingSpeed_Click">
                                     <toolkit:ContextMenuService.ContextMenu>
-                                        <toolkit:ContextMenu>
+                                        <toolkit:ContextMenu Name="cmWalkSpeed">
                                             <toolkit:MenuItem Name="optSlowWalk" Header="Lassú"/>
                                             <toolkit:MenuItem Name="optNormalWalk" Header="Átlagos"/>
                                             <toolkit:MenuItem Name="optFastWalk" Header="Gyors"/>
@@ -122,7 +122,7 @@
                                 <TextBlock Text="Várakozási hajlandóság:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,20,0"/>
                                 <Button Name="btnSelectMaxWaitingTime" Content="{Binding MaxWaitingTime}" Grid.Column="1" Grid.Row="2" Click="btnSelectMaxWaitingTime_Click">
                                     <toolkit:ContextMenuService.ContextMenu>
-                                        <toolkit:ContextMenu>
+                                        <toolkit:ContextMenu Name="cmWaitingTime">
                                             <toolkit:MenuItem Name="optWaitMaxTenMinutes" Header="10 perc"/>
                                             <toolkit:MenuItem Name="optWaitMaxHalfHour" Header="30 perc"/>
                                             <toolkit:MenuItem Name="optWaitMaxOneHour" Header="1 óra"/>
@@ -175,13 +175,13 @@
                                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Bejelentés típusa:" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                 <Button Name="btnSelectReportType" Content="{Binding TypeOfReport}" Grid.Row="0" Grid.Column="1" Click="btnSelectReportType_Click">
                                     <toolkit:ContextMenuService.ContextMenu>
-                                        <toolkit:ContextMenu>
-                                            <toolkit:MenuItem Name="optCrime" Header="Bűncselekmény"/>
-                                            <toolkit:MenuItem Name="optAccident" Header="Baleset"/>
-                                            <toolkit:MenuItem Name="optDelay" Header="Késés"/>
-                                            <toolkit:MenuItem Name="optTechFailure" Header="Műszaki hiba"/>
-                                            <toolkit:MenuItem Name="optBug" Header="Alkalmazáshiba"/>
-                                            <toolkit:MenuItem Name="optOther" Header="Egyéb"/>
+                                        <toolkit:ContextMenu Name="cmReportType">
+                                            <toolkit:MenuItem Name="optCrime" Header="Bűncselekmény" Click="optAnyOfReportTypes_Click"/>
+                                            <toolkit:MenuItem Name="optAccident" Header="Baleset" Click="optAnyOfReportTypes_Click"/>
+                                            <toolkit:MenuItem Name="optDelay" Header="Késés" Click="optAnyOfReportTypes_Click"/>
+                                            <toolkit:MenuItem Name="optTechFailure" Header="Műszaki hiba" Click="optAnyOfReportTypes_Click"/>
+                                            <toolkit:MenuItem Name="optBug" Header="Alkalmazáshiba" Click="optAnyOfReportTypes_Click"/>
+                                            <toolkit:MenuItem Name="optOther" Header="Egyéb" Click="optAnyOfReportTypes_Click"/>
                                         </toolkit:ContextMenu>
                                     </toolkit:ContextMenuService.ContextMenu>
                                 </Button>

@@ -11,17 +11,16 @@ namespace TransitPlannerMobile.Logic
     {
         public static MainPageViewModel mainPageViewModel = new MainPageViewModel
         {
-            CountOfDisabledRoutes = "3 járat",
-            FromStopName = "Rajmund háza #39",
-            ToStopName = "Munkahely #23",
+            FromStopName = "",
+            ToStopName = "",
             TypeOfReport = "Baleset",
-            WalkingSpeed = "Normál",
+            WalkingSpeed = "Átlagos",
             WheelchairSupportNeeded = false,
             WhenDate = DateTime.Now,
             WhenTime = DateTime.Now,
             ReportText = "",
             PositionIncluded = false,
-            MaxWaitingTime = "33 perc"
+            MaxWaitingTime = "30 perc"
         };
 
         public static SelectDisabledRoutesViewModel disabledRoutes = new SelectDisabledRoutesViewModel
