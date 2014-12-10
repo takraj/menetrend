@@ -19,6 +19,7 @@ using TransitPlannerMobile.Logic;
 using Windows.Devices.Geolocation;
 using TransitPlannerMobile.Logic.ViewModels;
 using System.Device.Location;
+using System.Threading.Tasks;
 
 namespace TransitPlannerMobile
 {
@@ -33,6 +34,8 @@ namespace TransitPlannerMobile
         {
             InitializeComponent();
 
+            God.disabledRoutes.PropertyChanged += disabledRoutes_PropertyChanged;
+
             if (God.mainPageViewModel.AvailableStops == null)
             {
                 ShowProgressDialog("Megállók letöltése...");
@@ -43,6 +46,11 @@ namespace TransitPlannerMobile
             }
 
             DataContext = God.mainPageViewModel;
+        }
+
+        void disabledRoutes_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            God.mainPageViewModel.OnPropertyChanged("CountOfDisabledRoutes");
         }
 
         private void ShowProgressDialog(string message, Action actionOnCancel = null)
@@ -172,7 +180,15 @@ namespace TransitPlannerMobile
         void svc_SendTroubleReportCompleted(object sender, AsyncCompletedEventArgs e)
         {
             HideProgressDialog();
-            MessageBox.Show("Hibajelentés elküldve.");
+
+            if (e.Error != null)
+            {
+                MessageBox.Show("Hibajelentés küldése sikertelen.");
+            }
+            else
+            {
+                MessageBox.Show("Hibajelentés elküldve.");
+            }
         }
 
         private void btnSelectReportType_Click(object sender, RoutedEventArgs e)
@@ -230,11 +246,7 @@ namespace TransitPlannerMobile
 
         private void btnNow_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke(() =>
-            {
-                dpPlanDate.Value = DateTime.Now;
-                dpPlanTime.Value = DateTime.Now;
-            });
+            God.mainPageViewModel.When = DateTime.Now;
         }
 
         private void btnSelectDisabledRoutes_Click(object sender, RoutedEventArgs e)
@@ -254,26 +266,154 @@ namespace TransitPlannerMobile
 
         private void btnClearPlanning_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke(() =>
+            God.mainPageViewModel.FromStopName = string.Empty;
+            God.mainPageViewModel.ToStopName = string.Empty;
+            God.mainPageViewModel.When = DateTime.Now;
+            God.mainPageViewModel.WheelchairSupportNeeded = false;
+        }
+
+        private void DoMakePlan()
+        {
+            Debug.WriteLine("Starting to make a plan...");
+
+            var svc = new RoutePlannerService.SoapServiceClient();
+            var parameters = new RoutePlannerService.WebTransitPlanRequestParameters();
+
+            Debug.WriteLine("Service is ready. Collecting disabled route types...");
+            
+            var disabled_route_types = new System.Collections.ObjectModel.ObservableCollection<int>(God.mainPageViewModel.GetDisabledRouteTypes());
+
+            Debug.WriteLine("Done with collecting disabled route types. Now finding stop ids...");
+
+            parameters.from = -1;
+            parameters.to = -1;
+
+            foreach (var stop in God.mainPageViewModel.AvailableStops)
             {
-                tbPlanFrom.Text = string.Empty;
-                tbPlanTo.Text = string.Empty;
+                if (stop.UniqueName == God.mainPageViewModel.FromStopName)
+                {
+                    Debug.WriteLine("From " + stop.UniqueName);
+                    parameters.from = stop.id;
+                }
 
-                dpPlanDate.Value = DateTime.Now;
-                dpPlanTime.Value = DateTime.Now;
+                if (stop.UniqueName == God.mainPageViewModel.ToStopName)
+                {
+                    Debug.WriteLine("To " + stop.UniqueName);
+                    parameters.to = stop.id;
+                }
+            }
 
-                cbWheelchair.IsChecked = false;
-            });
+            if (parameters.from == -1)
+            {
+                Dispatcher.BeginInvoke(() => MessageBox.Show("A 'honnan' megálló nem létezik."));
+                HideProgressDialog();
+                return;
+            }
+
+            if (parameters.to == -1)
+            {
+                Dispatcher.BeginInvoke(() => MessageBox.Show("A 'hova' megálló nem létezik."));
+                HideProgressDialog();
+                return;
+            }
+
+            Debug.WriteLine("Stops were found. Setting up other parameters...");
+
+            parameters.walking_speed_category = God.mainPageViewModel.GetWalkingSpeedCategoryNumerically();
+            parameters.max_waiting_time = God.mainPageViewModel.GetMaxWaitingTimeCategoryNumerically();
+            parameters.when = new RoutePlannerService.TransitDateTime
+            {
+                year = God.mainPageViewModel.When.Year,
+                month = God.mainPageViewModel.When.Month,
+                day = God.mainPageViewModel.When.Day,
+                hour = God.mainPageViewModel.When.Hour,
+                minute = God.mainPageViewModel.When.Minute
+            };
+
+            Debug.WriteLine("Sending request...");
+
+            svc.GetPlanCompleted += svc_GetPlanCompleted;
+            svc.GetPlanAsync(parameters);
+
+            Debug.WriteLine("Request sent.");
         }
 
         private void btnMakePlan_Click(object sender, RoutedEventArgs e)
         {
             ShowProgressDialog("Keresés...");
-            Utility.DelayedCall(() => HideProgressDialog(), 5000);
+
+            var rps = new RoutePlannerService.SoapServiceClient();
+            rps.GetMetadataCompleted += rps_GetMetadataCompleted;
+            rps.GetMetadataAsync();
+        }
+
+        void rps_GetMetadataCompleted(object sender, RoutePlannerService.GetMetadataCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                MessageBox.Show("Nem sikerült lekérdezni a leíró adatokat.");
+                HideProgressDialog();
+                return;
+            }
+
+            var valid_from = new DateTime(e.Result.valid_from.year, e.Result.valid_from.month, e.Result.valid_from.day);
+            var valid_to = new DateTime(e.Result.valid_to.year, e.Result.valid_to.month, e.Result.valid_to.day);
+
+            if (God.mainPageViewModel.When > valid_to || valid_from > God.mainPageViewModel.When)
+            {
+                MessageBox.Show(String.Format("Az adatbázisban tárolt menetrend csak '{0}' és '{1}' között érvényes.", valid_from, valid_to));
+                HideProgressDialog();
+                return;
+            }
+
+            Task.Factory.StartNew(() =>
+            {
+                DoMakePlan();
+            });
+        }
+
+        void svc_GetPlanCompleted(object sender, RoutePlannerService.GetPlanCompletedEventArgs e)
+        {
+            Debug.WriteLine("A tervező válaszolt.");
+
+            HideProgressDialog();
+
+            if (e.Error != null)
+            {
+                MessageBox.Show("Nincs útvonal.");
+                return;
+            }
+
+            Debug.WriteLine("Sikerült a tervezés. Algoritmus: " + e.Result.algorithm);
+        }
+
+        void Exit()
+        {
+            while (((PhoneApplicationFrame)App.Current.RootVisual).CanGoBack)
+            {
+                ((PhoneApplicationFrame)App.Current.RootVisual).RemoveBackEntry();
+            }
+            Application.Current.Terminate();
         }
 
         void rps_GetAllStopsCompleted(object sender, RoutePlannerService.GetAllStopsCompletedEventArgs e)
         {
+            if (e.Cancelled)
+            {
+                HideProgressDialog();
+                MessageBox.Show("Megállók lekérése megszakítva. Az alkalmazás kilép.");
+                Exit();
+                return;
+            }
+
+            if (e.Error != null)
+            {
+                HideProgressDialog();
+                MessageBox.Show("A megállók lekérése során hiba történt. Az alkalmazás kilép.");
+                Exit();
+                return;
+            }
+
             Debug.WriteLine("Count of stops: " + e.Result.Count);
             God.mainPageViewModel.AvailableStops = e.Result.Select(s => new UniqueTransitStop(s)).ToList();
 
@@ -289,6 +429,16 @@ namespace TransitPlannerMobile
                     e.Cancel = true;
                 }
             }
+        }
+
+        private void optAnyOfWalkingSpeeds_Click(object sender, RoutedEventArgs e)
+        {
+            God.mainPageViewModel.WalkingSpeed = (sender as MenuItem).Header.ToString();
+        }
+
+        private void optAnyOfMaxWaitingTimes_Click(object sender, RoutedEventArgs e)
+        {
+            God.mainPageViewModel.MaxWaitingTime = (sender as MenuItem).Header.ToString();
         }
 
         private void optAnyOfReportTypes_Click(object sender, RoutedEventArgs e)

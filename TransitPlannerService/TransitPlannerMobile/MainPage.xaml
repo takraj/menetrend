@@ -52,11 +52,11 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock HorizontalAlignment="Left" Width="80"  Margin="10,0,0,0" TextWrapping="NoWrap" Text="Honnan:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
-                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanFrom" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Text="{Binding FromStopName, Mode=TwoWay}" ValueMemberBinding="{Binding name}" MinimumPopulateDelay="1500" MinimumPrefixLength="3">
+                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanFrom" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Text="{Binding FromStopName, Mode=TwoWay}" ValueMemberBinding="{Binding UniqueName}" MinimumPopulateDelay="1500" MinimumPrefixLength="3">
                                     <toolkit:AutoCompleteBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Vertical">
-                                                <TextBlock Text="{Binding name}"/>
+                                                <TextBlock Text="{Binding UniqueName}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </toolkit:AutoCompleteBox.ItemTemplate>
@@ -66,11 +66,11 @@
                                 </Button>
 
                                 <TextBlock HorizontalAlignment="Left" Width="80" Margin="10,0,0,0" TextWrapping="NoWrap" Text="Hova:" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
-                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanTo" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Text="{Binding ToStopName, Mode=TwoWay}" ValueMemberBinding="{Binding name}" MinimumPopulateDelay="1500" MinimumPrefixLength="3">
+                                <toolkit:AutoCompleteBox ItemsSource="{Binding AvailableStops}" Name="tbPlanTo" Margin="0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="1" Text="{Binding ToStopName, Mode=TwoWay}" ValueMemberBinding="{Binding UniqueName}" MinimumPopulateDelay="1500" MinimumPrefixLength="3">
                                     <toolkit:AutoCompleteBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Vertical">
-                                                <TextBlock Text="{Binding name}"/>
+                                                <TextBlock Text="{Binding UniqueName}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </toolkit:AutoCompleteBox.ItemTemplate>
@@ -112,9 +112,9 @@
                                 <Button Name="btnSelectWalkingSpeed" Content="{Binding WalkingSpeed}" Grid.Column="1" Grid.Row="1" Click="btnSelectWalkingSpeed_Click">
                                     <toolkit:ContextMenuService.ContextMenu>
                                         <toolkit:ContextMenu Name="cmWalkSpeed">
-                                            <toolkit:MenuItem Name="optSlowWalk" Header="Lassú"/>
-                                            <toolkit:MenuItem Name="optNormalWalk" Header="Átlagos"/>
-                                            <toolkit:MenuItem Name="optFastWalk" Header="Gyors"/>
+                                            <toolkit:MenuItem Name="optSlowWalk" Header="Lassú" Click="optAnyOfWalkingSpeeds_Click"/>
+                                            <toolkit:MenuItem Name="optNormalWalk" Header="Átlagos" Click="optAnyOfWalkingSpeeds_Click"/>
+                                            <toolkit:MenuItem Name="optFastWalk" Header="Gyors" Click="optAnyOfWalkingSpeeds_Click"/>
                                         </toolkit:ContextMenu>
                                     </toolkit:ContextMenuService.ContextMenu>
                                 </Button>
@@ -123,10 +123,10 @@
                                 <Button Name="btnSelectMaxWaitingTime" Content="{Binding MaxWaitingTime}" Grid.Column="1" Grid.Row="2" Click="btnSelectMaxWaitingTime_Click">
                                     <toolkit:ContextMenuService.ContextMenu>
                                         <toolkit:ContextMenu Name="cmWaitingTime">
-                                            <toolkit:MenuItem Name="optWaitMaxTenMinutes" Header="10 perc"/>
-                                            <toolkit:MenuItem Name="optWaitMaxHalfHour" Header="30 perc"/>
-                                            <toolkit:MenuItem Name="optWaitMaxOneHour" Header="1 óra"/>
-                                            <toolkit:MenuItem Name="optWaitMaxInfinite" Header="Bármennyi"/>
+                                            <toolkit:MenuItem Name="optWaitMaxTenMinutes" Header="10 perc" Click="optAnyOfMaxWaitingTimes_Click"/>
+                                            <toolkit:MenuItem Name="optWaitMaxHalfHour" Header="30 perc" Click="optAnyOfMaxWaitingTimes_Click"/>
+                                            <toolkit:MenuItem Name="optWaitMaxOneHour" Header="1 óra" Click="optAnyOfMaxWaitingTimes_Click"/>
+                                            <toolkit:MenuItem Name="optWaitMaxInfinite" Header="Bármennyi" Click="optAnyOfMaxWaitingTimes_Click"/>
                                         </toolkit:ContextMenu>
                                     </toolkit:ContextMenuService.ContextMenu>
                                 </Button>
@@ -187,11 +187,11 @@
                                 </Button>
 
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Pozíció csatolása:" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                <Primitives:ToggleSwitchButton Name="swIncludePosition" IsChecked="{Binding PositionIncluded}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Primitives:ToggleSwitchButton Name="swIncludePosition" IsChecked="{Binding PositionIncluded, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
 
                             <TextBlock Grid.Row="1" Text="Szöveg:" Margin="10,0,0,0" HorizontalAlignment="Left"/>
-                            <TextBox Name="tbReportMessage"  Grid.Row="2" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="tbReportMessage_TextChanged" Text="{Binding ReportText}" />
+                            <TextBox Name="tbReportMessage"  Grid.Row="2" AcceptsReturn="True" TextWrapping="Wrap" TextChanged="tbReportMessage_TextChanged" Text="{Binding ReportText, Mode=TwoWay}" />
                         </Grid>
                     </ScrollViewer>
 
