@@ -34,5 +34,7 @@ namespace TransitPlannerMobile.Logic
             CableCar = true,
             Gondola = false
         };
+
+        public static PlanViewModel planViewModel = null;
     }
 }

@@ -385,6 +385,136 @@ namespace TransitPlannerMobile
             }
 
             Debug.WriteLine("Sikerült a tervezés. Algoritmus: " + e.Result.algorithm);
+
+            God.planViewModel = ConvertResult(e.Result);
+
+            Dispatcher.BeginInvoke(() => NavigationService.Navigate(new Uri("/ShowRouteOnMap.xaml", UriKind.Relative)));
+        }
+
+        private DateTime GetAsDateTime(RoutePlannerService.TransitDate td)
+        {
+            return new DateTime(td.year, td.month, td.day);
+        }
+
+        private DateTime GetAsDateTime(RoutePlannerService.TransitDateTime td)
+        {
+            return new DateTime(td.year, td.month, td.day, td.hour, td.minute, 0);
+        }
+
+        private PlanViewModel ConvertResult(RoutePlannerService.TransitPlan planResponse)
+        {
+            var vm = new PlanViewModel();
+
+            vm.CalculationTime = planResponse.plan_computation_time;
+            vm.FirstActionTime = GetAsDateTime(planResponse.base_time).ToString("HH:mm");
+            vm.LastActionTime = GetAsDateTime(planResponse.end_time).ToString("HH:mm");
+            vm.PlannedStartTime = God.mainPageViewModel.When;
+            vm.UsedAlgorithm = planResponse.algorithm;
+            vm.RouteLengthTime = planResponse.route_duration;
+            vm.RouteLengthKm = planResponse.route_length;
+            vm.RouteLengthStops = planResponse.instructions.Select(i => i.stop.id).Distinct().Count();
+
+            var tripIdsInOrder = new List<int>();
+            var instructionsMatrix = new List<List<RoutePlannerService.TransitPlanInstruction>>();
+            foreach (var instruction in planResponse.instructions)
+            {
+                int tripId = instruction.trip_id;
+
+                if (tripIdsInOrder.Count == 0)
+                {
+                    tripIdsInOrder.Add(tripId);
+                    instructionsMatrix.Add(new List<RoutePlannerService.TransitPlanInstruction>());
+                }
+
+                if (tripIdsInOrder.Last() != tripId)
+                {
+                    tripIdsInOrder.Add(tripId);
+                    instructionsMatrix.Add(new List<RoutePlannerService.TransitPlanInstruction>());
+                }
+
+                var lastInstructionsVector = instructionsMatrix.Last();
+
+                lastInstructionsVector.Add(instruction);
+            }
+
+            // -------- SECTION ÉPÍTÉS --------
+
+            vm.Sections = new List<PlanViewModel.Section>();
+
+            foreach (var instructionsVector in instructionsMatrix)
+            {
+                var section = new PlanViewModel.Section
+                {
+                    IsWalking = instructionsVector.First().is_walking,
+                    Steps = new List<PlanViewModel.Step>()
+                };
+
+                if (!section.IsWalking)
+                {
+                    var routeId = instructionsVector.First().route_id;
+                    var tripId = instructionsVector.First().trip_id;
+
+                    var route = planResponse.used_routes.First(r => r.id == routeId);
+                    var trip = planResponse.used_trips.First(t => t.id == tripId);
+
+                    section.RouteInfo = new VM_Route
+                    {
+                        ShortName = route.ShortName,
+                        Type = GetRouteTypeName(route.RouteType),
+                        Direction = trip.headsign
+                    };
+
+                    section.SectionBadge = new RouteBadgeModel
+                    {
+                        BadgeBackgroundColor = route.RouteColor,
+                        BadgeLabel = route.ShortName,
+                        BadgeLabelColor = route.RouteTextColor,
+                        BadgeSize = 40,
+                        FontSize = 16
+                    };
+                }
+
+                foreach (var instruction in instructionsVector)
+                {
+                    var instruction_when = GetAsDateTime(planResponse.base_time).AddMinutes(instruction.plan_minute);
+                    var step = new PlanViewModel.Step
+                    {
+                        When = instruction_when.ToString("HH:mm"),
+                        Stop = new VM_Stop
+                        {
+                            Address = instruction.stop.street,
+                            City = instruction.stop.city,
+                            Id = instruction.stop.id,
+                            Latitude = instruction.stop.latitude,
+                            Longitude = instruction.stop.longitude,
+                            Name = instruction.stop.name,
+                            PostalCode = instruction.stop.postal_code
+                        }
+                    };
+                    section.Steps.Add(step);
+                }
+
+                vm.Sections.Add(section);
+            }
+
+            return vm;
+        }
+
+        private string GetRouteTypeName(int typeId)
+        {
+            switch (typeId)
+            {
+                case 0: return "Villamos";
+                case 1: return "Metró";
+                case 2: return "Vasút";
+                case 3: return "Busz";
+                case 4: return "Hajó";
+                case 5: return "Függővasút";
+                case 6: return "Gondola";
+                case 7: return "Fogaskerekű";
+
+                default: return "Ismeretlen";
+            }
         }
 
         void Exit()

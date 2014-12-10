@@ -127,9 +127,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DetailedPlan.xaml.cs">
+      <DependentUpon>DetailedPlan.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Logic\God.cs" />
     <Compile Include="Logic\Utility.cs" />
     <Compile Include="Logic\ViewModels\MainPageViewModel.cs" />
+    <Compile Include="Logic\ViewModels\PlanViewModel.cs" />
     <Compile Include="Logic\ViewModels\SelectDisabledRoutesViewModel.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -143,12 +147,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="ShowRouteOnMap.xaml.cs">
+      <DependentUpon>ShowRouteOnMap.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="DetailedPlan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -157,9 +168,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ShowRouteOnMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
@@ -181,7 +198,9 @@
     <None Include="Service References\RoutePlannerService\SoapService4.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="ServiceReferences.ClientConfig" />
+    <Content Include="ServiceReferences.ClientConfig">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Service References\RoutePlannerService\TransitPlannerMobile.RoutePlannerService.TransitMetadata.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
