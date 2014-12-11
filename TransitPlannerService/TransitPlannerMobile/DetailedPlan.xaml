@@ -28,7 +28,89 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ScrollViewer>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Grid Margin="15" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                    
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                    
+                        <TextBlock Grid.Column="0" Grid.Row="0">Használt algoritmus:</TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="0" TextAlignment="Right" Text="{Binding UsedAlgorithm}" />
 
+                        <TextBlock Grid.Column="0" Grid.Row="1">Számítási idő:</TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="1" TextAlignment="Right" Text="{Binding CalculationTimeAsString}" />
+
+                        <TextBlock Grid.Column="0" Grid.Row="2">Indulási időpont:</TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="2" TextAlignment="Right" Text="{Binding PlannedStartTimeAsString}" />
+
+                        <TextBlock Grid.Column="0" Grid.Row="3">Útvonal hossza:</TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="3" TextAlignment="Right" Text="{Binding RouteLengthAsString}" />
+
+                        <TextBlock Grid.Column="0" Grid.Row="4">Becsült utazási idő:</TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="4" TextAlignment="Right" Text="{Binding RouteLengthInMinutesAsString}" />
+                    </Grid>
+                    
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Sections}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0" Background="{Binding BackgroundColorAsBrush}">
+                                        <TextBlock Text="{Binding RouteNameAsString}" FontSize="42" FontWeight="ExtraBold" Padding="10" TextAlignment="Center" Foreground="{Binding ForegroundColorAsBrush}" />
+                                    </Grid>
+
+                                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Steps}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="3">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="100" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    
+                                                    <TextBlock Text="{Binding When}" Grid.Column="0" FontWeight="Bold" TextAlignment="Right" Padding="0,0,10,0" />
+                                                    <TextBlock Text="{Binding Stop.Name}" Grid.Column="1" FontWeight="Normal" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </ScrollViewer>
         </Grid>
     </Grid>
 

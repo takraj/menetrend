@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace TransitPlannerMobile.Logic.ViewModels
 {
@@ -84,6 +86,38 @@ namespace TransitPlannerMobile.Logic.ViewModels
         public string UsedAlgorithm { get; set; }
         public double CalculationTime { get; set; }
 
+        public string CalculationTimeAsString
+        {
+            get
+            {
+                return String.Format("{0} s", CalculationTime.ToString("F3"));
+            }
+        }
+
+        public string PlannedStartTimeAsString
+        {
+            get
+            {
+                return PlannedStartTime.ToString("yyyy-MM-dd HH:mm");
+            }
+        }
+
+        public string RouteLengthAsString
+        {
+            get
+            {
+                return String.Format("({0} megálló, kb. {1} km)", RouteLengthStops, RouteLengthKm.ToString("F1"));
+            }
+        }
+
+        public string RouteLengthInMinutesAsString
+        {
+            get
+            {
+                return String.Format("{0} perc", RouteLengthTime);
+            }
+        }
+
         public int RouteLengthTime { get; set; }
         public double RouteLengthKm { get; set; }
         public int RouteLengthStops { get; set; }
@@ -112,6 +146,62 @@ namespace TransitPlannerMobile.Logic.ViewModels
             public VM_Route RouteInfo { get; set; }
             public List<Step> Steps { get; set; }
             public RouteBadgeModel SectionBadge { get; set; }
+
+            public string RouteNameAsString
+            {
+                get
+                {
+                    if (IsWalking)
+                    {
+                        return "Gyalog";
+                    }
+                    else
+                    {
+                        return RouteInfo.ShortName;
+                    }
+                }
+            }
+
+            private Color ConvertFromHtml(string htmlColor)
+            {
+                byte r = byte.Parse(htmlColor.Substring(0, 2), NumberStyles.HexNumber);
+                byte g = byte.Parse(htmlColor.Substring(2, 2), NumberStyles.HexNumber);
+                byte b = byte.Parse(htmlColor.Substring(4, 2), NumberStyles.HexNumber);
+
+                return Color.FromArgb(byte.MaxValue, r, g, b);
+            }
+
+            public Brush BackgroundColorAsBrush
+            {
+                get
+                {
+                    if (IsWalking)
+                    {
+                        return new SolidColorBrush(Colors.Transparent);
+                    }
+                    else
+                    {
+                        var c = ConvertFromHtml(SectionBadge.BadgeBackgroundColor);
+                        return new SolidColorBrush(c);
+                    }
+                }
+            }
+
+            public Brush ForegroundColorAsBrush
+            {
+                get
+                {
+                    if (IsWalking)
+                    {
+                        return new SolidColorBrush(Colors.LightGray);
+                    }
+                    else
+                    {
+                        var c = ConvertFromHtml(SectionBadge.BadgeLabelColor);
+                        return new SolidColorBrush(c);
+                    }
+                }
+            }
         }
     }
 }

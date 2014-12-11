@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using TransitPlannerMobile.Logic;
 
 namespace TransitPlannerMobile
 {
@@ -15,6 +16,13 @@ namespace TransitPlannerMobile
         public DetailedPlan()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            DataContext = God.planViewModel;
         }
     }
 }
