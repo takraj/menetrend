@@ -183,6 +183,7 @@ namespace TransitPlannerWcfHost
                 else
                 {
                     result.route_length += graph.GetDistanceBetween(lastStopId, node.StopId);
+                    lastStopId = node.StopId;
                 }
 
                 if (node is WalkingNode)
