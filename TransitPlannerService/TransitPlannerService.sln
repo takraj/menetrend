@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitPlannerHost", "TransitPlannerHost\TransitPlannerHost.csproj", "{A79113CD-9641-41C8-B033-067EB1CB9677}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransitPlannerLibrary", "TransitPlannerLibrary\TransitPlannerLibrary.csproj", "{2AA37BB9-1336-4521-B915-91703A71BB4F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortableUtilityLibrary", "PortableUtilityLibrary\PortableUtilityLibrary.csproj", "{7643C8EE-A46F-4442-805A-E2961891A476}"
@@ -29,14 +27,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A79113CD-9641-41C8-B033-067EB1CB9677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A79113CD-9641-41C8-B033-067EB1CB9677}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A79113CD-9641-41C8-B033-067EB1CB9677}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{A79113CD-9641-41C8-B033-067EB1CB9677}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A79113CD-9641-41C8-B033-067EB1CB9677}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A79113CD-9641-41C8-B033-067EB1CB9677}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A79113CD-9641-41C8-B033-067EB1CB9677}.Release|ARM.ActiveCfg = Release|Any CPU
-		{A79113CD-9641-41C8-B033-067EB1CB9677}.Release|x86.ActiveCfg = Release|Any CPU
 		{2AA37BB9-1336-4521-B915-91703A71BB4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2AA37BB9-1336-4521-B915-91703A71BB4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AA37BB9-1336-4521-B915-91703A71BB4F}.Debug|ARM.ActiveCfg = Debug|Any CPU
