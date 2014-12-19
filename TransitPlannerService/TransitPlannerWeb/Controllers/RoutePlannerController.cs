@@ -211,6 +211,44 @@ namespace TransitPlannerWeb.Controllers
                 trip_delays = delays_for_current_date.Select(d => new IntegerPair { key = d.TripId, value = d.DelayInMinutes }).ToList();
             }
 
+            var allRoutes = coreSvc.GetRoutes("");
+
+            foreach (var route in allRoutes)
+            {
+                if ((route.RouteType == 0) && (tram_enabled == 0) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 1) && (subway_enabled == 0) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 2) && (rail_enabled == 0) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 3) && (bus_enabled == 0) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 4) && (ferry_enabled == 0) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 5) && (cable_car_enabled == 0) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 6) && (gondola_enabled == 0) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 7) && (funicular_enabled == 0) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+            }
+
             double walking_speed = double.Parse(settings["NORMAL_WALKING_SPEED"], CultureInfo.InvariantCulture);
 
             if (walking_category == "slow")

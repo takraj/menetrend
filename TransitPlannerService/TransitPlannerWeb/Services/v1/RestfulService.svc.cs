@@ -123,6 +123,44 @@ namespace TransitPlannerWeb.Services.v1
                 trip_delays = delays_for_current_date.Select(d => new IntegerPair { key = d.TripId, value = d.DelayInMinutes }).ToList();
             }
 
+            var allRoutes = coreSvc.GetRoutes("");
+
+            foreach (var route in allRoutes)
+            {
+                if ((route.RouteType == 0) && parameters.disabled_route_types.Contains(0) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 1) && parameters.disabled_route_types.Contains(1) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 2) && parameters.disabled_route_types.Contains(2) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 3) && parameters.disabled_route_types.Contains(3) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 4) && parameters.disabled_route_types.Contains(4) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 5) && parameters.disabled_route_types.Contains(5) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 6) && parameters.disabled_route_types.Contains(6) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+                if ((route.RouteType == 7) && parameters.disabled_route_types.Contains(7) && (!disabled_route_ids.Contains(route.id)))
+                {
+                    disabled_route_ids.Add(route.id);
+                }
+            }
+
             var coreParameters = new TransitPlanRequestParameters
             {
                 from = parameters.from,

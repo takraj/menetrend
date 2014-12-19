@@ -281,7 +281,7 @@ namespace TransitPlannerMobile
 
             Debug.WriteLine("Service is ready. Collecting disabled route types...");
             
-            var disabled_route_types = new System.Collections.ObjectModel.ObservableCollection<int>(God.mainPageViewModel.GetDisabledRouteTypes());
+            parameters.disabled_route_types = new System.Collections.ObjectModel.ObservableCollection<int>(God.mainPageViewModel.GetDisabledRouteTypes());
 
             Debug.WriteLine("Done with collecting disabled route types. Now finding stop ids...");
 
@@ -321,6 +321,7 @@ namespace TransitPlannerMobile
 
             parameters.walking_speed_category = God.mainPageViewModel.GetWalkingSpeedCategoryNumerically();
             parameters.max_waiting_time = God.mainPageViewModel.GetMaxWaitingTimeCategoryNumerically();
+            parameters.needs_wheelchair_support = God.mainPageViewModel.WheelchairSupportNeeded;
             parameters.when = new RoutePlannerService.TransitDateTime
             {
                 year = God.mainPageViewModel.When.Year,

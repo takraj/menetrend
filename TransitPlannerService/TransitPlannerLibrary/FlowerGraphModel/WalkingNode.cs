@@ -46,10 +46,10 @@ namespace TransitPlannerLibrary.FlowerGraphModel
                 result.Add(new KeyValuePair<FlowerNode, DateTime>(walkToNode, walkToCost));
             }
 
-            if (_graph.NeedsWheelchairSupport && (!stop.HasWheelchairSupport))
-            {
-                return result;
-            }
+            //if (_graph.NeedsWheelchairSupport && (!stop.HasWheelchairSupport))
+            //{
+            //    return result;
+            //}
 
             foreach (int sequenceId in _graph.Repository.GetSequencesByStop(_stopId))
             {
